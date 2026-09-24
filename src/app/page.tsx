@@ -8,8 +8,9 @@ import type { Trial } from "@/lib/types";
 
 interface TrialsResponse {
   trials: Trial[];
+  source: "seed" | "live";
   lastUpdated: string;
-  live: boolean;
+  count: number;
 }
 
 export default function Home() {
@@ -52,9 +53,9 @@ export default function Home() {
     const trials = filtered;
     return {
       total: trials.length,
-      fresh: trials.filter((t) => t.change?.type === "NEW").length,
-      phaseChanges: trials.filter((t) => t.change?.type === "PHASE_CHANGE").length,
-      statusChanges: trials.filter((t) => t.change?.type === "STATUS_CHANGE").length,
+      phase3: trials.filter((t) => t.phase === "Phase 3").length,
+      recruiting: trials.filter((t) => t.status === "RECRUITING").length,
+      withSignals: trials.filter((t) => t.enrichment.length > 0).length,
     };
   }, [filtered]);
 
@@ -67,7 +68,7 @@ export default function Home() {
           setSelectedId(null);
         }}
         lastUpdated={data?.lastUpdated}
-        live={data?.live ?? false}
+        live={data?.source === "live"}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-6">
@@ -88,9 +89,9 @@ export default function Home() {
             {/* Stats strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
               <Stat label="Trials tracked" value={stats.total} />
-              <Stat label="New registrations" value={stats.fresh} accent />
-              <Stat label="Phase changes" value={stats.phaseChanges} accent />
-              <Stat label="Status changes" value={stats.statusChanges} accent />
+              <Stat label="Phase 3" value={stats.phase3} accent />
+              <Stat label="Recruiting" value={stats.recruiting} accent />
+              <Stat label="With signals" value={stats.withSignals} accent />
             </div>
 
             {/* Feed + detail */}
