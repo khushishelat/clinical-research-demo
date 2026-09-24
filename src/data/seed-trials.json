@@ -126,11 +126,24 @@
     "startDate": "2026-02-06",
     "primaryCompletionDate": "2028-03",
     "locationCount": 158,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "EARNINGS",
+        "headline": "Q1 2026 Lilly Earnings Call",
+        "summary": "Lilly's Q1 2026 earnings call identified eloralintide (LY3841136), alone or in combination, as a program for adults with obesity or overweight.",
+        "date": "2026-04-28",
+        "source": "investor.lilly.com",
+        "url": "https://investor.lilly.com/static-files/587c9bd3-6551-45c3-989d-ab60c49036bb"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07321886",
         "url": "https://clinicaltrials.gov/study/NCT07321886"
+      },
+      {
+        "title": "Q1 2026 Lilly Earnings Call",
+        "url": "https://investor.lilly.com/static-files/587c9bd3-6551-45c3-989d-ab60c49036bb"
       }
     ]
   },
@@ -206,11 +219,24 @@
     "startDate": "2025-09-15",
     "primaryCompletionDate": "2028-04",
     "locationCount": 88,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "PRESS_RELEASE",
+        "headline": "Lilly's oral GLP-1 Foundayo (orforglipron) delivered superior A1C control and weight loss in three pivotal type 2 diabetes trials",
+        "summary": "Alongside reporting phase 3 diabetes results, Lilly listed osteoarthritis knee pain among the conditions for which orforglipron is being studied.",
+        "date": "2026-06-08",
+        "source": "investor.lilly.com",
+        "url": "https://investor.lilly.com/news-releases/news-release-details/lillys-oral-glp-1-foundayo-orforglipron-delivered-superior-a1c"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07153471",
         "url": "https://clinicaltrials.gov/study/NCT07153471"
+      },
+      {
+        "title": "Lilly's oral GLP-1 Foundayo (orforglipron) delivered superior A1C control and weight loss in three pivotal type 2 diabetes trials",
+        "url": "https://investor.lilly.com/news-releases/news-release-details/lillys-oral-glp-1-foundayo-orforglipron-delivered-superior-a1c"
       }
     ]
   },
@@ -400,11 +426,24 @@
     "startDate": "2025-09-30",
     "primaryCompletionDate": "2028-03",
     "locationCount": 136,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "FDA_FILING",
+        "headline": "FDA approves Lilly's Foundayo\u2122 (orforglipron), the only GLP-1 pill for weight loss that can be taken any time of day without food or water restrictions",
+        "summary": "The FDA approved orforglipron for adults with obesity, or some adults with overweight who also have weight-related medical problems.",
+        "date": "2026-04-01",
+        "source": "investor.lilly.com",
+        "url": "https://investor.lilly.com/news-releases/news-release-details/fda-approves-lillys-foundayotm-orforglipron-only-glp-1-pill"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07202884",
         "url": "https://clinicaltrials.gov/study/NCT07202884"
+      },
+      {
+        "title": "FDA approves Lilly's Foundayo\u2122 (orforglipron), the only GLP-1 pill for weight loss that can be taken any time of day without food or water restrictions",
+        "url": "https://investor.lilly.com/news-releases/news-release-details/fda-approves-lillys-foundayotm-orforglipron-only-glp-1-pill"
       }
     ]
   },
@@ -427,11 +466,36 @@
     "startDate": "2026-08-24",
     "primaryCompletionDate": "2028-07-31",
     "locationCount": 330,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "PRESS_RELEASE",
+        "headline": "Novo Nordisk's investigational zenagamtide shows significant A1C reductions with up to 14.6% weight loss in adults with type 2 diabetes--presented at ADA 2026",
+        "summary": "Novo reported up to 14.6% body-weight loss at week 36 in its phase 2 trial and said the results support phase 3 investigation of zenagamtide in adults with type 2 diabetes.",
+        "date": "2026-06-05",
+        "source": "prnewswire.com",
+        "url": "https://www.prnewswire.com/news-releases/novo-nordisks-investigational-zenagamtide-shows-significant-a1c-reductions-with-up-to-14-6-weight-loss-in-adults-with-type-2-diabetespresented-at-ada-2026--302793124.html"
+      },
+      {
+        "kind": "PUBLICATION",
+        "headline": "1730-P: Zenagamtide (Amycretin), a Novel Unimolecular GLP-1 and Amylin Receptor Agonist: Phase 2b Results in T2D",
+        "summary": "The ADA Diabetes abstract reported that once-weekly subcutaneous zenagamtide up to 40 mg reduced A1C and body weight versus placebo in adults with type 2 diabetes.",
+        "date": "2026-06-01",
+        "source": "diabetesjournals.org",
+        "url": "https://diabetesjournals.org/diabetes/article/75/Supplement_1/1730-P/169008/1730-P-Zenagamtide-Amycretin-a-Novel-Unimolecular"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07797335",
         "url": "https://clinicaltrials.gov/study/NCT07797335"
+      },
+      {
+        "title": "Novo Nordisk's investigational zenagamtide shows significant A1C reductions with up to 14.6% weight loss in adults with type 2 diabetes--presented at ADA 2026",
+        "url": "https://www.prnewswire.com/news-releases/novo-nordisks-investigational-zenagamtide-shows-significant-a1c-reductions-with-up-to-14-6-weight-loss-in-adults-with-type-2-diabetespresented-at-ada-2026--302793124.html"
+      },
+      {
+        "title": "1730-P: Zenagamtide (Amycretin), a Novel Unimolecular GLP-1 and Amylin Receptor Agonist: Phase 2b Results in T2D",
+        "url": "https://diabetesjournals.org/diabetes/article/75/Supplement_1/1730-P/169008/1730-P-Zenagamtide-Amycretin-a-Novel-Unimolecular"
       }
     ]
   },
@@ -667,11 +731,24 @@
     "startDate": "2026-05-21",
     "primaryCompletionDate": "2028-02-23",
     "locationCount": 303,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "PRESS_RELEASE",
+        "headline": "Novo's CagriSema delivers superior weight loss versus tirzepatide in REIMAGINE 5 trial",
+        "summary": "Novo reported 21.0% weight reduction versus 2.0% with placebo in REDEFINE 9 and 12.4% versus 9.1% against tirzepatide in REIMAGINE 5.",
+        "date": "2026-09-21",
+        "source": "globenewswire.com",
+        "url": "https://www.globenewswire.com/news-release/2026/09/21/3365319/0/en/novo-s-cagrisema-delivers-superior-weight-loss-versus-tirzepatide-in-reimagine-5-trial.html"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07564414",
         "url": "https://clinicaltrials.gov/study/NCT07564414"
+      },
+      {
+        "title": "Novo's CagriSema delivers superior weight loss versus tirzepatide in REIMAGINE 5 trial",
+        "url": "https://www.globenewswire.com/news-release/2026/09/21/3365319/0/en/novo-s-cagrisema-delivers-superior-weight-loss-versus-tirzepatide-in-reimagine-5-trial.html"
       }
     ]
   },
@@ -1234,11 +1311,24 @@
     "startDate": "2026-06-10",
     "primaryCompletionDate": "2028-05-04",
     "locationCount": 50,
-    "enrichment": [],
+    "enrichment": [
+      {
+        "kind": "PRESS_RELEASE",
+        "headline": "Robust Phase 2b Efficacy and Favorable Tolerability Support Monthly Dosing for Pfizer\u2019s GLP-1 RA Berobenatide",
+        "summary": "Pfizer reported phase 2b berobenatide results and said VESPER-6, the monthly-maintenance phase 3 study identified as NCT07595549, was open for enrollment.",
+        "date": "2026-06-06",
+        "source": "pfizer.com",
+        "url": "https://www.pfizer.com/news/press-release/press-release-detail/robust-phase-2b-efficacy-and-favorable-tolerability-support"
+      }
+    ],
     "citations": [
       {
         "title": "ClinicalTrials.gov \u2014 NCT07595549",
         "url": "https://clinicaltrials.gov/study/NCT07595549"
+      },
+      {
+        "title": "Robust Phase 2b Efficacy and Favorable Tolerability Support Monthly Dosing for Pfizer\u2019s GLP-1 RA Berobenatide",
+        "url": "https://www.pfizer.com/news/press-release/press-release-detail/robust-phase-2b-efficacy-and-favorable-tolerability-support"
       }
     ]
   },
