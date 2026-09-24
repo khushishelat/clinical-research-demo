@@ -1,1 +1,1359 @@
-[]
+[
+  {
+    "nctId": "NCT06739122",
+    "title": "A Phase 3, Open-Label, Multicenter, Single-Arm Study to Evaluate Safety, Tolerability, Pharmacokinetics, and Efficacy of Dulaglutide 3.0 mg and 4.5 mg in Pediatric Participants 10 to Less Than 18 Years of Age With Type 2 Diabetes Mellitus",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Type 2 Diabetes"
+    ],
+    "interventions": [
+      "Dulaglutide"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 55,
+    "startDate": "2025-01-10",
+    "primaryCompletionDate": "2027-12",
+    "locationCount": 51,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06739122",
+        "url": "https://clinicaltrials.gov/study/NCT06739122"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06962280",
+    "title": "A Phase 3, Multicenter, Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Study Evaluating the Efficacy and Long-Term Safety of Tirzepatide Once Weekly Compared to Placebo in Adults With Type 1 Diabetes and Obesity or Overweight",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Type 1 Diabetes",
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Tirzepatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 465,
+    "startDate": "2025-05-12",
+    "primaryCompletionDate": "2026-11",
+    "locationCount": 79,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06962280",
+        "url": "https://clinicaltrials.gov/study/NCT06962280"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07232719",
+    "title": "A Phase 3b Study to Investigate the Efficacy and Safety of Retatrutide Once Weekly in Participants Without Type 2 Diabetes Who Have Obesity or Overweight: A Randomized, Double-Blind, Placebo-Controlled Trial",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Retatrutide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 250,
+    "startDate": "2025-11-17",
+    "primaryCompletionDate": "2027-07",
+    "locationCount": 31,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07232719",
+        "url": "https://clinicaltrials.gov/study/NCT07232719"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07589608",
+    "title": "A Phase 2b, Parallel-Group, Double-Blind, Placebo-Controlled Study to Investigate Weight Management With Macupatide and Eloralintide, Alone or in Combination, in Adult Participants With Obesity or Overweight and Without Type 2 Diabetes",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "Macupatide",
+      "Eloralintide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 400,
+    "startDate": "2026-05-15",
+    "primaryCompletionDate": "2027-09",
+    "locationCount": 40,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07589608",
+        "url": "https://clinicaltrials.gov/study/NCT07589608"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07321886",
+    "title": "A Phase 3 Randomized, Double-Blind, Placebo-Controlled Study to Investigate the Efficacy and Safety of Once Weekly Eloralintide in Adult Participants With Obesity or Overweight, Without Type 2 Diabetes",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Eloralintide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1980,
+    "startDate": "2026-02-06",
+    "primaryCompletionDate": "2028-03",
+    "locationCount": 158,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07321886",
+        "url": "https://clinicaltrials.gov/study/NCT07321886"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06948435",
+    "title": "A Master Protocol to Investigate the Efficacy and Safety of Orforglipron Once Daily in Participants With Hypertension and Obesity or Overweight: Randomized, Double-Blind, Placebo-Controlled Trials (ATTAIN-HYPERTENSION)",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Hypertension",
+      "Overweight or Obesity"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 487,
+    "startDate": "2025-04-30",
+    "primaryCompletionDate": "2027-09",
+    "locationCount": 99,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06948435",
+        "url": "https://clinicaltrials.gov/study/NCT06948435"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT05556512",
+    "title": "A Phase 3, Randomized, Double-blind, Placebo-Controlled Study to Investigate the Effect of Tirzepatide on the Reduction of Morbidity and Mortality in Adults With Obesity",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Tirzepatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 15374,
+    "startDate": "2022-10-11",
+    "primaryCompletionDate": "2027-10",
+    "locationCount": 671,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT05556512",
+        "url": "https://clinicaltrials.gov/study/NCT05556512"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07153471",
+    "title": "A Phase 3 Study to Investigate the Efficacy and Safety of Orforglipron Once Daily in Participants Who Have Obesity or Overweight and Osteoarthritis of the Knee: A Multicenter, Randomized, Double-Blind, Parallel-Arm, Placebo-Controlled Trial",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Osteoarthritis"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 800,
+    "startDate": "2025-09-15",
+    "primaryCompletionDate": "2028-04",
+    "locationCount": 88,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07153471",
+        "url": "https://clinicaltrials.gov/study/NCT07153471"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06643728",
+    "title": "A Phase 2, Double-Blind, Randomized, Placebo-Controlled Study of Bimagrumab and Tirzepatide, Alone or in Combination, to Investigate the Efficacy and Safety in Adult Participants With Obesity or Overweight Without Type 2 Diabetes",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 2",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Bimagrumab",
+      "Tirzepatide",
+      "Bimagrumab Placebo",
+      "Tirzepatide Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 252,
+    "startDate": "2024-10-21",
+    "primaryCompletionDate": "2026-01-16",
+    "locationCount": 12,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06643728",
+        "url": "https://clinicaltrials.gov/study/NCT06643728"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06993792",
+    "title": "A Master Protocol to Investigate the Efficacy and Safety of Orforglipron Tablet Once Daily Compared With Placebo in Participants With Obesity or Overweight With and Without Type 2 Diabetes",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight",
+      "Type 2 Diabetes"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1400,
+    "startDate": "2025-05-15",
+    "primaryCompletionDate": "2027-08",
+    "locationCount": 80,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06993792",
+        "url": "https://clinicaltrials.gov/study/NCT06993792"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06948422",
+    "title": "A Master Protocol to Investigate the Efficacy and Safety of Orforglipron Once Daily in Participants With Hypertension and Obesity or Overweight: Randomized, Double-Blind, Placebo-Controlled Trials (ATTAIN-HYPERTENSION)",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Hypertension"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 974,
+    "startDate": "2025-04-30",
+    "primaryCompletionDate": "2027-09",
+    "locationCount": 100,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06948422",
+        "url": "https://clinicaltrials.gov/study/NCT06948422"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06972459",
+    "title": "A Master Protocol to Investigate the Efficacy and Safety of Orforglipron Tablet Once Daily Compared With Placebo in Participants With Obesity or Overweight With and Without Type 2 Diabetes",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 800,
+    "startDate": "2025-05-15",
+    "primaryCompletionDate": "2027-08",
+    "locationCount": 80,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06972459",
+        "url": "https://clinicaltrials.gov/study/NCT06972459"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06143956",
+    "title": "A Master Protocol for a Randomized, Controlled, Clinical Trial of Multiple Interventions for Chronic Weight Management in Adult Participants With Obesity or Overweight",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "LY3305677",
+      "LY3841136",
+      "Tirzepatide",
+      "LY3549492",
+      "LY3532226",
+      "Placebo",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1481,
+    "startDate": "2023-11-17",
+    "primaryCompletionDate": "2027-09",
+    "locationCount": 56,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06143956",
+        "url": "https://clinicaltrials.gov/study/NCT06143956"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07222137",
+    "title": "A Phase 3, Double-Blind, Randomized, Placebo-Controlled Study of Baricitinib to Delay Stage 3 Type 1 Diabetes in At-risk Participants Aged \u22651 to <36 Years",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 1"
+    ],
+    "interventions": [
+      "Baricitinib",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 150,
+    "startDate": "2026-01-12",
+    "primaryCompletionDate": "2031-07",
+    "locationCount": 113,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07222137",
+        "url": "https://clinicaltrials.gov/study/NCT07222137"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07202884",
+    "title": "A Master Protocol to Investigate the Efficacy and Safety of Orforglipron Tablet Once Daily Compared With Placebo in Female Participants With Stress Urinary Incontinence Who Have Obesity or Overweight",
+    "sponsor": "Eli Lilly and Company",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Urinary Incontinence,Stress"
+    ],
+    "interventions": [
+      "Orforglipron",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1000,
+    "startDate": "2025-09-30",
+    "primaryCompletionDate": "2028-03",
+    "locationCount": 136,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07202884",
+        "url": "https://clinicaltrials.gov/study/NCT07202884"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07797335",
+    "title": "Efficacy and Safety of Zenagamtide s.c. Once Weekly Compared to Insulin Glargine s.c. Once Daily in Participants With Type 2 Diabetes and Increased Cardiovascular Risk Inadequately Controlled on 1-3 Oral Glucose-lowering Medications (AMBITION 7)",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Type 2 Diabetes",
+      "Cardiovascular Risk"
+    ],
+    "interventions": [
+      "Zenagamtide",
+      "Insulin glargine U-100"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1778,
+    "startDate": "2026-08-24",
+    "primaryCompletionDate": "2028-07-31",
+    "locationCount": 330,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07797335",
+        "url": "https://clinicaltrials.gov/study/NCT07797335"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT03811561",
+    "title": "Long-term Effects of Semaglutide on Diabetic Retinopathy in Subjects With Type 2 Diabetes",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 2"
+    ],
+    "interventions": [
+      "Semaglutide",
+      "Placebo (semaglutide)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1500,
+    "startDate": "2019-05-08",
+    "primaryCompletionDate": "2027-11-07",
+    "locationCount": 230,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT03811561",
+        "url": "https://clinicaltrials.gov/study/NCT03811561"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07668388",
+    "title": "Efficacy and Safety of Once-weekly Subcutaneous UBT251 in Participants With Type 2 Diabetes - a Dose-finding Study",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 2"
+    ],
+    "interventions": [
+      "UBT251",
+      "UBT251 Placebo",
+      "Semaglutide",
+      "Semaglutide Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 300,
+    "startDate": "2026-06-22",
+    "primaryCompletionDate": "2027-10-04",
+    "locationCount": 70,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07668388",
+        "url": "https://clinicaltrials.gov/study/NCT07668388"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07503210",
+    "title": "Efficacy and Safety of NNC0487-0111 s.c. Once Weekly in Participants With Obesity Who Have Reached Target Dose During run-in Period (AMAZE 12)",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "NNC0487-0111",
+      "Placebo (matched to NNC0487-0111)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 606,
+    "startDate": "2026-04-21",
+    "primaryCompletionDate": "2028-06-06",
+    "locationCount": 72,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07503210",
+        "url": "https://clinicaltrials.gov/study/NCT07503210"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT05567796",
+    "title": "Efficacy and Safety of Cagrilintide s.c. 2.4 Milligram (mg) in Combination With Semaglutide Subcutaneous (s.c). 2.4 mg (CagriSema s.c. 2.4 mg/2.4 mg) Once-weekly in Participants With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "Cagrilintide",
+      "Semaglutide",
+      "Placebo cagrilintide",
+      "Placebo semaglutide"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 3400,
+    "startDate": "2022-11-01",
+    "primaryCompletionDate": "2024-10-30",
+    "locationCount": 256,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT05567796",
+        "url": "https://clinicaltrials.gov/study/NCT05567796"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06717698",
+    "title": "Efficacy, Safety and Pharmacokinetics of NNC0519-0130 Once Weekly s.c. Versussemaglutide 1.0 mg and Placebo in People With Chronic Kidney Disease, With or Without Type 2 Diabetes, and With Overweight or Obesity: a Proof-of-concept and Dose-finding Study",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Chronic Kidney Disease"
+    ],
+    "interventions": [
+      "NNC0519-0130",
+      "Placebo",
+      "Semaglutide"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 465,
+    "startDate": "2024-12-02",
+    "primaryCompletionDate": "2026-09-01",
+    "locationCount": 147,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06717698",
+        "url": "https://clinicaltrials.gov/study/NCT06717698"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07184632",
+    "title": "A Study Investigating Safety, Tolerability and Efficacy of Once-weekly NNC0662-0419 in Participants Living With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "NNC0662-0419",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 224,
+    "startDate": "2025-10-01",
+    "primaryCompletionDate": "2026-12-14",
+    "locationCount": 2,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07184632",
+        "url": "https://clinicaltrials.gov/study/NCT07184632"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07817251",
+    "title": "Safety And Tolerability of 3 Switch Regimens From Semaglutide 1.0 mg and 2.0 mg to Co-Administered Cagrilintide and Semaglutide (Cagrisema) in Participants With Type 2 Diabetes",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 2"
+    ],
+    "interventions": [
+      "CagriSema"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 210,
+    "startDate": "2026-09-16",
+    "primaryCompletionDate": "2027-06-09",
+    "locationCount": 40,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07817251",
+        "url": "https://clinicaltrials.gov/study/NCT07817251"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07339423",
+    "title": "Efficacy and Safety of NNC0487-0111 s.c. Once-weekly in Participants With Obesity (AMAZE 1)",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "NNC0487-0111",
+      "Placebo (matched to NNC0487-0111)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1150,
+    "startDate": "2026-02-24",
+    "primaryCompletionDate": "2029-06-26",
+    "locationCount": 72,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07339423",
+        "url": "https://clinicaltrials.gov/study/NCT07339423"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07564414",
+    "title": "A Clinical Study to Compare Efficacy and Safety of Two Different Doses of CagriSema and Semaglutide in Participants With Obesity With or Without Type 2 Diabetes",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Type 2 Diabetes"
+    ],
+    "interventions": [
+      "Cagrisema",
+      "Semaglutide"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 2500,
+    "startDate": "2026-05-21",
+    "primaryCompletionDate": "2028-02-23",
+    "locationCount": 303,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07564414",
+        "url": "https://clinicaltrials.gov/study/NCT07564414"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07567001",
+    "title": "Efficacy and Safety of NNC0487-0111 Compared to Placebo on Morbidity and Mortality in People With Heart Failure With Preserved or Mildly Reduced Ejection Fraction and Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Heart Failure"
+    ],
+    "interventions": [
+      "NNC0487-0111",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 5610,
+    "startDate": "2026-05-11",
+    "primaryCompletionDate": "2029-07-23",
+    "locationCount": 838,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07567001",
+        "url": "https://clinicaltrials.gov/study/NCT07567001"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07639021",
+    "title": "Evaluation of Different Dose Escalation Regimens for NNC0662-0419 in Participants With Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "NNC0662-0419",
+      "Semaglutide",
+      "NNC0662-0419 Placebo",
+      "Semaglutide placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 233,
+    "startDate": "2026-06-09",
+    "primaryCompletionDate": "2027-06-14",
+    "locationCount": 25,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07639021",
+        "url": "https://clinicaltrials.gov/study/NCT07639021"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07415954",
+    "title": "Efficacy and Safety of Once-weekly Subcutaneous NNC0662-0419 in Participants With Type 2 Diabetes - a Dose-finding Study",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 2"
+    ],
+    "interventions": [
+      "NNC0662-0419",
+      "Semaglutide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 270,
+    "startDate": "2026-04-17",
+    "primaryCompletionDate": "2027-09-03",
+    "locationCount": 63,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07415954",
+        "url": "https://clinicaltrials.gov/study/NCT07415954"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07282613",
+    "title": "Efficacy and Safety of Co-administered Cagrilintide and Semaglutide (CagriSema) s.c. Once Weekly Versus Placebo in Children and Adolescents With Type 2 Diabetes",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus, Type 2"
+    ],
+    "interventions": [
+      "CagriSema (Cagrilintide B and Semaglutide I)",
+      "Placebo matched to CagriSema (Cagrilintide B and Semaglutide I)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 80,
+    "startDate": "2026-08-04",
+    "primaryCompletionDate": "2029-09-07",
+    "locationCount": 58,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07282613",
+        "url": "https://clinicaltrials.gov/study/NCT07282613"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07533175",
+    "title": "Efficacy and Safety of NNC0487-0111 s.c. Once-weekly in Participants With Overweight or Obesity, and Type 2 Diabetes (AMAZE 2)",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Diabetes Mellitus",
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "NNC0487-0111",
+      "Placebo (matched to NNC0487-0111)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 630,
+    "startDate": "2026-04-13",
+    "primaryCompletionDate": "2028-08-07",
+    "locationCount": 74,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07533175",
+        "url": "https://clinicaltrials.gov/study/NCT07533175"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06612268",
+    "title": "A Global Phase 3, Randomised, Double-blind and Placebo-controlled Study Evaluating the Efficacy and Safety of Etavopivat in Adolescents and Adults With Sickle Cell Disease",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Sickle Cell Disease"
+    ],
+    "interventions": [
+      "Etavopivat",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 510,
+    "startDate": "2025-02-17",
+    "primaryCompletionDate": "2027-08-27",
+    "locationCount": 175,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06612268",
+        "url": "https://clinicaltrials.gov/study/NCT06612268"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06979375",
+    "title": "Phase 2, Multicentre, Randomised, Double-blind, Placebo-controlled Safety and Efficacy Study of CDR132L on Reverse Cardiac Remodelling in Participants With Heart Failure With Reduced/Mildly Reduced Ejection Fraction and Left Ventricular Hypertrophy",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Heart Failure"
+    ],
+    "interventions": [
+      "CDR132L",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 200,
+    "startDate": "2025-06-30",
+    "primaryCompletionDate": "2027-05-16",
+    "locationCount": 92,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06979375",
+        "url": "https://clinicaltrials.gov/study/NCT06979375"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07830732",
+    "title": "A Multinational, Open-label Study to Investigate Efficacy and Safety of Denecimig (Mim8) in Adults With Acquired Haemophilia A",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Haemophilia A"
+    ],
+    "interventions": [
+      "Denecimig"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 84,
+    "startDate": "2026-10-09",
+    "primaryCompletionDate": "2029-03-23",
+    "locationCount": 83,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07830732",
+        "url": "https://clinicaltrials.gov/study/NCT07830732"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06200207",
+    "title": "Effects of Ziltivekimab Versus Placebo on Heart Failure Symptoms and Physical Function in Patients With Heart Failure With Mildly Reduced or Preserved Ejection Fraction and Systemic Inflammation",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Heart Failure",
+      "Systemic Inflammation"
+    ],
+    "interventions": [
+      "Ziltivekimab",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 680,
+    "startDate": "2024-04-01",
+    "primaryCompletionDate": "2026-10-01",
+    "locationCount": 217,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06200207",
+        "url": "https://clinicaltrials.gov/study/NCT06200207"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07395687",
+    "title": "A Study Investigating Safety, Tolerability and Efficacy of UBT251 in Participants Living With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 2",
+    "status": "RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "UBT251",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 333,
+    "startDate": "2026-02-02",
+    "primaryCompletionDate": "2027-01-14",
+    "locationCount": 3,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07395687",
+        "url": "https://clinicaltrials.gov/study/NCT07395687"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07745504",
+    "title": "A Placebo-controlled Comparability Study to Compare Two Presentations of Cagrilintide for Weight Management in Participants With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "Cagrilintide",
+      "Placebo cagrilintide",
+      "Placebo semaglutide"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 285,
+    "startDate": "2026-08-04",
+    "primaryCompletionDate": "2027-05-18",
+    "locationCount": 36,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07745504",
+        "url": "https://clinicaltrials.gov/study/NCT07745504"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07571109",
+    "title": "Efficacy and Safety of NNC0487-0111 s.c. Once-weekly in Participants With Overweight or Obesity, and Obstructive Sleep Apnoea Treated With Positive Airway Pressure (AMAZE 4)",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight",
+      "Obstructive Sleep Apnoea"
+    ],
+    "interventions": [
+      "NNC0487-0111",
+      "Placebo (matched to NNC0487-0111)"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 300,
+    "startDate": "2026-05-05",
+    "primaryCompletionDate": "2028-06-26",
+    "locationCount": 92,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07571109",
+        "url": "https://clinicaltrials.gov/study/NCT07571109"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07220642",
+    "title": "Efficacy and Safety of Cagrilintide for Weight Management in Participants With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Cagrilintide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 300,
+    "startDate": "2025-11-05",
+    "primaryCompletionDate": "2027-05-11",
+    "locationCount": 40,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07220642",
+        "url": "https://clinicaltrials.gov/study/NCT07220642"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT04775082",
+    "title": "Effect and Safety of Liraglutide 3.0 mg on Weight Management in Children With Obesity Aged 6 to Below 12 Years: 56-week, Double-blind, Randomised, Placebo-controlled Trial",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "Liraglutide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 78,
+    "startDate": "2021-03-04",
+    "primaryCompletionDate": "2023-08-01",
+    "locationCount": 32,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT04775082",
+        "url": "https://clinicaltrials.gov/study/NCT04775082"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07770841",
+    "title": "Efficacy and Safety of Once Daily Oral Semaglutide in Adults With Overweight or Obesity",
+    "sponsor": "Novo Nordisk",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity"
+    ],
+    "interventions": [
+      "Semaglutide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 450,
+    "startDate": "2026-08-12",
+    "primaryCompletionDate": "2028-02-22",
+    "locationCount": 62,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07770841",
+        "url": "https://clinicaltrials.gov/study/NCT07770841"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07792954",
+    "title": "A PHASE 3, RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED STUDY TO EVALUATE THE EFFICACY AND SAFETY OF ONCE-WEEKLY PF-08653944 IN CHINESE ADULTS WITH OVERWEIGHT OR OBESITY",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "Berobenatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 300,
+    "startDate": "2026-09-01",
+    "primaryCompletionDate": "2028-03-14",
+    "locationCount": 33,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07792954",
+        "url": "https://clinicaltrials.gov/study/NCT07792954"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07311850",
+    "title": "Evaluating The Efficacy and Safety of MET097, a Fully-Biased, Ultra Long-Acting GLP-1RA, In People With Overweight or Obesity: A Phase 3, Multi-Center Randomized, Controlled Trial (VESPER-4)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity and Overweight"
+    ],
+    "interventions": [
+      "MET097",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 3578,
+    "startDate": "2025-12-19",
+    "primaryCompletionDate": "2027-09-21",
+    "locationCount": 167,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07311850",
+        "url": "https://clinicaltrials.gov/study/NCT07311850"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07794761",
+    "title": "A PHASE 3, RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED STUDY TO ASSESS THE EFFICACY AND SAFETY OF ONCE-WEEKLY BEROBENATIDE IN ADULTS WITH OBESITY DISEASE IN JAPAN (VESPER-JW)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "Berobenatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 180,
+    "startDate": "2026-09-28",
+    "primaryCompletionDate": "2029-03-14",
+    "locationCount": 12,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07794761",
+        "url": "https://clinicaltrials.gov/study/NCT07794761"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07400653",
+    "title": "EVALUATING THE EFFICACY AND SAFETY OF MET097, A FULLY-BIASED ULTRA LONG-ACTING GLP-1RA, IN PEOPLE WITH OVERWEIGHT OR OBESITY AND TYPE 2 DIABETES: A PHASE 3, MULTI-CENTER RANDOMIZED PLACEBO-CONTROLLED TRIAL (VESPER-5)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight and/or Obesity",
+      "Overweight",
+      "Diabetes, Type 2",
+      "Type 2 Diabetes"
+    ],
+    "interventions": [
+      "PF-08653944",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 1078,
+    "startDate": "2026-02-24",
+    "primaryCompletionDate": "2027-10-12",
+    "locationCount": 188,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07400653",
+        "url": "https://clinicaltrials.gov/study/NCT07400653"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06924320",
+    "title": "A PHASE 1/2A RANDOMIZED, DOUBLE-BLIND, PLACEBO CONTROLLED, SINGLE AND MULTIPLE ASCENDING DOSE STUDY TO INVESTIGATE THE SAFETY, TOLERABILITY, PHARMACOKINETICS, AND PHARMACODYNAMICS OF MET233 CO-ADMINISTERED WITH MET097 IN ADULT PARTICIPANTS WITH OBESITY OR OVERWEIGHT INCLUDING PARTICIPANTS WITH TYPE 2 DIABETES MELLITUS",
+    "sponsor": "Pfizer",
+    "phase": "Phase 1",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity and Obesity-related Medical Conditions"
+    ],
+    "interventions": [
+      "MET233 and MET097",
+      "Placebo",
+      "MET097"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 381,
+    "startDate": "2025-03-06",
+    "primaryCompletionDate": "2026-09-15",
+    "locationCount": 1,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06924320",
+        "url": "https://clinicaltrials.gov/study/NCT06924320"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07595549",
+    "title": "A PHASE 3, RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED STUDY TO ASSESS THE EFFICACY AND SAFETY OF ONCE-MONTHLY PF-08653944 IN ADULTS WITH OVERWEIGHT OR OBESITY (VESPER-6)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight and/or Obesity",
+      "Overweight"
+    ],
+    "interventions": [
+      "PF-08653944",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 954,
+    "startDate": "2026-06-10",
+    "primaryCompletionDate": "2028-05-04",
+    "locationCount": 50,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07595549",
+        "url": "https://clinicaltrials.gov/study/NCT07595549"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07823608",
+    "title": "A PHASE 3, RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED STUDY TO ASSESS THE EFFICACY AND SAFETY OF ONCE-MONTHLY BEROBENATIDE IN ADULTS WITH OBSTRUCTIVE SLEEP APNEA AND OVERWEIGHT OR OBESITY RECEIVING POSITIVE AIRWAY PRESSURE THERAPY (VESPER-OSA 1)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Apnea",
+      "Sleep Disorders",
+      "Overweight and/or Obesity"
+    ],
+    "interventions": [
+      "Berobenatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 258,
+    "startDate": "2026-09-19",
+    "primaryCompletionDate": "2028-06-19",
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07823608",
+        "url": "https://clinicaltrials.gov/study/NCT07823608"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07575932",
+    "title": "A PHASE 2B, RANDOMIZED, PLACEBO-CONTROLLED, DOUBLE-BLIND, DOSE-RANGING, DOSE-FINDING, UMBRELLA STUDY TO EVALUATE EFFICACY AND SAFETY OF PF-08653945 AND PF-08653944, ALONE OR IN COMBINATION, IN ADULTS WITH OVERWEIGHT OR OBESITY (SOLIS-1)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 2",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Overweight",
+      "Obesity",
+      "Overweight and/or Obesity",
+      "Overweight or Obesity",
+      "Overnutrition",
+      "Nutrition Disorders",
+      "Nutritional and Metabolic Diseases",
+      "Body Weight"
+    ],
+    "interventions": [
+      "PF-08653945",
+      "PF-08653944",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 940,
+    "startDate": "2026-05-11",
+    "primaryCompletionDate": "2027-08-04",
+    "locationCount": 63,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07575932",
+        "url": "https://clinicaltrials.gov/study/NCT07575932"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT06973720",
+    "title": "A Phase 2b, Multi-Center, Randomized, Double-Blind, Placebo-Controlled Study to Investigate the Efficacy, Safety and Tolerability of Multiple Dose Regimens of Once-Weekly Switching to Once-Monthly MET097 in Participants With Obesity or Overweight (VESPER-3)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 2",
+    "status": "ACTIVE_NOT_RECRUITING",
+    "conditions": [
+      "Obesity",
+      "Overweight or Obesity"
+    ],
+    "interventions": [
+      "MET097",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 268,
+    "startDate": "2025-04-07",
+    "primaryCompletionDate": "2025-12-16",
+    "locationCount": 5,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT06973720",
+        "url": "https://clinicaltrials.gov/study/NCT06973720"
+      }
+    ]
+  },
+  {
+    "nctId": "NCT07794774",
+    "title": "A PHASE 3, RANDOMIZED, DOUBLE-BLIND, PLACEBO-CONTROLLED STUDY TO ASSESS THE EFFICACY AND SAFETY OF ONCE-MONTHLY BEROBENATIDE IN ADULTS WITH OBESITY DISEASE IN JAPAN (VESPER-JM)",
+    "sponsor": "Pfizer",
+    "phase": "Phase 3",
+    "status": "NOT_YET_RECRUITING",
+    "conditions": [
+      "Obesity"
+    ],
+    "interventions": [
+      "Berobenatide",
+      "Placebo"
+    ],
+    "studyType": "INTERVENTIONAL",
+    "enrollment": 197,
+    "startDate": "2026-09-28",
+    "primaryCompletionDate": "2029-02-21",
+    "locationCount": 11,
+    "enrichment": [],
+    "citations": [
+      {
+        "title": "ClinicalTrials.gov \u2014 NCT07794774",
+        "url": "https://clinicaltrials.gov/study/NCT07794774"
+      }
+    ]
+  }
+]

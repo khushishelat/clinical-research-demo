@@ -6,15 +6,19 @@ export const dynamic = "force-dynamic";
 
 /**
  * Serves the trial watchlist.
- * - If PARALLEL_API_KEY is set, this route can trigger a live refresh via
- *   the Task API (wired up separately); for now it always serves the
- *   seeded baseline so the demo is deterministic and fast.
+ *
+ * The seed baseline was pulled from ClinicalTrials.gov via Parallel's
+ * clinical_trials connector (see scripts/seed.py), so it is real
+ * registry data — just not refreshed on a schedule yet. The `source`
+ * label says "seed" honestly; live scheduled refresh via snapshot
+ * monitors is the follow-up.
  */
 export async function GET() {
   const trials = (seedTrials as Trial[]) ?? [];
   return NextResponse.json({
     trials,
+    source: "seed" as const,
     lastUpdated: process.env.SEED_UPDATED_AT ?? new Date().toISOString().slice(0, 10),
-    live: Boolean(process.env.PARALLEL_API_KEY),
+    count: trials.length,
   });
 }

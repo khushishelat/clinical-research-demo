@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """Seed the demo's trial watchlist from Parallel's clinical_trials connector.
 
-For each sponsor, runs a Task API call with the clinical_trials data source
-and a strict output schema, then normalizes the result into
-src/data/seed-trials.json.
+For each sponsor, runs a Task API call with the clinical_trials data source,
+then extracts the structured registry records from the run's mcp_tool_calls
+(the connector returns real JSON — no need to re-extract via schema).
 
-Auth: uses the stored `custom.parallel` connector via dynamic credential
-surrogates (same mechanism as ~/workspace/skills/parallel/bin/parallel).
+Output: src/data/seed-trials.json
+
+Auth: stored `custom.parallel` connector via dynamic credential surrogates.
 
 Usage:
     python3 scripts/seed.py
 """
 from __future__ import annotations
 
-import datetime
 import json
 import sys
 import time
@@ -36,43 +36,11 @@ SPONSORS = [
     "Pfizer Inc.",
 ]
 
-OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "trials": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "nctId": {"type": "string"},
-                    "title": {"type": "string"},
-                    "phase": {"type": "string"},
-                    "status": {"type": "string"},
-                    "conditions": {"type": "array", "items": {"type": "string"}},
-                    "interventions": {"type": "array", "items": {"type": "string"}},
-                    "enrollment": {"type": "number"},
-                    "startDate": {"type": "string"},
-                    "primaryCompletionDate": {"type": "string"},
-                    "locationCount": {"type": "number"},
-                    "studyType": {"type": "string"},
-                    "lastUpdatePosted": {"type": "string"},
-                    "firstPosted": {"type": "string"},
-                },
-                "required": ["nctId", "title", "phase", "status"],
-            },
-        }
-    },
-    "required": ["trials"],
-}
-
-PROMPT = """Using the ClinicalTrials.gov connector, find interventional trials \
-sponsored by {sponsor} related to obesity, overweight, diabetes, or weight \
-management, in Phase 2 or Phase 3, with status RECRUITING, ACTIVE_NOT_RECRUITING, \
-or NOT_YET_RECRUITING. Return up to 15, preferring the most recently updated. \
-For each trial include the registry's first posted date and last update posted \
-date. Phase should be a human string like "Phase 3". Status must be one of: \
-RECRUITING, ACTIVE_NOT_RECRUITING, NOT_YET_RECRUITING, COMPLETED, SUSPENDED, \
-TERMINATED, WITHDRAWN."""
+PROMPT = """Using the ClinicalTrials.gov connector, search for interventional \
+trials sponsored by {sponsor} related to obesity, overweight, diabetes, or \
+weight management, in Phase 2 or Phase 3. Include recruiting, active, and \
+not-yet-recruiting studies. Return up to 15 trials, preferring the most \
+recently updated. Briefly list each trial's NCT ID, title, phase, and status."""
 
 
 def api(method: str, path: str, payload: dict | None = None) -> dict:
@@ -87,17 +55,16 @@ def api(method: str, path: str, payload: dict | None = None) -> dict:
         return read_json_response(resp)
 
 
-def run_seed_task(sponsor: str) -> dict:
+def run_task(sponsor: str) -> dict:
     payload = {
         "input": PROMPT.format(sponsor=sponsor),
         "processor": "base",
         "advanced_settings": {"data_sources": {"free": ["clinical_trials"]}},
-        "output_schema": OUTPUT_SCHEMA,
     }
     task = api("POST", "/v1/tasks/runs", payload)
     run_id = task["run_id"]
     print(f"[{sponsor}] run {run_id}", flush=True)
-    deadline = time.time() + 900
+    deadline = time.time() + 600
     while time.time() < deadline:
         status = api("GET", f"/v1/tasks/runs/{run_id}")
         state = status.get("status")
@@ -109,41 +76,57 @@ def run_seed_task(sponsor: str) -> dict:
     raise SystemExit(f"[{sponsor}] timed out waiting for {run_id}")
 
 
-def normalize_phase(raw: str) -> str:
-    m = {
+def try_parse(content) -> dict | list | None:
+    """Parse content that may be JSON, double-encoded JSON, or junk."""
+    if isinstance(content, (dict, list)):
+        return content
+    if not isinstance(content, str):
+        return None
+    for _ in range(3):
+        try:
+            parsed = json.loads(content)
+        except (json.JSONDecodeError, TypeError):
+            return None
+        if isinstance(parsed, (dict, list)):
+            # keep unwrapping if the dict is just {"...": "..."}? no — return it
+            return parsed
+        content = parsed
+    return None
+
+
+def extract_items(result: dict) -> list[dict]:
+    """Pull registry records out of the run's clinical_trials tool calls."""
+    items: list[dict] = []
+    calls = (result.get("output") or {}).get("mcp_tool_calls") or []
+    for call in calls:
+        if call.get("server_name") != "clinical_trials":
+            continue
+        parsed = try_parse(call.get("content"))
+        if isinstance(parsed, dict) and isinstance(parsed.get("items"), list):
+            items.extend(parsed["items"])
+    return items
+
+
+def normalize_phase(raw) -> str:
+    if isinstance(raw, list):
+        raw = raw[0] if raw else ""
+    mapping = {
         "PHASE1": "Phase 1",
         "PHASE2": "Phase 2",
         "PHASE3": "Phase 3",
         "PHASE4": "Phase 4",
         "PHASE1_PHASE2": "Phase 1/2",
         "PHASE2_PHASE3": "Phase 2/3",
+        "NA": "N/A",
     }
-    return m.get(raw.strip().upper().replace(" ", "_"), raw)
+    key = str(raw).strip().upper().replace(" ", "_")
+    return mapping.get(key, str(raw))
 
 
-def normalize_trial(t: dict, sponsor: str) -> dict:
-    nct = t.get("nctId", "")
-    first_posted = t.get("firstPosted") or ""
-    change = None
-    # Mark genuinely recent registrations — grounded in the registry's
-    # first-posted date, not invented.
-    try:
-        fp = datetime.date.fromisoformat(first_posted[:10])
-        age_days = (datetime.date.today() - fp).days
-        if 0 <= age_days <= 180:
-            change = {
-                "type": "NEW",
-                "detail": f"First posted {fp.isoformat()} ({age_days}d ago)",
-                "detectedAt": datetime.date.today().isoformat(),
-                "basis": [
-                    {
-                        "title": f"ClinicalTrials.gov — {nct}",
-                        "url": f"https://clinicaltrials.gov/study/{nct}",
-                    }
-                ],
-            }
-    except (ValueError, TypeError):
-        pass
+def normalize(item: dict, sponsor: str) -> dict | None:
+    nct = item.get("nct_id") or ""
+    if not nct:
+        return None
 
     def num(v):
         try:
@@ -153,54 +136,50 @@ def normalize_trial(t: dict, sponsor: str) -> dict:
 
     return {
         "nctId": nct,
-        "title": t.get("title", ""),
-        "sponsor": sponsor,
-        "phase": normalize_phase(str(t.get("phase", ""))),
-        "status": str(t.get("status", "UNKNOWN")).upper(),
-        "conditions": t.get("conditions") or [],
-        "interventions": t.get("interventions") or [],
-        "studyType": t.get("studyType") or "INTERVENTIONAL",
-        "enrollment": num(t.get("enrollment")),
-        "startDate": t.get("startDate"),
-        "primaryCompletionDate": t.get("primaryCompletionDate"),
-        "lastUpdatePosted": t.get("lastUpdatePosted"),
-        "locationCount": num(t.get("locationCount")),
-        "change": change,
+        "title": item.get("title", ""),
+        "sponsor": item.get("sponsor") or sponsor,
+        "phase": normalize_phase(item.get("phase", "")),
+        "status": str(item.get("status", "UNKNOWN")).upper(),
+        "conditions": item.get("conditions") or [],
+        "interventions": item.get("interventions") or [],
+        "studyType": item.get("study_type") or "INTERVENTIONAL",
+        "enrollment": num(item.get("enrollment")),
+        "startDate": item.get("start_date"),
+        "primaryCompletionDate": item.get("primary_completion_date"),
+        "lastUpdatePosted": item.get("last_updated") or item.get("last_update_posted"),
+        "locationCount": num(item.get("locations_count")),
+        "change": None,
         "enrichment": [],
         "citations": [
             {
                 "title": f"ClinicalTrials.gov — {nct}",
                 "url": f"https://clinicaltrials.gov/study/{nct}",
             }
-        ]
-        if nct
-        else [],
+        ],
     }
 
 
 def main() -> None:
-    all_trials = []
+    all_trials: list[dict] = []
     for sponsor in SPONSORS:
-        result = run_seed_task(sponsor)
-        content = (result.get("output") or {}).get("content") or {}
-        if isinstance(content, str):
-            content = json.loads(content)
-        trials = content.get("trials", [])
-        print(f"[{sponsor}] got {len(trials)} trials", flush=True)
-        for t in trials:
-            all_trials.append(normalize_trial(t, sponsor))
+        result = run_task(sponsor)
+        items = extract_items(result)
+        print(f"[{sponsor}] extracted {len(items)} records", flush=True)
+        for it in items:
+            t = normalize(it, sponsor)
+            if t:
+                all_trials.append(t)
 
-    # De-dupe by NCT ID, keep first occurrence
     seen = set()
     deduped = []
     for t in all_trials:
-        if t["nctId"] and t["nctId"] not in seen:
+        if t["nctId"] not in seen:
             seen.add(t["nctId"])
             deduped.append(t)
 
     with open(OUT_PATH, "w") as f:
         json.dump(deduped, f, indent=2)
-    print(f"wrote {len(deduped)} trials to {OUT_PATH}")
+    print(f"wrote {len(deduped)} trials to {OUT_PATH}", flush=True)
 
 
 if __name__ == "__main__":
