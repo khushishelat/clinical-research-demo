@@ -35,11 +35,6 @@ export default async function LandscapePage({ params, searchParams }: PageProps<
     <>
       <Landscape view={lv} names={names} keyName={key} nextRefresh={view.refresh.next} events={view.events} today={today(now)} />
       {replay ? <Replay keyName={key} company={view.pack.about.company} recorded={view.pack.about.recorded} /> : null}
-      <Disclaimer>
-        <Label>
-          {String(view.pack.totals.connector_calls ?? '')} connector calls · recorded {view.pack.about.recorded}
-        </Label>
-      </Disclaimer>
       <details className="mt-10">
         <summary className="cursor-pointer text-[15px]">
           <span className="font-medium underline decoration-line-strong underline-offset-4">Ask about {view.pack.about.company}</span>{' '}
@@ -48,6 +43,11 @@ export default async function LandscapePage({ params, searchParams }: PageProps<
         <p className="mt-1 text-[13px] text-muted">Quick answers can be wrong. They never change a flag.</p>
         <Ask keyName={key} company={view.pack.about.company} bare />
       </details>
+      <Disclaimer>
+        <Label>
+          {String(view.pack.totals.connector_calls ?? '')} connector calls · recorded {view.pack.about.recorded}
+        </Label>
+      </Disclaimer>
     </>
   );
 }

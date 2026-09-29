@@ -5,6 +5,7 @@ import { CheckedWith } from '@/components/Landscape';
 import { LiveFlag, LiveStatus } from '@/components/LiveFlag';
 import { Card, Chip, ConnectorMarker, Disclaimer, HandChecked, Label, RoleBadge, SourceChip, Unconfirmed } from '@/components/ui';
 import { nctIdsIn } from '@/lib/domain/programs';
+import { flagTrigger } from '@/lib/domain/specs';
 import type { BasisEntry, Milestone, RegistryRecord } from '@/lib/domain/types';
 import { daysBetween, fmtDate, milestoneLabel, phaseShort, statusLabel } from '@/lib/view/format';
 import { namesOf } from '@/lib/view/names';
@@ -35,6 +36,7 @@ export default async function TrialPage({ params }: PageProps<'/c/[key]/t/[nct]'
   const title = rec?.title ?? row?.title ?? found?.registry?.title ?? '';
   const sponsor = row?.lead_sponsor ?? found?.registry?.lead_sponsor ?? '';
   const flag = check?.flag;
+  const trigger = flagTrigger(flag, check?.latest_milestone, check?.earlier_milestones);
 
   return (
     <div className="pb-8">
@@ -71,7 +73,7 @@ export default async function TrialPage({ params }: PageProps<'/c/[key]/t/[nct]'
 
       <Card className="mt-8 p-6">
         <Label>Registry vs. latest news</Label>
-        {m && updated ? <p className="mt-2 text-[18px]">{comparison(status, updated, m)}</p> : null}
+        {(trigger ?? m) && updated ? <p className="mt-2 text-[18px]">{comparison(status, updated, (trigger ?? m)!)}</p> : null}
         <div className="mt-5 grid gap-6 md:grid-cols-2">
           <div>
             <Label>ClinicalTrials.gov</Label>

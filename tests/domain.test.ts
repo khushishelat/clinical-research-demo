@@ -144,3 +144,14 @@ test('trial names: title acronym, program lead-in, trial codes; never bare asset
   assert.equal(trialName(row('Study (NSCLC)', 'AXS-05 in agitation')), 'NCT00000001');
   assert.equal(trialName(row('Study'), 'NSCLC'), 'NCT00000001', 'registry acronyms are checked too');
 });
+
+test('flag evidence is the milestone that set the flag, not just the latest news', async () => {
+  const { flagTrigger } = await import('../src/lib/domain/specs');
+  const done = { type: 'enrollment_completed', date: '2026-07-23' };
+  const newer = { type: 'interim_data', date: '2026-08-14' };
+  assert.equal(flagTrigger('registry_lagging', newer, [done]), done, 'an earlier enrollment completion is the evidence');
+  assert.equal(flagTrigger('registry_lagging', done, []), done);
+  const stop = { type: 'discontinued_or_terminated', date: '2026-06-01' };
+  assert.equal(flagTrigger('conflict', stop, []), stop);
+  assert.equal(flagTrigger('news', newer, [done]), null);
+});

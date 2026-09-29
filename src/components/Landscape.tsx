@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type { Freshness } from '@/lib/domain/freshness';
 import type { StoredEvent } from '@/lib/domain/monitor';
+import { flagTrigger } from '@/lib/domain/specs';
 import type { Flag, RunBy } from '@/lib/domain/types';
 import { fmtDate, isFlagLoud, milestoneLabel, milestoneOf, monthsSince, phaseShort, plural, statusLabel } from '@/lib/view/format';
 import type { AreaView, CatalystView, LandscapeView, ProgramView } from '@/lib/view/landscape';
@@ -20,26 +21,27 @@ type Filter = 'all' | 'news' | 'flagged' | 'found';
 
 export function Landscape({ view, names, keyName, nextRefresh, events, today }: Props) {
   const { data: registry } = useRegistry(keyName);
-  const [filter, setFilter] = useState<Filter>(() =>
-    view.pack.rows.some((r) => isFlagLoud(r.check?.flag ?? 'no_news')) ||
-    view.pack.found_beyond_registry_search.some((f) => isFlagLoud(f.check?.flag ?? 'no_news'))
-      ? 'flagged'
-      : 'all',
-  );
+  // null until the viewer picks a filter: then the page opens on Flagged only
+  // while the same live count shown on the button is above zero.
+  const [chosen, setFilter] = useState<Filter | null>(null);
   const [runBy, setRunBy] = useState<RunBy | 'any'>('any');
   const [milestone, setMilestone] = useState<string>('any');
   const rows = useMemo(() => new Map(view.pack.rows.map((r) => [r.nct_id, r])), [view.pack.rows]);
   const found = useMemo(() => new Map(view.pack.found_beyond_registry_search.map((f) => [f.nct_id, f])), [view.pack.found_beyond_registry_search]);
   const fresh = (id: string): Freshness | undefined => registry?.freshness[id];
   const flagOf = (r: SlimRow): Flag => fresh(r.nct_id)?.flag ?? r.check?.flag ?? 'no_news';
-  const lagging = view.pack.rows.filter((r) => isFlagLoud(flagOf(r)) && fresh(r.nct_id)?.state !== 'changed_pending').length;
+  const rowLoud = (r: SlimRow) => isFlagLoud(flagOf(r)) && fresh(r.nct_id)?.state !== 'changed_pending';
+  // Found trials have no live registry re-read yet; their recorded flag counts.
+  const foundLoud = (f: SlimFound) => isFlagLoud(f.check?.flag);
+  const lagging = view.pack.rows.filter(rowLoud).length + view.pack.found_beyond_registry_search.filter(foundLoud).length;
+  const filter: Filter = chosen ?? (lagging > 0 ? 'flagged' : 'all');
   const milestoneTypes = [...new Set(view.pack.rows.map((r) => milestoneOf(r)?.type).filter((t): t is string => Boolean(t)))];
 
   const rowPasses = (r: SlimRow) =>
-    (filter === 'all' || (filter === 'news' && Boolean(milestoneOf(r)?.date)) || (filter === 'flagged' && isFlagLoud(flagOf(r)))) &&
+    (filter === 'all' || (filter === 'news' && Boolean(milestoneOf(r)?.date)) || (filter === 'flagged' && rowLoud(r))) &&
     (runBy === 'any' || r.role === runBy) &&
     (milestone === 'any' || milestoneOf(r)?.type === milestone);
-  const foundPasses = (f: SlimFound) => (filter === 'all' || filter === 'found' || (filter === 'news' && Boolean(milestoneOf(f)?.date))) && (runBy === 'any' || runBy === 'partner_led') && (milestone === 'any' || milestoneOf(f)?.type === milestone);
+  const foundPasses = (f: SlimFound) => (filter === 'all' || filter === 'found' || (filter === 'news' && Boolean(milestoneOf(f)?.date)) || (filter === 'flagged' && foundLoud(f))) && (runBy === 'any' || runBy === 'partner_led') && (milestone === 'any' || milestoneOf(f)?.type === milestone);
   const ctx: RowCtx = { keyName, names, fresh, flagOf, nextRefresh, today };
 
   return (
@@ -54,6 +56,19 @@ export function Landscape({ view, names, keyName, nextRefresh, events, today }: 
         <WhatsNew view={view} names={names} keyName={keyName} events={events} />
         <div className="flex flex-col gap-4">
           <Hero view={view} company={view.pack.about.company} lagging={lagging} registryNow={registry?.trials ?? null} />
+          {view.pack.mechanism?.competitors.length ? (
+            <Link href={`/c/${keyName}/competitive`} className="group block rounded-[4px] border border-line bg-card px-4 py-3 hover:border-ink">
+              <span className="flex items-center justify-between gap-3">
+                <span className="text-[14px]">
+                  {plural(view.pack.mechanism.competitors.length, 'same-mechanism program')} · {view.pack.mechanism.targets.map((t) => t.gene_symbol).filter(Boolean).join(' × ')}
+                </span>
+                <span className="font-mono text-[11px] text-muted group-hover:text-ink">→</span>
+              </span>
+              <span className="mt-2 block">
+                <ConnectorMarker connector="chembl" />
+              </span>
+            </Link>
+          ) : null}
           {view.related.length ? (
             <div>
               <Label>Related</Label>
@@ -495,12 +510,11 @@ function RegistryCell({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
   );
 }
 
-function lagSentence(row: SlimRow, today: string): string | null {
-  const all = [row.check?.latest_milestone, ...(row.check?.earlier_milestones ?? [])];
-  const done = all.find((m) => m?.type === 'enrollment_completed' && m.date);
+function lagSentence(row: SlimRow, status: string, today: string): string | null {
+  const done = flagTrigger('registry_lagging', row.check?.latest_milestone, row.check?.earlier_milestones);
   if (!done?.date) return null;
   const months = monthsSince(done.date, new Date(today));
-  return `Registry still says ${statusLabel(row.status)} ${months >= 2 ? `${months} months` : 'weeks'} after enrollment completed (${fmtDate(done.date)}).`;
+  return `Registry still says ${statusLabel(status)} ${months >= 2 ? `${months} months` : 'weeks'} after enrollment completed (${fmtDate(done.date)}).`;
 }
 
 function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
@@ -510,7 +524,8 @@ function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
   const f = ctx.fresh(row.nct_id);
   const pending = f?.state === 'changed_pending';
   const loud = isFlagLoud(flag) && !pending;
-  const lag = flag === 'registry_lagging' && !pending ? lagSentence(row, ctx.today) : null;
+  const status = f?.status ?? row.status;
+  const lag = flag === 'registry_lagging' && !pending ? lagSentence(row, status, ctx.today) : null;
   const href = `/c/${ctx.keyName}/t/${row.nct_id}`;
   const checks = row.check?.hand_checked ?? [];
   return (
@@ -566,7 +581,7 @@ function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
           )}
         </div>
       </div>
-      {loud && receiptOpen ? <FlagReceipt row={row} /> : null}
+      {loud && receiptOpen ? <FlagReceipt row={row} flag={flag} status={status} live={Boolean(f)} href={href} /> : null}
       {lag ? <p className="mt-2 text-[13px]">{lag}</p> : null}
       {row.check?.updated_by ? <p className="mt-2 font-mono text-[10px] uppercase text-muted">Updated from a Monitor event · {fmtDate(row.check.updated_by.date)}</p> : null}
       {row.check ? (
@@ -578,29 +593,46 @@ function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
   );
 }
 
-/** The receipt behind a loud flag: what the registry says vs what the company said, side by side. */
-function FlagReceipt({ row }: { row: SlimRow }) {
-  const m = milestoneOf(row);
+/**
+ * The receipt behind a loud flag: today's registry status next to the company
+ * statement that set the flag (not simply the latest news), with its source.
+ */
+function FlagReceipt({ row, flag, status, live, href }: { row: SlimRow; flag: Flag; status: string; live: boolean; href: string }) {
+  const m = flagTrigger(flag, row.check?.latest_milestone, row.check?.earlier_milestones);
+  const latest = milestoneOf(row);
+  const checks = (row.check?.hand_checked ?? []).filter((c) => c.verdict === 'confirmed' || c.verdict === 'partly');
   return (
-    <div className="mt-3 grid gap-4 rounded-[4px] border border-line bg-page p-4 sm:grid-cols-2">
-      <div>
-        <Label>Registry says</Label>
-        <p className="mt-1 text-[14px] font-medium">{statusLabel(row.status)}</p>
-        {row.last_update_posted ? <p className="mt-0.5 text-[12px] text-muted">Posted {fmtDate(row.last_update_posted)}</p> : null}
+    <div className="mt-3 rounded-[4px] border border-line bg-page p-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <Label>Registry says{live ? ' · today' : ''}</Label>
+          <p className="mt-1 text-[14px] font-medium">{statusLabel(status)}</p>
+          {row.last_update_posted ? <p className="mt-0.5 text-[12px] text-muted">Last updated {fmtDate(row.last_update_posted)}</p> : null}
+          <div className="mt-1.5">
+            <SourceChip url={`https://clinicaltrials.gov/study/${row.nct_id}`} />
+          </div>
+        </div>
+        <div>
+          <Label>Company said{m?.date ? ` · ${fmtDate(m.date)}` : ''}</Label>
+          {m ? (
+            <>
+              <p className="mt-1 text-[14px]">
+                <span className="font-medium">{milestoneLabel(m.type)}.</span> {m.description}
+              </p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                <SourceChip url={m.source_url} date={m.date} nctId={row.nct_id} />
+                <HandChecked checks={checks} />
+              </div>
+              {latest && latest !== m ? <p className="mt-2 text-[12px] text-muted">Newer news since: {milestoneLabel(latest.type)}, {fmtDate(latest.date)}. It does not change the lag.</p> : null}
+            </>
+          ) : (
+            <p className="mt-1 text-[14px] text-muted">No dated milestone recorded.</p>
+          )}
+        </div>
       </div>
-      <div>
-        <Label>Company said{m?.date ? ` · ${fmtDate(m.date)}` : ''}</Label>
-        {m ? (
-          <>
-            <p className="mt-1 text-[14px]">{m.description}</p>
-            <div className="mt-1.5">
-              <SourceChip url={m.source_url} date={m.date} nctId={row.nct_id} />
-            </div>
-          </>
-        ) : (
-          <p className="mt-1 text-[14px] text-muted">No dated milestone recorded.</p>
-        )}
-      </div>
+      <Link href={href} className="mt-3 inline-block font-mono text-[11px] uppercase underline">
+        Full evidence, sites and timeline →
+      </Link>
     </div>
   );
 }
