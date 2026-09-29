@@ -8,7 +8,7 @@ import type { AskEvent } from '@/lib/server/ask';
 import { domainOf } from '@/lib/view/format';
 import { Card, Chip, connectorName, Label } from './ui';
 
-type Props = { keyName: string; company: string; nctId?: string; trialName?: string; suggestions?: string[] };
+type Props = { keyName: string; company: string; nctId?: string; trialName?: string; suggestions?: string[]; bare?: boolean };
 
 export async function* readSse<T>(res: Response): AsyncGenerator<T> {
   const reader = res.body!.getReader();
@@ -32,7 +32,7 @@ export async function* readSse<T>(res: Response): AsyncGenerator<T> {
   }
 }
 
-export function Ask({ keyName, company, nctId, trialName, suggestions }: Props) {
+export function Ask({ keyName, company, nctId, trialName, suggestions, bare }: Props) {
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
   const [text, setText] = useState('');
@@ -80,12 +80,14 @@ export function Ask({ keyName, company, nctId, trialName, suggestions }: Props) 
   }
 
   return (
-    <Card className="mt-10 p-5">
-      <div className="flex flex-wrap items-center gap-3">
-        <h2 className="text-[20px]">Ask about {nctId ? 'this trial' : company}</h2>
-        <Chip tone="dashed">Exploratory</Chip>
-        <span className="text-[13px] text-muted">Quick answers can be wrong. They never change a flag.</span>
-      </div>
+    <Card className={bare ? 'mt-3 p-5' : 'mt-10 p-5'}>
+      {bare ? null : (
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="text-[20px]">Ask about {nctId ? 'this trial' : company}</h2>
+          <Chip tone="dashed">Exploratory</Chip>
+          <span className="text-[13px] text-muted">Quick answers can be wrong. They never change a flag.</span>
+        </div>
+      )}
       <form
         className="mt-4 flex gap-2"
         onSubmit={(e) => {
