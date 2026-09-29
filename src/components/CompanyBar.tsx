@@ -13,7 +13,6 @@ type Props = {
   nextRefresh: string;
   refreshIncluded: boolean;
   scopeLabel?: string;
-  competitors: number;
   replay: boolean;
   reading?: boolean;
 };
@@ -27,7 +26,6 @@ export function CompanyBar(p: Props) {
   const base = `/c/${p.keyName}`;
   const tabs = [
     { href: base, label: 'Landscape' },
-    { href: `${base}/competitive`, label: 'Competitive set', count: p.competitors },
     { href: `${base}/company`, label: 'Company' },
     { href: `${base}/hood`, label: 'Under the hood', mono: true },
   ];
@@ -87,7 +85,6 @@ export function CompanyBar(p: Props) {
               className={cx('whitespace-nowrap border-b-2 pb-3 text-[15px]', active ? 'border-ink' : 'border-transparent text-muted hover:text-ink', t.mono && 'font-mono text-[12px] uppercase tracking-[0.06em]')}
             >
               {t.label}
-              {t.count ? <span className="ml-1.5 font-mono text-[12px] text-muted">{t.count}</span> : null}
             </Link>
           );
         })}

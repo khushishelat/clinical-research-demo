@@ -20,7 +20,6 @@ export default async function CompanyLayout({ children, params }: LayoutProps<'/
           nextRefresh={view?.refresh.next ?? nextRefreshDate(new Date())}
           refreshIncluded={view?.refresh.included ?? false}
           scopeLabel={view?.config?.scope_label}
-          competitors={view?.pack.mechanism?.competitors.length ?? 0}
           replay={Boolean(view && (await hasReplay(key)))}
           reading={!view}
         />
