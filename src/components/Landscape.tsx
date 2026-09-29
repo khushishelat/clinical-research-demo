@@ -504,10 +504,12 @@ function lagSentence(row: SlimRow, today: string): string | null {
 }
 
 function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
+  const [receiptOpen, setReceiptOpen] = useState(false);
   const m = milestoneOf(row);
   const flag = ctx.flagOf(row);
   const f = ctx.fresh(row.nct_id);
   const pending = f?.state === 'changed_pending';
+  const loud = isFlagLoud(flag) && !pending;
   const lag = flag === 'registry_lagging' && !pending ? lagSentence(row, ctx.today) : null;
   const href = `/c/${ctx.keyName}/t/${row.nct_id}`;
   const checks = row.check?.hand_checked ?? [];
@@ -548,9 +550,23 @@ function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
         </div>
         <div className="text-[13px]">{row.check?.next_catalyst?.timing_text ? <p>{row.check.next_catalyst.timing_text}</p> : <p className="text-muted">Not guided</p>}</div>
         <div>
-          <FlagBadge flag={flag} pending={pending} />
+          {loud ? (
+            <button
+              type="button"
+              onClick={() => setReceiptOpen((v) => !v)}
+              aria-expanded={receiptOpen}
+              title="See the evidence behind this flag"
+              className="group inline-flex items-center gap-1.5 rounded-[4px] px-1 py-0.5 hover:bg-wash"
+            >
+              <FlagBadge flag={flag} pending={pending} />
+              <span className="font-mono text-[10px] uppercase text-faint group-hover:text-ink">{receiptOpen ? 'Hide ▾' : 'Why ▸'}</span>
+            </button>
+          ) : (
+            <FlagBadge flag={flag} pending={pending} />
+          )}
         </div>
       </div>
+      {loud && receiptOpen ? <FlagReceipt row={row} /> : null}
       {lag ? <p className="mt-2 text-[13px]">{lag}</p> : null}
       {row.check?.updated_by ? <p className="mt-2 font-mono text-[10px] uppercase text-muted">Updated from a Monitor event · {fmtDate(row.check.updated_by.date)}</p> : null}
       {row.check ? (
@@ -558,6 +574,33 @@ function TrialLine({ row, ctx }: { row: SlimRow; ctx: RowCtx }) {
           <CheckedWith calls={row.check.connector_calls} citations={row.check.citations} seconds={row.check.seconds} />
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** The receipt behind a loud flag: what the registry says vs what the company said, side by side. */
+function FlagReceipt({ row }: { row: SlimRow }) {
+  const m = milestoneOf(row);
+  return (
+    <div className="mt-3 grid gap-4 rounded-[4px] border border-line bg-page p-4 sm:grid-cols-2">
+      <div>
+        <Label>Registry says</Label>
+        <p className="mt-1 text-[14px] font-medium">{statusLabel(row.status)}</p>
+        {row.last_update_posted ? <p className="mt-0.5 text-[12px] text-muted">Posted {fmtDate(row.last_update_posted)}</p> : null}
+      </div>
+      <div>
+        <Label>Company said{m?.date ? ` · ${fmtDate(m.date)}` : ''}</Label>
+        {m ? (
+          <>
+            <p className="mt-1 text-[14px]">{m.description}</p>
+            <div className="mt-1.5">
+              <SourceChip url={m.source_url} date={m.date} nctId={row.nct_id} />
+            </div>
+          </>
+        ) : (
+          <p className="mt-1 text-[14px] text-muted">No dated milestone recorded.</p>
+        )}
+      </div>
     </div>
   );
 }
