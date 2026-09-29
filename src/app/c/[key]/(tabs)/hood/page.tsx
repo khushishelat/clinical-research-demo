@@ -141,6 +141,15 @@ export default async function HoodPage({ params }: PageProps<'/c/[key]/hood'>) {
             </>
           ) : null}
         </section>
+        <section>
+          <Head>Competitive set · {pack.mechanism?.competitors.length ?? 0} same-mechanism programs</Head>
+          <p className="mt-2 text-[#adadac]">
+            ChEMBL targets for the lead asset and molecules on the same targets, ranked by highest phase reached.{' '}
+            <a href={`/c/${key}/competitive`} className="text-page underline decoration-machine-line underline-offset-4 hover:decoration-page">
+              Open the full view →
+            </a>
+          </p>
+        </section>
       </div>
       <p className="mt-8 text-[#adadac]">
         Group events are followed with last_event_id and a small pool of run event streams; when a stream drops, the app lists the group&apos;s runs and fetches any finished run it missed.
