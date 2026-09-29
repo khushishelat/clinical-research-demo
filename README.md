@@ -1,16 +1,36 @@
 # Trial Check
 
-Competitive intelligence from public trial data, built on
-[Parallel](https://parallel.ai) Data Connectors.
+The trial registry is stale. Trial Check catches it.
 
 Enter a company. Trial Check lists every active trial it runs, partners on or
-collaborates on. It checks each one against the company's own news, filings and
-papers. It shows the latest dated milestone and the next catalyst, with a source
-for each, and flags where ClinicalTrials.gov is behind what the company already
-said.
+collaborates on, checks each one against the company's own news, filings and
+papers, and flags where ClinicalTrials.gov is behind what the company already
+said — with a source for every claim.
+
+**Nothing here is hand-curated.** Every flag was set by code from real runs on
+public data (recorded Sep 28, 2026). Model output is labeled as such unless
+hand-checked. The flags are the point: what the registry gets wrong, not the
+registry itself.
 
 It's for BD, competitive-intelligence and investment analysts who track biotech
-pipelines. They need to know what changed, not re-read registry pages.
+pipelines — and for anyone who's ever watched an official database disagree
+with reality. They need to know what changed, not re-read registry pages.
+
+## The recipe (steal this)
+
+Trial Check is one instance of a reusable pattern: take a domain with an
+official database and a noisy web, put connectors on both, and flag the
+disagreements. The pieces a deployed engineer can lift:
+
+1. **One Task Group per entity.** An `ultra` snapshot for breadth, a `pro`
+   mechanism pass, a `pro` check per item — connectors on every run.
+2. **A freshness state machine.** Re-read the database on every open, re-run
+   weekly on a cron, and let daily event-stream monitors trigger
+   connector-backed re-checks that patch rows.
+3. **Flags in code, not in the model.** The model finds facts; code decides
+   what counts as a conflict or a lag.
+
+Details in [How it works](#how-it-works) and on the "Under the hood" page.
 
 Six companies are recorded and open instantly: Summit, Akeso (Phase 3 only),
 Arvinas, Legend, Revolution Medicines and Axsome. Anyone can research a new
@@ -73,7 +93,8 @@ produced the fact. Web news and filings keep plain source chips.
 **Ask** is on the Responses API: `model: "parallel"`, `reasoning.effort:
 "medium"`, and `data_sources` set to `clinical_trials` and `pubmed`. It streams
 a quick answer with citations. Answers are labeled exploratory and never change
-a flag.
+a flag. On the company page it lives in a collapsed Experimental disclosure
+below the fold; the trial-detail page keeps an inline one.
 
 **Replay** plays the recorded run's real event log in 30 seconds: searches,
 pages read and connector calls. It makes no API calls.
@@ -135,7 +156,8 @@ Research over the budget is queued, not refused.
 | `/` | Typeahead: recorded companies first, then the sponsor index (`data/sponsors.json`) with live counts |
 | `/c/:key` | Landscape. Add `?replay=1` for the replay, or `?run=<taskgroup_id>` for a live run |
 | `/c/:key/t/:nct` | Trial detail |
-| `/c/:key/competitive`, `/company`, `/hood` | Competitive set, Company, Under the hood |
+| `/c/:key/competitive` | Competitive set (linked from Under the hood, not a nav tab) |
+| `/c/:key/company`, `/hood` | Company, Under the hood |
 | `/c/:key/narrow` | Narrowing for sponsors with more than 60 trials |
 | `GET /api/company/:key`, `/api/registry/:key`, `/api/events/:key`, `/api/replay/:key`, `/api/export/:key` | Data |
 | `POST /api/research`, `GET /api/research/:gid/stream` | Research, streamed as server-sent events |
