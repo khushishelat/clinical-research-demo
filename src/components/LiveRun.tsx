@@ -132,7 +132,7 @@ export function LiveRun({ keyName, company, gid, phase, startedAt, message }: Pr
         <Stage label="Registry table" detail={`${rows.length} trials, live from ClinicalTrials.gov`} state={registry ? 'done' : 'reading'} />
         <Stage label="Trial checks" detail="Rows fill in place" state={trialRuns.length && finished === trialRuns.length ? 'done' : 'reading'} progress={trialRuns.length ? `${finished} of ${trialRuns.length}` : undefined} />
         <Stage label="Pipeline" detail="Fills program headers last" state={snapDone ? 'done' : 'reading'} />
-        <Stage label="Competitive set" detail="Mechanism and competitors, via ChEMBL" state={mechDone ? 'done' : 'reading'} />
+        <Stage label="Competitors" detail="Mechanism and same-target programs, via ChEMBL" state={mechDone ? 'done' : 'reading'} />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">

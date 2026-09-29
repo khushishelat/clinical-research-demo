@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: PageProps<'/'>) {
   return (
     <main className="mx-auto max-w-[760px] py-16 sm:py-24">
       <Label>Competitive intelligence from public trial data</Label>
-      <h1 className="mt-4 text-[36px] leading-[1.1] tracking-[-0.01em] sm:text-[48px]">The trial registry is stale. We catch it.</h1>
+      <h1 className="mt-4 text-[36px] leading-[1.1] tracking-[-0.01em] sm:text-[48px]">What a biotech is actually running, and what changed that the registry doesn&apos;t show.</h1>
       <p className="mt-4 max-w-[600px] text-[18px] text-muted">
         Type a company. We read the official registry, then check every trial against the company&apos;s own news, filings and papers, and flag where the registry is behind what the company already said.
       </p>

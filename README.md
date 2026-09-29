@@ -1,20 +1,34 @@
 # Trial Check
 
-The trial registry is stale. Trial Check catches it.
+What a biotech is actually running, and what changed that the registry doesn't
+show.
 
 Enter a company. Trial Check lists every active trial it runs, partners on or
-collaborates on, checks each one against the company's own news, filings and
-papers, and flags where ClinicalTrials.gov is behind what the company already
-said — with a source for every claim.
+collaborates on, and checks each one against the company's own news, filings
+and papers. Every trial gets its latest dated milestone and next catalyst, each
+with a source, and a flag where ClinicalTrials.gov is behind what the company
+already said.
 
-**Nothing here is hand-curated.** Every flag was set by code from real runs on
-public data (recorded Sep 28, 2026). Model output is labeled as such unless
-hand-checked. The flags are the point: what the registry gets wrong, not the
-registry itself.
+**What the recorded runs found** (six companies, Sep 28, 2026):
+
+- **Trials a sponsor search misses.** For Summit, a registry search returns 31
+  trials; research finds 51, because 20 are run by partners and don't list
+  Summit.
+- **News the registry doesn't carry.** 19 of Summit's 31 registry trials have
+  dated public news (a readout, an enrollment update, a filing) that the
+  registry record doesn't show.
+- **Registry lags.** These are rare (3 in 116 registry trials) and specific when
+  they happen. At recording, HARMONi-3 still said Recruiting two months after
+  Summit reported enrollment complete, while 241 of its 260 sites already said
+  otherwise. Akeso's COMPASSION-22 still said Recruiting 18 months after
+  enrollment completed. Both are hand-checked. The registry is re-read on
+  every open, so a flag clears as soon as the registry catches up.
+
+No flag is set by hand: code sets every flag from the milestone type and
+today's registry status. Model output is labeled as such unless hand-checked.
 
 It's for BD, competitive-intelligence and investment analysts who track biotech
-pipelines — and for anyone who's ever watched an official database disagree
-with reality. They need to know what changed, not re-read registry pages.
+pipelines. They need to know what changed, not re-read registry pages.
 
 ## The recipe (steal this)
 
@@ -23,7 +37,7 @@ official database and a noisy web, put connectors on both, and flag the
 disagreements. The pieces a deployed engineer can lift:
 
 1. **One Task Group per entity.** An `ultra` snapshot for breadth, a `pro`
-   mechanism pass, a `pro` check per item — connectors on every run.
+   mechanism pass and a `pro` check per item, with connectors on every run.
 2. **A freshness state machine.** Re-read the database on every open, re-run
    weekly on a cron, and let daily event-stream monitors trigger
    connector-backed re-checks that patch rows.

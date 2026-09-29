@@ -217,6 +217,17 @@ export function flagFor(
   return 'news';
 }
 
+/**
+ * The milestone that set a loud flag, so the evidence shown matches the rule:
+ * for a lag, the enrollment completion (latest or earlier, since newer news
+ * must not hide it); for a conflict, the latest milestone (the stop).
+ */
+export function flagTrigger<M extends { type: string }>(flag: string | undefined, latest: M | null | undefined, earlier: readonly (M | null | undefined)[] = []): M | null {
+  if (flag === 'conflict') return latest && ['discontinued_or_terminated', 'paused_or_on_hold'].includes(latest.type) ? latest : null;
+  if (flag === 'registry_lagging') return [latest, ...earlier].find((m): m is M => m?.type === 'enrollment_completed') ?? null;
+  return null;
+}
+
 // parallel-web 1.1.0 through 1.3.3 do not type advanced_settings.data_sources,
 // which the API accepts. The intersection keeps `location` so the type is not
 // a "weak type" mismatch.

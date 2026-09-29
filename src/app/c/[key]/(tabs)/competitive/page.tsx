@@ -38,7 +38,13 @@ export default async function CompetitivePage({ params }: PageProps<'/c/[key]/co
 
   return (
     <div className="pb-8">
-      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <p className="mt-8 font-mono text-[12px] uppercase tracking-[0.05em] text-muted">
+        <Link href={`/c/${key}`} className="hover:text-ink">
+          ← {pack.about.company} · Landscape
+        </Link>{' '}
+        · Competitive set
+      </p>
+      <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <Label>Lead asset</Label>
