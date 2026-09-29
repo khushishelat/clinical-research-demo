@@ -20,7 +20,12 @@ type Filter = 'all' | 'news' | 'flagged' | 'found';
 
 export function Landscape({ view, names, keyName, nextRefresh, events, today }: Props) {
   const { data: registry } = useRegistry(keyName);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(() =>
+    view.pack.rows.some((r) => isFlagLoud(r.check?.flag ?? 'no_news')) ||
+    view.pack.found_beyond_registry_search.some((f) => isFlagLoud(f.check?.flag ?? 'no_news'))
+      ? 'flagged'
+      : 'all',
+  );
   const [runBy, setRunBy] = useState<RunBy | 'any'>('any');
   const [milestone, setMilestone] = useState<string>('any');
   const rows = useMemo(() => new Map(view.pack.rows.map((r) => [r.nct_id, r])), [view.pack.rows]);
