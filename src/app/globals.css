@@ -1,39 +1,120 @@
 @import "tailwindcss";
 
+/* Parallel brand tokens (HANDOFF.md section 8). Orange is only for conflicts,
+   active progress and the developer CTA; orange fills carry ink text. */
 @theme inline {
   --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono), "SF Mono", "Fira Code", monospace;
 
-  /* Palette — matches the Parallel demo family */
-  --color-off-white: #f9f8f4;
-  --color-brand: #fb631b;
-  --color-brand-hover: #f4793f;
-  --color-brand-wash: #feddce;
-  --color-index-black: #1d1b16;
-  --color-neural: #d8d0bf;
+  --color-page: #fcfcfa;
+  --color-card: #ffffff;
+  --color-ink: #1d1b16;
+  --color-muted: #5c5b59;
+  --color-faint: #858483;
+  --color-line: #e5e5e5;
+  --color-line-strong: #d6d6d6;
+  --color-wash: #f6f5f1;
+  --color-orange: #fb631b;
+  --color-orange-wash: #fcddcf;
+  --color-machine: #1d1b16;
+  --color-machine-line: #434343;
+  --color-machine-text: #e9e7e1;
+  --color-ok: #2f7d45;
+  --color-ok-wash: #e3f1e6;
 
-  --color-grey-100: #f6f6f6;
-  --color-grey-200: #eeeeee;
-  --color-grey-300: #e5e5e5;
-  --color-grey-400: #d6d6d6;
-  --color-grey-500: #adadac;
-  --color-grey-600: #858483;
-  --color-grey-700: #5c5b59;
-  --color-grey-800: #434343;
-  --color-grey-900: #181818;
+  --ease-brand: cubic-bezier(0.8, 0.45, 0.2, 1);
+}
 
-  --color-success: #69be78;
-  --color-error: #e14942;
-  --color-info: #4a90d9;
+html {
+  background: var(--color-page);
 }
 
 body {
-  background: var(--color-off-white);
-  color: var(--color-index-black);
+  background: var(--color-page);
+  color: var(--color-ink);
   font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
 
+h1,
+h2,
+h3,
+h4,
+strong,
+b {
+  font-weight: 500;
+}
+
 ::selection {
-  background: var(--color-brand-wash);
+  background: var(--color-orange-wash);
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* The signature detail: thin vertical bracket lines on the main container. */
+.bracket {
+  position: relative;
+}
+.bracket::before,
+.bracket::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-line);
+  pointer-events: none;
+}
+.bracket::before {
+  left: 0;
+}
+.bracket::after {
+  right: 0;
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@keyframes fill-in {
+  from {
+    background: var(--color-orange-wash);
+  }
+  to {
+    background: transparent;
+  }
+}
+.just-landed {
+  animation: fill-in 1.6s var(--ease-brand);
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.pulse {
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .just-landed,
+  .pulse {
+    animation: none;
+  }
 }

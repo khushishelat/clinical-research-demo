@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Route handlers read recorded packs, replays and config from disk; include them in every server trace.
+  outputFileTracingIncludes: {
+    '/*': ['./fixtures/**/*', './data/**/*'],
+  },
 };
 
 export default nextConfig;
