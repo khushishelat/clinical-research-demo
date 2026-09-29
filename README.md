@@ -1,23 +1,82 @@
-# Pipeline Watch
+# Trial Check
 
-Competitive clinical trial intelligence — a Parallel Web Systems demo.
+Competitive intelligence from public trial data, built on
+[Parallel](https://parallel.ai) Data Connectors.
 
-Watches the GLP-1 pipelines of **Eli Lilly**, **Novo Nordisk**, and **Pfizer**:
-new registrations, phase transitions, and status changes, enriched with press
-releases, earnings calls, and FDA filings. Every claim carries its source.
+Enter a company. Trial Check lists every active trial it runs, partners on or
+collaborates on. It checks each one against the company's own news, filings and
+papers. It shows the latest dated milestone and the next catalyst, with a source
+for each, and flags where ClinicalTrials.gov is behind what the company already
+said.
+
+It's for BD, competitive-intelligence and investment analysts who track biotech
+pipelines. They need to know what changed, not re-read registry pages.
+
+Six companies are recorded and open instantly: Summit, Akeso (Phase 3 only),
+Arvinas, Legend, Revolution Medicines and Axsome. Anyone can research a new
+company. That takes about 8 minutes, and the result is shared with everyone.
+
+## Where the connectors show up
+
+| Connector | What it does here | Where you see it |
+| --- | --- | --- |
+| `clinical_trials` | Reads the full registry record (sites, site status, outcomes). Finds partner-run trials by searching drug names and codes, which a sponsor search misses. Confirms competitors' stages. | Hero count ("31 in the registry search → 51 found by research"), found-by-research badges, the registry drawer, and the site-status line: "241 of 260 sites already show Active, not recruiting." |
+| `pubmed` | Looks for results papers for each trial | Results and publications, including an honest "0 papers found" with the queries that ran |
+| `chembl` | Gets the lead asset's targets and mechanism, and molecules on the same targets | Competitive set |
+| `biorxiv` | Looks for preprints | "Checked with" line on each row |
+
+The "Via connector" marker appears only where a connector, not the open web,
+produced the fact. Web news and filings keep plain source chips.
 
 ## How it works
 
-1. **Seed** — `scripts/seed.py` runs one Task API call per sponsor with the
-   free `clinical_trials` data connector attached (`advanced_settings.data_sources`),
-   using a strict `output_schema` so registry records come back as structured JSON.
-   Output lands in `src/data/seed-trials.json`.
-2. **Watch** (next) — snapshot monitors diff registry fields between runs to
-   detect phase/status transitions; event-stream monitors catch new registrations.
-3. **Enrich** (next) — follow-up Task runs with the PR Newswire connector + web
-   research attach press/earnings/filing signals to trials.
-4. **Serve** — Next.js renders the trial feed, detail panels with citations,
-   and stats from the seed baseline.
+1. **Find** (free, under a second). The ClinicalTrials.gov API v2 lists the
+   company's active trials as lead sponsor or collaborator. This re-runs on
+   every page open, so registry status is always today's.
+2. **Research** (Task API, one Task Group per company):
+   - an `ultra` company snapshot: programs, partnerships, partner-run trials
+   - a `pro` mechanism run: ChEMBL targets and competitors
+   - a `pro` trial check per trial, with connectors on every run
+     (`advanced_settings.data_sources`)
+
+   When the snapshot finishes, the partner-run trials it found are confirmed
+   against the registry, and their checks join the same group.
+3. **Join** (code, not the model). Trials attach to programs by NCT ID, and
+   code sets the flags:
+
+   | Flag | When |
+   | --- | --- |
+   | conflict | The company says the trial was stopped, but the registry says active |
+   | registry lagging | Any milestone says enrollment completed, but the registry still says enrolling |
+   | news | Any other dated milestone |
+   | no news | Nothing found |
+
+   A found trial is kept only if all of these hold:
+   - it exists on the registry
+   - it doesn't list the company
+   - it has an industry lead sponsor
+   - one of its interventions is a company asset
+
+**Freshness**
+
+- **Every open.** Registry status is re-read. A lag clears when the registry
+  catches up ("✓ Registry caught up"). It drops to "Registry changed · in next
+  check" when the status moves sideways.
+- **Weekly.** A cron state machine re-runs every recorded company. Hand-check
+  ticks carry over only when the claim is unchanged: same milestone type, date
+  and source.
+- **Daily.** One `event_stream` monitor per company (Monitor API, `base`)
+  watches for news. Monitors can't call connectors. So a matched event starts
+  a connector-backed `pro` check, with `previous_interaction_id` set to the
+  event, and the result patches that row: "Updated from a Monitor event".
+
+**Ask** is on the Responses API: `model: "parallel"`, `reasoning.effort:
+"medium"`, and `data_sources` set to `clinical_trials` and `pubmed`. It streams
+a quick answer with citations. Answers are labeled exploratory and never change
+a flag.
+
+**Replay** plays the recorded run's real event log in 30 seconds: searches,
+pages read and connector calls. It makes no API calls.
 
 ## Run it
 
@@ -26,28 +85,70 @@ npm install
 npm run dev
 ```
 
-Re-seed the baseline (needs a Parallel API key — see below):
+The app starts in fixture mode by default, with the six recorded companies, no
+key and no API calls. For live runs, copy `.env.example` to `.env.local` and
+set `DEMO_MODE=live` and `PARALLEL_API_KEY`. Setting a key alone never turns
+live mode on.
 
 ```bash
-python3 scripts/seed.py
+npm test          # 29 tests: flags, freshness, layout, pipeline state machine, webhooks, routes
+npm run typecheck
 ```
 
-## Env
+## Deploy (Vercel)
 
-| Var | Purpose |
-|---|---|
-| `PARALLEL_API_KEY` | Live refresh via the Parallel API (optional; demo serves seed data without it) |
-| `SEED_UPDATED_AT` | Override the "updated" stamp shown in the header |
+1. Add private Blob storage and Upstash Redis (Marketplace), and set the
+   variables in `.env.example`.
+2. `vercel.json` schedules two crons:
+   - `/api/cron/refresh`: every 15 minutes on Mondays. Each call advances
+     every company by one step.
+   - `/api/cron/followups`: every 15 minutes. It drains Monitor follow-ups and
+     advances research nobody is watching.
+3. Create the monitors once. This bills daily until cancelled.
 
-For local seeding from this machine, auth goes through the stored Parallel
-connector (never paste a raw key into the repo).
+   ```bash
+   npm run setup-monitors -- --mode=create
+   ```
 
-## Deploy
+   It writes `data/monitors.json`; commit that file. To stop the monitors, run
+   `--mode=cancel`.
 
-Standard Next.js on Vercel. Set `PARALLEL_API_KEY` in the project env for live
-data; otherwise the seeded baseline is served.
+**Webhooks** arrive at `/api/webhooks/parallel`.
 
-## Notes
+- They're verified with the Standard Webhooks signature, de-duplicated by
+  `webhook-id` and queued, and the endpoint returns 200 right away.
+- A monitor webhook only carries `event_group_id`. The events are fetched
+  from the API.
 
-- Registry data: ClinicalTrials.gov via Parallel's `clinical_trials` connector.
-- Demo only — not medical advice.
+**Spend.** Viewers never see a price. Server-side caps protect the key:
+
+- per-IP daily limits
+- daily budgets for research, Ask and follow-ups
+- a per-run cap
+
+Research over the budget is queued, not refused.
+
+## Routes
+
+| Route | |
+| --- | --- |
+| `/` | Typeahead: recorded companies first, then the sponsor index (`data/sponsors.json`) with live counts |
+| `/c/:key` | Landscape. Add `?replay=1` for the replay, or `?run=<taskgroup_id>` for a live run |
+| `/c/:key/t/:nct` | Trial detail |
+| `/c/:key/competitive`, `/company`, `/hood` | Competitive set, Company, Under the hood |
+| `/c/:key/narrow` | Narrowing for sponsors with more than 60 trials |
+| `GET /api/company/:key`, `/api/registry/:key`, `/api/events/:key`, `/api/replay/:key`, `/api/export/:key` | Data |
+| `POST /api/research`, `GET /api/research/:gid/stream` | Research, streamed as server-sent events |
+| `POST /api/ask` | Ask (server-sent events) |
+
+## Data and privacy
+
+- **Recorded packs** (`fixtures/recorded/`) are real runs on public data from
+  Sep 28, 2026. Model output is labeled as such unless hand-checked. See
+  `fixtures/recorded/README.md`.
+- **Investigators.** Some investigator-led trials list a person as lead
+  sponsor. That name shows as "[Investigator]" everywhere, including replay
+  logs. Site contacts are never shown.
+- **Not advice.** This is research support from public sources, not investment
+  or medical advice, and its coverage of trials and disclosures is not
+  complete.

@@ -6,12 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "build-sponsors": "tsx scripts/build-sponsors.mts",
+    "setup-monitors": "tsx --env-file-if-exists=.env.local scripts/setup-monitors.mts",
+    "compact-replay": "tsx scripts/compact-replay.mts"
   },
   "dependencies": {
+    "@vercel/blob": "^2.8.0",
     "next": "16.3.6",
+    "openai": "^7.23.0",
+    "parallel-web": "^1.3.3",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +30,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

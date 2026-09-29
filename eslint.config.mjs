@@ -5,6 +5,17 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true }],
+    },
+  },
+  {
+    // These layers parse untyped JSON from the model, the Task/Monitor APIs and
+    // ClinicalTrials.gov; `any` is confined to them.
+    files: ['src/lib/domain/**', 'src/lib/server/**', 'scripts/**', 'tests/**'],
+    rules: { '@typescript-eslint/no-explicit-any': 'off' },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

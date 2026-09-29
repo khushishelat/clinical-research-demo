@@ -1,0 +1,3630 @@
+{
+  "about": {
+    "company": "Axsome Therapeutics",
+    "recorded": "2026-09-28",
+    "taskgroup_id": "tgrp_4e78849e383e4a8ab2f65b46e8772253",
+    "note": "Recorded live run on public data. Model output unless hand-checked. Not investment advice."
+  },
+  "totals": {
+    "registry_trials": 14,
+    "flags": {
+      "news": 9,
+      "no_news": 5
+    },
+    "partner_run_trials_claimed": 0,
+    "partner_run_trials_new_and_confirmed": 0,
+    "programs": 17,
+    "competitors": 3,
+    "connector_calls": 66,
+    "snapshot_seconds": 291,
+    "mechanism_seconds": 132,
+    "estimated_cost_usd": 1.8,
+    "partner_run_trials": 0,
+    "partner_run_excluded": 0,
+    "hand_checked_claims": 3,
+    "hand_checked_wrong": 0
+  },
+  "snapshot": {
+    "company": "Axsome Therapeutics, Inc. (NASDAQ: AXSM)",
+    "latest_filing": "10-Q, quarter ended 2026-06-30, filing date 2026-08-10",
+    "programs": [
+      {
+        "status": "approved",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "AUVELITY (dextromethorphan-bupropion; AXS-05)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "In its second-quarter update, Axsome reported continued commercialization of AUVELITY, which is approved in the United States for major depressive disorder in adults.",
+        "indication": "Major depressive disorder in adults",
+        "phase": "Approved; Phase 3 completed",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "approved",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "AUVELITY (dextromethorphan-bupropion; AXS-05)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that it had launched U.S.-approved AUVELITY for agitation associated with dementia due to Alzheimer's disease in June 2026.",
+        "indication": "Agitation associated with dementia due to Alzheimer's disease",
+        "phase": "Approved; Phase 3 completed",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "approved",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "SUNOSI (solriamfetol)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported continued commercialization of SUNOSI, approved in the United States for excessive daytime sleepiness associated with narcolepsy.",
+        "indication": "Excessive daytime sleepiness associated with narcolepsy",
+        "phase": "Approved; Phase 3 completed",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "approved",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "SUNOSI (solriamfetol)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported continued commercialization of SUNOSI, approved in the United States for excessive daytime sleepiness associated with obstructive sleep apnea.",
+        "indication": "Excessive daytime sleepiness associated with obstructive sleep apnea",
+        "phase": "Approved; Phase 3 completed",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "approved",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "SYMBRAVO (meloxicam-rizatriptan; AXS-07)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported second-quarter 2026 sales of U.S.-approved SYMBRAVO, which it launched in June 2025 for acute migraine treatment.",
+        "indication": "Acute treatment of migraine with or without aura in adults",
+        "phase": "Approved; Phase 3 completed",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "regulatory_submission",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "reboxetine (AXS-12)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that the FDA had accepted its U.S. NDA for cataplexy in narcolepsy and assigned a May 1, 2027 target action date.",
+        "indication": "Cataplexy in narcolepsy",
+        "phase": "Phase 3; NDA accepted",
+        "next_catalyst": {
+          "timing_text": "May 1, 2027",
+          "description": "FDA target action on the AXS-12 NDA.",
+          "latest": "2027-05-01",
+          "stated_by": "Axsome second-quarter 2026 results release",
+          "earliest": "2027-05-01"
+        },
+        "key_trials": [
+          "SYMPHONY (NCT05059223)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://www.globenewswire.com/news-release/2026/08/31/3353172/0/en/axsome-therapeutics-initiates-summit-phase-3-trial-of-axs-05-in-smoking-cessation.html",
+        "asset": "dextromethorphan-bupropion (AXS-05)",
+        "latest_milestone_date": "2026-08-31",
+        "latest_milestone": "Axsome announced that the first participant had been dosed in its Phase 3 SUMMIT smoking-cessation trial.",
+        "indication": "Smoking cessation in adults",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "SUMMIT (NCT07766655)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://www.globenewswire.com/news-release/2025/03/25/3048592/33090/en/axsome-therapeutics-announces-focus-phase-3-trial-of-solriamfetol-in-adults-with-attention-deficit-hyperactivity-disorder-adhd-achieves-primary-endpoint.html",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2025-03-25",
+        "latest_milestone": "Axsome announced that its Phase 3 FOCUS trial in adults with ADHD met its primary endpoint.",
+        "indication": "Attention-deficit/hyperactivity disorder in adults",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "FOCUS (NCT05972044)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://www.globenewswire.com/news-release/2026/07/07/3323028/0/en/Axsome-Therapeutics-Initiates-FOCUS-2-Phase-3-Trial-of-Solriamfetol-in-Children-with-Attention-Deficit-Hyperactivity-Disorder-ADHD.html",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2026-07-07",
+        "latest_milestone": "Axsome announced that the first patient had been dosed in the Phase 3 FOCUS-2 trial.",
+        "indication": "Attention-deficit/hyperactivity disorder in children aged 6 to less than 12 years",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "FOCUS-2 (NCT07717879)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2026-06-26",
+        "latest_milestone": "Axsome announced that the first patient had been dosed in the Phase 3 FOCUS-3 trial.",
+        "indication": "Attention-deficit/hyperactivity disorder in adolescents aged 12 to less than 18 years",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "FOCUS-3 (NCT07717892)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that its Phase 3 ENGAGE trial in binge eating disorder was ongoing.",
+        "indication": "Binge eating disorder in adults",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": "4Q 2026",
+          "description": "Topline ENGAGE results.",
+          "latest": "2026-12-31",
+          "stated_by": "Axsome second-quarter 2026 results release",
+          "earliest": "2026-10-01"
+        },
+        "key_trials": [
+          "ENGAGE (NCT06413433)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that it was conducting its Phase 3 CLARITY trial.",
+        "indication": "Major depressive disorder with symptoms of excessive daytime sleepiness in adults",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "CLARITY (NCT07484217)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "solriamfetol",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that its Phase 3 SUSTAIN trial in shift work disorder was ongoing.",
+        "indication": "Excessive sleepiness associated with shift work disorder",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": "2027",
+          "description": "Topline SUSTAIN results.",
+          "latest": "2027-12-31",
+          "stated_by": "Axsome second-quarter 2026 results release",
+          "earliest": "2027-01-01"
+        },
+        "key_trials": [
+          "SUSTAIN (NCT06568367)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "esreboxetine (AXS-14)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported that its Phase 3 FORWARD trial for fibromyalgia management was ongoing.",
+        "indication": "Management of fibromyalgia",
+        "phase": "Phase 3",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": [
+          "FORWARD (NCT07398417)"
+        ]
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "balipodect (AXS-20)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported Phase 3 trial-enabling work following an earlier Phase 2 proof-of-concept study in schizophrenia; it did not announce a Phase 3 trial start.",
+        "indication": "Schizophrenia",
+        "phase": "Phase 2 completed; Phase 3 in preparation",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "AZD7325 (AXS-17)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome reported technical-transfer and Phase 2 trial-enabling activities for its epilepsy program; no epilepsy Phase 2 trial start was announced.",
+        "indication": "Epilepsy",
+        "phase": "Phase 1 completed for the asset; epilepsy Phase 2 in preparation",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      },
+      {
+        "status": "active",
+        "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+        "asset": "balipodect (AXS-20)",
+        "latest_milestone_date": "2026-08-10",
+        "latest_milestone": "Axsome stated that it plans to evaluate AXS-20 for Tourette syndrome; it did not announce a Tourette-specific clinical trial.",
+        "indication": "Tourette syndrome, proposed indication",
+        "phase": "No indication-specific clinical trial announced",
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "key_trials": []
+      }
+    ],
+    "partner_run_trials": [],
+    "partnerships": [
+      {
+        "partner": "Pfizer Inc.",
+        "scope": "Pfizer licensed Axsome exclusive U.S. rights to reboxetine (AXS-12) data and intellectual property and exclusive U.S. development and commercialization rights to esreboxetine (AXS-14).",
+        "source_url": "https://www.pfizer.com/news/press-release/press-release-detail/axsome-therapeutics-enters-exclusive-license-agreement"
+      },
+      {
+        "partner": "Jazz Pharmaceuticals plc",
+        "scope": "Axsome acquired SUNOSI (solriamfetol) rights in the territories then held by Jazz, subject to continuing U.S. sales royalties to Jazz.",
+        "source_url": "https://investor.jazzpharma.com/news-releases/news-release-details/jazz-pharmaceuticals-announces-agreement-divest-sunosir"
+      },
+      {
+        "partner": "Atnahs Pharma UK Limited (Pharmanovia)",
+        "scope": "Axsome exclusively licensed Pharmanovia SUNOSI development and commercialization rights in Europe and certain Middle East and North African markets while retaining manufacturing responsibilities.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017023003568/axsm-ex99_1.htm"
+      },
+      {
+        "partner": "SK Biopharmaceuticals Co., Ltd.",
+        "scope": "SK retains solriamfetol rights in 12 Asian markets, including China, Korea and Japan; Axsome assumed Jazz's SUNOSI royalty commitments to SK.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm"
+      },
+      {
+        "partner": "Aerial Biopharma LLC",
+        "scope": "Axsome assumed royalty commitments to Aerial associated with the earlier license of solriamfetol rights that Axsome acquired from Jazz.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm"
+      },
+      {
+        "partner": "Antecip",
+        "scope": "Axsome holds exclusive licenses from Antecip covering intellectual property used in its AXS-05 program.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm"
+      },
+      {
+        "partner": "AstraZeneca AB",
+        "scope": "Axsome obtained worldwide AZD7325 (AXS-17) rights through its acquisition of Baergic Bio, which had originally licensed the asset from AstraZeneca.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm"
+      },
+      {
+        "partner": "Takeda Pharmaceutical Company Limited",
+        "scope": "Axsome acquired global rights to balipodect (AXS-20) from Takeda, which remains eligible for development and sales milestones and royalties.",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm"
+      }
+    ]
+  },
+  "snapshot_connector_calls": [
+    {
+      "connector": "clinical_trials",
+      "tool": "search_by_sponsor",
+      "arguments": "{\"sponsor_name\": \"Axsome Therapeutics\", \"page_size\": 15, \"count_total\": true}",
+      "error": ""
+    },
+    {
+      "connector": "pubmed",
+      "tool": "search_articles",
+      "arguments": "{\"query\": \"Axsome solriamfetol OR dextromethorphan bupropion clinical trial\", \"max_results\": 5, \"sort\": \"pub_date\"}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-14\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"solriamfetol\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-12\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-07\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-05\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-20\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-17\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"balipodect\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"reboxetine\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"esreboxetine\", \"page_size\": 100}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT05536011\"}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT06170970\"}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT07523048\"}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT06590662\"}",
+      "error": ""
+    }
+  ],
+  "snapshot_live": {
+    "events": 132,
+    "sources_considered": 1087,
+    "sources_read": 18
+  },
+  "mechanism": {
+    "chembl_molecule_id": null,
+    "targets": [
+      {
+        "gene_symbol": "GRIN2A",
+        "chembl_target_id": "CHEMBL1972",
+        "name": "Glutamate receptor ionotropic, NMDA 2A"
+      },
+      {
+        "gene_symbol": "SIGMAR1",
+        "chembl_target_id": "CHEMBL287",
+        "name": "Sigma non-opioid intracellular receptor 1"
+      },
+      {
+        "gene_symbol": "SLC6A2",
+        "chembl_target_id": "CHEMBL222",
+        "name": "Sodium-dependent noradrenaline transporter"
+      },
+      {
+        "gene_symbol": "SLC6A3",
+        "chembl_target_id": "CHEMBL238",
+        "name": "Sodium-dependent dopamine transporter"
+      }
+    ],
+    "modality": "oral fixed-dose small-molecule combination",
+    "lead_asset": "dextromethorphan-bupropion (AXS-05, AUVELITY)",
+    "competitors": [
+      {
+        "example_nct_ids": [],
+        "company": "Avanir Pharmaceuticals (Otsuka Pharmaceutical); marketed in the United States by Otsuka America Pharmaceutical",
+        "mechanism": "Dextromethorphan is an uncompetitive NMDA-receptor antagonist and sigma-1-receptor agonist; quinidine inhibits CYP2D6 to increase dextromethorphan exposure.",
+        "source_url": "https://www.otsuka.co.jp/en/company/newsreleases/2015/20150813_1.html",
+        "asset": "dextromethorphan/quinidine (NUEDEXTA, AVP-923)",
+        "highest_phase": "Approved"
+      },
+      {
+        "example_nct_ids": [],
+        "company": "Janssen Pharmaceuticals (Johnson & Johnson)",
+        "mechanism": "Noncompetitive NMDA-receptor antagonist.",
+        "source_url": "https://www.jnj.com/innovativemedicine/us/news-center/neuroscience/spravato-esketamine-approved-in-the-u-s-as-the-first-and-only-monotherapy-for-adults-with-treatment-resistant-depression",
+        "asset": "esketamine (SPRAVATO)",
+        "highest_phase": "Approved"
+      },
+      {
+        "example_nct_ids": [],
+        "company": "Forest Laboratories (original NAMENDA sponsor; subsequently acquired by Allergan, now part of AbbVie)",
+        "mechanism": "Low-to-moderate-affinity uncompetitive NMDA-receptor antagonist.",
+        "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2003/021487lbl.pdf",
+        "asset": "memantine hydrochloride (NAMENDA)",
+        "highest_phase": "Approved"
+      }
+    ],
+    "mechanism_of_action": "Dextromethorphan antagonizes NMDA receptors and agonizes sigma-1 receptors, while bupropion inhibits CYP2D6 to raise dextromethorphan exposure and inhibits norepinephrine and dopamine reuptake."
+  },
+  "mechanism_connector_calls": [
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"esmethadone\", \"page_size\": 15}",
+      "error": ""
+    },
+    {
+      "connector": "pubmed",
+      "tool": "search_articles",
+      "arguments": "{\"query\": \"dextromethorphan bupropion NMDA sigma-1 mechanism depression competitors\", \"max_results\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"dextromethorphan quinidine\", \"page_size\": 15}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"dextromethorphan\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"bupropion\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SIGMAR1\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"target_name\": \"N-methyl-D-aspartate receptor\", \"organism\": \"Homo sapiens\", \"limit\": 15}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"Auvelity\", \"limit\": 10}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"molecule_chembl_id\": \"CHEMBL894\", \"limit\": 20}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"molecule_chembl_id\": \"CHEMBL52440\", \"limit\": 20}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"dextromethorphan bupropion\", \"limit\": 10}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"target_chembl_id\": \"CHEMBL287\", \"limit\": 40}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"GRIN2B\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"GRIN1\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SLC6A3\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": ""
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SLC6A2\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": ""
+    }
+  ],
+  "found_beyond_registry_search": [],
+  "rows": [
+    {
+      "nct_id": "NCT06568367",
+      "title": "Studying Solriamfetol Modulation of TAAR-1, Dopamine, and Norepinephrine in Shift Work Disorder (SUSTAIN)",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol 150 mg",
+        "Solriamfetol 300 mg",
+        "Placebo"
+      ],
+      "condition": "Excessive Sleepiness",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-07-24",
+      "primary_completion_date": "2026-12",
+      "check": {
+        "status": "completed",
+        "seconds": 128,
+        "program": "Solriamfetol for excessive sleepiness associated with shift work disorder — SUSTAIN (Phase 3).",
+        "latest_milestone": {
+          "description": "On February 23, 2026, Axsome moved its anticipated SUSTAIN topline results to 2027 from its previously stated 2026 timing, citing current enrollment trends.",
+          "date": "2026-02-23",
+          "type": "timeline_changed",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526062421/axsm-ex99_1.htm"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On August 5, 2024, Axsome announced that it had initiated the SUSTAIN Phase 3 trial; the announcement did not state that a first patient had been dosed.",
+            "date": "2024-08-05",
+            "type": "trial_announced",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017024090311/axsm-ex99_1.htm"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": "2027",
+          "description": "Topline results from the SUSTAIN Phase 3 trial.",
+          "latest": "2027-12-31",
+          "stated_by": "Axsome second-quarter 2026 financial-results and business-update release, August 10, 2026",
+          "earliest": "2027-01-01"
+        },
+        "flag": "news",
+        "connector_calls": {
+          "pubmed": 1,
+          "clinical_trials": 1
+        },
+        "citations": 7,
+        "site_status": {
+          "sites": 49,
+          "by_status": {
+            "RECRUITING": 46,
+            "WITHDRAWN": 2,
+            "TERMINATED": 1
+          },
+          "enrollment": 520,
+          "start_date": "2024-08-01",
+          "has_results": false
+        },
+        "live": {
+          "events": 47,
+          "sources_considered": 515,
+          "sources_read": 2
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017024090311/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017024090311/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017025101624/axsm-ex99_1.htm",
+                "title": "sec.gov"
+              },
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526062421/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/08/10/3341699/0/en/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update.html",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial"
+              },
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017024090311/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06568367",
+          "title": "A Multi-center, Randomized, Double-blind, Placebo-controlled Trial to Assess the Efficacy and Safety of Solriamfetol in Excessive Sleepiness Associated With Shift Work Disorder",
+          "acronym": null,
+          "enrollment": 520,
+          "start_date": "2024-08-01",
+          "primary_completion_date": "2026-12",
+          "completion_date": "2026-12",
+          "interventions": [
+            "Solriamfetol 150 mg",
+            "Solriamfetol 300 mg",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Change from Baseline to Week 12 in the mean sleep latency time as measured by the Maintenance of Wakefulness Test (MWT).",
+            "Change from Baseline to Week 12 in the Clinical Global Impressions of Severity of Illness (CGI-S) for sleepiness during the night shift."
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 49,
+          "countries": [
+            "United States",
+            "Canada"
+          ],
+          "site_status": {
+            "RECRUITING": 46,
+            "WITHDRAWN": 2,
+            "TERMINATED": 1
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06568367 OR (SUSTAIN AND solriamfetol AND shift work disorder)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 868
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06568367\"}",
+            "error": "",
+            "output_chars": 10131
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07484217",
+      "title": "Clinical Assessment of Response in the Treatment of Depression With Daytime Sleepiness Using Solriamfetol",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol 150 MG",
+        "Placebo"
+      ],
+      "condition": "Major Depressive Disorder With Excessive Daytime Sleepiness Symptoms",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-07-24",
+      "primary_completion_date": "2028-12",
+      "check": {
+        "status": "completed",
+        "seconds": 132,
+        "program": "Solriamfetol, major depressive disorder with excessive daytime sleepiness symptoms (CLARITY Phase 3 trial)",
+        "latest_milestone": {
+          "description": "On August 10, 2026, Axsome reported that it was conducting the CLARITY study; it did not report a new dosing, enrollment-completion, or results milestone.",
+          "date": "2026-08-10",
+          "type": "enrolling",
+          "source_url": "https://axsometherapeuticsinc.gcs-web.com/node/13231/pdf"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On February 24, 2026, Axsome announced that the first patient had been dosed in CLARITY.",
+            "date": "2026-02-24",
+            "type": "first_patient_dosed",
+            "source_url": "https://www.globenewswire.com/news-release/2026/02/24/3243362/33090/en/axsome-therapeutics-initiates-clarity-phase-3-trial-of-solriamfetol-in-adults-with-major-depressive-disorder-with-excessive-daytime-sleepiness-symptoms.html"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 1
+        },
+        "citations": 5,
+        "site_status": {
+          "sites": 40,
+          "by_status": {
+            "RECRUITING": 40
+          },
+          "enrollment": 508,
+          "start_date": "2026-02-23",
+          "has_results": false
+        },
+        "live": {
+          "events": 44,
+          "sources_considered": 551,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/02/24/3243362/33090/en/axsome-therapeutics-initiates-clarity-phase-3-trial-of-solriamfetol-in-adults-with-major-depressive-disorder-with-excessive-daytime-sleepiness-symptoms.html",
+                "title": "Axsome Therapeutics Initiates CLARITY Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/02/24/3243362/33090/en/axsome-therapeutics-initiates-clarity-phase-3-trial-of-solriamfetol-in-adults-with-major-depressive-disorder-with-excessive-daytime-sleepiness-symptoms.html",
+                "title": "Axsome Therapeutics Initiates CLARITY Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/node/13231/pdf",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial ..."
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/08/10/3341699/0/en/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update.html",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/02/24/3243362/33090/en/axsome-therapeutics-initiates-clarity-phase-3-trial-of-solriamfetol-in-adults-with-major-depressive-disorder-with-excessive-daytime-sleepiness-symptoms.html",
+                "title": "Axsome Therapeutics Initiates CLARITY Phase 3 Trial of"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07484217",
+          "title": "A Multicenter, Double-blind, Placebo-controlled, Randomized Withdrawal Study of Solriamfetol in Subjects With Major Depressive Disorder With Excessive Daytime Sleepiness Symptoms",
+          "acronym": "CLARITY",
+          "enrollment": 508,
+          "start_date": "2026-02-23",
+          "primary_completion_date": "2028-12",
+          "completion_date": "2028-12",
+          "interventions": [
+            "Solriamfetol 150 MG",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Time from randomization to relapse of depressive symptoms"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 40,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 40
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07484217\"}",
+            "error": "",
+            "output_chars": 8847
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07484217 OR (CLARITY solriamfetol depression daytime sleepiness)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 1074
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT06413433",
+      "title": "Elucidating TAAR-1, Dopamine, and Norepinephrine in Binge Eating Disorder Using Solriamfetol",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol 150 mg",
+        "Solriamfetol 300 mg",
+        "Placebo"
+      ],
+      "condition": "Binge-Eating Disorder",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-07-28",
+      "primary_completion_date": "2026-12",
+      "check": {
+        "status": "completed",
+        "seconds": 127,
+        "program": "Solriamfetol for adults with binge-eating disorder — ENGAGE (Phase 3).",
+        "latest_milestone": {
+          "description": "On August 10, 2026, Axsome narrowed its expected timing for ENGAGE topline results from the second half of 2026 to the fourth quarter of 2026.",
+          "date": "2026-08-10",
+          "type": "timeline_changed",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On May 4, 2026, Axsome specified that it expected ENGAGE topline results in the second half of 2026, narrowing its earlier guidance of 2026.",
+            "date": "2026-05-04",
+            "type": "timeline_changed",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm"
+          },
+          {
+            "description": "On April 1, 2024, Axsome announced initiation of ENGAGE and said the first patient had been screened in March; it did not say the patient had been dosed.",
+            "date": "2024-04-01",
+            "type": "trial_announced",
+            "source_url": "https://www.globenewswire.com/news-release/2024/04/01/2855085/33090/en/axsome-therapeutics-initiates-engage-phase-3-trial-of-solriamfetol-for-the-treatment-of-binge-eating-disorder.html"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": "4Q 2026",
+          "description": "Topline results from the Phase 3 ENGAGE trial of solriamfetol in binge-eating disorder.",
+          "latest": "2026-12-31",
+          "stated_by": "Axsome second-quarter 2026 results release, August 10, 2026; reiterated at its September 2026 Cantor healthcare conference",
+          "earliest": "2026-10-01"
+        },
+        "flag": "news",
+        "connector_calls": {
+          "pubmed": 1,
+          "clinical_trials": 1
+        },
+        "citations": 14,
+        "site_status": {
+          "sites": 45,
+          "by_status": {
+            "RECRUITING": 38,
+            "TERMINATED": 7
+          },
+          "enrollment": 450,
+          "start_date": "2024-04-26",
+          "has_results": false
+        },
+        "live": {
+          "events": 37,
+          "sources_considered": 382,
+          "sources_read": 3
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT06413433",
+                "title": "clinical_trials: get_trial_details"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              },
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/node/12291/pdf",
+                "title": "Axsome Therapeutics Reports Second Quarter 2025 Financial Results and Provides Business Update"
+              },
+              {
+                "url": "https://www.globenewswire.com/news-release/2024/04/01/2855085/33090/en/axsome-therapeutics-initiates-engage-phase-3-trial-of-solriamfetol-for-the-treatment-of-binge-eating-disorder.html",
+                "title": "Axsome Therapeutics Initiates ENGAGE Phase 3 Trial of"
+              },
+              {
+                "url": "https://docs.publicnow.com/181332B0B1B12393527ECFAE1E0F4D909D2A22C3",
+                "title": "Axsome Therapeutics Initiates ENGAGE Phase 3 Trial of ..."
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "sec.gov"
+              },
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              },
+              {
+                "url": "https://stockanalysis.com/stocks/axsm/transcripts/744413-12th-annual-cantor-fitzgerald-global-healthcare-conference/",
+                "title": "Axsome Therapeutics (AXSM) FY 2026 Earnings Call Transcript & Audio"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "sec.gov"
+              },
+              {
+                "url": "https://stockanalysis.com/stocks/axsm/transcripts/744413-12th-annual-cantor-fitzgerald-global-healthcare-conference/",
+                "title": "Axsome Therapeutics (AXSM) FY 2026 Earnings Call Transcript & Audio"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              },
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/node/12291/pdf",
+                "title": "Axsome Therapeutics Reports Second Quarter 2025 Financial Results and Provides Business Update"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.1",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2024/04/01/2855085/33090/en/axsome-therapeutics-initiates-engage-phase-3-trial-of-solriamfetol-for-the-treatment-of-binge-eating-disorder.html",
+                "title": "Axsome Therapeutics Initiates ENGAGE Phase 3 Trial of"
+              },
+              {
+                "url": "https://docs.publicnow.com/181332B0B1B12393527ECFAE1E0F4D909D2A22C3",
+                "title": "Axsome Therapeutics Initiates ENGAGE Phase 3 Trial of ..."
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06413433",
+          "title": "A Phase 3, Randomized, Double-blind, Placebo-Controlled Trial of Solriamfetol in Adults With Binge Eating Disorder (BED)",
+          "acronym": "ENGAGE",
+          "enrollment": 450,
+          "start_date": "2024-04-26",
+          "primary_completion_date": "2026-12",
+          "completion_date": "2026-12",
+          "interventions": [
+            "Solriamfetol 150 mg",
+            "Solriamfetol 300 mg",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Change from Baseline to Week 12 in number of binge eating episodes"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 45,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 38,
+            "TERMINATED": 7
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06413433 OR (solriamfetol AND ENGAGE AND binge eating)\", \"max_results\": 10}",
+            "error": "",
+            "output_chars": 742
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06413433\"}",
+            "error": "",
+            "output_chars": 9106
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT06413420",
+      "title": "SUNOSI® (Solriamfetol) Pregnancy Registry",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Sunosi (solriamfetol)",
+        "Other prescription wake-promoting medications or stimulants",
+        "No treatment"
+      ],
+      "condition": "Narcolepsy",
+      "phases": [],
+      "status": "RECRUITING",
+      "last_update_posted": "2024-05-14",
+      "primary_completion_date": "2029-09",
+      "check": {
+        "status": "completed",
+        "seconds": 139,
+        "program": "SUNOSI (solriamfetol) Pregnancy Registry — pregnancy-exposure safety in women with narcolepsy or obstructive sleep apnea (OSA).",
+        "latest_milestone": {
+          "description": "On 2019-03-20, FDA required a prospective solriamfetol pregnancy-exposure registry; this announced a planned study, not its initiation or enrollment.",
+          "date": "2019-03-20",
+          "type": "trial_announced",
+          "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211230Orig1s000,%20Orig2s000ltr.pdf"
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": "09/29",
+          "description": "Planned completion of the solriamfetol pregnancy-exposure registry under the timetable submitted to FDA in 2019; no current reaffirmation of that timetable was found.",
+          "latest": "2029-09-30",
+          "stated_by": "FDA's 2019 SUNOSI approval letter, citing the sponsor-submitted timetable",
+          "earliest": "2029-09-01"
+        },
+        "flag": "news",
+        "connector_calls": {
+          "pubmed": 3,
+          "clinical_trials": 1
+        },
+        "citations": 3,
+        "site_status": {
+          "sites": 2,
+          "by_status": {
+            "RECRUITING": 2
+          },
+          "enrollment": 1731,
+          "start_date": "2019-07-31",
+          "has_results": false
+        },
+        "live": {
+          "events": 45,
+          "sources_considered": 348,
+          "sources_read": 3
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://sunosipregnancyregistry.com/",
+                "title": "HOME - SUNOSI™ Pregnancy Registry"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "low",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211230Orig1s000,%20Orig2s000ltr.pdf",
+                "title": "Sunosi (solriamfetol) Tablets"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "low",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211230Orig1s000,%20Orig2s000ltr.pdf",
+                "title": "Sunosi (solriamfetol) Tablets"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06413420",
+          "title": "SUNOSI® (Solriamfetol) Pregnancy Registry: An Observational Study on the Safety of Solriamfetol Exposure in Pregnant Women and Their Offspring",
+          "acronym": null,
+          "enrollment": 1731,
+          "start_date": "2019-07-31",
+          "primary_completion_date": "2029-09",
+          "completion_date": "2029-09",
+          "interventions": [
+            "Sunosi (solriamfetol)",
+            "Other prescription wake-promoting medications or stimulants",
+            "No treatment"
+          ],
+          "primary_outcomes": [
+            "Long-term Safety"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 2,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 2
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06413420 OR (solriamfetol AND pregnancy registry)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 528
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06413420 OR (solriamfetol AND pregnancy registry)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 528
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06413420\"}",
+            "error": "",
+            "output_chars": 2934
+          },
+          {
+            "connector": "pubmed",
+            "tool": "get_article_metadata",
+            "arguments": "{\"pmids\": [\"34104879\", \"33370015\"]}",
+            "error": "",
+            "output_chars": 11660
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07637162",
+      "title": "Open-Label Safety Study of AXS-14 in Subjects With Fibromyalgia",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "AXS-14 (esreboxetine)"
+      ],
+      "condition": "Fibromyalgia",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "ENROLLING_BY_INVITATION",
+      "last_update_posted": "2026-09-04",
+      "primary_completion_date": "2028-05",
+      "check": {
+        "status": "completed",
+        "seconds": 119,
+        "program": "AXS-14 (esreboxetine), fibromyalgia — 52-week open-label safety extension of FORWARD",
+        "latest_milestone": {
+          "description": "As of 2026-09-28, searches of Axsome announcements and filings, independent news, conference abstracts, and biomedical publications found no dated public update specific to this open-label extension; the announced FORWARD trial is a separate study.",
+          "date": null,
+          "type": "no_public_update",
+          "source_url": null
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "no_news",
+        "connector_calls": {
+          "pubmed": 1,
+          "clinical_trials": 1
+        },
+        "citations": 4,
+        "site_status": {
+          "sites": 31,
+          "by_status": {
+            "UNKNOWN": 31
+          },
+          "enrollment": 300,
+          "start_date": "2026-04-29",
+          "has_results": false
+        },
+        "live": {
+          "events": 49,
+          "sources_considered": 668,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT07637162",
+                "title": "clinical_trials: get_trial_details"
+              },
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT07637162",
+                "title": "clinical_trials: get_trial_details"
+              },
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html",
+                "title": "Axsome Therapeutics Initiates FORWARD Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": []
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07637162",
+          "title": "An Open-Label Study to Assess the Long-Term Safety and Efficacy of AXS-14 in the Management of Fibromyalgia",
+          "acronym": null,
+          "enrollment": 300,
+          "start_date": "2026-04-29",
+          "primary_completion_date": "2028-05",
+          "completion_date": "2028-05",
+          "interventions": [
+            "AXS-14 (esreboxetine)"
+          ],
+          "primary_outcomes": [
+            "Long-term Safety"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 31,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "UNKNOWN": 31
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07637162 OR (AXS-14 AND fibromyalgia AND open-label safety)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 247
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07637162\"}",
+            "error": "",
+            "output_chars": 6135
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07398417",
+      "title": "Fibromyalgia Response With Esreboxetine Evaluated Using a Randomized Withdrawal Research Design",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "AXS-14 (Esreboxetine)",
+        "Placebo"
+      ],
+      "condition": "Fibromyalgia",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-09-04",
+      "primary_completion_date": "2028-03",
+      "check": {
+        "status": "completed",
+        "seconds": 118,
+        "program": "AXS-14 (esreboxetine) for fibromyalgia — FORWARD Phase 3 trial",
+        "latest_milestone": {
+          "description": "On August 10, 2026, Axsome reported that it was conducting the FORWARD study; it did not report an enrollment milestone or results.",
+          "date": "2026-08-10",
+          "type": "enrolling",
+          "source_url": "https://www.biospace.com/press-releases/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On January 15, 2026, Axsome announced that the first patient had been dosed in FORWARD.",
+            "date": "2026-01-15",
+            "type": "first_patient_dosed",
+            "source_url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 2
+        },
+        "citations": 6,
+        "site_status": {
+          "sites": 53,
+          "by_status": {
+            "RECRUITING": 53
+          },
+          "enrollment": 620,
+          "start_date": "2026-01-14",
+          "has_results": false
+        },
+        "live": {
+          "events": 49,
+          "sources_considered": 513,
+          "sources_read": 4
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html",
+                "title": "Axsome Therapeutics Initiates FORWARD Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html",
+                "title": "Axsome Therapeutics Initiates FORWARD Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.biospace.com/press-releases/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update - BioSpace"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.biospace.com/press-releases/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update - BioSpace"
+              }
+            ]
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.biospace.com/press-releases/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update - BioSpace"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html",
+                "title": "Axsome Therapeutics Initiates FORWARD Phase 3 Trial of"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07398417",
+          "title": "A Double-Blind, Placebo-Controlled, Randomized Withdrawal Study to Assess the Efficacy and Safety of AXS-14 in the Management of Fibromyalgia",
+          "acronym": "FORWARD",
+          "enrollment": 620,
+          "start_date": "2026-01-14",
+          "primary_completion_date": "2028-03",
+          "completion_date": "2028-03",
+          "interventions": [
+            "AXS-14 (Esreboxetine)",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Time from randomization to loss of therapeutic response"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 53,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 53
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07398417\"}",
+            "error": "",
+            "output_chars": 10379
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07398417 OR (esreboxetine AND fibromyalgia AND randomized withdrawal)\", \"max_results\": 15}",
+            "error": "",
+            "output_chars": 1103
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07398417[All Fields]\", \"max_results\": 10}",
+            "error": "",
+            "output_chars": 169
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07717879",
+      "title": "Forward Treatment of Attention Deficit and Hyperactivity Using Solriamfetol (FOCUS-2)",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol Dose A",
+        "Solriamfetol Dose B",
+        "Placebo"
+      ],
+      "condition": "ADHD",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-09-08",
+      "primary_completion_date": "2028-06-30",
+      "check": {
+        "status": "completed",
+        "seconds": 126,
+        "program": "Solriamfetol for ADHD in children aged 6 to under 12 years (FOCUS-2)",
+        "latest_milestone": {
+          "description": "On July 7, 2026, Axsome announced that the first patient had been dosed in the FOCUS-2 Phase 3 trial.",
+          "date": "2026-07-07",
+          "type": "first_patient_dosed",
+          "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-focus-2-phase-3-trial-solriamfetol"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On May 4, 2026, Axsome said it was on track to initiate a Phase 3 solriamfetol trial in children with ADHD in the second quarter; that trial was subsequently identified as FOCUS-2.",
+            "date": "2026-05-04",
+            "type": "trial_announced",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 1
+        },
+        "citations": 6,
+        "site_status": {
+          "sites": 23,
+          "by_status": {
+            "RECRUITING": 23
+          },
+          "enrollment": 468,
+          "start_date": "2026-07-06",
+          "has_results": false
+        },
+        "live": {
+          "events": 41,
+          "sources_considered": 476,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-focus-2-phase-3-trial-solriamfetol",
+                "title": "Axsome Therapeutics Initiates FOCUS-2 Phase 3 Trial of Solriamfetol in Children with Attention Deficit Hyperactivity Disorder (ADHD) | Axsome Therapeutics, Inc."
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-focus-2-phase-3-trial-solriamfetol",
+                "title": "Axsome Therapeutics Initiates FOCUS-2 Phase 3 Trial of Solriamfetol in Children with Attention Deficit Hyperactivity Disorder (ADHD) | Axsome Therapeutics, Inc."
+              },
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526202506/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07717879",
+          "title": "A Phase 3, Randomized, 6-Week, Double-blind, Placebo-controlled Trial of Solriamfetol in Children Aged 6 to <12 Years With Attention Deficit Hyperactivity Disorder (ADHD)",
+          "acronym": null,
+          "enrollment": 468,
+          "start_date": "2026-07-06",
+          "primary_completion_date": "2028-06-30",
+          "completion_date": "2028-06-30",
+          "interventions": [
+            "Solriamfetol Dose A",
+            "Solriamfetol Dose B",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "ADHD-RS-5 Total Score, Change from Baseline to Week 6"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 23,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 23
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07717879\"}",
+            "error": "",
+            "output_chars": 5793
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"(NCT07717879 OR (FOCUS-2 AND solriamfetol))\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 267
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07773883",
+      "title": "An Open-Label Study to Assess the Long-Term Safety of Solriamfetol in Children and Adolescents With ADHD",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol"
+      ],
+      "condition": "ADHD",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "ENROLLING_BY_INVITATION",
+      "last_update_posted": "2026-09-08",
+      "primary_completion_date": "2027-12",
+      "check": {
+        "status": "completed",
+        "seconds": 115,
+        "program": "Solriamfetol (SOL-ADHD-303), long-term safety in children and adolescents with ADHD",
+        "latest_milestone": {
+          "description": "As of 2026-09-28, searches of Axsome announcements, earnings materials, SEC filings, conference reports and publications found no dated independent update about SOL-ADHD-303; announcements about FOCUS-2 and FOCUS-3 concern separate trials.",
+          "date": null,
+          "type": "no_public_update",
+          "source_url": null
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "no_news",
+        "connector_calls": {
+          "pubmed": 2,
+          "clinical_trials": 1
+        },
+        "citations": 2,
+        "site_status": {
+          "sites": 3,
+          "by_status": {
+            "UNKNOWN": 3
+          },
+          "enrollment": 300,
+          "start_date": "2026-08-06",
+          "has_results": false
+        },
+        "live": {
+          "events": 47,
+          "sources_considered": 559,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT07773883",
+                "title": "clinical_trials: get_trial_details"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/de/news-release/2026/08/10/3341699/0/en/axsome-therapeutics-reports-second-quarter-2026-financial-results-and-provides-business-update.html",
+                "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": []
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07773883",
+          "title": "An Open-Label Study to Assess the Long-Term Safety of Solriamfetol in Children and Adolescents With Attention Deficit Hyperactivity Disorder (ADHD)",
+          "acronym": null,
+          "enrollment": 300,
+          "start_date": "2026-08-06",
+          "primary_completion_date": "2027-12",
+          "completion_date": "2027-12",
+          "interventions": [
+            "Solriamfetol"
+          ],
+          "primary_outcomes": [
+            "Treatment-Emergent Adverse Events (TEAEs)"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 3,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "UNKNOWN": 3
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07773883 OR (solriamfetol AND pediatric ADHD AND long-term)\", \"max_results\": 15}",
+            "error": "",
+            "output_chars": 722
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07773883\"}",
+            "error": "",
+            "output_chars": 2542
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07773883\", \"max_results\": 10}",
+            "error": "",
+            "output_chars": 145
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07717892",
+      "title": "Forward Treatment of Attention Deficit and Hyperactivity Using Solriamfetol (FOCUS-3)",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol Dose A",
+        "Solriamfetol Dose B",
+        "Placebo"
+      ],
+      "condition": "ADHD",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-09-08",
+      "primary_completion_date": "2028-06-30",
+      "check": {
+        "status": "completed",
+        "seconds": 120,
+        "program": "FOCUS-3: solriamfetol for adolescents with ADHD",
+        "latest_milestone": {
+          "description": "On June 26, 2026, Axsome announced that the first patient had been dosed in FOCUS-3.",
+          "date": "2026-06-26",
+          "type": "first_patient_dosed",
+          "source_url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On February 23, 2026, Axsome announced plans for a Phase 3 solriamfetol trial in adolescents with ADHD, later named FOCUS-3.",
+            "date": "2026-02-23",
+            "type": "trial_announced",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526062421/axsm-ex99_1.htm"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 1
+        },
+        "citations": 6,
+        "site_status": {
+          "sites": 24,
+          "by_status": {
+            "RECRUITING": 24
+          },
+          "enrollment": 468,
+          "start_date": "2026-06-25",
+          "has_results": false
+        },
+        "live": {
+          "events": 37,
+          "sources_considered": 405,
+          "sources_read": 1
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html",
+                "title": "Axsome Therapeutics Initiates FOCUS-3 Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526062421/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html",
+                "title": "Axsome Therapeutics Initiates FOCUS-3 Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html",
+                "title": "Axsome Therapeutics Initiates FOCUS-3 Phase 3 Trial of"
+              }
+            ]
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526062421/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07717892",
+          "title": "A Phase 3, Randomized, 6-Week, Double-blind, Placebo- Controlled Trial of Solriamfetol in Adolescents Aged 12 to <18 Years With Attention Deficit Hyperactivity Disorder (ADHD)",
+          "acronym": null,
+          "enrollment": 468,
+          "start_date": "2026-06-25",
+          "primary_completion_date": "2028-06-30",
+          "completion_date": "2028-06-30",
+          "interventions": [
+            "Solriamfetol Dose A",
+            "Solriamfetol Dose B",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "ADHD-RS-5 Total Score, Change from Baseline to Week 6"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 24,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 24
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07717892\"}",
+            "error": "",
+            "output_chars": 5973
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"FOCUS-3 solriamfetol ADHD OR NCT07717892\", \"max_results\": 10}",
+            "error": "",
+            "output_chars": 543
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07766655",
+      "title": "Studying NMDA and Sigma-1 in Smoking Cessation Treatment (SUMMIT)",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "AXS-05 (dextromethorphan-bupropion)",
+        "Bupropion",
+        "Placebo"
+      ],
+      "condition": "Smoking Cessation",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-09-08",
+      "primary_completion_date": "2027-12",
+      "check": {
+        "status": "completed",
+        "seconds": 126,
+        "program": "AXS-05 (dextromethorphan-bupropion) for smoking cessation in adults — SUMMIT Phase 3",
+        "latest_milestone": {
+          "description": "On 2026-09-11, a report of Axsome’s Cantor healthcare conference remarks said enrollment in SUMMIT was underway.",
+          "date": "2026-09-11",
+          "type": "enrolling",
+          "source_url": "https://au.investing.com/news/stock-market-news/axsome-at-cantor-healthcare-conference-auvelity-growth-accelerates-93CH-4637568"
+        },
+        "earlier_milestones": [
+          {
+            "description": "On 2026-08-31, Axsome announced that the first patient had been dosed in the SUMMIT Phase 3 trial.",
+            "date": "2026-08-31",
+            "type": "first_patient_dosed",
+            "source_url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-summit-phase-3-trial-axs-05"
+          }
+        ],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "pubmed": 1,
+          "clinical_trials": 1
+        },
+        "citations": 5,
+        "site_status": {
+          "sites": 16,
+          "by_status": {
+            "RECRUITING": 16
+          },
+          "enrollment": 705,
+          "start_date": "2026-08-27",
+          "has_results": false
+        },
+        "live": {
+          "events": 36,
+          "sources_considered": 475,
+          "sources_read": 2
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-summit-phase-3-trial-axs-05",
+                "title": "Axsome Therapeutics Initiates SUMMIT Phase 3 Trial of AXS-05 in Smoking Cessation | Axsome Therapeutics, Inc."
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-summit-phase-3-trial-axs-05",
+                "title": "Axsome Therapeutics Initiates SUMMIT Phase 3 Trial of AXS-05 in Smoking Cessation | Axsome Therapeutics, Inc."
+              }
+            ]
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://au.investing.com/news/stock-market-news/axsome-at-cantor-healthcare-conference-auvelity-growth-accelerates-93CH-4637568",
+                "title": "Axsome at cantor healthcare conference: auvelity growth accelerates By Investing.com"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://au.investing.com/news/stock-market-news/axsome-at-cantor-healthcare-conference-auvelity-growth-accelerates-93CH-4637568",
+                "title": "Axsome at cantor healthcare conference: auvelity growth accelerates By Investing.com"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones.0",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-initiates-summit-phase-3-trial-axs-05",
+                "title": "Axsome Therapeutics Initiates SUMMIT Phase 3 Trial of AXS-05 in Smoking Cessation | Axsome Therapeutics, Inc."
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07766655",
+          "title": "A Randomized, Double-Blind, Placebo and Active-Controlled Trial to Evaluate the Efficacy and Safety of AXS-05 for Smoking Cessation in Adults",
+          "acronym": "SUMMIT",
+          "enrollment": 705,
+          "start_date": "2026-08-27",
+          "primary_completion_date": "2027-12",
+          "completion_date": "2027-12",
+          "interventions": [
+            "AXS-05 (dextromethorphan-bupropion)",
+            "Bupropion",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "4-Week Continuous Smoking Abstinence Rate"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 16,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 16
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07766655 OR (SUMMIT AND AXS-05 AND smoking cessation)\", \"max_results\": 15}",
+            "error": "",
+            "output_chars": 393
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07766655\"}",
+            "error": "",
+            "output_chars": 4143
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT06878976",
+      "title": "A Study to Assess the Long-term Safety and Efficacy of Solriamfetol in Subjects With Binge Eating Disorder",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "Solriamfetol",
+        "Placebo"
+      ],
+      "condition": "Binge-Eating Disorder",
+      "phases": [
+        "PHASE3"
+      ],
+      "status": "ENROLLING_BY_INVITATION",
+      "last_update_posted": "2026-08-11",
+      "primary_completion_date": "2027-12",
+      "check": {
+        "status": "completed",
+        "seconds": 117,
+        "program": "Solriamfetol, adult binge-eating disorder (long-term safety and efficacy study)",
+        "latest_milestone": {
+          "description": "As of 2026-09-28, searches of Axsome disclosures, independent news and publication records found no dated public update specific to NCT06878976; Axsome’s reported ENGAGE milestones concern a different trial.",
+          "date": null,
+          "type": "no_public_update",
+          "source_url": null
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "no_news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 1
+        },
+        "citations": 4,
+        "site_status": {
+          "sites": 33,
+          "by_status": {
+            "UNKNOWN": 33
+          },
+          "enrollment": 236,
+          "start_date": "2025-02-20",
+          "has_results": false
+        },
+        "live": {
+          "events": 39,
+          "sources_considered": 471,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT06878976",
+                "title": "clinical_trials: get_trial_details"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              },
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526064267/axsm-20251231.htm",
+                "title": "10-K - SEC.gov"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526341206/axsm-ex99_1.htm",
+                "title": "EX-99.1"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06878976",
+          "title": "An Open-Label and Double-Blind, Randomized Withdrawal Study to Assess the Long-term Safety and Efficacy of Solriamfetol in Adults With Binge Eating Disorder",
+          "acronym": null,
+          "enrollment": 236,
+          "start_date": "2025-02-20",
+          "primary_completion_date": "2027-12",
+          "completion_date": "2027-12",
+          "interventions": [
+            "Solriamfetol",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Time from randomization to relapse of binge eating in the RW segment"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 33,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "UNKNOWN": 33
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06878976\"}",
+            "error": "",
+            "output_chars": 6972
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06878976\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 145
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT06223880",
+      "title": "A Study to Evaluate the Efficacy of AXS-05 Compared to Bupropion in Preventing the Relapse of Depressive Symptoms",
+      "role": "company_led",
+      "lead_sponsor": "Axsome Therapeutics, Inc.",
+      "collaborators": [],
+      "interventions": [
+        "AXS-05",
+        "Bupropion"
+      ],
+      "condition": "Major Depressive Disorder",
+      "phases": [
+        "PHASE4"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2025-01-23",
+      "primary_completion_date": "2026-03",
+      "check": {
+        "status": "completed",
+        "seconds": 118,
+        "program": "AXS-05, prevention of depressive-symptom relapse in major depressive disorder (NCT06223880)",
+        "latest_milestone": {
+          "description": "As of 2026-09-28, searches of Axsome announcements and filings, conference materials, biomedical publications, and reporting on NCT06223880 or protocol AXS-05-MDD-401 found no dated, trial-specific milestone beyond the registry record.",
+          "date": null,
+          "type": "no_public_update",
+          "source_url": null
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "no_news",
+        "connector_calls": {
+          "pubmed": 2,
+          "clinical_trials": 1
+        },
+        "citations": 1,
+        "site_status": {
+          "sites": 40,
+          "by_status": {
+            "RECRUITING": 40
+          },
+          "enrollment": 350,
+          "start_date": "2023-12-27",
+          "has_results": false
+        },
+        "live": {
+          "events": 45,
+          "sources_considered": 549,
+          "sources_read": 0
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://clinicaltrials.gov/study/NCT06223880",
+                "title": "clinical_trials: get_trial_details"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": []
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06223880",
+          "title": "A Randomized, Double-blind, Active-controlled Study of AXS-05 for the Prevention of Relapse of Depressive Symptoms",
+          "acronym": null,
+          "enrollment": 350,
+          "start_date": "2023-12-27",
+          "primary_completion_date": "2026-03",
+          "completion_date": "2026-03",
+          "interventions": [
+            "AXS-05",
+            "Bupropion"
+          ],
+          "primary_outcomes": [
+            "Time from randomization to relapse of depressive symptoms"
+          ],
+          "secondary_outcome_count": 0,
+          "has_results": false,
+          "sites": 40,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 40
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06223880 OR (AXS-05 AND bupropion AND relapse prevention)\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 642
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06223880\"}",
+            "error": "",
+            "output_chars": 8515
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06223880\", \"max_results\": 10}",
+            "error": "",
+            "output_chars": 145
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT07523048",
+      "title": "Dextromethorphan-Bupropion on Striatal Activity in Adults With Major Depressive Disorder",
+      "role": "investigator_led",
+      "lead_sponsor": "[Investigator]",
+      "collaborators": [
+        "Axsome Therapeutics, Inc."
+      ],
+      "interventions": [
+        "Dextromethorphan-Bupropion"
+      ],
+      "condition": "Major Depressive Disorder (MDD)",
+      "phases": [
+        "PHASE2"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-04-13",
+      "primary_completion_date": "2026-07",
+      "check": {
+        "status": "completed",
+        "seconds": 164,
+        "program": "Dextromethorphan–bupropion (Auvelity/AXS-05), striatal reward-circuit activity in major depressive disorder; protocol BCDF004 (no trial acronym identified).",
+        "latest_milestone": {
+          "description": "On 2025-08-19, Health Canada approved protocol BCDF004, the dextromethorphan–bupropion neuroimaging study in major depressive disorder.",
+          "date": "2025-08-19",
+          "type": "trial_announced",
+          "source_url": "https://clinical-trials-search.canada.ca/en/clinical-trial/299870-major-depressive-disorder"
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "news",
+        "connector_calls": {
+          "pubmed": 1,
+          "clinical_trials": 1
+        },
+        "citations": 5,
+        "site_status": {
+          "sites": 1,
+          "by_status": {
+            "RECRUITING": 1
+          },
+          "enrollment": 30,
+          "start_date": "2025-11-21",
+          "has_results": false
+        },
+        "live": {
+          "events": 52,
+          "sources_considered": 444,
+          "sources_read": 3
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://clinical-trials-search.canada.ca/en/clinical-trial/299870-major-depressive-disorder",
+                "title": "299870-MAJOR DEPRESSIVE DISORDER Canadian clinical trial search portal"
+              },
+              {
+                "url": "https://www.bcdfoundation.ca/dextromethorphan-bupropion-study",
+                "title": "New Dextromethorphan-bupropion Research Study | bcdf"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://clinical-trials-search.canada.ca/en/clinical-trial/299870-major-depressive-disorder",
+                "title": "299870-MAJOR DEPRESSIVE DISORDER Canadian clinical trial search portal"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://www.bcdfoundation.ca/dextromethorphan-bupropion-study",
+                "title": "New Dextromethorphan-bupropion Research Study | bcdf"
+              },
+              {
+                "url": "https://www.xylo.bio/blog-posts/may-2026-newsletter",
+                "title": "May 2026 Newsletter"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT07523048",
+          "title": "Two-Week, Open-Label, Exploratory Neuroimaging Study Evaluating the Effect of Dextromethorphan-HBr Bupropion-HCl on Striatal Reactivity During Reward Processing in Adults With Major Depressive Disorder",
+          "acronym": null,
+          "enrollment": 30,
+          "start_date": "2025-11-21",
+          "primary_completion_date": "2026-07",
+          "completion_date": "2027-01",
+          "interventions": [
+            "Dextromethorphan-Bupropion"
+          ],
+          "primary_outcomes": [
+            "Change in Striatal BOLD Signal During Reward Processing"
+          ],
+          "secondary_outcome_count": 23,
+          "has_results": false,
+          "sites": 1,
+          "countries": [
+            "Canada"
+          ],
+          "site_status": {
+            "RECRUITING": 1
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT07523048\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 145
+          },
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT07523048\"}",
+            "error": "",
+            "output_chars": 21468
+          }
+        ]
+      }
+    },
+    {
+      "nct_id": "NCT06170970",
+      "title": "Solriamfetol for the Treatment of Multiple Sclerosis Fatigue",
+      "role": "investigator_led",
+      "lead_sponsor": "Johns Hopkins University",
+      "collaborators": [
+        "National Multiple Sclerosis Society",
+        "Axsome Therapeutics, Inc."
+      ],
+      "interventions": [
+        "Solriamfetol",
+        "Placebo"
+      ],
+      "condition": "Multiple Sclerosis",
+      "phases": [
+        "PHASE2"
+      ],
+      "status": "RECRUITING",
+      "last_update_posted": "2026-06-09",
+      "primary_completion_date": "2026-12-01",
+      "check": {
+        "status": "completed",
+        "seconds": 138,
+        "program": "SOLARIMS — solriamfetol for fatigue and excessive daytime sleepiness in people with multiple sclerosis",
+        "latest_milestone": {
+          "description": "No dated independent update was found for SOLARIMS through September 28, 2026; searches covered Johns Hopkins, Axsome, the National MS Society, trial news, conference reports, and biomedical publications.",
+          "date": null,
+          "type": "no_public_update",
+          "source_url": null
+        },
+        "earlier_milestones": [],
+        "results_publications": [],
+        "next_catalyst": {
+          "timing_text": null,
+          "description": null,
+          "latest": null,
+          "stated_by": null,
+          "earliest": null
+        },
+        "flag": "no_news",
+        "connector_calls": {
+          "clinical_trials": 1,
+          "pubmed": 2
+        },
+        "citations": 5,
+        "site_status": {
+          "sites": 1,
+          "by_status": {
+            "RECRUITING": 1
+          },
+          "enrollment": 46,
+          "start_date": "2024-06-01",
+          "has_results": false
+        },
+        "live": {
+          "events": 46,
+          "sources_considered": 470,
+          "sources_read": 3
+        },
+        "basis": [
+          {
+            "field": "program",
+            "confidence": "high",
+            "citations": [
+              {
+                "url": "https://solarims.org/",
+                "title": "SOLARIMS — A Clinical Trial of Solriamfetol for MS Fatigue and Sleepiness"
+              }
+            ]
+          },
+          {
+            "field": "earlier_milestones",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "latest_milestone",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://solarims.org/",
+                "title": "SOLARIMS — A Clinical Trial of Solriamfetol for MS Fatigue and Sleepiness"
+              },
+              {
+                "url": "https://www.nationalmssociety.org/how-you-can-help/get-involved/participate-in-research-studies/participate-in-clinical-trials/ct-solriamfetol-for-fatigue",
+                "title": "Clinical Trial: Solriamfetol for Multiple Sclerosis Fatigue"
+              }
+            ]
+          },
+          {
+            "field": "results_publications",
+            "confidence": "medium",
+            "citations": []
+          },
+          {
+            "field": "next_catalyst",
+            "confidence": "medium",
+            "citations": [
+              {
+                "url": "https://solarims.org/",
+                "title": "SOLARIMS — A Clinical Trial of Solriamfetol for MS Fatigue and Sleepiness"
+              },
+              {
+                "url": "https://www.nationalmssociety.org/how-you-can-help/get-involved/participate-in-research-studies/participate-in-clinical-trials/ct-solriamfetol-for-fatigue",
+                "title": "Clinical Trial: Solriamfetol for Multiple Sclerosis Fatigue"
+              }
+            ]
+          }
+        ],
+        "registry_record": {
+          "via": "clinical_trials.get_trial_details",
+          "url": "https://clinicaltrials.gov/study/NCT06170970",
+          "title": "Solriamfetol for the Treatment of Fatigue in Patients With Multiple Sclerosis and Excessive Daytime Sleepiness",
+          "acronym": "SOLARIMS",
+          "enrollment": 46,
+          "start_date": "2024-06-01",
+          "primary_completion_date": "2026-12-01",
+          "completion_date": "2027-03-01",
+          "interventions": [
+            "Solriamfetol",
+            "Placebo"
+          ],
+          "primary_outcomes": [
+            "Modified Fatigue Impact Scale (MFIS) Score"
+          ],
+          "secondary_outcome_count": 2,
+          "has_results": false,
+          "sites": 1,
+          "countries": [
+            "United States"
+          ],
+          "site_status": {
+            "RECRUITING": 1
+          }
+        },
+        "connector_log": [
+          {
+            "connector": "clinical_trials",
+            "tool": "get_trial_details",
+            "arguments": "{\"nct_id\": \"NCT06170970\"}",
+            "error": "",
+            "output_chars": 5475
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"NCT06170970\", \"max_results\": 20}",
+            "error": "",
+            "output_chars": 145
+          },
+          {
+            "connector": "pubmed",
+            "tool": "search_articles",
+            "arguments": "{\"query\": \"SOLARIMS OR (solriamfetol AND multiple sclerosis AND fatigue)\", \"max_results\": 30}",
+            "error": "",
+            "output_chars": 635
+          }
+        ]
+      }
+    }
+  ],
+  "snapshot_basis": [
+    {
+      "field": "company",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017023003568/axsm-ex99_1.htm",
+          "title": "sec.gov"
+        }
+      ]
+    },
+    {
+      "field": "latest_filing",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://fiscal.ai",
+          "title": "Fiscal.ai /v2/company/filings"
+        }
+      ]
+    },
+    {
+      "field": "programs",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "partner_run_trials",
+      "confidence": "low",
+      "citations": [
+        {
+          "url": "https://clinicaltrials.gov/study/NCT06590662",
+          "title": "clinical_trials: get_trial_details"
+        },
+        {
+          "url": "https://clinicaltrials.gov/study/NCT06170970",
+          "title": "clinical_trials: get_trial_details"
+        }
+      ]
+    },
+    {
+      "field": "partnerships",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    },
+    {
+      "field": "programs.0",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    },
+    {
+      "field": "programs.1",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        },
+        {
+          "url": "http://globenewswire.com/news-release/2026/04/30/3285345/33090/en/axsome-therapeutics-announces-fda-approval-of-auvelity-dextromethorphan-hbr-and-bupropion-hcl-for-the-treatment-of-agitation-associated-with-dementia-due-to-alzheimer-s-disease.html",
+          "title": "Axsome Therapeutics Announces FDA Approval of AUVELITY®"
+        }
+      ]
+    },
+    {
+      "field": "programs.2",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.3",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.4",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.5",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.6",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.globenewswire.com/news-release/2026/08/31/3353172/0/en/axsome-therapeutics-initiates-summit-phase-3-trial-of-axs-05-in-smoking-cessation.html",
+          "title": "Axsome Therapeutics Initiates SUMMIT Phase 3 Trial of"
+        }
+      ]
+    },
+    {
+      "field": "programs.7",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.globenewswire.com/news-release/2025/03/25/3048592/33090/en/axsome-therapeutics-announces-focus-phase-3-trial-of-solriamfetol-in-adults-with-attention-deficit-hyperactivity-disorder-adhd-achieves-primary-endpoint.html",
+          "title": "Axsome Therapeutics Announces FOCUS Phase 3 Trial of"
+        }
+      ]
+    },
+    {
+      "field": "programs.8",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.globenewswire.com/news-release/2026/07/07/3323028/0/en/Axsome-Therapeutics-Initiates-FOCUS-2-Phase-3-Trial-of-Solriamfetol-in-Children-with-Attention-Deficit-Hyperactivity-Disorder-ADHD.html",
+          "title": "Axsome Therapeutics Initiates FOCUS-2 Phase 3 Trial of"
+        }
+      ]
+    },
+    {
+      "field": "programs.9",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.globenewswire.com/news-release/2026/06/26/3318133/33090/en/axsome-therapeutics-initiates-focus-3-phase-3-trial-of-solriamfetol-in-adolescents-with-attention-deficit-hyperactivity-disorder-adhd.html",
+          "title": "Axsome Therapeutics Initiates FOCUS-3 Phase 3 Trial of"
+        }
+      ]
+    },
+    {
+      "field": "programs.10",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.11",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.12",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.13",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        },
+        {
+          "url": "https://www.globenewswire.com/news-release/2026/01/15/3219394/0/en/axsome-therapeutics-initiates-forward-phase-3-trial-of-axs-14-for-the-management-of-fibromyalgia.html",
+          "title": "Axsome Therapeutics Initiates FORWARD Phase 3 Trial of"
+        }
+      ]
+    },
+    {
+      "field": "programs.14",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        },
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "programs.15",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        },
+        {
+          "url": "https://www.globenewswire.com/news-release/2025/11/06/3182362/33090/en/axsome-therapeutics-acquires-subtype-selective-gaba-a-receptor-positive-allosteric-modulator-azd7325-for-the-treatment-of-epilepsy.html",
+          "title": "Axsome Therapeutics Acquires Subtype Selective GABA-A"
+        }
+      ]
+    },
+    {
+      "field": "programs.16",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial",
+          "title": "Axsome Therapeutics Reports Second Quarter 2026 Financial Results and Provides Business Update | Axsome Therapeutics, Inc."
+        }
+      ]
+    },
+    {
+      "field": "partnerships.0",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.pfizer.com/news/press-release/press-release-detail/axsome-therapeutics-enters-exclusive-license-agreement",
+          "title": "Axsome Therapeutics Enters into Exclusive License Agreement with Pfizer Inc. for Pfizer’s Reboxetine Clinical and Nonclinical Data and for New Phase 3 Esreboxetine Product Candidate | Pfizer"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.1",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://investor.jazzpharma.com/news-releases/news-release-details/jazz-pharmaceuticals-announces-agreement-divest-sunosir",
+          "title": "Jazz Pharmaceuticals Announces Agreement to Divest Sunosi® (solriamfetol) to Axsome Therapeutics | Jazz Pharmaceuticals plc"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.2",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017023003568/axsm-ex99_1.htm",
+          "title": "sec.gov"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.3",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://investor.jazzpharma.com/news-releases/news-release-details/jazz-pharmaceuticals-announces-agreement-divest-sunosir",
+          "title": "Jazz Pharmaceuticals Announces Agreement to Divest Sunosi® (solriamfetol) to Axsome Therapeutics | Jazz Pharmaceuticals plc"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.4",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://investor.jazzpharma.com/news-releases/news-release-details/jazz-pharmaceuticals-announces-agreement-divest-sunosir",
+          "title": "Jazz Pharmaceuticals Announces Agreement to Divest Sunosi® (solriamfetol) to Axsome Therapeutics | Jazz Pharmaceuticals plc"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.5",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.6",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        },
+        {
+          "url": "https://www.globenewswire.com/news-release/2025/11/06/3182362/33090/en/axsome-therapeutics-acquires-subtype-selective-gaba-a-receptor-positive-allosteric-modulator-azd7325-for-the-treatment-of-epilepsy.html",
+          "title": "Axsome Therapeutics Acquires Subtype Selective GABA-A"
+        }
+      ]
+    },
+    {
+      "field": "partnerships.7",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1579428/000119312526342360/axsm-20260630.htm",
+          "title": "10-Q"
+        }
+      ]
+    }
+  ],
+  "snapshot_connector_log": [
+    {
+      "connector": "clinical_trials",
+      "tool": "search_by_sponsor",
+      "arguments": "{\"sponsor_name\": \"Axsome Therapeutics\", \"page_size\": 15, \"count_total\": true}",
+      "error": "",
+      "output_chars": 8039
+    },
+    {
+      "connector": "pubmed",
+      "tool": "search_articles",
+      "arguments": "{\"query\": \"Axsome solriamfetol OR dextromethorphan bupropion clinical trial\", \"max_results\": 5, \"sort\": \"pub_date\"}",
+      "error": "",
+      "output_chars": 846
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-14\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 962
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"solriamfetol\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 17582
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-12\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 1717
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-07\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 2139
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-05\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 8400
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-20\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 58
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"AXS-17\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 58
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"balipodect\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 58
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"reboxetine\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 21419
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"esreboxetine\", \"page_size\": 100}",
+      "error": "",
+      "output_chars": 2796
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT05536011\"}",
+      "error": "",
+      "output_chars": 6066
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT06170970\"}",
+      "error": "",
+      "output_chars": 5475
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT07523048\"}",
+      "error": "",
+      "output_chars": 21468
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "get_trial_details",
+      "arguments": "{\"nct_id\": \"NCT06590662\"}",
+      "error": "",
+      "output_chars": 12784
+    }
+  ],
+  "mechanism_basis": [
+    {
+      "field": "chembl_molecule_id",
+      "confidence": "medium",
+      "citations": []
+    },
+    {
+      "field": "targets",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "modality",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "lead_asset",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/node/12901/pdf",
+          "title": "Axsome Therapeutics Announces FDA Approval of AUVELITY® (dextromethorphan HBr and bupropion HCl) for the Treatment of Agitation Associated with Dementia due to Alzheimer's Disease"
+        },
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "competitors",
+      "confidence": "low",
+      "citations": []
+    },
+    {
+      "field": "mechanism_of_action",
+      "confidence": "high",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        },
+        {
+          "url": "https://axsometherapeuticsinc.gcs-web.com/node/12901/pdf",
+          "title": "Axsome Therapeutics Announces FDA Approval of AUVELITY® (dextromethorphan HBr and bupropion HCl) for the Treatment of Agitation Associated with Dementia due to Alzheimer's Disease"
+        }
+      ]
+    },
+    {
+      "field": "targets.0",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "targets.1",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "targets.2",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "targets.3",
+      "confidence": "medium",
+      "citations": [
+        {
+          "url": "https://www.axsome.com/axs-portfolio/pipeline/about-axs-05",
+          "title": "AXS-05 - Axsome Therapeutics"
+        }
+      ]
+    },
+    {
+      "field": "competitors.0",
+      "confidence": "medium",
+      "citations": []
+    },
+    {
+      "field": "competitors.1",
+      "confidence": "medium",
+      "citations": []
+    },
+    {
+      "field": "competitors.2",
+      "confidence": "low",
+      "citations": []
+    }
+  ],
+  "mechanism_connector_log": [
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"esmethadone\", \"page_size\": 15}",
+      "error": "",
+      "output_chars": 3991
+    },
+    {
+      "connector": "pubmed",
+      "tool": "search_articles",
+      "arguments": "{\"query\": \"dextromethorphan bupropion NMDA sigma-1 mechanism depression competitors\", \"max_results\": 5}",
+      "error": "",
+      "output_chars": 1331
+    },
+    {
+      "connector": "clinical_trials",
+      "tool": "search_trials",
+      "arguments": "{\"intervention\": \"dextromethorphan quinidine\", \"page_size\": 15}",
+      "error": "",
+      "output_chars": 8260
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"dextromethorphan\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 8790
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"bupropion\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 6353
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SIGMAR1\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 16972
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"target_name\": \"N-methyl-D-aspartate receptor\", \"organism\": \"Homo sapiens\", \"limit\": 15}",
+      "error": "",
+      "output_chars": 34
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"Auvelity\", \"limit\": 10}",
+      "error": "",
+      "output_chars": 4210
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"molecule_chembl_id\": \"CHEMBL894\", \"limit\": 20}",
+      "error": "",
+      "output_chars": 3090
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"molecule_chembl_id\": \"CHEMBL52440\", \"limit\": 20}",
+      "error": "",
+      "output_chars": 3284
+    },
+    {
+      "connector": "chembl",
+      "tool": "compound_search",
+      "arguments": "{\"name\": \"dextromethorphan bupropion\", \"limit\": 10}",
+      "error": "",
+      "output_chars": 36
+    },
+    {
+      "connector": "chembl",
+      "tool": "get_mechanism",
+      "arguments": "{\"target_chembl_id\": \"CHEMBL287\", \"limit\": 40}",
+      "error": "",
+      "output_chars": 6044
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"GRIN2B\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 170058
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"GRIN1\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 165288
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SLC6A3\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 68190
+    },
+    {
+      "connector": "chembl",
+      "tool": "target_search",
+      "arguments": "{\"gene_symbol\": \"SLC6A2\", \"organism\": \"Homo sapiens\", \"limit\": 5}",
+      "error": "",
+      "output_chars": 67631
+    }
+  ],
+  "mechanism_rerun": true,
+  "found_beyond_excluded": [],
+  "review": [
+    {
+      "company": "axsome",
+      "claim": "AUVELITY launched for agitation associated with Alzheimer's dementia in June 2026",
+      "verdict": "confirmed",
+      "checked": "2026-09-28",
+      "source": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial"
+    },
+    {
+      "company": "axsome",
+      "claim": "AXS-12 NDA for cataplexy in narcolepsy accepted, PDUFA target action date May 1, 2027",
+      "verdict": "confirmed",
+      "checked": "2026-09-28",
+      "source": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial"
+    },
+    {
+      "company": "axsome",
+      "claim": "Solriamfetol ENGAGE topline results expected 4Q 2026; SUSTAIN topline in 2027",
+      "verdict": "confirmed",
+      "checked": "2026-09-28",
+      "source": "https://axsometherapeuticsinc.gcs-web.com/news-releases/news-release-details/axsome-therapeutics-reports-second-quarter-2026-financial"
+    }
+  ]
+}

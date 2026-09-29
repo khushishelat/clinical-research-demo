@@ -1,0 +1,9270 @@
+{
+ "built": "2026-09-29",
+ "source": "ClinicalTrials.gov API v2, active interventional trials, industry lead sponsors",
+ "sponsors": [
+  {
+   "name": "AstraZeneca",
+   "trials": 364
+  },
+  {
+   "name": "Novartis Pharmaceuticals",
+   "trials": 254
+  },
+  {
+   "name": "Eli Lilly and Company",
+   "trials": 222
+  },
+  {
+   "name": "Merck Sharp & Dohme LLC",
+   "trials": 218
+  },
+  {
+   "name": "Hoffmann-La Roche",
+   "trials": 189
+  },
+  {
+   "name": "AbbVie",
+   "trials": 188
+  },
+  {
+   "name": "Pfizer",
+   "trials": 172
+  },
+  {
+   "name": "GlaxoSmithKline",
+   "trials": 161
+  },
+  {
+   "name": "Janssen Research & Development, LLC",
+   "trials": 157
+  },
+  {
+   "name": "Sichuan Baili Pharmaceutical Co., Ltd.",
+   "trials": 135
+  },
+  {
+   "name": "Sanofi",
+   "trials": 121
+  },
+  {
+   "name": "Bristol-Myers Squibb",
+   "trials": 120
+  },
+  {
+   "name": "Regeneron Pharmaceuticals",
+   "trials": 107
+  },
+  {
+   "name": "Qilu Pharmaceutical Co., Ltd.",
+   "trials": 100
+  },
+  {
+   "name": "Amgen",
+   "trials": 99
+  },
+  {
+   "name": "Jiangsu HengRui Medicine Co., Ltd.",
+   "trials": 97
+  },
+  {
+   "name": "Novo Nordisk A/S",
+   "trials": 95
+  },
+  {
+   "name": "Boehringer Ingelheim",
+   "trials": 88
+  },
+  {
+   "name": "Akeso",
+   "trials": 82
+  },
+  {
+   "name": "Takeda",
+   "trials": 78
+  },
+  {
+   "name": "Suzhou Suncadia Biopharmaceuticals Co., Ltd.",
+   "trials": 73
+  },
+  {
+   "name": "Chia Tai Tianqing Pharmaceutical Group Co., Ltd.",
+   "trials": 68
+  },
+  {
+   "name": "Gilead Sciences",
+   "trials": 66
+  },
+  {
+   "name": "Innovent Biologics (Suzhou) Co. Ltd.",
+   "trials": 64
+  },
+  {
+   "name": "Shanghai Henlius Biotech",
+   "trials": 56
+  },
+  {
+   "name": "Jiangsu Hansoh Pharmaceutical Co., Ltd.",
+   "trials": 56
+  },
+  {
+   "name": "Incyte Corporation",
+   "trials": 55
+  },
+  {
+   "name": "Daiichi Sankyo",
+   "trials": 52
+  },
+  {
+   "name": "BeOne Medicines",
+   "trials": 49
+  },
+  {
+   "name": "Haisco Pharmaceutical Group Co., Ltd.",
+   "trials": 48
+  },
+  {
+   "name": "Changchun GeneScience Pharmaceutical Co., Ltd.",
+   "trials": 47
+  },
+  {
+   "name": "Sichuan Kelun-Biotech Biopharmaceutical Co., Ltd.",
+   "trials": 44
+  },
+  {
+   "name": "Boston Scientific Corporation",
+   "trials": 41
+  },
+  {
+   "name": "CSPC ZhongQi Pharmaceutical Technology Co., Ltd.",
+   "trials": 40
+  },
+  {
+   "name": "Genentech, Inc.",
+   "trials": 39
+  },
+  {
+   "name": "Shandong Suncadia Medicine Co., Ltd.",
+   "trials": 38
+  },
+  {
+   "name": "Hangzhou Zhongmei Huadong Pharmaceutical Co., Ltd.",
+   "trials": 37
+  },
+  {
+   "name": "Bayer",
+   "trials": 37
+  },
+  {
+   "name": "Hansoh BioMedical R&D Company",
+   "trials": 37
+  },
+  {
+   "name": "Astellas Pharma Global Development, Inc.",
+   "trials": 37
+  },
+  {
+   "name": "argenx",
+   "trials": 37
+  },
+  {
+   "name": "Ono Pharmaceutical Co., Ltd.",
+   "trials": 36
+  },
+  {
+   "name": "CSPC Megalith Biopharmaceutical Co.,Ltd.",
+   "trials": 34
+  },
+  {
+   "name": "Abbott Medical Devices",
+   "trials": 34
+  },
+  {
+   "name": "Chia Tai Tianqing Pharmaceutical Group Nanjing Shunxin Pharmaceutical Co., Ltd.",
+   "trials": 32
+  },
+  {
+   "name": "Beijing Biotech",
+   "trials": 32
+  },
+  {
+   "name": "Genmab",
+   "trials": 31
+  },
+  {
+   "name": "Guangdong Hengrui Pharmaceutical Co., Ltd",
+   "trials": 31
+  },
+  {
+   "name": "BioNTech SE",
+   "trials": 31
+  },
+  {
+   "name": "Fujian Shengdi Pharmaceutical Co., Ltd.",
+   "trials": 31
+  },
+  {
+   "name": "Alexion Pharmaceuticals, Inc.",
+   "trials": 30
+  },
+  {
+   "name": "RemeGen Co., Ltd.",
+   "trials": 30
+  },
+  {
+   "name": "Vertex Pharmaceuticals Incorporated",
+   "trials": 30
+  },
+  {
+   "name": "Shanghai JMT-Bio Inc.",
+   "trials": 29
+  },
+  {
+   "name": "Chongqing Precision Biotech Co., Ltd",
+   "trials": 29
+  },
+  {
+   "name": "Edwards Lifesciences",
+   "trials": 28
+  },
+  {
+   "name": "UCB Biopharma SRL",
+   "trials": 27
+  },
+  {
+   "name": "Ascentage Pharma Group Inc.",
+   "trials": 27
+  },
+  {
+   "name": "Sinocelltech Ltd.",
+   "trials": 27
+  },
+  {
+   "name": "Biogen",
+   "trials": 27
+  },
+  {
+   "name": "Shanghai Hengrui Pharmaceutical Co., Ltd.",
+   "trials": 27
+  },
+  {
+   "name": "Keymed Biosciences Co.Ltd",
+   "trials": 26
+  },
+  {
+   "name": "Beijing InnoCare Pharma Tech Co., Ltd.",
+   "trials": 26
+  },
+  {
+   "name": "ViiV Healthcare",
+   "trials": 26
+  },
+  {
+   "name": "ModernaTX, Inc.",
+   "trials": 25
+  },
+  {
+   "name": "Gan & Lee Pharmaceuticals.",
+   "trials": 25
+  },
+  {
+   "name": "Addpharma Inc.",
+   "trials": 24
+  },
+  {
+   "name": "Mabwell (Shanghai) Bioscience Co., Ltd.",
+   "trials": 24
+  },
+  {
+   "name": "Biocad",
+   "trials": 24
+  },
+  {
+   "name": "Institut Pasteur",
+   "trials": 24
+  },
+  {
+   "name": "MediLink Therapeutics (Suzhou) Co., Ltd.",
+   "trials": 23
+  },
+  {
+   "name": "Suzhou Zelgen Biopharmaceuticals Co.,Ltd",
+   "trials": 23
+  },
+  {
+   "name": "Shanghai Fosun Pharmaceutical Industrial Development Co. Ltd.",
+   "trials": 23
+  },
+  {
+   "name": "Celgene",
+   "trials": 23
+  },
+  {
+   "name": "Shenyang Sunshine Pharmaceutical Co., LTD.",
+   "trials": 22
+  },
+  {
+   "name": "Exelixis",
+   "trials": 22
+  },
+  {
+   "name": "W.L.Gore & Associates",
+   "trials": 22
+  },
+  {
+   "name": "Jazz Pharmaceuticals",
+   "trials": 21
+  },
+  {
+   "name": "Essilor International",
+   "trials": 21
+  },
+  {
+   "name": "ImmunityBio, Inc.",
+   "trials": 21
+  },
+  {
+   "name": "Wecare Probiotics Co., Ltd.",
+   "trials": 21
+  },
+  {
+   "name": "Efforia, Inc",
+   "trials": 21
+  },
+  {
+   "name": "InSightec",
+   "trials": 20
+  },
+  {
+   "name": "Alnylam Pharmaceuticals",
+   "trials": 20
+  },
+  {
+   "name": "Abbisko Therapeutics Co, Ltd",
+   "trials": 20
+  },
+  {
+   "name": "Alpha Tau Medical LTD.",
+   "trials": 20
+  },
+  {
+   "name": "Ipsen",
+   "trials": 20
+  },
+  {
+   "name": "Otsuka Pharmaceutical Development & Commercialization, Inc.",
+   "trials": 20
+  },
+  {
+   "name": "BioMarin Pharmaceutical",
+   "trials": 19
+  },
+  {
+   "name": "Ionis Pharmaceuticals, Inc.",
+   "trials": 19
+  },
+  {
+   "name": "Grit Biotechnology",
+   "trials": 19
+  },
+  {
+   "name": "Jemincare",
+   "trials": 19
+  },
+  {
+   "name": "Jiangsu Simcere Pharmaceutical Co., Ltd.",
+   "trials": 19
+  },
+  {
+   "name": "Zimmer Biomet",
+   "trials": 19
+  },
+  {
+   "name": "Sinovac Biotech Co., Ltd",
+   "trials": 19
+  },
+  {
+   "name": "Vanda Pharmaceuticals",
+   "trials": 18
+  },
+  {
+   "name": "Dizal Pharmaceuticals",
+   "trials": 18
+  },
+  {
+   "name": "Sunshine Guojian Pharmaceutical (Shanghai) Co., Ltd.",
+   "trials": 18
+  },
+  {
+   "name": "Shenzhen Salubris Pharmaceuticals Co., Ltd.",
+   "trials": 18
+  },
+  {
+   "name": "Cochlear",
+   "trials": 17
+  },
+  {
+   "name": "Neurocrine Biosciences",
+   "trials": 17
+  },
+  {
+   "name": "Minghui Pharmaceutical (Hangzhou) Ltd",
+   "trials": 17
+  },
+  {
+   "name": "Jiangsu Alphamab Biopharmaceuticals Co., Ltd",
+   "trials": 17
+  },
+  {
+   "name": "Daewoong Pharmaceutical Co. LTD.",
+   "trials": 17
+  },
+  {
+   "name": "Société des Produits Nestlé (SPN)",
+   "trials": 16
+  },
+  {
+   "name": "Shanghai Juncell Therapeutics",
+   "trials": 16
+  },
+  {
+   "name": "Shanghai Chia Tai Tianqing Pharmaceutical Technology Development Co., Ltd.",
+   "trials": 16
+  },
+  {
+   "name": "Seagen, a wholly owned subsidiary of Pfizer",
+   "trials": 16
+  },
+  {
+   "name": "Radicle Science",
+   "trials": 16
+  },
+  {
+   "name": "Genrix (Shanghai) Biopharmaceutical Co., Ltd.",
+   "trials": 15
+  },
+  {
+   "name": "Shandong New Time Pharmaceutical Co., LTD",
+   "trials": 15
+  },
+  {
+   "name": "Hamad Medical Corporation",
+   "trials": 15
+  },
+  {
+   "name": "InventisBio Co., Ltd",
+   "trials": 15
+  },
+  {
+   "name": "Chengdu Zenitar Biomedical Technology Co., Ltd",
+   "trials": 15
+  },
+  {
+   "name": "Medtronic Cardiovascular",
+   "trials": 15
+  },
+  {
+   "name": "Betta Pharmaceuticals Co., Ltd.",
+   "trials": 15
+  },
+  {
+   "name": "Acerta Pharma BV",
+   "trials": 15
+  },
+  {
+   "name": "EMS",
+   "trials": 15
+  },
+  {
+   "name": "Revolution Medicines, Inc.",
+   "trials": 15
+  },
+  {
+   "name": "Philogen S.p.A.",
+   "trials": 15
+  },
+  {
+   "name": "Eisai Inc.",
+   "trials": 14
+  },
+  {
+   "name": "Luye Pharma Group Ltd.",
+   "trials": 14
+  },
+  {
+   "name": "CSL Behring",
+   "trials": 14
+  },
+  {
+   "name": "Shanghai Pharmaceuticals Holding Co., Ltd",
+   "trials": 14
+  },
+  {
+   "name": "Chiesi Farmaceutici S.p.A.",
+   "trials": 14
+  },
+  {
+   "name": "Tasly Pharmaceutical Group Co., Ltd",
+   "trials": 14
+  },
+  {
+   "name": "Galderma R&D",
+   "trials": 14
+  },
+  {
+   "name": "EMD Serono Research & Development Institute, Inc.",
+   "trials": 14
+  },
+  {
+   "name": "Colgate Palmolive",
+   "trials": 14
+  },
+  {
+   "name": "Sunshine Lake Pharma Co., Ltd.",
+   "trials": 14
+  },
+  {
+   "name": "Agios Pharmaceuticals, Inc.",
+   "trials": 14
+  },
+  {
+   "name": "Shanghai Institute Of Biological Products",
+   "trials": 14
+  },
+  {
+   "name": "CSPC Zhongnuo Pharmaceutical (Shijiazhuang) Co., Ltd.",
+   "trials": 14
+  },
+  {
+   "name": "GE Healthcare",
+   "trials": 13
+  },
+  {
+   "name": "Bausch Health Americas, Inc.",
+   "trials": 13
+  },
+  {
+   "name": "Allist Pharmaceuticals, Inc.",
+   "trials": 13
+  },
+  {
+   "name": "Nanjing Leads Biolabs Co.,Ltd",
+   "trials": 13
+  },
+  {
+   "name": "Taiho Oncology, Inc.",
+   "trials": 13
+  },
+  {
+   "name": "Miltenyi Biomedicine GmbH",
+   "trials": 13
+  },
+  {
+   "name": "Hutchmed",
+   "trials": 13
+  },
+  {
+   "name": "Arrowhead Pharmaceuticals",
+   "trials": 13
+  },
+  {
+   "name": "Shanghai Minwei Biotechnology Co., Ltd",
+   "trials": 13
+  },
+  {
+   "name": "Beijing Mabworks Biotech Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Sclnow Biotechnology Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Jiangsu vcare pharmaceutical technology co., LTD",
+   "trials": 12
+  },
+  {
+   "name": "Lifetech Scientific (Shenzhen) Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Bioray Laboratories",
+   "trials": 12
+  },
+  {
+   "name": "Guangzhou Lupeng Pharmaceutical Company LTD.",
+   "trials": 12
+  },
+  {
+   "name": "LaNova Medicines Limited",
+   "trials": 12
+  },
+  {
+   "name": "Ultragenyx Pharmaceutical Inc",
+   "trials": 12
+  },
+  {
+   "name": "Valenta Pharm JSC",
+   "trials": 12
+  },
+  {
+   "name": "Biohaven Therapeutics Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Boryung Pharmaceutical Co., Ltd",
+   "trials": 12
+  },
+  {
+   "name": "BrightGene Bio-Medical Technology Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "BeiGene",
+   "trials": 12
+  },
+  {
+   "name": "Kite, A Gilead Company",
+   "trials": 12
+  },
+  {
+   "name": "Kyowa Kirin Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Hanmi Pharmaceutical Company Limited",
+   "trials": 12
+  },
+  {
+   "name": "CSPC Ouyi Pharmaceutical Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "Azidus Brasil",
+   "trials": 12
+  },
+  {
+   "name": "PersonGen BioTherapeutics (Suzhou) Co., Ltd.",
+   "trials": 12
+  },
+  {
+   "name": "SightGlass Vision, Inc.",
+   "trials": 12
+  },
+  {
+   "name": "H. Lundbeck A/S",
+   "trials": 12
+  },
+  {
+   "name": "Biosense Webster, Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Chipscreen Biosciences, Ltd.",
+   "trials": 11
+  },
+  {
+   "name": "Mirum Pharmaceuticals, Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Qualia Life Sciences",
+   "trials": 11
+  },
+  {
+   "name": "Vigonvita Life Sciences",
+   "trials": 11
+  },
+  {
+   "name": "Xuanzhu Biopharmaceutical Co., Ltd.",
+   "trials": 11
+  },
+  {
+   "name": "DualityBio Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Axsome Therapeutics, Inc.",
+   "trials": 11
+  },
+  {
+   "name": "IDEAYA Biosciences",
+   "trials": 11
+  },
+  {
+   "name": "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
+   "trials": 11
+  },
+  {
+   "name": "Chong Kun Dang Pharmaceutical",
+   "trials": 11
+  },
+  {
+   "name": "Evopoint Biosciences Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Alcon Research",
+   "trials": 11
+  },
+  {
+   "name": "Intra-Cellular Therapies, Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Guangdong Raynovent Biotech Co., Ltd",
+   "trials": 11
+  },
+  {
+   "name": "Changchun BCHT Biotechnology Co.",
+   "trials": 11
+  },
+  {
+   "name": "Avistone Biotechnology Co., Ltd.",
+   "trials": 11
+  },
+  {
+   "name": "Genfleet Therapeutics (Shanghai) Inc.",
+   "trials": 11
+  },
+  {
+   "name": "Shionogi",
+   "trials": 11
+  },
+  {
+   "name": "Aspargo Labs, Inc",
+   "trials": 11
+  },
+  {
+   "name": "RAI Services Company",
+   "trials": 10
+  },
+  {
+   "name": "Biotheus Inc.",
+   "trials": 10
+  },
+  {
+   "name": "SUNHO（China）BioPharmaceutical CO., Ltd.",
+   "trials": 10
+  },
+  {
+   "name": "Nanjing Chia-tai Tianqing Pharmaceutical",
+   "trials": 10
+  },
+  {
+   "name": "Varian, a Siemens Healthineers Company",
+   "trials": 10
+  },
+  {
+   "name": "MAXVAX Biotechnology Limited Liability Company",
+   "trials": 10
+  },
+  {
+   "name": "CanSino Biologics Inc.",
+   "trials": 10
+  },
+  {
+   "name": "Lepu Biopharma Co., Ltd.",
+   "trials": 10
+  },
+  {
+   "name": "Sarepta Therapeutics, Inc.",
+   "trials": 10
+  },
+  {
+   "name": "Sichuan Huiyu Pharmaceutical Co., Ltd",
+   "trials": 10
+  },
+  {
+   "name": "Beijing Suncadia Pharmaceuticals Co., Ltd",
+   "trials": 10
+  },
+  {
+   "name": "Deciphera Pharmaceuticals, LLC",
+   "trials": 10
+  },
+  {
+   "name": "Dong-A ST Co., Ltd.",
+   "trials": 10
+  },
+  {
+   "name": "Cullinan Therapeutics Inc.",
+   "trials": 10
+  },
+  {
+   "name": "Shanghai Huaota Biopharmaceutical Co., Ltd.",
+   "trials": 10
+  },
+  {
+   "name": "RDC Clinical Pty Ltd",
+   "trials": 10
+  },
+  {
+   "name": "Fisher and Paykel Healthcare",
+   "trials": 10
+  },
+  {
+   "name": "Xiamen Amoytop Biotech Co., Ltd.",
+   "trials": 10
+  },
+  {
+   "name": "Verastem, Inc.",
+   "trials": 10
+  },
+  {
+   "name": "TYK Medicines, Inc",
+   "trials": 9
+  },
+  {
+   "name": "Sun Pharmaceutical Industries Limited",
+   "trials": 9
+  },
+  {
+   "name": "Shenzhen TargetRx Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Shanghai Mabgeek Biotech.Co.Ltd",
+   "trials": 9
+  },
+  {
+   "name": "Nuvation Bio Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Juventas Cell Therapy Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "HC Biopharma Inc.",
+   "trials": 9
+  },
+  {
+   "name": "HALEON",
+   "trials": 9
+  },
+  {
+   "name": "Teva Branded Pharmaceutical Products R&D LLC",
+   "trials": 9
+  },
+  {
+   "name": "Intuitive Surgical",
+   "trials": 9
+  },
+  {
+   "name": "Arcus Biosciences, Inc.",
+   "trials": 9
+  },
+  {
+   "name": "The United Bio-Technology (Hengqin) Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Nanjing IASO Biotechnology Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Ausper Biopharma Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "ADARx Pharmaceuticals, Inc.",
+   "trials": 9
+  },
+  {
+   "name": "BioRay Pharmaceutical Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "PT. Prodia Stem Cell Indonesia",
+   "trials": 9
+  },
+  {
+   "name": "TCI Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Xenon Pharmaceuticals Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Hebei Senlang Biotechnology Inc., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Otsuka Pharmaceutical Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "4D Molecular Therapeutics",
+   "trials": 9
+  },
+  {
+   "name": "HK inno.N Corporation",
+   "trials": 9
+  },
+  {
+   "name": "Beijing Tide Pharmaceutical Co., Ltd",
+   "trials": 9
+  },
+  {
+   "name": "Glaukos Corporation",
+   "trials": 9
+  },
+  {
+   "name": "InxMed (Shanghai) Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "ResMed",
+   "trials": 9
+  },
+  {
+   "name": "Denali Therapeutics Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Bio-Thera Solutions",
+   "trials": 9
+  },
+  {
+   "name": "Krystal Biotech, Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Sanofi Pasteur, a Sanofi Company",
+   "trials": 9
+  },
+  {
+   "name": "Iovance Biotherapeutics, Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Beijing Konruns Pharmaceutical Co., Ltd.",
+   "trials": 9
+  },
+  {
+   "name": "Angiodynamics, Inc.",
+   "trials": 9
+  },
+  {
+   "name": "Philips Clinical & Medical Affairs Global",
+   "trials": 9
+  },
+  {
+   "name": "Replimune, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Ivoclar Vivadent AG",
+   "trials": 8
+  },
+  {
+   "name": "Shanghai Vitalgen BioPharma Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Longbio Pharma",
+   "trials": 8
+  },
+  {
+   "name": "Karuna Therapeutics, Inc., a Bristol Myers Squibb company",
+   "trials": 8
+  },
+  {
+   "name": "Hangzhou Sumgen Biotech Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Rhaeos, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Immunovant Sciences GmbH",
+   "trials": 8
+  },
+  {
+   "name": "Chugai Pharmaceutical",
+   "trials": 8
+  },
+  {
+   "name": "Shanghai Yidian Pharmaceutical Technology Development Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Nutricia UK Ltd",
+   "trials": 8
+  },
+  {
+   "name": "Octapharma",
+   "trials": 8
+  },
+  {
+   "name": "BeBetter Med Inc",
+   "trials": 8
+  },
+  {
+   "name": "Praxis Precision Medicines",
+   "trials": 8
+  },
+  {
+   "name": "TG Therapeutics, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Yuhan Corporation",
+   "trials": 8
+  },
+  {
+   "name": "Abiomed Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Zai Lab (Shanghai) Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "GC Biopharma Corp",
+   "trials": 8
+  },
+  {
+   "name": "R-Pharm International, LLC",
+   "trials": 8
+  },
+  {
+   "name": "TORL Biotherapeutics, LLC",
+   "trials": 8
+  },
+  {
+   "name": "Guangzhou JOYO Pharma Co., Ltd",
+   "trials": 8
+  },
+  {
+   "name": "Shenzhen Core Medical Technology CO.,LTD.",
+   "trials": 8
+  },
+  {
+   "name": "Beijing Biostar Pharmaceuticals Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Corcept Therapeutics",
+   "trials": 8
+  },
+  {
+   "name": "Suzhou Abogen Biosciences Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Ganzhou Hemay Pharmaceutical Co., Ltd",
+   "trials": 8
+  },
+  {
+   "name": "Xeltis",
+   "trials": 8
+  },
+  {
+   "name": "Swedish Orphan Biovitrum",
+   "trials": 8
+  },
+  {
+   "name": "NovelMed Therapeutics",
+   "trials": 8
+  },
+  {
+   "name": "Xencor, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Hubei Bio-Pharmaceutical Industrial Technological Institute Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Medtronic Cardiac Ablation Solutions",
+   "trials": 8
+  },
+  {
+   "name": "NuScience Medical Biologics, LLC",
+   "trials": 8
+  },
+  {
+   "name": "Telix Pharmaceuticals (Innovations) Pty Limited",
+   "trials": 8
+  },
+  {
+   "name": "Medtronic - MITG",
+   "trials": 8
+  },
+  {
+   "name": "Mirati Therapeutics Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Alkermes, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "BTL Industries Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Bausch & Lomb Incorporated",
+   "trials": 8
+  },
+  {
+   "name": "Karyopharm Therapeutics Inc",
+   "trials": 8
+  },
+  {
+   "name": "OncoC4, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "Shanghai Argo Biopharmaceutical Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Nutricia Research",
+   "trials": 8
+  },
+  {
+   "name": "Jiangsu Aosaikang Pharmaceutical Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Pierre Fabre Medicament",
+   "trials": 8
+  },
+  {
+   "name": "Shanghai Cell Therapy Group Co.,Ltd",
+   "trials": 8
+  },
+  {
+   "name": "MedImmune LLC",
+   "trials": 8
+  },
+  {
+   "name": "Onconic Therapeutics Inc.",
+   "trials": 8
+  },
+  {
+   "name": "C. R. Bard",
+   "trials": 8
+  },
+  {
+   "name": "Suzhou Alphamab Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "GeneCradle Inc",
+   "trials": 8
+  },
+  {
+   "name": "MED-EL Elektromedizinische Geräte GesmbH",
+   "trials": 8
+  },
+  {
+   "name": "Sinovac Life Sciences Co., Ltd.",
+   "trials": 8
+  },
+  {
+   "name": "Stemline Therapeutics, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "BicycleTx Limited",
+   "trials": 8
+  },
+  {
+   "name": "Hudson Biotech",
+   "trials": 8
+  },
+  {
+   "name": "Applied Biology, Inc.",
+   "trials": 8
+  },
+  {
+   "name": "InSilico Medicine Hong Kong Limited",
+   "trials": 8
+  },
+  {
+   "name": "Kumquat Biosciences Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Jacobio Pharmaceuticals Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Debiopharm International SA",
+   "trials": 7
+  },
+  {
+   "name": "Zydus Therapeutics Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Celldex Therapeutics",
+   "trials": 7
+  },
+  {
+   "name": "Hangzhou Highlightll Pharmaceutical Co., Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Tyra Biosciences, Inc",
+   "trials": 7
+  },
+  {
+   "name": "Wandercraft",
+   "trials": 7
+  },
+  {
+   "name": "Hangzhou Huasai Biomedicine Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "BioGaia AB",
+   "trials": 7
+  },
+  {
+   "name": "Beijing Immunochina Medical Science & Technology Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Rise Therapeutics LLC",
+   "trials": 7
+  },
+  {
+   "name": "Medtronic Vascular",
+   "trials": 7
+  },
+  {
+   "name": "Chengdu Kanghong Pharmaceutical Group Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Pharmazz, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Clinical Nutrition Research Center, Illinois Institute of Technology",
+   "trials": 7
+  },
+  {
+   "name": "Chengdu Suncadia Medicine Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Supernus Pharmaceuticals, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Binhui Biopharmaceutical Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "USWM CT, LLC",
+   "trials": 7
+  },
+  {
+   "name": "Nuwacell Biotechnologies Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Merck Healthcare KGaA, Darmstadt, Germany, an affiliate of Merck KGaA, Darmstadt, Germany",
+   "trials": 7
+  },
+  {
+   "name": "Jiangxi Kvvit Pharmaceutical Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "CooperVision International Limited (CVIL)",
+   "trials": 7
+  },
+  {
+   "name": "Loxo Oncology, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Huons Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Daewon Pharmaceutical Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Bolton Medical",
+   "trials": 7
+  },
+  {
+   "name": "Shanghai Jiatan Pharmatech Co., Ltd",
+   "trials": 7
+  },
+  {
+   "name": "China Immunotech (Beijing) Biotechnology Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "ChinaNorm",
+   "trials": 7
+  },
+  {
+   "name": "Multitude Therapeutics Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Beijing QL Biopharmaceutical Co.,Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Inmunotek S.L.",
+   "trials": 7
+  },
+  {
+   "name": "Shanghai MicroPort EP MedTech Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Almirall, S.A.",
+   "trials": 7
+  },
+  {
+   "name": "Laboratoires Thea",
+   "trials": 7
+  },
+  {
+   "name": "TCRx Therapeutics Co.Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Han Xu, M.D., Ph.D., FAPCR, Sponsor-Investigator, IRB Chair",
+   "trials": 7
+  },
+  {
+   "name": "Guangzhou Patronus Biotech Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Sumitomo Pharma America, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "RayzeBio, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Aesculap AG",
+   "trials": 7
+  },
+  {
+   "name": "Truway Health, Inc.",
+   "trials": 7
+  },
+  {
+   "name": "Excyte Biopharma Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Brainfarma Industria Química e Farmacêutica S/A",
+   "trials": 7
+  },
+  {
+   "name": "Insmed Incorporated",
+   "trials": 7
+  },
+  {
+   "name": "Beijing Continent Pharmaceutical Co, Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "BrosMed Medical Co., Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Radiopharm Theranostics, Ltd",
+   "trials": 7
+  },
+  {
+   "name": "Kind Pharmaceuticals LLC",
+   "trials": 7
+  },
+  {
+   "name": "Innovent Biopharmaceutical Technology (Hangzhou) Co., LTD.",
+   "trials": 7
+  },
+  {
+   "name": "Ceric Sàrl",
+   "trials": 7
+  },
+  {
+   "name": "Eurofarma Laboratorios S.A.",
+   "trials": 7
+  },
+  {
+   "name": "NewAmsterdam Pharma",
+   "trials": 7
+  },
+  {
+   "name": "JCR Pharmaceuticals Co., Ltd.",
+   "trials": 7
+  },
+  {
+   "name": "Sinotau Pharmaceutical Group",
+   "trials": 7
+  },
+  {
+   "name": "Taizhou Mabtech Pharmaceutical Co.,Ltd",
+   "trials": 7
+  },
+  {
+   "name": "iRegene Therapeutics Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Zhaoke (Guangzhou) Ophthalmology Pharmaceutical Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai Runshi Pharmaceutical Technology Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "Candela Corporation",
+   "trials": 6
+  },
+  {
+   "name": "Hangzhou Endonom Medtech Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "GT Metabolic Solutions, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Natera, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Kura Oncology, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "MMI (Medical Microinstruments, Inc.)",
+   "trials": 6
+  },
+  {
+   "name": "Chongqing Peg-Bio Biopharm Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Hrain Biotechnology Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Atridia Pty Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Anhui Zhifei Longcom Biologic Pharmacy Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Lumos Pharma",
+   "trials": 6
+  },
+  {
+   "name": "Materia Medica Holding",
+   "trials": 6
+  },
+  {
+   "name": "Nurix Therapeutics, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Guangzhou Virotech Pharmaceutical Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Anabio R&D",
+   "trials": 6
+  },
+  {
+   "name": "Polares Medical SA",
+   "trials": 6
+  },
+  {
+   "name": "Jecho Biopharmaceuticals Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Innostellar Biotherapeutics Co.,Ltd",
+   "trials": 6
+  },
+  {
+   "name": "LEO Pharma",
+   "trials": 6
+  },
+  {
+   "name": "Oruka Therapeutics, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Fate Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "Ponce Medical School Foundation, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Aktiia SA",
+   "trials": 6
+  },
+  {
+   "name": "JW Pharmaceutical",
+   "trials": 6
+  },
+  {
+   "name": "3D Medicines (Sichuan) Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai BDgene Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Vedic Lifesciences Pvt. Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Luminary Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "HuidaGene Therapeutics Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai Jiaolian Drug Research and Development Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "Crinetics Pharmaceuticals Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Frontera Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "Molnlycke Health Care AB",
+   "trials": 6
+  },
+  {
+   "name": "Sofwave Medical LTD",
+   "trials": 6
+  },
+  {
+   "name": "iCell Gene Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "Autolus Limited",
+   "trials": 6
+  },
+  {
+   "name": "Eikon Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "Zenas BioPharma (USA), LLC",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai Fudan-Zhangjiang Bio-Pharmaceutical Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Healeon Medical Inc",
+   "trials": 6
+  },
+  {
+   "name": "Vir Biotechnology, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Newish Biotech (Wuxi) Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Travere Therapeutics, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "TBF Genie Tissulaire",
+   "trials": 6
+  },
+  {
+   "name": "Convalife (Shanghai) Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Celltrion",
+   "trials": 6
+  },
+  {
+   "name": "Medacta International SA",
+   "trials": 6
+  },
+  {
+   "name": "Madrigal Pharmaceuticals, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Dentsply Sirona Implants and Consumables",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai NewMed Medical Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Disc Medicine, Inc",
+   "trials": 6
+  },
+  {
+   "name": "Wuhan Createrna Science and Technology Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "Pharming Technologies B.V.",
+   "trials": 6
+  },
+  {
+   "name": "CARsgen Therapeutics Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Nanjing Bioheng Biotech Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "ACADIA Pharmaceuticals Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Neuralink Corp",
+   "trials": 6
+  },
+  {
+   "name": "NS Pharma, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Kailera",
+   "trials": 6
+  },
+  {
+   "name": "Johnson & Johnson Enterprise Innovation Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Shape Memory Medical, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Kriya Therapeutics, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Zealand Pharma",
+   "trials": 6
+  },
+  {
+   "name": "HELP Therapeutics Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Viatris Innovation GmbH",
+   "trials": 6
+  },
+  {
+   "name": "PharmaEssentia",
+   "trials": 6
+  },
+  {
+   "name": "Hangzhou Sciwind Biosciences Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Hangzhou Valgen Medtech Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "CStone Pharmaceuticals",
+   "trials": 6
+  },
+  {
+   "name": "Immunocore Ltd",
+   "trials": 6
+  },
+  {
+   "name": "United Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "M.A. Med Alliance S.A.",
+   "trials": 6
+  },
+  {
+   "name": "Xynomic Pharmaceuticals, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "XellSmart Bio-Pharmaceutical (Suzhou) Co., Ltd.",
+   "trials": 6
+  },
+  {
+   "name": "Aragon Pharmaceuticals, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "ConvaTec Inc.",
+   "trials": 6
+  },
+  {
+   "name": "LG Chem",
+   "trials": 6
+  },
+  {
+   "name": "Shanghai Shenqi Medical Technology Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "Ocugen",
+   "trials": 6
+  },
+  {
+   "name": "Concept Medical Inc.",
+   "trials": 6
+  },
+  {
+   "name": "Bambusa Therapeutics",
+   "trials": 6
+  },
+  {
+   "name": "XVIVO Perfusion",
+   "trials": 6
+  },
+  {
+   "name": "Bavarian Nordic",
+   "trials": 6
+  },
+  {
+   "name": "Helixon Biotechnology (Suzhou) Co., Ltd",
+   "trials": 6
+  },
+  {
+   "name": "Cogent Biosciences, Inc.",
+   "trials": 6
+  },
+  {
+   "name": "MoonLake Immunotherapeutics AG",
+   "trials": 5
+  },
+  {
+   "name": "Shanghai YingLi Pharmaceutical Co. Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Grifols Therapeutics LLC",
+   "trials": 5
+  },
+  {
+   "name": "Eidos Therapeutics, a BridgeBio company",
+   "trials": 5
+  },
+  {
+   "name": "Zhejiang Doer Biologics Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "TransThera Sciences (Nanjing), Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Lee's Pharmaceutical Limited",
+   "trials": 5
+  },
+  {
+   "name": "Eisai Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Restore Biologics Holdings, Inc. dba Xtressé",
+   "trials": 5
+  },
+  {
+   "name": "Daiichi Sankyo Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Beijing Geekgene Technology Co., LTD",
+   "trials": 5
+  },
+  {
+   "name": "ScinnoHub Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Edgewise Therapeutics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "ALX Oncology Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Cytokinetics",
+   "trials": 5
+  },
+  {
+   "name": "Pharmacosmos A/S",
+   "trials": 5
+  },
+  {
+   "name": "CellSight Technologies, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Liquidia Technologies, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Salvia BioElectronics",
+   "trials": 5
+  },
+  {
+   "name": "Guangzhou Jiayin Biotech Ltd",
+   "trials": 5
+  },
+  {
+   "name": "AgNovos Healthcare, LLC",
+   "trials": 5
+  },
+  {
+   "name": "Kaneka Medical America LLC",
+   "trials": 5
+  },
+  {
+   "name": "Genzyme, a Sanofi Company",
+   "trials": 5
+  },
+  {
+   "name": "Azafaros B.V.",
+   "trials": 5
+  },
+  {
+   "name": "UniQure Biopharma B.V.",
+   "trials": 5
+  },
+  {
+   "name": "AskBio Inc",
+   "trials": 5
+  },
+  {
+   "name": "Apollo Therapeutics Ltd",
+   "trials": 5
+  },
+  {
+   "name": "HistoSonics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Tesaro, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Huahui Health",
+   "trials": 5
+  },
+  {
+   "name": "Suzhou BlueHorse Therapeutics Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Myeloid Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Guangdong ProCapZoom Biosciences Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Asklepios proresearch",
+   "trials": 5
+  },
+  {
+   "name": "Oneness Biotech Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Generate Biomedicines",
+   "trials": 5
+  },
+  {
+   "name": "MindRank AI Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Il-Yang Pharm. Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Cartesian Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Bellicum Pharmaceuticals",
+   "trials": 5
+  },
+  {
+   "name": "Rigel Pharmaceuticals",
+   "trials": 5
+  },
+  {
+   "name": "Vaxcyte, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Joincare Pharmaceutical Group Industry Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "PharmaMar",
+   "trials": 5
+  },
+  {
+   "name": "ArriVent BioPharma, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Efferon JSC",
+   "trials": 5
+  },
+  {
+   "name": "EyeBiotech Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Jiangsu Topcel-KH Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "GI Windows, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Kymera Therapeutics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Sinovac (Dalian) Vaccine Technology Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Cellectar Biosciences, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Grand Theravac Life Sciences (Nanjing) Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Definium Therapeutics US, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Janux Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "CorrectSequence Therapeutics Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Beam Therapeutics Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Candid Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Astellas Pharma Inc",
+   "trials": 5
+  },
+  {
+   "name": "Abivax S.A.",
+   "trials": 5
+  },
+  {
+   "name": "Immunome, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "AB Science",
+   "trials": 5
+  },
+  {
+   "name": "SystImmune Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Henan Genuine Biotech Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Fortvita Biologics (USA)Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Olly, PBC",
+   "trials": 5
+  },
+  {
+   "name": "iVascular S.L.U.",
+   "trials": 5
+  },
+  {
+   "name": "Oystershell NV",
+   "trials": 5
+  },
+  {
+   "name": "AtriCure, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Shockwave Medical, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Fresenius Medical Care Deutschland GmbH",
+   "trials": 5
+  },
+  {
+   "name": "Beacon Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "L'Oreal",
+   "trials": 5
+  },
+  {
+   "name": "Ferring Pharmaceuticals",
+   "trials": 5
+  },
+  {
+   "name": "Regend Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "CatalYm GmbH",
+   "trials": 5
+  },
+  {
+   "name": "Wondercel Biotech (ShenZhen)",
+   "trials": 5
+  },
+  {
+   "name": "EyePoint Pharmaceuticals, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Biocity Biopharmaceutics Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Cerenome",
+   "trials": 5
+  },
+  {
+   "name": "Innovent Biologics Technology Limited (Shanghai R&D Center)",
+   "trials": 5
+  },
+  {
+   "name": "SpringWorks Therapeutics, Inc., a healthcare company of Merck KGaA, Darmstadt, Germany",
+   "trials": 5
+  },
+  {
+   "name": "Biocodex",
+   "trials": 5
+  },
+  {
+   "name": "BioSyngen Pte Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Samsung Bioepis Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Rousselot BVBA",
+   "trials": 5
+  },
+  {
+   "name": "Avidity Biosciences, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "MacroGenics",
+   "trials": 5
+  },
+  {
+   "name": "Amazentis SA",
+   "trials": 5
+  },
+  {
+   "name": "Cellenkos, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Taisho Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Pacira Pharmaceuticals, Inc",
+   "trials": 5
+  },
+  {
+   "name": "FutureGen Biopharmaceutical (Beijing) Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Hangzhou DAC Biotechnology Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Centessa Pharmaceuticals (UK) Limited",
+   "trials": 5
+  },
+  {
+   "name": "Caranx Medical",
+   "trials": 5
+  },
+  {
+   "name": "VelaVigo Bio Inc",
+   "trials": 5
+  },
+  {
+   "name": "Norroy Bioscience Co., LTD",
+   "trials": 5
+  },
+  {
+   "name": "Thuasne",
+   "trials": 5
+  },
+  {
+   "name": "Syndax Pharmaceuticals",
+   "trials": 5
+  },
+  {
+   "name": "Biosensors Europe SA",
+   "trials": 5
+  },
+  {
+   "name": "Precigen, Inc",
+   "trials": 5
+  },
+  {
+   "name": "Candel Therapeutics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Tubulis GmbH",
+   "trials": 5
+  },
+  {
+   "name": "Cabaletta Bio",
+   "trials": 5
+  },
+  {
+   "name": "Microvention-Terumo, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Climb Bio, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "D3 Bio (Wuxi) Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Urotronic Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Spyre Therapeutics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Base Therapeutics (Shanghai) Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Transcenta Therapeutics (Hangzhou) Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Staidson (Beijing) Biopharmaceuticals Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Medtronic Cardiac Rhythm and Heart Failure",
+   "trials": 5
+  },
+  {
+   "name": "LucasBio",
+   "trials": 5
+  },
+  {
+   "name": "Ever Supreme Bio Technology Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Beijing Gene Key Life Technology Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "DePuy Orthopaedics",
+   "trials": 5
+  },
+  {
+   "name": "Rhythm Pharmaceuticals, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "TJ Biopharma Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Shanghai AbelZeta Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "AC Immune SA",
+   "trials": 5
+  },
+  {
+   "name": "Coherus Oncology, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Solid Biosciences Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Taiho Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Laboratorios Sophia S.A de C.V.",
+   "trials": 5
+  },
+  {
+   "name": "Haihe Biopharma Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "PTC Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Adlai Nortye Biopharma Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Suzhou Immunofoco Biotechnology Co., Ltd",
+   "trials": 5
+  },
+  {
+   "name": "Prevail Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Astria Therapeutics, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Pulse Biosciences, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Jina Pharmaceuticals Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Blueprint Medicines Corporation",
+   "trials": 5
+  },
+  {
+   "name": "Shanghai Best-Link Bioscience, LLC",
+   "trials": 5
+  },
+  {
+   "name": "Caliway Biopharmaceuticals Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Rocket Pharmaceuticals Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Servier Bio-Innovation LLC",
+   "trials": 5
+  },
+  {
+   "name": "Guangzhou FineImmune Biotechnology Co., LTD.",
+   "trials": 5
+  },
+  {
+   "name": "Shanghai Ark Biopharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "BioInvent International AB",
+   "trials": 5
+  },
+  {
+   "name": "Olema Pharmaceuticals, Inc.",
+   "trials": 5
+  },
+  {
+   "name": "Neurodawn Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Nanjing Sanhome Pharmaceutical, Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Hunan Kelun Pharmaceutical Co., Ltd.",
+   "trials": 5
+  },
+  {
+   "name": "Summit Therapeutics",
+   "trials": 5
+  },
+  {
+   "name": "Italfarmaco",
+   "trials": 5
+  },
+  {
+   "name": "SuperPatch Limited LLC",
+   "trials": 5
+  },
+  {
+   "name": "Ache Laboratorios Farmaceuticos S.A.",
+   "trials": 5
+  },
+  {
+   "name": "Intra-IMMUSG Pte Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Can-Fite BioPharma",
+   "trials": 4
+  },
+  {
+   "name": "Barron Associates, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai StairMed Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Xentria, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Basilea Pharmaceutica",
+   "trials": 4
+  },
+  {
+   "name": "Magnetic Tides",
+   "trials": 4
+  },
+  {
+   "name": "Atom Therapeutics Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Klein Buendel, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "iOnctura",
+   "trials": 4
+  },
+  {
+   "name": "Nerviano Medical Sciences",
+   "trials": 4
+  },
+  {
+   "name": "Sanaria Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Axonics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Research Inc",
+   "trials": 4
+  },
+  {
+   "name": "Atea Pharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Servier",
+   "trials": 4
+  },
+  {
+   "name": "OBI Pharma, Inc",
+   "trials": 4
+  },
+  {
+   "name": "HUYABIO International, LLC.",
+   "trials": 4
+  },
+  {
+   "name": "PYC Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Erasca, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "InnovStone Therapeutics Limited",
+   "trials": 4
+  },
+  {
+   "name": "JenaValve Technology, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Restorear Devices LLC",
+   "trials": 4
+  },
+  {
+   "name": "Shenzhen Shenxin Biotechnology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Escugen Biotechnology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Bioagile Therapeutics Pvt. Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Enliven Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "PepsiCo Global R&D",
+   "trials": 4
+  },
+  {
+   "name": "Tiziana Life Sciences LTD",
+   "trials": 4
+  },
+  {
+   "name": "bioLytical Laboratories",
+   "trials": 4
+  },
+  {
+   "name": "Lantheus Medical Imaging",
+   "trials": 4
+  },
+  {
+   "name": "Kodiak Sciences Inc",
+   "trials": 4
+  },
+  {
+   "name": "Relay Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Dompé Farmaceutici S.p.A",
+   "trials": 4
+  },
+  {
+   "name": "Jiangsu Famous Medical Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Oncotherapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Novadip Biosciences",
+   "trials": 4
+  },
+  {
+   "name": "Scholar Rock, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Peijia Medical Technology (Suzhou) Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Korea United Pharm. Inc.",
+   "trials": 4
+  },
+  {
+   "name": "NaviFUS Corporation",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Kechow Pharma, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Aurigene Discovery Technologies Limited",
+   "trials": 4
+  },
+  {
+   "name": "TaiRx, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "GRIN Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Ocular Therapeutix, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "MapLight Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Lo.Li.Pharma s.r.l",
+   "trials": 4
+  },
+  {
+   "name": "Ascendis Pharma A/S",
+   "trials": 4
+  },
+  {
+   "name": "Pharvaris Netherlands B.V.",
+   "trials": 4
+  },
+  {
+   "name": "Vividion Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Treeline Biosciences, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Koite Health Oy",
+   "trials": 4
+  },
+  {
+   "name": "PPD Development, LP",
+   "trials": 4
+  },
+  {
+   "name": "Avenzo Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Dianthus Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "i+Med S.Coop.",
+   "trials": 4
+  },
+  {
+   "name": "Bio-Path Holdings, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Biogenea Pharmaceuticals Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Frantz Viral Therapeutics, LLC",
+   "trials": 4
+  },
+  {
+   "name": "Biocells Medical",
+   "trials": 4
+  },
+  {
+   "name": "Piramal Enterprises Limited",
+   "trials": 4
+  },
+  {
+   "name": "Forte Biosciences, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Sun Pharmaceutical Industries, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Inari Medical",
+   "trials": 4
+  },
+  {
+   "name": "Quanta Medical",
+   "trials": 4
+  },
+  {
+   "name": "Mirador Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Green Valley (Shanghai) Pharmaceuticals Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Wanbangde Pharmaceutical Group Co., LTD",
+   "trials": 4
+  },
+  {
+   "name": "MediWound Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Adverum Biotechnologies, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Orca Biosystems, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Antengene Biologics Limited",
+   "trials": 4
+  },
+  {
+   "name": "Pierre Fabre Dermo Cosmetique",
+   "trials": 4
+  },
+  {
+   "name": "Vera Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "HighLife SAS",
+   "trials": 4
+  },
+  {
+   "name": "Nimble Science Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Beijing Pearl Biotechnology Limited Liability Company",
+   "trials": 4
+  },
+  {
+   "name": "Sichuan Credit Pharmaceutical Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Wave Life Sciences USA, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "MarsiBionics",
+   "trials": 4
+  },
+  {
+   "name": "CytoCares Inc",
+   "trials": 4
+  },
+  {
+   "name": "Cardiovalve Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Airiver Medical, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "CEN Biotech",
+   "trials": 4
+  },
+  {
+   "name": "Idorsia Pharmaceuticals Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Citryll BV",
+   "trials": 4
+  },
+  {
+   "name": "Nkarta, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Jiangsu Aidea Pharmaceutical Group Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "PRG Science & Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Aqua Medical, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Criterium, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Laekna Limited",
+   "trials": 4
+  },
+  {
+   "name": "Beijing Airdoc Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Suzhou Forlong Biotechnology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Orion Corporation, Orion Pharma",
+   "trials": 4
+  },
+  {
+   "name": "Gaia AG",
+   "trials": 4
+  },
+  {
+   "name": "Ascletis Pharma (China) Co., Limited",
+   "trials": 4
+  },
+  {
+   "name": "Kardium Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Bluesail Boyuan Medical Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Beijing Union Pharmaceutical Factory Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Amicus Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "RevBio",
+   "trials": 4
+  },
+  {
+   "name": "MediBeacon",
+   "trials": 4
+  },
+  {
+   "name": "SleepRes Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Newsoara Biopharma Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Ranok Therapeutics (Hangzhou) Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Dren Bio",
+   "trials": 4
+  },
+  {
+   "name": "Corbus Pharmaceuticals Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Veradermics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Next Biomedical Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "AB Biotics, SA",
+   "trials": 4
+  },
+  {
+   "name": "Nacuity Pharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Intellia Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Hemab ApS",
+   "trials": 4
+  },
+  {
+   "name": "Rapport Therapeutics Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Dyne Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "TRiCares",
+   "trials": 4
+  },
+  {
+   "name": "CRISPR Therapeutics AG",
+   "trials": 4
+  },
+  {
+   "name": "TILT Biotherapeutics Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Bovax Biotechnology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Ton-Bridge Medical Tech. Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Anteris Technologies Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Apellis Pharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Evergreen Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "SmartNuclide Biopharma",
+   "trials": 4
+  },
+  {
+   "name": "Starna Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Medtronic Spinal and Biologics",
+   "trials": 4
+  },
+  {
+   "name": "Neonc Technologies, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "HighField Biopharmaceuticals Corporation",
+   "trials": 4
+  },
+  {
+   "name": "Allogene Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Conformal Medical, Inc",
+   "trials": 4
+  },
+  {
+   "name": "CSPC Baike (Shandong) Biopharmaceutical Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Eilean Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "CanariaBio Inc.",
+   "trials": 4
+  },
+  {
+   "name": "CereVasc Inc",
+   "trials": 4
+  },
+  {
+   "name": "AP Biosciences Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Med-El Corporation",
+   "trials": 4
+  },
+  {
+   "name": "Traws Pharma, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Teoxane SA",
+   "trials": 4
+  },
+  {
+   "name": "Adicet Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Shandong Boan Biotechnology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Kunming Pharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Prime Gene Therapeutics Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Sirius Therapeutics Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Kedrion S.p.A.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Zhimeng Biopharma, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Kexing Biopharm Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Alfasigma S.p.A.",
+   "trials": 4
+  },
+  {
+   "name": "Tcelltech Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Lexeo Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Corvus Pharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Medtronic Cardiac Surgery",
+   "trials": 4
+  },
+  {
+   "name": "Kartos Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "CLASSYS Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Inhibrx Biosciences, Inc",
+   "trials": 4
+  },
+  {
+   "name": "Peloton Therapeutics, Inc., a subsidiary of Merck & Co., Inc. (Rahway, New Jersey USA)",
+   "trials": 4
+  },
+  {
+   "name": "QED Therapeutics, a BridgeBio company",
+   "trials": 4
+  },
+  {
+   "name": "ImmVira Pharma Co. Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Viridian Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "VisionCare, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "REGENXBIO Inc.",
+   "trials": 4
+  },
+  {
+   "name": "The Archer-Daniels-Midland Company",
+   "trials": 4
+  },
+  {
+   "name": "Protara Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Corregene Biotechnology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Stryker Orthopaedics",
+   "trials": 4
+  },
+  {
+   "name": "IBSA Farmaceutici Italia Srl",
+   "trials": 4
+  },
+  {
+   "name": "ModeX Therapeutics, An OPKO Health Company",
+   "trials": 4
+  },
+  {
+   "name": "GI Innovation, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Nanjing Immunophage Biotech Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Actelion",
+   "trials": 4
+  },
+  {
+   "name": "Palvella Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shaanxi Micot Pharmaceutical Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "dōTERRA International",
+   "trials": 4
+  },
+  {
+   "name": "Chengdu Origen Biotechnology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "CardioVision International Tech, S.A.S. de C.V.",
+   "trials": 4
+  },
+  {
+   "name": "Jade Biosciences, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Kerecis Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "MicroPort NeuroTech Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Ollin Biosciences, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Shengdi Pharmaceutical Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Beijing Youcare Kechuang Pharmaceutical Technology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Unilever R&D",
+   "trials": 4
+  },
+  {
+   "name": "dsm-firmenich Switzerland AG",
+   "trials": 4
+  },
+  {
+   "name": "Hinova Pharmaceuticals Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Laboratorios Silanes S.A. de C.V.",
+   "trials": 4
+  },
+  {
+   "name": "Celyad Oncology SA",
+   "trials": 4
+  },
+  {
+   "name": "Labo'Life",
+   "trials": 4
+  },
+  {
+   "name": "Beijing Zhifei Lvzhu Biopharmaceutical Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Harmony Biosciences Management, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Unicar-Therapy Bio-medicine Technology Co.,Ltd",
+   "trials": 4
+  },
+  {
+   "name": "AJU Pharm Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Biotronik AG",
+   "trials": 4
+  },
+  {
+   "name": "Spark Biomedical, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai EpimAb Biotherapeutics Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "AFT Pharmaceuticals, Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Otsuka Medical Devices Co., Ltd. Japan",
+   "trials": 4
+  },
+  {
+   "name": "Merus B.V.",
+   "trials": 4
+  },
+  {
+   "name": "Lacer S.A.",
+   "trials": 4
+  },
+  {
+   "name": "Poseida Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shenzhen Hemogen",
+   "trials": 4
+  },
+  {
+   "name": "FindCure Biosciences (ZhongShan) Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "BeyondBio Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Insud Pharma",
+   "trials": 4
+  },
+  {
+   "name": "Apogee Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Smith & Nephew, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Tango Therapeutics, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Viome",
+   "trials": 4
+  },
+  {
+   "name": "Compass Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Alto Neuroscience",
+   "trials": 4
+  },
+  {
+   "name": "Berlin-Chemie AG Menarini Group",
+   "trials": 4
+  },
+  {
+   "name": "Cosmetique Active International",
+   "trials": 4
+  },
+  {
+   "name": "SK Life Science, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Suzhou Sanegene Bio Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Spinogenix",
+   "trials": 4
+  },
+  {
+   "name": "InGeneron, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Suzhou Hearthill Medical Technology Co.,LTD",
+   "trials": 4
+  },
+  {
+   "name": "Marea Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Cytrellis Biosystems, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Day One Biopharmaceuticals, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shenzhen Kangzhe Biotechnology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "SpyGlass Pharma, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Kardigan, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "ORIC Pharmaceuticals",
+   "trials": 4
+  },
+  {
+   "name": "Eccogene",
+   "trials": 4
+  },
+  {
+   "name": "Polaris Group",
+   "trials": 4
+  },
+  {
+   "name": "Fujian Akeylink Biotechnology Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Allink Biotherapeutics Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Quoin Pharmaceuticals",
+   "trials": 4
+  },
+  {
+   "name": "Ellipses Pharma",
+   "trials": 4
+  },
+  {
+   "name": "Astellas Gene Therapies",
+   "trials": 4
+  },
+  {
+   "name": "Humacyte, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Nuvalent Inc.",
+   "trials": 4
+  },
+  {
+   "name": "PT Bio Farma",
+   "trials": 4
+  },
+  {
+   "name": "Shanghai Huilun Pharmaceutical Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Gasherbrum Bio, Inc., a wholly owned subsidiary of Structure Therapeutics",
+   "trials": 4
+  },
+  {
+   "name": "Hangzhou Dinova EP Technology Co., Ltd",
+   "trials": 4
+  },
+  {
+   "name": "Vectorious Medical Technologies Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Medtronic MiniMed, Inc.",
+   "trials": 4
+  },
+  {
+   "name": "Shenzhen Ionova Life Sciences Co., Ltd.",
+   "trials": 4
+  },
+  {
+   "name": "Zhejiang Anglikang Pharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Pyrotech Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "BOE Technology Group Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "ITM Solucin GmbH",
+   "trials": 3
+  },
+  {
+   "name": "V-Wave Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Encoded Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "iSTAR Medical",
+   "trials": 3
+  },
+  {
+   "name": "Oregon Research Behavioral Intervention Strategies, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Crystalys Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Grifols Biologicals, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Arvinas Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Tenax Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "R-Pharm",
+   "trials": 3
+  },
+  {
+   "name": "CG Oncology, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Stryker Neurovascular",
+   "trials": 3
+  },
+  {
+   "name": "Nordberg Medical AB",
+   "trials": 3
+  },
+  {
+   "name": "Syndeio Biosciences, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Xinzhi BioMed Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Novlead Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Biotronik SE & Co. KG",
+   "trials": 3
+  },
+  {
+   "name": "SyMap Medical (Suzhou), Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Nanjing Legend Biotech Co.",
+   "trials": 3
+  },
+  {
+   "name": "Tianjin ConjuStar Biologics Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Transdermal Delivery Solutions Corp",
+   "trials": 3
+  },
+  {
+   "name": "Forward Pharmaceuticals Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Institut de Recherches Internationales Servier (I.R.I.S.)",
+   "trials": 3
+  },
+  {
+   "name": "Klus Pharma Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Heartfelt Technologies",
+   "trials": 3
+  },
+  {
+   "name": "Neptune Medical",
+   "trials": 3
+  },
+  {
+   "name": "EicOsis Human Health Inc.",
+   "trials": 3
+  },
+  {
+   "name": "ALPFA Medical",
+   "trials": 3
+  },
+  {
+   "name": "Monte Rosa Therapeutics, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Mercator MedSystems, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Wenda Pharma Technology LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Immatics US, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Teclison Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "WestVac Biopharma Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Lunan Better Pharmaceutical Co., LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Teleflex",
+   "trials": 3
+  },
+  {
+   "name": "Asia Cell Therapeutics (Shanghai) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Merit Medical Systems, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Takara Bio Inc.",
+   "trials": 3
+  },
+  {
+   "name": "TCM Biotech International Corp.",
+   "trials": 3
+  },
+  {
+   "name": "BackBeat Medical Inc",
+   "trials": 3
+  },
+  {
+   "name": "Gradient Denervation Technologies",
+   "trials": 3
+  },
+  {
+   "name": "Geron Corporation",
+   "trials": 3
+  },
+  {
+   "name": "UroMems SAS",
+   "trials": 3
+  },
+  {
+   "name": "LeMaitre Vascular",
+   "trials": 3
+  },
+  {
+   "name": "Cerus Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Omeros Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Supergene, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Agenus Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Zoll Medical Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Philip Morris Products S.A.",
+   "trials": 3
+  },
+  {
+   "name": "RECORDATI GROUP",
+   "trials": 3
+  },
+  {
+   "name": "Syntrix Biosystems, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "1ST Biotherapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Medinol Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Fujifilm Pharmaceuticals U.S.A., Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Akebia Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Rapa Therapeutics LLC",
+   "trials": 3
+  },
+  {
+   "name": "Canwell Biotech Limited",
+   "trials": 3
+  },
+  {
+   "name": "Cybin IRL Limited",
+   "trials": 3
+  },
+  {
+   "name": "Cellectis S.A.",
+   "trials": 3
+  },
+  {
+   "name": "Nectero Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Corvia Medical",
+   "trials": 3
+  },
+  {
+   "name": "Salubris Biotherapeutics Inc",
+   "trials": 3
+  },
+  {
+   "name": "Intralytix, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Nuvectis Pharma, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "UroGen Pharma Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "A.M.I. Agency for Medical Innovations GmbH",
+   "trials": 3
+  },
+  {
+   "name": "Miach Orthopaedics",
+   "trials": 3
+  },
+  {
+   "name": "Hummingbird Bioscience",
+   "trials": 3
+  },
+  {
+   "name": "AOP Orphan Pharmaceuticals AG",
+   "trials": 3
+  },
+  {
+   "name": "Biomea Fusion Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Implicit Bioscience",
+   "trials": 3
+  },
+  {
+   "name": "Shenzhen Genocury Biotech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Shenzhen Fosun Kairos Biotechnology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "IntraBio Inc",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Yangli Pharmaceutical Technology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Inventprise Inc.",
+   "trials": 3
+  },
+  {
+   "name": "A2 Biotherapeutics Inc.",
+   "trials": 3
+  },
+  {
+   "name": "CivaTech Oncology",
+   "trials": 3
+  },
+  {
+   "name": "Exscientia AI Ltd., a wholly owned subsidiary of Recursion Pharmaceuticals, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Cilcare SAS",
+   "trials": 3
+  },
+  {
+   "name": "Design Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "AVAVA, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Telios Pharma, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "SynAct Pharma Aps",
+   "trials": 3
+  },
+  {
+   "name": "SunWay Biotech Co., LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Amylyx Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Gan and Lee Pharmaceuticals, USA",
+   "trials": 3
+  },
+  {
+   "name": "JC Medical, Inc., an affiliate of Edwards Lifesciences LLC",
+   "trials": 3
+  },
+  {
+   "name": "Gemma Biotherapeutics",
+   "trials": 3
+  },
+  {
+   "name": "medac GmbH",
+   "trials": 3
+  },
+  {
+   "name": "AGO Research GmbH",
+   "trials": 3
+  },
+  {
+   "name": "MODAG GmbH",
+   "trials": 3
+  },
+  {
+   "name": "Enveda Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Imbioray (Hangzhou) Biomedicine Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Echosens",
+   "trials": 3
+  },
+  {
+   "name": "Nyxoah S.A.",
+   "trials": 3
+  },
+  {
+   "name": "Qurient Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Alkeus Pharmaceuticals, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "VIS, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Clarity Pharmaceuticals Ltd",
+   "trials": 3
+  },
+  {
+   "name": "ProofPilot",
+   "trials": 3
+  },
+  {
+   "name": "Össur Iceland ehf",
+   "trials": 3
+  },
+  {
+   "name": "TheRas, Inc., d/b/a BBOT (BridgeBio Oncology Therapeutics)",
+   "trials": 3
+  },
+  {
+   "name": "Cidara Therapeutics Inc., a subsidiary of Merck & Co., Inc. (Rahway, New Jersey USA)",
+   "trials": 3
+  },
+  {
+   "name": "Quanta Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Longwood Biopharmaceuticals Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "MeiraGTx Ocular UK Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Sichuan Luzhou Buchang Biopharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "FBD Biologics Limited",
+   "trials": 3
+  },
+  {
+   "name": "Nutraland USA, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "TScan Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Beijing Pins Medical Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Priovant Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Lomond Therapeutics Holdings, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Context Therapeutics Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Kuros Biosurgery AG",
+   "trials": 3
+  },
+  {
+   "name": "Kangabio AUSTRALIA LTD PTY",
+   "trials": 3
+  },
+  {
+   "name": "Reistone Biopharma Company Limited",
+   "trials": 3
+  },
+  {
+   "name": "Vaxine Pty Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Chengdu New Radiomedicine Technology Co. LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Laplace Interventional, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Liberating Technologies, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "OncoVerity, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Hangzhou Gensciences Biopharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Maxigen Biotech Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Limacorporate S.p.a",
+   "trials": 3
+  },
+  {
+   "name": "Lunair Medical",
+   "trials": 3
+  },
+  {
+   "name": "ENIKAM d.o.o.",
+   "trials": 3
+  },
+  {
+   "name": "Prove pharm",
+   "trials": 3
+  },
+  {
+   "name": "Kissei Pharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Iksuda Therapeutics Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Brii Biosciences Limited",
+   "trials": 3
+  },
+  {
+   "name": "Wooshin Labottach Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Akero Therapeutics, Inc",
+   "trials": 3
+  },
+  {
+   "name": "CellCentric Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Lyell Immunopharma, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Pharmanutra S.p.a.",
+   "trials": 3
+  },
+  {
+   "name": "Riboscience, LLC.",
+   "trials": 3
+  },
+  {
+   "name": "Synbiotic Health",
+   "trials": 3
+  },
+  {
+   "name": "Coloplast A/S",
+   "trials": 3
+  },
+  {
+   "name": "Everfront Biotech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "TCA Cellular Therapy",
+   "trials": 3
+  },
+  {
+   "name": "Moon (Guangzhou) Biotechnology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Olistic Research Labs S.L.",
+   "trials": 3
+  },
+  {
+   "name": "Arrae",
+   "trials": 3
+  },
+  {
+   "name": "MedtronicNeuro",
+   "trials": 3
+  },
+  {
+   "name": "L & L Bio Co., Ltd., Ningbo, China",
+   "trials": 3
+  },
+  {
+   "name": "Cho Pharma Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Dermal Laboratories Ltd",
+   "trials": 3
+  },
+  {
+   "name": "ImmuneOncia Therapeutics Inc.",
+   "trials": 3
+  },
+  {
+   "name": "ReCor Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "CNBG-Virogin Biotech (Shanghai) Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Mather's Pharm. Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Astellas Institute for Regenerative Medicine",
+   "trials": 3
+  },
+  {
+   "name": "Infinite Biomedical Technologies",
+   "trials": 3
+  },
+  {
+   "name": "Vyriad, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Leeuwenhoek Laboratories Co. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai UniXell Biotechnology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Verve Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Longbio Pharma (Suzhou) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Dr. F. Köhler Chemie GmbH",
+   "trials": 3
+  },
+  {
+   "name": "Resilience",
+   "trials": 3
+  },
+  {
+   "name": "LB Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "ML Bio Solutions, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Elpida Therapeutics SPC",
+   "trials": 3
+  },
+  {
+   "name": "Fusion Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Serum Institute of India Pvt. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Sorrento Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Varol TUNALI",
+   "trials": 3
+  },
+  {
+   "name": "Longboard Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "Good Molecules, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Lantern Pharma Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Lion TCR Pte. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Jiangsu Healthy Life Innovation Medical Technology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "CMR Surgical Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Immorna Biotherapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shenzhen Huishan Biotechnology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Abbott Rapid Dx",
+   "trials": 3
+  },
+  {
+   "name": "AgelessRx",
+   "trials": 3
+  },
+  {
+   "name": "Nevro Corp",
+   "trials": 3
+  },
+  {
+   "name": "Byondis B.V.",
+   "trials": 3
+  },
+  {
+   "name": "SURGE Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Cytori Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Abbott Nutrition",
+   "trials": 3
+  },
+  {
+   "name": "LIB Therapeutics LLC",
+   "trials": 3
+  },
+  {
+   "name": "Sana Biotechnology",
+   "trials": 3
+  },
+  {
+   "name": "ZetrOZ, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "AO GENERIUM",
+   "trials": 3
+  },
+  {
+   "name": "União Química Farmacêutica Nacional S/A",
+   "trials": 3
+  },
+  {
+   "name": "Celltex Therapeutics Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Phanes Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Biotyx Medical (Shenzhen) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Turning Point Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Haichang Biotech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "US Oncology Research",
+   "trials": 3
+  },
+  {
+   "name": "OriCell Therapeutics Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Adcendo ApS",
+   "trials": 3
+  },
+  {
+   "name": "Toray Industries, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Tarian Pharma",
+   "trials": 3
+  },
+  {
+   "name": "Providence Medical Technology, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "mAbxience Research S.L.",
+   "trials": 3
+  },
+  {
+   "name": "Risen (Suzhou) Pharma Tech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Nektar Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Sunshine Mandi Pharmaceutical Co.,Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Linno Pharmaceuticals, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Pulmovant, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Advenchen Laboratories, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Accro Bioscience (Suzhou) Limited",
+   "trials": 3
+  },
+  {
+   "name": "Leadingtac Pharmaceutical (Shaoxing) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Seismic Therapeutic AU Pty Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Supira Medical",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Ming Ju Biotechnology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Tissium",
+   "trials": 3
+  },
+  {
+   "name": "Voronoi, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Puma Biotechnology, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "DexCom, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Ryvu Therapeutics SA",
+   "trials": 3
+  },
+  {
+   "name": "Eetho Brands, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Hinge Health, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Danatlas Pharmaceuticals Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "PharmaBio Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Mediar Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Guangzhou Gloria Biosciences Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Beijing Bio-Targeting Therapeutics Technology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Broadenbio Ltd., Co.",
+   "trials": 3
+  },
+  {
+   "name": "GRAIL, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Gracell Biotechnologies (Shanghai) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Tanabe Pharma Corporation",
+   "trials": 3
+  },
+  {
+   "name": "AskGene Pharma, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Clarent Biopharma, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Endogenex, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Calico Life Sciences LLC",
+   "trials": 3
+  },
+  {
+   "name": "Zhongmou Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Biocomposites Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Olympus Corporation of the Americas",
+   "trials": 3
+  },
+  {
+   "name": "Berlin Heals GmbH",
+   "trials": 3
+  },
+  {
+   "name": "HTA Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Chengdu Ucello Biotechnology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Bright Uro",
+   "trials": 3
+  },
+  {
+   "name": "StimLabs",
+   "trials": 3
+  },
+  {
+   "name": "Wayshine Biopharm, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Soterix Medical",
+   "trials": 3
+  },
+  {
+   "name": "Direct Biologics, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Oncolytics Biotech",
+   "trials": 3
+  },
+  {
+   "name": "MBX Biosciences",
+   "trials": 3
+  },
+  {
+   "name": "ESM Technologies, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Perspective Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Hologic, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Suzhou Hengruihongyuan Medical Technology Co. LTD",
+   "trials": 3
+  },
+  {
+   "name": "Tarapeutics Science Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Ionclinics & Deionic SL",
+   "trials": 3
+  },
+  {
+   "name": "Verrica Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai MicroPort Medical (Group) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Avalyn Pharma Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Kira Pharmacenticals (US), LLC.",
+   "trials": 3
+  },
+  {
+   "name": "MeiraGTx, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Opus Genetics, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Reprise Biomedical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Jubaan Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Signos Inc",
+   "trials": 3
+  },
+  {
+   "name": "Bactolife A/S",
+   "trials": 3
+  },
+  {
+   "name": "Regor Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Teligene US",
+   "trials": 3
+  },
+  {
+   "name": "VistaGen Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Nuritas Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Senseonics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Insulet Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Qilu Pharmaceutical (Hainan) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "VivaVision Biotech, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Foundry Innovation & Research 1, Limited (FIRE1)",
+   "trials": 3
+  },
+  {
+   "name": "Shin Poong Pharmaceutical Co. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "C4 Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Invivyd, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "CoreAalst BV",
+   "trials": 3
+  },
+  {
+   "name": "Pulmair Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Qilu Pharmaceutical Research and Development Center LTD",
+   "trials": 3
+  },
+  {
+   "name": "LUMA Vision Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "SCG Cell Therapy Pte. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "NextPoint Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "NIN Institute",
+   "trials": 3
+  },
+  {
+   "name": "HRYZ Biotech Co.",
+   "trials": 3
+  },
+  {
+   "name": "Guangdong Ruishun Biotech Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Tolmar Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Standard Process Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Enterra Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Tessa Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Beijing Sungen Biomedical Technology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Industrial Farmacéutica Cantabria, S.A.",
+   "trials": 3
+  },
+  {
+   "name": "Sound Pharmaceuticals, Incorporated",
+   "trials": 3
+  },
+  {
+   "name": "Inozyme Pharma",
+   "trials": 3
+  },
+  {
+   "name": "Taysha Gene Therapies, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Ikaria Bioscience Pty Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Changchun Intellicrown Pharmaceutical Co. LTD",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Synvida Biotechnology Co.,Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Zhuhai Yufan Biotechnologies Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Pack Health",
+   "trials": 3
+  },
+  {
+   "name": "RHEACELL GmbH & Co. KG",
+   "trials": 3
+  },
+  {
+   "name": "S.Biomedics Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Eledon Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "Axogen Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Scancell Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Dermavon Holdings Limited",
+   "trials": 3
+  },
+  {
+   "name": "COMPASS Pathways",
+   "trials": 3
+  },
+  {
+   "name": "Tego Science, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Aptabio Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Sardocor Corp.",
+   "trials": 3
+  },
+  {
+   "name": "Elpiscience (Suzhou) Biopharma, Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Comeback Mobility Inc",
+   "trials": 3
+  },
+  {
+   "name": "Fidia Farmaceutici s.p.a.",
+   "trials": 3
+  },
+  {
+   "name": "Samyang Biopharmaceuticals Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Viking Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Afasci Inc",
+   "trials": 3
+  },
+  {
+   "name": "Conjupro Biotherapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Bao Pharmaceuticals Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "BioCardia, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Tela Bio Inc",
+   "trials": 3
+  },
+  {
+   "name": "Hangzhou Converd Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Hyalex Orthopaedics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Fytexia",
+   "trials": 3
+  },
+  {
+   "name": "STCube, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Step Pharma, SAS",
+   "trials": 3
+  },
+  {
+   "name": "CardioFocus",
+   "trials": 3
+  },
+  {
+   "name": "Carmat SAS",
+   "trials": 3
+  },
+  {
+   "name": "ABL Bio, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Lanyi Therapeutics Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Dr. Falk Pharma GmbH",
+   "trials": 3
+  },
+  {
+   "name": "MicroPort CRM",
+   "trials": 3
+  },
+  {
+   "name": "Healionics Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Shenzhen Celconta Life Science Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Blue Earth Diagnostics",
+   "trials": 3
+  },
+  {
+   "name": "Gritgen Therapeutics Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "SparingVision",
+   "trials": 3
+  },
+  {
+   "name": "Spark Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Energenx Medical LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Heronova Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "Ace Cells Lab Limited",
+   "trials": 3
+  },
+  {
+   "name": "Sonova AG",
+   "trials": 3
+  },
+  {
+   "name": "Beijing Inno Medicine Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "K-Group, Beta, Inc., a wholly owned subsidiary of Zentalis Pharmaceuticals, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Celcuity Inc",
+   "trials": 3
+  },
+  {
+   "name": "AusperBio Therapeutics Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Advenchen Laboratories Nanjing Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Corxel Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "NEOS Surgery",
+   "trials": 3
+  },
+  {
+   "name": "Beijing Scitech-Mq Pharmaceuticals Limited",
+   "trials": 3
+  },
+  {
+   "name": "Recursion Pharmaceuticals Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Tiger Biosciences, LLC.",
+   "trials": 3
+  },
+  {
+   "name": "Getz Pharma",
+   "trials": 3
+  },
+  {
+   "name": "Adagio Medical",
+   "trials": 3
+  },
+  {
+   "name": "Spinal Stabilization Technologies",
+   "trials": 3
+  },
+  {
+   "name": "Oticon Medical",
+   "trials": 3
+  },
+  {
+   "name": "Wuhan Humanwell Innovative Drug Research and Development Center Limited Company",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai MicroPort Rhythm MedTech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Arsenal Biosciences, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "VivaTech International, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "PROCEPT BioRobotics",
+   "trials": 3
+  },
+  {
+   "name": "Forma Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Kallyope Inc.",
+   "trials": 3
+  },
+  {
+   "name": "GV20 Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Orchard Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "SoniVie Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Ancora Heart, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Pyxis Oncology, Inc",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai RAAS Blood Products Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Nanjing RegeneCore Biotech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Transcend Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Tasly Biopharmaceuticals Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Vaderis Therapeutics AG",
+   "trials": 3
+  },
+  {
+   "name": "Lallemand Health Solutions",
+   "trials": 3
+  },
+  {
+   "name": "Skyhawk Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Novelwise Pharmaceutical Corporation",
+   "trials": 3
+  },
+  {
+   "name": "ABLE Human Motion S.L.",
+   "trials": 3
+  },
+  {
+   "name": "Ion Beam Applications",
+   "trials": 3
+  },
+  {
+   "name": "Cutting Edge SAS",
+   "trials": 3
+  },
+  {
+   "name": "McGuire Institute",
+   "trials": 3
+  },
+  {
+   "name": "Solve Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "ReAlta Life Sciences, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "SetPoint Medical Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Carnot Laboratories",
+   "trials": 3
+  },
+  {
+   "name": "GCP-Service International West GmbH",
+   "trials": 3
+  },
+  {
+   "name": "Noctrix Health, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Umoja Biopharma",
+   "trials": 3
+  },
+  {
+   "name": "Imunon",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Golden Leaf MedTec Co. Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Aura Biosciences",
+   "trials": 3
+  },
+  {
+   "name": "Annovis Bio Inc.",
+   "trials": 3
+  },
+  {
+   "name": "EverEx Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Syntr Health Technologies, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "EnnovaBio",
+   "trials": 3
+  },
+  {
+   "name": "Symatese",
+   "trials": 3
+  },
+  {
+   "name": "ProbiSearch SL",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Simnova Biotechnology Co.,Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Ashvattha Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shenzhen MagicRNA Biotechnology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "SuZhou Sinus Medical Technologies Co.,Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Endotronix, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Han Xu, M.D., Ph.D., FAPCR, Medical Director,, IRB Chair",
+   "trials": 3
+  },
+  {
+   "name": "Treadwell Therapeutics, Inc",
+   "trials": 3
+  },
+  {
+   "name": "BioLab Holdings",
+   "trials": 3
+  },
+  {
+   "name": "Newave Pharmaceutical Inc",
+   "trials": 3
+  },
+  {
+   "name": "R3 Vascular Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Kolon TissueGene, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "JenKem Technology Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "PharmaEngine",
+   "trials": 3
+  },
+  {
+   "name": "Cellcolabs Clinical LTD.",
+   "trials": 3
+  },
+  {
+   "name": "Synchron, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Shanghai Jeyou Pharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Rakuten Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Neuspera Medical, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Bicara Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "GT Medical Technologies, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Huabo Biopharm Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Chengdu Kangnuoxing Biopharma,Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Biozeus Biopharmaceutical S.A.",
+   "trials": 3
+  },
+  {
+   "name": "Bharat Biotech International Limited",
+   "trials": 3
+  },
+  {
+   "name": "InspireMD",
+   "trials": 3
+  },
+  {
+   "name": "BioLite, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Merz North America, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "LimmaTech Biologics AG",
+   "trials": 3
+  },
+  {
+   "name": "Uniquity One (UNI)",
+   "trials": 3
+  },
+  {
+   "name": "Tavotek Biotherapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Annexon, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Immunic AG",
+   "trials": 3
+  },
+  {
+   "name": "Innervate Radiopharmaceuticals LLC (Formerly: Illumina Radiopharmaceuticals LLC)",
+   "trials": 3
+  },
+  {
+   "name": "Tr1X, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "EpicentRx, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Bisirna Therapeutics (Suzhou) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "TCRCure Biopharma Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Meril Life Sciences Pvt. Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "BioCryst Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "Applied Biologics, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Magenta Medical Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Entrada Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Alentis Therapeutics AG",
+   "trials": 3
+  },
+  {
+   "name": "Prestige Biopharma Limited",
+   "trials": 3
+  },
+  {
+   "name": "Delcath Systems Inc.",
+   "trials": 3
+  },
+  {
+   "name": "TriCity Research Center",
+   "trials": 3
+  },
+  {
+   "name": "Metagenics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Curis, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Primus Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "ApexCPG LLC",
+   "trials": 3
+  },
+  {
+   "name": "Nexira",
+   "trials": 3
+  },
+  {
+   "name": "Suzhou Maximum Bio-tech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Sapience Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "NeuShen Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Lupin Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Cionic, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Rigerna Therapeutics Co., Ltd.; Rigerna Therapeutics (Beijing) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Aveta Biomics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Marker Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Daré Bioscience, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Prana Therapies Inc",
+   "trials": 3
+  },
+  {
+   "name": "Lingyi Biotech Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Janssen Pharmaceutical K.K.",
+   "trials": 3
+  },
+  {
+   "name": "Eddingpharm (Zhuhai) Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "Diakonos Oncology Corporation",
+   "trials": 3
+  },
+  {
+   "name": "United Pharmaceuticals",
+   "trials": 3
+  },
+  {
+   "name": "ExThera Medical Corporation",
+   "trials": 3
+  },
+  {
+   "name": "FA Corporation",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Teruisi Pharmaceutical Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Zhejiang Kanova Biopharmaceutical Co., LTD",
+   "trials": 3
+  },
+  {
+   "name": "Innate srl",
+   "trials": 3
+  },
+  {
+   "name": "Hangzhou SynRx Therapeutics Biomedical Technology Co., Ltd",
+   "trials": 3
+  },
+  {
+   "name": "Calcilytix Therapeutics, Inc., a BridgeBio company",
+   "trials": 3
+  },
+  {
+   "name": "VDyne, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Halia Therapeutics, Inc.",
+   "trials": 3
+  },
+  {
+   "name": "Theranica",
+   "trials": 3
+  },
+  {
+   "name": "Advenchen Pharmaceuticals, LLC.",
+   "trials": 3
+  },
+  {
+   "name": "Dicerna Pharmaceuticals, Inc., a Novo Nordisk company",
+   "trials": 3
+  },
+  {
+   "name": "R3 Stem Cell",
+   "trials": 3
+  },
+  {
+   "name": "Alumis Inc",
+   "trials": 3
+  },
+  {
+   "name": "Jiangsu Chia Tai Fenghai Pharmaceutical Co., Ltd.",
+   "trials": 3
+  },
+  {
+   "name": "InnoCon Medical",
+   "trials": 3
+  },
+  {
+   "name": "CynosureLutronic",
+   "trials": 3
+  },
+  {
+   "name": "Biotroy Therapeutics",
+   "trials": 3
+  },
+  {
+   "name": "Vitti Labs, LLC",
+   "trials": 3
+  },
+  {
+   "name": "Synthekine",
+   "trials": 3
+  },
+  {
+   "name": "Jiangsu Renocell Biotech Company",
+   "trials": 3
+  },
+  {
+   "name": "Natureceuticals Sdn Bhd",
+   "trials": 3
+  },
+  {
+   "name": "ArthroBiologix Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Egyptian International Pharmaceutical Industries Co",
+   "trials": 2
+  },
+  {
+   "name": "Pharmicell Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Tau Medical Australia Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Bliss Biopharmaceutical (Hangzhou) Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "HabitAware Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Volumina Medical S.A.",
+   "trials": 2
+  },
+  {
+   "name": "ARTIDIS AG",
+   "trials": 2
+  },
+  {
+   "name": "Vima Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Toll Biotech Co. Ltd. (Beijing)",
+   "trials": 2
+  },
+  {
+   "name": "Light Chain Bioscience - Novimmune SA",
+   "trials": 2
+  },
+  {
+   "name": "BioMérieux",
+   "trials": 2
+  },
+  {
+   "name": "Laminar Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "ONY",
+   "trials": 2
+  },
+  {
+   "name": "Uromedica",
+   "trials": 2
+  },
+  {
+   "name": "Stratpharma AG",
+   "trials": 2
+  },
+  {
+   "name": "GC Cell Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Adagene Inc",
+   "trials": 2
+  },
+  {
+   "name": "China National Biotec Group Company Limited",
+   "trials": 2
+  },
+  {
+   "name": "Beijing VDJBio Co., LTD.",
+   "trials": 2
+  },
+  {
+   "name": "AlloSource",
+   "trials": 2
+  },
+  {
+   "name": "Arctic Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "EuroPharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Shanton Pharma Pte. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Myopowers Medical Technologies France SAS",
+   "trials": 2
+  },
+  {
+   "name": "Rovi Pharmaceuticals Laboratories",
+   "trials": 2
+  },
+  {
+   "name": "Guna S.p.a",
+   "trials": 2
+  },
+  {
+   "name": "Nu Eyne Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Omeza, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Fractyl Health Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ashibio Inc",
+   "trials": 2
+  },
+  {
+   "name": "Ksana Health",
+   "trials": 2
+  },
+  {
+   "name": "Oshadi Drug Administration",
+   "trials": 2
+  },
+  {
+   "name": "Code Pharma",
+   "trials": 2
+  },
+  {
+   "name": "Toivoa Inc",
+   "trials": 2
+  },
+  {
+   "name": "Ascentawits Pharmaceuticals, Ltd",
+   "trials": 2
+  },
+  {
+   "name": "VeonGen Therapeutics GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Laboratorios Ozoaqua",
+   "trials": 2
+  },
+  {
+   "name": "Corvivo Cardiovascular, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "89bio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AMAG Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jiangsu Genscend Biopharmaceutical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Kibow Pharma",
+   "trials": 2
+  },
+  {
+   "name": "Laboratorio Elea Phoenix S.A.",
+   "trials": 2
+  },
+  {
+   "name": "Genprex, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Volastra Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Moleac Pte Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Inception Fertility Research Institute, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Lactomason Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Ribocure Pharmaceuticals AB",
+   "trials": 2
+  },
+  {
+   "name": "Marzieh Ebrahimi",
+   "trials": 2
+  },
+  {
+   "name": "Corium Innovations, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Mitrassist Lifesciences Limited Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Christopher Williams",
+   "trials": 2
+  },
+  {
+   "name": "CardioRenal Systems, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Avizor SA",
+   "trials": 2
+  },
+  {
+   "name": "vTv Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Huihe Medical Technology Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Hutchison Pharmaceuticals Limited",
+   "trials": 2
+  },
+  {
+   "name": "Grünenthal GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Inventage Lab., Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cristália Produtos Químicos Farmacêuticos Ltda.",
+   "trials": 2
+  },
+  {
+   "name": "CorMedix Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Moximed",
+   "trials": 2
+  },
+  {
+   "name": "Sciton",
+   "trials": 2
+  },
+  {
+   "name": "Nanochon, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Thiogenesis Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Health Hope Pharma",
+   "trials": 2
+  },
+  {
+   "name": "Bonafide Health",
+   "trials": 2
+  },
+  {
+   "name": "C Ray Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Gain Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Health and Happiness Research Limited",
+   "trials": 2
+  },
+  {
+   "name": "Immunophotonics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NEOK Bio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AbCellera Biologics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "PMV Pharmaceuticals, Inc",
+   "trials": 2
+  },
+  {
+   "name": "BioVersys AG",
+   "trials": 2
+  },
+  {
+   "name": "Aventyn, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Everest Medicines (Beijing) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "XBiotech, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Pentax Medical",
+   "trials": 2
+  },
+  {
+   "name": "Lipogems International spa",
+   "trials": 2
+  },
+  {
+   "name": "Mucosa Innovations, S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Butterfly Medical Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Miracogen Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Bioithas SL",
+   "trials": 2
+  },
+  {
+   "name": "Lanzhou Institute of Biological Products Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "ULURU Inc.",
+   "trials": 2
+  },
+  {
+   "name": "ENCell",
+   "trials": 2
+  },
+  {
+   "name": "Rgene Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Nabiqasim Industries (Pvt) Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Spinal Simplicity LLC",
+   "trials": 2
+  },
+  {
+   "name": "Kate Farms Inc",
+   "trials": 2
+  },
+  {
+   "name": "Janssen Pharmaceutica N.V., Belgium",
+   "trials": 2
+  },
+  {
+   "name": "Endomagnetics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "VitaKey Inc.",
+   "trials": 2
+  },
+  {
+   "name": "SOTIO Biotech a.s.",
+   "trials": 2
+  },
+  {
+   "name": "BioMimetix JV, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Castle Creek Biosciences, LLC.",
+   "trials": 2
+  },
+  {
+   "name": "PharmaResearch Co.,Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Autotelicbio",
+   "trials": 2
+  },
+  {
+   "name": "Biojiva LLC",
+   "trials": 2
+  },
+  {
+   "name": "Sinovac Research and Development Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Taejoon Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Foresee Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Jeisys Medical Inc",
+   "trials": 2
+  },
+  {
+   "name": "Braile Biomedica Ind. Com. e Repr. Ltda.",
+   "trials": 2
+  },
+  {
+   "name": "FutureChem",
+   "trials": 2
+  },
+  {
+   "name": "Ebima Clifford Okundaye",
+   "trials": 2
+  },
+  {
+   "name": "FrieslandCampina",
+   "trials": 2
+  },
+  {
+   "name": "Lakewood-Amedex Inc",
+   "trials": 2
+  },
+  {
+   "name": "Occlutech International AB",
+   "trials": 2
+  },
+  {
+   "name": "Beijing Tricision Biotherapeutics Inc",
+   "trials": 2
+  },
+  {
+   "name": "CCRF Inc., Beijing, China",
+   "trials": 2
+  },
+  {
+   "name": "CareAcross",
+   "trials": 2
+  },
+  {
+   "name": "Vega Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Myota GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Karo Pharma AB",
+   "trials": 2
+  },
+  {
+   "name": "HiFiBiO Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Freya Biosciences ApS",
+   "trials": 2
+  },
+  {
+   "name": "Innolake Biopharm",
+   "trials": 2
+  },
+  {
+   "name": "Beijing Yongtai Ruike Biotechnology Company Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Andromeda Surgical",
+   "trials": 2
+  },
+  {
+   "name": "Xantho Biotechnology Co., LTD",
+   "trials": 2
+  },
+  {
+   "name": "AAVantgarde Bio Srl",
+   "trials": 2
+  },
+  {
+   "name": "Actuate Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Regeneration Biomedical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "CVRx, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "OSE Immunotherapeutics",
+   "trials": 2
+  },
+  {
+   "name": "CooperVision, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Clasp Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Resurge Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ratio Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cardurion Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sound Biopharmaceuticals Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Puressentiel",
+   "trials": 2
+  },
+  {
+   "name": "Posit Science Corporation",
+   "trials": 2
+  },
+  {
+   "name": "OMNIFARMA LLC",
+   "trials": 2
+  },
+  {
+   "name": "Neurotronic, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NGGT (Suzhou) Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Athletic Greens International",
+   "trials": 2
+  },
+  {
+   "name": "Healthgen Biotechnology Corp.",
+   "trials": 2
+  },
+  {
+   "name": "ChromaDex, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jiangxi Qingfeng Pharmaceutical Co. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Crossbow Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "S1 Biopharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "RJK Biopharma Ltd",
+   "trials": 2
+  },
+  {
+   "name": "GrayMatters Health Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "IceCure Medical Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Neurosoft Bioelectronics SA",
+   "trials": 2
+  },
+  {
+   "name": "TrueLab Biopharmaceutical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Bows Pharmaceuticals AG",
+   "trials": 2
+  },
+  {
+   "name": "Koronis Biomedical Technologies",
+   "trials": 2
+  },
+  {
+   "name": "Eodyne Systems SL",
+   "trials": 2
+  },
+  {
+   "name": "Zydus Lifesciences Limited",
+   "trials": 2
+  },
+  {
+   "name": "Anthogyr",
+   "trials": 2
+  },
+  {
+   "name": "Chiome Bioscience Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sirtex Medical",
+   "trials": 2
+  },
+  {
+   "name": "Resverlogix Corp",
+   "trials": 2
+  },
+  {
+   "name": "Restem, LLC.",
+   "trials": 2
+  },
+  {
+   "name": "Molecure S.A.",
+   "trials": 2
+  },
+  {
+   "name": "Reprieve Cardiovascular, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Apsen Farmaceutica S.A.",
+   "trials": 2
+  },
+  {
+   "name": "Voll Medical Technologies Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "QurAlis Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai IASO Biotechnology Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Fibralign Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Acotec Scientific Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "The Skin Center Dermatology Group",
+   "trials": 2
+  },
+  {
+   "name": "Laboratoires URGO",
+   "trials": 2
+  },
+  {
+   "name": "Organogenesis",
+   "trials": 2
+  },
+  {
+   "name": "Visioneering Technologies, Inc",
+   "trials": 2
+  },
+  {
+   "name": "SymBio Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Seaport Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Ensysce Biosciences",
+   "trials": 2
+  },
+  {
+   "name": "Spirair, Inc",
+   "trials": 2
+  },
+  {
+   "name": "American Association of Sensory Electrodiagnostic Medicine",
+   "trials": 2
+  },
+  {
+   "name": "Cerus Endovascular, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "GrandPharma (China) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "ProDa BioTech, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Azurity Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Khondrion BV",
+   "trials": 2
+  },
+  {
+   "name": "TECLens, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AltruBio Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Mesoblast, Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Epygenix",
+   "trials": 2
+  },
+  {
+   "name": "Suzhou Junjing BioSciences Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Les Laboratoires des Médicaments Stériles",
+   "trials": 2
+  },
+  {
+   "name": "Everest Medicines (China) Co.,Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Genascence Corporation",
+   "trials": 2
+  },
+  {
+   "name": "MaaT Pharma",
+   "trials": 2
+  },
+  {
+   "name": "WELT corp",
+   "trials": 2
+  },
+  {
+   "name": "TIXiMED, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Alvotech Swiss AG",
+   "trials": 2
+  },
+  {
+   "name": "Cleerly, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ningbo Rongan Biological Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Aimei Vacin BioPharm (Zhejiang) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Stingray Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "3H (Suzhou) Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Great Novel Therapeutics Biotech & Medicals Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Trevi Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Lepu Medical Technology (Beijing) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Pharmbio Korea Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "JW Medical Systems Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Becton, Dickinson and Company",
+   "trials": 2
+  },
+  {
+   "name": "Filamon LTD",
+   "trials": 2
+  },
+  {
+   "name": "Flare Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Amplia Therapeutics Limited",
+   "trials": 2
+  },
+  {
+   "name": "FH ORTHO",
+   "trials": 2
+  },
+  {
+   "name": "Prime Medicine, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cumberland Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Cryotherapeutics SA",
+   "trials": 2
+  },
+  {
+   "name": "ImmuneSensor Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Neuren Pharmaceuticals Limited",
+   "trials": 2
+  },
+  {
+   "name": "Stelexis BioSciences",
+   "trials": 2
+  },
+  {
+   "name": "Neurothera Labs Inc.",
+   "trials": 2
+  },
+  {
+   "name": "SONIRE Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Nalu Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jiangsu BioJeTay Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Belite Bio, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Kivu Bioscience Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ocean Spray Cranberries, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Prenetics Global",
+   "trials": 2
+  },
+  {
+   "name": "SeaStar Medical",
+   "trials": 2
+  },
+  {
+   "name": "Acandis GmbH",
+   "trials": 2
+  },
+  {
+   "name": "PAQ Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "J-Pharma Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Nexcella Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Chongqing Jinsaixing Medical Technology Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Protagonist Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Elgan Pharma Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Unravel Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Apreo Health, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Averto Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ray Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Myant Medical Corp.",
+   "trials": 2
+  },
+  {
+   "name": "Oculis",
+   "trials": 2
+  },
+  {
+   "name": "SynerGene Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Marengo Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "FluidAI Medical",
+   "trials": 2
+  },
+  {
+   "name": "Aerin Medical",
+   "trials": 2
+  },
+  {
+   "name": "Conceivable Life Sciences",
+   "trials": 2
+  },
+  {
+   "name": "Novita Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Arcturus Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Capricor Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Javelin Medical",
+   "trials": 2
+  },
+  {
+   "name": "Kyverna Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Ostia Sciences",
+   "trials": 2
+  },
+  {
+   "name": "ProVerum Medical",
+   "trials": 2
+  },
+  {
+   "name": "Gravitas Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AVM Biotechnology Inc",
+   "trials": 2
+  },
+  {
+   "name": "Inspire Medical Systems, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NeuroBiogen Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Mannkind Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Consun Pharmaceutical Group",
+   "trials": 2
+  },
+  {
+   "name": "Jetema Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Amydis Inc.",
+   "trials": 2
+  },
+  {
+   "name": "GigaGen, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "City Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Hemanext",
+   "trials": 2
+  },
+  {
+   "name": "Biocon Biologics UK PLC",
+   "trials": 2
+  },
+  {
+   "name": "Emergent BioSolutions",
+   "trials": 2
+  },
+  {
+   "name": "MED Institute Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai MicroPort Endovascular MedTech（Group）Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Saol Therapeutics Inc",
+   "trials": 2
+  },
+  {
+   "name": "Plexaa Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Aligos Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Stella Pharma Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Claris Biotherapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hansa Biopharma AB",
+   "trials": 2
+  },
+  {
+   "name": "Guangdong Hengqin Novagains Biopharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Accutar Biotechnology Inc",
+   "trials": 2
+  },
+  {
+   "name": "Staar Surgical Company",
+   "trials": 2
+  },
+  {
+   "name": "Glac Biotech Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "LuSeed Vascular LTD.",
+   "trials": 2
+  },
+  {
+   "name": "Alebund Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Hypersound Medical Inc",
+   "trials": 2
+  },
+  {
+   "name": "Orchestra BioMed, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Gliknik Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Implantica CE Reflux Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "CGBio Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Gelscom SAS",
+   "trials": 2
+  },
+  {
+   "name": "60 Degrees Pharmaceuticals LLC",
+   "trials": 2
+  },
+  {
+   "name": "BioAegis Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Remix Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "VahatiCor, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Abbott Point of Care",
+   "trials": 2
+  },
+  {
+   "name": "InnovHeart",
+   "trials": 2
+  },
+  {
+   "name": "PureTech",
+   "trials": 2
+  },
+  {
+   "name": "Integrative Skin Science and Research",
+   "trials": 2
+  },
+  {
+   "name": "NEUROPHET",
+   "trials": 2
+  },
+  {
+   "name": "BlueSky Immunotherapies GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Axon Therapies, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Alucent Biomedical",
+   "trials": 2
+  },
+  {
+   "name": "Perelel Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Xilio Development, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Field Medical",
+   "trials": 2
+  },
+  {
+   "name": "Allurion Technologies",
+   "trials": 2
+  },
+  {
+   "name": "Encellin",
+   "trials": 2
+  },
+  {
+   "name": "Acorn Biolabs Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Strand Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Usynova Pharmaceuticals Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Neurogene Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AbelZeta Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Withings",
+   "trials": 2
+  },
+  {
+   "name": "Santen Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Medical Inventi S.A.",
+   "trials": 2
+  },
+  {
+   "name": "SurgiQuest, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NextCure, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Genomic Prediction Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hasten Biopharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Harpoon Therapeutics, Inc., a subsidiary of Merck & Co., Inc. (Rahway, New Jersey USA)",
+   "trials": 2
+  },
+  {
+   "name": "COUR Pharmaceutical Development Company, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cook MyoSite",
+   "trials": 2
+  },
+  {
+   "name": "Zhejiang ACEA Pharmaceutical Co. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Liaoning Medical Diagnosis and Treatment Technology Research and Development Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Medigen Biotechnology Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Jiangsu Carephar Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Belief BioMed (Beijing) Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Arga Medtech SA",
+   "trials": 2
+  },
+  {
+   "name": "BAAT Medical Products B.V.",
+   "trials": 2
+  },
+  {
+   "name": "TransMedics",
+   "trials": 2
+  },
+  {
+   "name": "Bright Cell, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "L&C Bio",
+   "trials": 2
+  },
+  {
+   "name": "Lumenis Be Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Resilient Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Intervene, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Noema Pharma AG",
+   "trials": 2
+  },
+  {
+   "name": "Precision BioSciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Suzhou Biomissile Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Carag AG",
+   "trials": 2
+  },
+  {
+   "name": "Aphaia Pharma US LLC",
+   "trials": 2
+  },
+  {
+   "name": "Trak Health Solutions S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Shenzhen Majory Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Ascension Health",
+   "trials": 2
+  },
+  {
+   "name": "BioVentrix",
+   "trials": 2
+  },
+  {
+   "name": "Applied Science & Performance Institute",
+   "trials": 2
+  },
+  {
+   "name": "Mundipharma Research Limited",
+   "trials": 2
+  },
+  {
+   "name": "Xcovery Holdings, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Voyager Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Livzon Pharmaceutical Group Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Beneo-Institute",
+   "trials": 2
+  },
+  {
+   "name": "Zhejiang Zylox Medical Device Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Editas Medicine, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "invoX Pharma Limited",
+   "trials": 2
+  },
+  {
+   "name": "Geneos Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Rethink Medical SL",
+   "trials": 2
+  },
+  {
+   "name": "Nuvaira, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "BelleTorus Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Transgene",
+   "trials": 2
+  },
+  {
+   "name": "Sight Sciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sutro Biopharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Levee Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Clear Scientific, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Impact Biotech Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Suzhou HepaThera Biotech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Epigenic Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "RedDress Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "iVeena Delivery Systems, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Merz Therapeutics GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Abeona Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Galvani Bioelectronics",
+   "trials": 2
+  },
+  {
+   "name": "COSMO ROBOTICS CO., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Envivo Bio Inc",
+   "trials": 2
+  },
+  {
+   "name": "Boston Intelligent Medical Research Center, Shenzhen United Scheme Technology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Flaus, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Advanced NanoTherapies",
+   "trials": 2
+  },
+  {
+   "name": "Innate Pharma",
+   "trials": 2
+  },
+  {
+   "name": "BioAge Labs, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Anhui Palo Alto Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sichuan Honghe Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Atamyo Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "BreakBio Corp",
+   "trials": 2
+  },
+  {
+   "name": "CUTISS AG",
+   "trials": 2
+  },
+  {
+   "name": "Theranova, L.L.C.",
+   "trials": 2
+  },
+  {
+   "name": "Eureka Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Glycomine, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Arsenal Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "CRISPR Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Indapta Therapeutics, INC.",
+   "trials": 2
+  },
+  {
+   "name": "DBV Technologies",
+   "trials": 2
+  },
+  {
+   "name": "Spectrum Pharmaceuticals, Inc",
+   "trials": 2
+  },
+  {
+   "name": "MYnd Analytics",
+   "trials": 2
+  },
+  {
+   "name": "Luminate Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Tangram Therapeutics Plc",
+   "trials": 2
+  },
+  {
+   "name": "Dynavax Technologies Corporation",
+   "trials": 2
+  },
+  {
+   "name": "MiRus",
+   "trials": 2
+  },
+  {
+   "name": "NGM Biopharmaceuticals, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Amckaus PTY LTD.",
+   "trials": 2
+  },
+  {
+   "name": "I-Mab Biopharma US Limited",
+   "trials": 2
+  },
+  {
+   "name": "Janssen-Cilag Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Tortugas Neuroscience, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Thirty Respiratory Limited",
+   "trials": 2
+  },
+  {
+   "name": "DeepQure Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Enlivex Therapeutics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Black Diamond Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "EHL Bio Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Oscotec Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Palatin Technologies, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Hopeful Aging",
+   "trials": 2
+  },
+  {
+   "name": "MiMedx Group, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "MOMA Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Sona Nanotech Inc",
+   "trials": 2
+  },
+  {
+   "name": "Oui Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Nuvig Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Maia Biotechnology",
+   "trials": 2
+  },
+  {
+   "name": "ENBIOSIS BIOTECHNOLOGIES",
+   "trials": 2
+  },
+  {
+   "name": "Nelum Corp",
+   "trials": 2
+  },
+  {
+   "name": "BlossomHill Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Osheru Inc.",
+   "trials": 2
+  },
+  {
+   "name": "TiumBio Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Victoria Collotta",
+   "trials": 2
+  },
+  {
+   "name": "Chengdu JOYO pharma Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "ADVANCED MARKER DISCOVERY S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Pasithea Therapeutics Corp.",
+   "trials": 2
+  },
+  {
+   "name": "Yaqrit Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Curocell Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Europa Life Sciences Limited",
+   "trials": 2
+  },
+  {
+   "name": "Reprogenetics",
+   "trials": 2
+  },
+  {
+   "name": "Visirna Therapeutics HK Limited",
+   "trials": 2
+  },
+  {
+   "name": "Nova Eye, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Okuvision GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Legend Biotech USA Inc",
+   "trials": 2
+  },
+  {
+   "name": "Lubris Bio Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Cinclus Pharma Holding AB",
+   "trials": 2
+  },
+  {
+   "name": "Amber Therapeutics Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Aspeya, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "BioVersys SAS",
+   "trials": 2
+  },
+  {
+   "name": "Shattuck Labs, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Aadi Bioscience, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "IVIEW Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Xenothera SAS",
+   "trials": 2
+  },
+  {
+   "name": "iCamuno Biotherapeutics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Lei Yunshang Group",
+   "trials": 2
+  },
+  {
+   "name": "Viatris Inc.",
+   "trials": 2
+  },
+  {
+   "name": "InnoCare Pharma Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Taivex Therapeutics Corporation",
+   "trials": 2
+  },
+  {
+   "name": "EuBiologics Co.,Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Akura Medical",
+   "trials": 2
+  },
+  {
+   "name": "Hip Innovation Technology",
+   "trials": 2
+  },
+  {
+   "name": "Herrick Medical LLC",
+   "trials": 2
+  },
+  {
+   "name": "NovaGo Therapeutics AG",
+   "trials": 2
+  },
+  {
+   "name": "LigaChem Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Nanjing Yoko Biomedical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Micro Interventional Devices",
+   "trials": 2
+  },
+  {
+   "name": "Vor Biopharma",
+   "trials": 2
+  },
+  {
+   "name": "Amplitude Vascular Systems, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Insmed Gene Therapy LLC",
+   "trials": 2
+  },
+  {
+   "name": "inTumo Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Morphic Therapeutic, Inc. (A Wholly Owned Subsidiary of Eli Lilly and Company)",
+   "trials": 2
+  },
+  {
+   "name": "Savara Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Compugen Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Neodent",
+   "trials": 2
+  },
+  {
+   "name": "ARS Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou Reprogenix Bioscience, Inc",
+   "trials": 2
+  },
+  {
+   "name": "MegaPro Biomedical Co. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Ryme Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Auzone Biological Technology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Ladera Medical",
+   "trials": 2
+  },
+  {
+   "name": "Impact Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Shenzhen Ausa Pharmed Co.,Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Verona Pharma, Inc., a subsidiary of Merck & Co., Inc. (Rahway, New Jersey USA",
+   "trials": 2
+  },
+  {
+   "name": "TME Pharma AG",
+   "trials": 2
+  },
+  {
+   "name": "OrsoBio, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Checkpoint Surgical Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Monopar Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Nasus Pharma",
+   "trials": 2
+  },
+  {
+   "name": "PepGen Inc",
+   "trials": 2
+  },
+  {
+   "name": "Trellis Bioscience LLC",
+   "trials": 2
+  },
+  {
+   "name": "Implai Sp z o.o",
+   "trials": 2
+  },
+  {
+   "name": "BonusBio Group Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Otolith Labs",
+   "trials": 2
+  },
+  {
+   "name": "Samaritan Biologics",
+   "trials": 2
+  },
+  {
+   "name": "Estar Medical dba Medical Technologies, LTD",
+   "trials": 2
+  },
+  {
+   "name": "iIDEAS Group Holdings Limited",
+   "trials": 2
+  },
+  {
+   "name": "Sunkaky Medical Cooperation",
+   "trials": 2
+  },
+  {
+   "name": "Shenzhen Pulsecare Medical Technology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "HanAll BioPharma Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "SOFIE",
+   "trials": 2
+  },
+  {
+   "name": "Nanogen, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Mylan Pharmaceuticals Inc",
+   "trials": 2
+  },
+  {
+   "name": "Verismo Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Attovia Therapeutics Inc",
+   "trials": 2
+  },
+  {
+   "name": "Altimmune, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Adcentrx Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Mabscale, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Applied Food Sciences Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Triveni Bio",
+   "trials": 2
+  },
+  {
+   "name": "LAPIX Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "ADC Therapeutics S.A.",
+   "trials": 2
+  },
+  {
+   "name": "Aktis Oncology, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Anika Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Pharmavite LLC",
+   "trials": 2
+  },
+  {
+   "name": "Johnson & Johnson Private Limited",
+   "trials": 2
+  },
+  {
+   "name": "RxFunction Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Motiva USA LLC",
+   "trials": 2
+  },
+  {
+   "name": "Mapi Pharma Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "GenSight Biologics",
+   "trials": 2
+  },
+  {
+   "name": "Teal Health, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Bioiberica",
+   "trials": 2
+  },
+  {
+   "name": "Evommune, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Lesaffre International",
+   "trials": 2
+  },
+  {
+   "name": "Chengdu Syncor Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "xDot Medical, Inc",
+   "trials": 2
+  },
+  {
+   "name": "TICAROS Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Minovia Therapeutics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Ossium Health, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Nanolattix Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Cardiac Success",
+   "trials": 2
+  },
+  {
+   "name": "Treace Medical Concepts, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Rhythm Diagnostic Systems",
+   "trials": 2
+  },
+  {
+   "name": "ISTITUTO FARMOCHIMICO FITOTERAPICO: EPO SRL",
+   "trials": 2
+  },
+  {
+   "name": "Beijing Kanghong Biological Medicine Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Artiva Biotherapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jiangsu Nutai Biologics Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Enanta Pharmaceuticals, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Schrödinger, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "PeproMene Bio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Bostal Drug Delivery Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Ablative Solutions, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hinge Bio",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai HEP Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Kylonova (Xiamen) Biopharma co., LTD.",
+   "trials": 2
+  },
+  {
+   "name": "SAb Biotherapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Vivasure Medical Limited",
+   "trials": 2
+  },
+  {
+   "name": "QBiotics Group Limited",
+   "trials": 2
+  },
+  {
+   "name": "Kenvue Brands LLC",
+   "trials": 2
+  },
+  {
+   "name": "Harrow Inc",
+   "trials": 2
+  },
+  {
+   "name": "Vascudyne, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "XyloCor Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Chendu DIAO Pharmaceutical Group CO., LTD.",
+   "trials": 2
+  },
+  {
+   "name": "CASI pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "MediciNova",
+   "trials": 2
+  },
+  {
+   "name": "Espad Pharmed",
+   "trials": 2
+  },
+  {
+   "name": "Cellid Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "CroiValve Limited",
+   "trials": 2
+  },
+  {
+   "name": "Venus MedTech (HangZhou) Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Alleviant Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Inmagene LLC",
+   "trials": 2
+  },
+  {
+   "name": "Cagent Vascular LLC",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou PhecdaMed Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Sequence LifeScience, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Oncotelic Inc.",
+   "trials": 2
+  },
+  {
+   "name": "CSA Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "EBG MedAustron GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Immunity Pharma Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "SuperBonsai Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Autobahn Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Aesculap Biologics, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Genor Biopharma Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Align Technology, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cellbion Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Impulse Dynamics",
+   "trials": 2
+  },
+  {
+   "name": "Stoke Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Francis Medical Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Therorna",
+   "trials": 2
+  },
+  {
+   "name": "Elixir Medical Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Beijing Dongfang Biotech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Faeth Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Energenesis Biomedical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Umbria Bioengineering Technologies",
+   "trials": 2
+  },
+  {
+   "name": "Laboratoires Gilbert",
+   "trials": 2
+  },
+  {
+   "name": "SFA Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Actinium Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "BioAtla, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Huons Biopharma",
+   "trials": 2
+  },
+  {
+   "name": "Neurolab Plus",
+   "trials": 2
+  },
+  {
+   "name": "InnoUp Farma S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Neudive Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Amber Implants B.V.",
+   "trials": 2
+  },
+  {
+   "name": "Biotechnology Institute IMASD",
+   "trials": 2
+  },
+  {
+   "name": "Lakefront Biotherapeutics West LLC",
+   "trials": 2
+  },
+  {
+   "name": "Million Marker Wellness, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Integrum",
+   "trials": 2
+  },
+  {
+   "name": "Paradigm Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Theolytics Limited",
+   "trials": 2
+  },
+  {
+   "name": "Wuhan YZY Biopharma Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "CARE ARTHRITIS LTD.",
+   "trials": 2
+  },
+  {
+   "name": "Indena S.p.A",
+   "trials": 2
+  },
+  {
+   "name": "E-nitiate Biopharmaceuticals (Hangzhou) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "MBrace Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Advanced Accelerator Applications",
+   "trials": 2
+  },
+  {
+   "name": "Erchonia Corporation",
+   "trials": 2
+  },
+  {
+   "name": "SPARK Biopharma",
+   "trials": 2
+  },
+  {
+   "name": "Newleos Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Vivifi Medical",
+   "trials": 2
+  },
+  {
+   "name": "OneCarbon",
+   "trials": 2
+  },
+  {
+   "name": "AtaCor Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Endo Health GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Areteia Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Creative Medical Technology Holdings Inc",
+   "trials": 2
+  },
+  {
+   "name": "Lungpacer Medical Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Incyte Biosciences Japan GK",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Ruotuo Biosciences Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "SRI International",
+   "trials": 2
+  },
+  {
+   "name": "Sitala Bio LTD",
+   "trials": 2
+  },
+  {
+   "name": "Guangzhou Ruixin Biotechnological Co., LTD",
+   "trials": 2
+  },
+  {
+   "name": "Sonoma Biotherapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Science Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Venus Concept",
+   "trials": 2
+  },
+  {
+   "name": "Linnaeus Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Bluefin Biomedicine, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NiKang Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Clarion Cells, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai MicroPort CardioFlow Medtech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Organon and Co",
+   "trials": 2
+  },
+  {
+   "name": "Hexun Biosciences Co., LTD.",
+   "trials": 2
+  },
+  {
+   "name": "Sinomune Pharmaceutical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Sinocare",
+   "trials": 2
+  },
+  {
+   "name": "MD Stem Cells",
+   "trials": 2
+  },
+  {
+   "name": "Kringle Pharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cognito Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cellmedis",
+   "trials": 2
+  },
+  {
+   "name": "Tenaya Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Translational Sciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Draig Therapeutics Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Bentley InnoMed GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Five Eleven Pharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Uro-1 Medical",
+   "trials": 2
+  },
+  {
+   "name": "Vichy Laboratoires",
+   "trials": 2
+  },
+  {
+   "name": "Acrivon Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Atos Medical AB",
+   "trials": 2
+  },
+  {
+   "name": "Larimar Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sino Medical Sciences Technology Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hutom Corp",
+   "trials": 2
+  },
+  {
+   "name": "NEC Bio B.V",
+   "trials": 2
+  },
+  {
+   "name": "Anwita Biosciences",
+   "trials": 2
+  },
+  {
+   "name": "Bantam Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "ProArc Medical",
+   "trials": 2
+  },
+  {
+   "name": "Man and Science, SA",
+   "trials": 2
+  },
+  {
+   "name": "Vincentage Pharma Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Tarsus Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "EIP Pharma Inc",
+   "trials": 2
+  },
+  {
+   "name": "Zhuhai United Laboratories Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Neurocrine Switzerland GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Alimera Sciences",
+   "trials": 2
+  },
+  {
+   "name": "Vericel Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Bionic Sight LLC",
+   "trials": 2
+  },
+  {
+   "name": "Aptitude Medical Systems",
+   "trials": 2
+  },
+  {
+   "name": "Skye Biologics Holdings, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Innoventric LTD",
+   "trials": 2
+  },
+  {
+   "name": "Owlet Baby Care, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hope Biosciences Research Foundation",
+   "trials": 2
+  },
+  {
+   "name": "Georgiamune Inc",
+   "trials": 2
+  },
+  {
+   "name": "Gossamer Bio USA, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Alessa Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cook Research Incorporated",
+   "trials": 2
+  },
+  {
+   "name": "Teikoku Pharma USA, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "SpotOn Therapeutics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "DK Medical Technology (Suzhou) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "AnaptysBio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Whitehawk Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Imviva Bio",
+   "trials": 2
+  },
+  {
+   "name": "Novatim Immune Therapeutics (Zhejiang) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "EDAP TMS S.A.",
+   "trials": 2
+  },
+  {
+   "name": "Neuralert Technologies LLC",
+   "trials": 2
+  },
+  {
+   "name": "Acepodia Biotech, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "JYAMS PET Research & Development Limited",
+   "trials": 2
+  },
+  {
+   "name": "35Pharma Inc",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Hansoh Biomedical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Acrotech Biopharma Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Brain Neurotherapy Bio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Vantive Health LLC",
+   "trials": 2
+  },
+  {
+   "name": "TR Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Aribio Lab Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Sebela Women's Health Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NovoCure GmbH",
+   "trials": 2
+  },
+  {
+   "name": "Menicon Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "HiDO Technologies",
+   "trials": 2
+  },
+  {
+   "name": "Brixton Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Adraxe Corp.",
+   "trials": 2
+  },
+  {
+   "name": "Kubota Vision Inc.",
+   "trials": 2
+  },
+  {
+   "name": "taVNS AB",
+   "trials": 2
+  },
+  {
+   "name": "Liaoning Chengda Biotechnology CO., LTD",
+   "trials": 2
+  },
+  {
+   "name": "Edgewood Oncology Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cyllene Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Guangzhou Bio-gene Technology Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Darwin Origin (Hubei) Biopharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Metro International Biotech, LLC",
+   "trials": 2
+  },
+  {
+   "name": "OPKO Health, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Saluda Medical Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Myosin Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Filament Health Corp.",
+   "trials": 2
+  },
+  {
+   "name": "Rivus Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Lumen Bioscience, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hyundai Bioscience Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "ZSky Biotech Inc",
+   "trials": 2
+  },
+  {
+   "name": "NexImmune Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Fresenius Kabi",
+   "trials": 2
+  },
+  {
+   "name": "Suzhou Siran Biotechnology Co.,Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Lynk Pharmaceuticals Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Regenexx, LLC",
+   "trials": 2
+  },
+  {
+   "name": "CrannMed",
+   "trials": 2
+  },
+  {
+   "name": "Motion Informatics LTD",
+   "trials": 2
+  },
+  {
+   "name": "Spiderwort Biotechnologies Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Upstream Bio Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Virogin Biotech Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Anterogen Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Hyivy Health Inc",
+   "trials": 2
+  },
+  {
+   "name": "Fresenius Kabi Taiwan Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Shijiazhuang Yiling Pharmaceutical Co. Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Atsena Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Zenith Epigenetics",
+   "trials": 2
+  },
+  {
+   "name": "Solarea Bio, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Sinew Pharma Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Immunomic Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Myoptechs, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Bionoxx Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Spur Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Virogin Biotech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Tonix Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Advanced Medical Solutions Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Juvena Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Venturis Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "VectivBio AG",
+   "trials": 2
+  },
+  {
+   "name": "Sellas Life Sciences Group",
+   "trials": 2
+  },
+  {
+   "name": "DMG Dental Material Gesellschaft mbH",
+   "trials": 2
+  },
+  {
+   "name": "Medipost Co Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "TLC Biopharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "SpectraCure AB",
+   "trials": 2
+  },
+  {
+   "name": "Ascendis Pharma Growth Disorders A/S",
+   "trials": 2
+  },
+  {
+   "name": "VIVEX Biologics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Biomed Industries, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "DJO UK Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Actio Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "VPIX Medical",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Yao Yuan Biotechnology Ltd. (also known as Drug Farm)",
+   "trials": 2
+  },
+  {
+   "name": "Emerald Health Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "TRCare, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Medaxis, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Cousin Biotech",
+   "trials": 2
+  },
+  {
+   "name": "PolyActiva Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Genoss Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "InMode MD Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Mastelli S.r.l",
+   "trials": 2
+  },
+  {
+   "name": "Kiniksa Pharmaceuticals International, plc",
+   "trials": 2
+  },
+  {
+   "name": "Catalysis SL",
+   "trials": 2
+  },
+  {
+   "name": "ReFlow Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Lantu Biopharma",
+   "trials": 2
+  },
+  {
+   "name": "SecuraBio",
+   "trials": 2
+  },
+  {
+   "name": "Santen SAS",
+   "trials": 2
+  },
+  {
+   "name": "Daily Nouri",
+   "trials": 2
+  },
+  {
+   "name": "Endologix",
+   "trials": 2
+  },
+  {
+   "name": "iTeos Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Tau-MEDICAL Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Alzamend Neuro, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Biotech Healthcare Holding Gmbh",
+   "trials": 2
+  },
+  {
+   "name": "Xadcera Biopharmaceutical (Suzhou) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Jubilant Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "National Vaccine and Serum Institute, China",
+   "trials": 2
+  },
+  {
+   "name": "Venova Medical",
+   "trials": 2
+  },
+  {
+   "name": "R-Bio",
+   "trials": 2
+  },
+  {
+   "name": "P+F Products + Features USA Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Ahn-Gook Pharmaceuticals Co.,Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Restorbio Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sling Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "ImmunoVaccine Technologies, Inc. (IMV Inc.)",
+   "trials": 2
+  },
+  {
+   "name": "Arcellx, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "EBR Systems, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Brise Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Rapamycin Holdings Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Epineuron Technologies Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Viewray Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Clinique Ovo",
+   "trials": 2
+  },
+  {
+   "name": "Zymeworks BC Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Regenerative Ocular Immunobiologics LLC",
+   "trials": 2
+  },
+  {
+   "name": "Vesalio",
+   "trials": 2
+  },
+  {
+   "name": "Otsuka Beijing Research Institute",
+   "trials": 2
+  },
+  {
+   "name": "Guangzhou Novaken Pharm Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Neurotech Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou GluBio Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Endeavor Biomedicines, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "StemCyte, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Heartseed Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Udisense DBA Nanit",
+   "trials": 2
+  },
+  {
+   "name": "Servier Affaires Médicales",
+   "trials": 2
+  },
+  {
+   "name": "Hofseth Biocare ASA",
+   "trials": 2
+  },
+  {
+   "name": "Motif Neurotech, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "DermBiont, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "VenoStent",
+   "trials": 2
+  },
+  {
+   "name": "K36 Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Agomab Spain S.L.U.",
+   "trials": 2
+  },
+  {
+   "name": "Append Medical Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "TRB Chemedica International SA",
+   "trials": 2
+  },
+  {
+   "name": "UTC Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Faron Pharmaceuticals Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Sparrow Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Chengdu Kanghong Biotech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Tissue Regenix Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Aston Sci. Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Kyntra Bio",
+   "trials": 2
+  },
+  {
+   "name": "Alveus Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Zhuhai Huahaikang Pharmaceutical Technology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Artivion Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Lindenhofgruppe AG",
+   "trials": 2
+  },
+  {
+   "name": "Delta-Fly Pharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Aymes International Limited",
+   "trials": 2
+  },
+  {
+   "name": "Zentiva, k.s.",
+   "trials": 2
+  },
+  {
+   "name": "Far East Bio-Tec Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou Yirui Pharmaceutical Technology Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Bioretec Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Phrontline Biopharma",
+   "trials": 2
+  },
+  {
+   "name": "Fenix Innovation Group",
+   "trials": 2
+  },
+  {
+   "name": "Aplagon Oy",
+   "trials": 2
+  },
+  {
+   "name": "GeneSail Biotech (Shanghai) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "General Neuro Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Compremium AG",
+   "trials": 2
+  },
+  {
+   "name": "Immatics Biotechnologies GmbH",
+   "trials": 2
+  },
+  {
+   "name": "InnoPharmax Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AVEO Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou Hanx Biopharmaceuticals, Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Iperboreal Pharma Srl",
+   "trials": 2
+  },
+  {
+   "name": "InnoVec Biotherapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Biotronik, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Bright Minds Biosciences Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Alphatec Spine, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Prilenia",
+   "trials": 2
+  },
+  {
+   "name": "Nanjing Minova Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Nanjing Zenshine Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "Anbogen Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Gylden Pharma Ltd",
+   "trials": 2
+  },
+  {
+   "name": "GIE Medical",
+   "trials": 2
+  },
+  {
+   "name": "Redx Pharma Ltd",
+   "trials": 2
+  },
+  {
+   "name": "ARJ Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Neurona Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Agouron Pharmaceuticals",
+   "trials": 2
+  },
+  {
+   "name": "NuvOx LLC",
+   "trials": 2
+  },
+  {
+   "name": "Genelux Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Emblok, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jiangsu Kanion Pharmaceutical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Vivace Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Inhibikase Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Hope Biosciences LLC",
+   "trials": 2
+  },
+  {
+   "name": "Beijing Anlong Biopharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Cell Biopeutics Resources Sdn Bhd",
+   "trials": 2
+  },
+  {
+   "name": "CytomX Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Ophtec USA",
+   "trials": 2
+  },
+  {
+   "name": "Anaconda Biomed S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Stealth BioTherapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Gedeon Richter Plc.",
+   "trials": 2
+  },
+  {
+   "name": "Kure Cells, INC",
+   "trials": 2
+  },
+  {
+   "name": "Cell>Point LLC",
+   "trials": 2
+  },
+  {
+   "name": "Myungmoon Pharma. Co. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Epax Norway AS",
+   "trials": 2
+  },
+  {
+   "name": "VISUfarma SpA",
+   "trials": 2
+  },
+  {
+   "name": "Shanghai Pharmaceutical Group Biological Therapy Technology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "BRIM Biotechnology Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Xizang Haisco Pharmaceutical Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Curonix LLC",
+   "trials": 2
+  },
+  {
+   "name": "EnCompass Technologies, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hangzhou Adcoris Biopharmacy Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Biohaven Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "LaNova Medicines Zhejiang Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Joint & Vascular Institute",
+   "trials": 2
+  },
+  {
+   "name": "Shine-On Biomedical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "AiViva BioPharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "GeneQuantum Healthcare (Suzhou) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Cierra",
+   "trials": 2
+  },
+  {
+   "name": "Ceragem Clinical Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Windward Bio",
+   "trials": 2
+  },
+  {
+   "name": "VLP Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "UBP Greater China (Shanghai) Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "InventVacc Biologicals Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hyundai Pharm",
+   "trials": 2
+  },
+  {
+   "name": "Fujian Haixi Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Nanjing Reju Therapeutics Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Otto Bock France SNC",
+   "trials": 2
+  },
+  {
+   "name": "Apollomics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Hanx Biopharmaceuticals (Wuhan) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Distribuidora Biolife SA de CV",
+   "trials": 2
+  },
+  {
+   "name": "Artios Pharma Ltd",
+   "trials": 2
+  },
+  {
+   "name": "SciTech Development, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Suven Life Sciences Limited",
+   "trials": 2
+  },
+  {
+   "name": "Tanabe Pharma America, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Procter and Gamble",
+   "trials": 2
+  },
+  {
+   "name": "Chongqing Claruvis Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "BlueRock Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Linio Biotech Oy",
+   "trials": 2
+  },
+  {
+   "name": "Antev Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Genfit",
+   "trials": 2
+  },
+  {
+   "name": "Curium US LLC",
+   "trials": 2
+  },
+  {
+   "name": "Kiora Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Q Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Aurion Biotech",
+   "trials": 2
+  },
+  {
+   "name": "The Bird and Be Co Inc",
+   "trials": 2
+  },
+  {
+   "name": "Alterome Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "VividWhite Pty Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Synergic Medical Technologies, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Vielight Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NKGen Biotech, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Aurinia Pharmaceuticals Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Point Designs",
+   "trials": 2
+  },
+  {
+   "name": "Arnatar Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Trust Bio-sonics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "P+F Products + Features GmbH",
+   "trials": 2
+  },
+  {
+   "name": "ICIM International S.r.l.",
+   "trials": 2
+  },
+  {
+   "name": "ImmunoGenesis",
+   "trials": 2
+  },
+  {
+   "name": "Vaneltix Pharma, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "VIVUS LLC",
+   "trials": 2
+  },
+  {
+   "name": "CEBIOTEX",
+   "trials": 2
+  },
+  {
+   "name": "Synnovation Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Elixirgen Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AUG Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Ardelyx",
+   "trials": 2
+  },
+  {
+   "name": "Outpace Bio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Recross Cardio, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Cognixion",
+   "trials": 2
+  },
+  {
+   "name": "Phathom Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Electra Therapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Synergy Spine Solutions",
+   "trials": 2
+  },
+  {
+   "name": "SK Bioscience Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "RiboX Therapeutics Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Presidio Medical, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Dalia Care",
+   "trials": 2
+  },
+  {
+   "name": "Galimedix Therapeutics Inc",
+   "trials": 2
+  },
+  {
+   "name": "Guangzhou Magpie Pharmaceuticals Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Akouos, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "AnewPharma",
+   "trials": 2
+  },
+  {
+   "name": "Verdiva Bio Dev Limited",
+   "trials": 2
+  },
+  {
+   "name": "YolTech Therapeutics Co., Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Ankyra Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Atavistik Bio, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Camurus AB",
+   "trials": 2
+  },
+  {
+   "name": "Price Vision Group",
+   "trials": 2
+  },
+  {
+   "name": "Prospect Therapeutics (Nanjing) Limited",
+   "trials": 2
+  },
+  {
+   "name": "Arkin",
+   "trials": 2
+  },
+  {
+   "name": "Rehear Audiology Company LTD",
+   "trials": 2
+  },
+  {
+   "name": "Anthos Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Relmada Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "TuHURA Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Q32 Bio Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Maze Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "MSD R&D (China) Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Boston Medical Group",
+   "trials": 2
+  },
+  {
+   "name": "NOxy Health Products, LLC",
+   "trials": 2
+  },
+  {
+   "name": "IO Biotech",
+   "trials": 2
+  },
+  {
+   "name": "Enzon Pharmaceuticals, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Guerbet",
+   "trials": 2
+  },
+  {
+   "name": "Zura Bio Inc",
+   "trials": 2
+  },
+  {
+   "name": "Avacta Life Sciences Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Inion Oy",
+   "trials": 2
+  },
+  {
+   "name": "Koya Medical, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Endo USA Inc., a Keenova Therapeutics Company",
+   "trials": 2
+  },
+  {
+   "name": "Sichuan Jishengtang Pharmaceutical Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Helaina Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Jenscare Innovation Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Establishment Labs",
+   "trials": 2
+  },
+  {
+   "name": "NeuroDerm Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Caption Health, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Kali Therapeutics, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Meribank Biotech Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "MeLSyTech, Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Immuneering Corporation",
+   "trials": 2
+  },
+  {
+   "name": "Next Life Sciences",
+   "trials": 2
+  },
+  {
+   "name": "Equa Health",
+   "trials": 2
+  },
+  {
+   "name": "Shenzhen Wingor Biotechnology Co., Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Johnson & Johnson Vision Care, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Exosystems",
+   "trials": 2
+  },
+  {
+   "name": "Biolexis Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "FUSMobile Inc.",
+   "trials": 2
+  },
+  {
+   "name": "QuantX Biosciences, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Sirnaomics",
+   "trials": 2
+  },
+  {
+   "name": "Metanoic Health Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Hollister Incorporated",
+   "trials": 2
+  },
+  {
+   "name": "ProQR Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Pleryon Therapeutics (Hangzhou) Limited",
+   "trials": 2
+  },
+  {
+   "name": "Feeltect Limited",
+   "trials": 2
+  },
+  {
+   "name": "Helius Medical Inc",
+   "trials": 2
+  },
+  {
+   "name": "Fulgent Pharma LLC.",
+   "trials": 2
+  },
+  {
+   "name": "Viacor",
+   "trials": 2
+  },
+  {
+   "name": "Op-T LLC",
+   "trials": 2
+  },
+  {
+   "name": "Just-Evotec Biologics",
+   "trials": 2
+  },
+  {
+   "name": "Satellos Bioscience, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Vironexis Biotherapeutics Inc.",
+   "trials": 2
+  },
+  {
+   "name": "SANGMYUNG innovation",
+   "trials": 2
+  },
+  {
+   "name": "Reunion Neuroscience Inc",
+   "trials": 2
+  },
+  {
+   "name": "NovaRock Biotherapeutics, Ltd",
+   "trials": 2
+  },
+  {
+   "name": "Femasys Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Leal Therapeutics, Inc",
+   "trials": 2
+  },
+  {
+   "name": "Zhejiang Hisun Pharmaceutical Co. Ltd.",
+   "trials": 2
+  },
+  {
+   "name": "Oncomatryx Biopharma S.L.",
+   "trials": 2
+  },
+  {
+   "name": "Solventum US LLC",
+   "trials": 2
+  },
+  {
+   "name": "Cryosa, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "ReValve Solutions Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Quell Therapeutics Limited",
+   "trials": 2
+  },
+  {
+   "name": "NOBO Medicine",
+   "trials": 2
+  },
+  {
+   "name": "Rigicon, Inc.",
+   "trials": 2
+  },
+  {
+   "name": "NAOS Les Laboratoires",
+   "trials": 2
+  },
+  {
+   "name": "Mentor Worldwide, LLC",
+   "trials": 2
+  },
+  {
+   "name": "Allotera Therapeutics",
+   "trials": 2
+  },
+  {
+   "name": "Imricor Medical Systems",
+   "trials": 2
+  },
+  {
+   "name": "Devintec Sagl",
+   "trials": 2
+  },
+  {
+   "name": "Albireo, an Ipsen Company",
+   "trials": 2
+  },
+  {
+   "name": "3-C Institute for Social Development",
+   "trials": 2
+  },
+  {
+   "name": "HitGen Inc.",
+   "trials": 2
+  },
+  {
+   "name": "Botanic Tonics, LLC",
+   "trials": 2
+  },
+  {
+   "name": "CorFlow Therapeutics AG",
+   "trials": 2
+  },
+  {
+   "name": "Tridem Bioscience FlexCo",
+   "trials": 2
+  },
+  {
+   "name": "Herbarium Laboratorio Botanico Ltda",
+   "trials": 2
+  },
+  {
+   "name": "Wigen Biomedicine Technology (Shanghai) Co., Ltd.",
+   "trials": 2
+  }
+ ]
+}
