@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "pipeline": "tsx scripts/pipeline.mts",
-    "remove-clinician": "tsx scripts/remove-clinician.mts"
+    "remove-clinician": "tsx scripts/remove-clinician.mts",
+    "review": "tsx scripts/review.mts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
