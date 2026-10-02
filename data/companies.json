@@ -1,8 +1,0 @@
-[
-  { "key": "summit", "name": "Summit Therapeutics", "match": "summit", "aliases": ["Summit Therapeutics Inc.", "SMMT"], "lead_asset": "ivonescimab (SMT112, AK112)" },
-  { "key": "akeso", "name": "Akeso", "match": "akeso", "aliases": ["Akeso, Inc.", "Akeso Biopharma", "Akesobio", "9926.HK"], "advanced": "AREA[Phase]PHASE3", "scope_label": "Phase 3 trials only", "lead_asset": "ivonescimab (AK112, SMT112)" },
-  { "key": "arvinas", "name": "Arvinas", "match": "arvinas", "aliases": ["Arvinas, Inc.", "ARVN"], "lead_asset": "vepdegestrant (ARV-471, PF-07850327)" },
-  { "key": "legend", "name": "Legend Biotech", "match": "legend", "aliases": ["Legend Biotech Corporation", "LEGN"], "lead_asset": "ciltacabtagene autoleucel (cilta-cel, CARVYKTI)" },
-  { "key": "revmed", "name": "Revolution Medicines", "match": "revolution", "aliases": ["Revolution Medicines, Inc.", "RevMed", "RVMD"], "lead_asset": "daraxonrasib (RMC-6236, RASONQUE)" },
-  { "key": "axsome", "name": "Axsome Therapeutics", "match": "axsome", "aliases": ["Axsome Therapeutics, Inc.", "AXSM"], "lead_asset": "dextromethorphan-bupropion (AXS-05, AUVELITY)" }
-]

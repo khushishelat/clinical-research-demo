@@ -11,9 +11,10 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    // These layers parse untyped JSON from the model, the Task/Monitor APIs and
-    // ClinicalTrials.gov; `any` is confined to them.
-    files: ['src/lib/domain/**', 'src/lib/server/**', 'scripts/**', 'tests/**'],
+    // The pipeline parses untyped JSON from Task runs, ClinicalTrials.gov, the
+    // NPI Registry and PubMed; `any` is confined to it. The app reads typed
+    // documents (src/lib/space/types.ts).
+    files: ['scripts/**', 'tests/**'],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
   // Override default ignores of eslint-config-next.

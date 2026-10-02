@@ -1,9 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Route handlers read recorded packs, replays and config from disk; include them in every server trace.
+  // The app reads the disease list at runtime; include it in every server trace.
   outputFileTracingIncludes: {
-    '/*': ['./fixtures/**/*', './data/**/*'],
+    '/*': ['./scripts/diseases.json'],
   },
 };
 
