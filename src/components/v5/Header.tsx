@@ -78,7 +78,7 @@ export function Header({ current, diseases, updated }: { current: string; diseas
         </div>
         {updated ? (
           <span className="ml-auto hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.05em] text-muted md:flex">
-            <span className="h-1.5 w-1.5 rounded-full bg-ok" /> Updated {fmt(updated)} · checked daily
+            <span className="h-1.5 w-1.5 rounded-full bg-ok" /> Updated {fmt(updated)}
           </span>
         ) : null}
       </div>
