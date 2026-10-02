@@ -212,7 +212,8 @@ export function mapView(s: Space, scope: Scope, today: string) {
       stage: c.approved ? 'Approved' : STAGE[Math.min(c.max_phase, 4)],
       approved: c.approved,
       // v1 drugs carry a short mechanism phrase from the run; older records go through shortMechanism.
-      mechanisms: [...new Set((c.drugs ?? []).map((x) => (x.phase && x.mechanism.length <= 32 ? x.mechanism : shortMechanism(x.mechanism))).filter(present))].slice(0, 2),
+      // One tag per mechanism: "CGRP receptor antagonist" and "CGRP-receptor antagonist" are the same.
+      mechanisms: [...new Map((c.drugs ?? []).map((x) => (x.phase && x.mechanism.length <= 32 ? x.mechanism : shortMechanism(x.mechanism))).filter(present).map((m) => [m.toLowerCase().replace(/[-\s]+/g, ' '), m] as const)).values()].slice(0, 2),
       dots,
       news,
       next,
