@@ -101,9 +101,13 @@ export type Recorder = { start: number; events: CompactEvent[] };
 export const recorder = (): Recorder => ({ start: Date.now(), events: [] });
 export async function saveReplay(d: Disease, job: string, r: Recorder) {
   const events = thinStats(r.events).sort((a, b) => a.t - b.t);
-  // A re-run that only reused finished runs records little; keep the fuller replay.
-  const prior = await store.get<{ events: unknown[] }>(spacePath(d, `replay/${job}.json`));
-  if (prior && prior.events.length >= events.length) return;
+  // A re-run that only reused finished runs records little; keep the fuller replay of the
+  // same runs. Runs are named by their run-log keys, which carry the spec version, so a
+  // recording of different runs (a new spec, a new period) always replaces the old one.
+  const prior = await store.get<{ events: { run: string }[] }>(spacePath(d, `replay/${job}.json`));
+  const before = new Set((prior?.events ?? []).map((e) => e.run));
+  const same = events.every((e) => before.has(e.run));
+  if (prior && same && prior.events.length >= events.length) return;
   await store.put(spacePath(d, `replay/${job}.json`), { job, started: new Date(r.start).toISOString(), duration_s: Math.round((Date.now() - r.start) / 1000), events });
 }
 
