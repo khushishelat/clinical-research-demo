@@ -81,6 +81,8 @@ export type RunRecord = {
   basis?: unknown[];
   connectors?: Record<string, number>;
   seconds?: number | null;
+  /** Earlier runs for this key that failed (not billed), oldest first. */
+  failed_runs?: string[];
 };
 export type RunLog = Record<string, RunRecord>;
 
@@ -127,6 +129,10 @@ export type RunSpec = {
 /** Create a run once per key (or reuse the recorded one), wait for it, and record the result. */
 export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => Promise<void> }, key: string, spec: RunSpec, rec0?: Recorder): Promise<RunRecord> {
   let rec = rl.log[key];
+  // Failed runs are not billed (docs: pricing), so a failed unit gets one fresh run; the
+  // failed run's ID is kept. A second failure stands, so a broken input never loops.
+  const failed = rec?.status === 'failed' && !rec.failed_runs?.length ? [rec.run_id] : null;
+  if (failed) rec = undefined as unknown as RunRecord;
   if (!rec) {
     const run: any = await client.taskRun.create({
       processor: spec.processor,
@@ -138,7 +144,7 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
       ...(rec0 ? { enable_events: true } : {}),
       ...(spec.previous_interaction_id ? { previous_interaction_id: spec.previous_interaction_id } : {}),
     } as any);
-    rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString() };
+    rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString(), ...(failed ? { failed_runs: failed } : {}) };
     await rl.save();
   }
   if (rec.status) return rec;
@@ -181,6 +187,8 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
         rec.connectors = (res.output.mcp_tool_calls ?? []).reduce((m: Record<string, number>, c: any) => ((m[c.server_name] = (m[c.server_name] ?? 0) + 1), m), {});
       }
       await rl.save();
+      // A first failure is retried at once (see above), so one bad run doesn't end a chain.
+      if (rec.status === 'failed' && !rec.failed_runs?.length) return runOnce(client, rl, key, spec, rec0);
       return rec;
     }
     await sleep(15_000);
