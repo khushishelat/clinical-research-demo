@@ -20,10 +20,10 @@ table view shows every researched field with its sources.
   approved by a person
 - 749 investigators (PIs and study chairs) named in the registry; 229 US
   investigators matched to the NPI Registry
-- About $12B in disclosed licensing and M&A value since May 2025, across 9
-  asset deals such as Novo Nordisk–Akero and Roche–89bio (headline USD values
-  only; whole-company, commercial and research deals are shown on the rows but
-  not counted)
+- About $19B in disclosed licensing and M&A value since May 2025, across 12
+  asset deals such as Novo Nordisk–Akero, Madrigal–Ribo and Roche–89bio
+  (headline USD values only; whole-company, commercial and research deals are
+  shown on the rows but not counted)
 - 6 trials disclosed before ClinicalTrials.gov listed them, such as Altimmune's
   PERFORMA, 28 days earlier
 
@@ -101,7 +101,7 @@ Every Parallel run's processor, connectors and output schema live in
   spec, never a second model pass over the output.
 - **Amounts as stated and as numbers.** "up to $4.4B" is kept as written, with a
   currency and a value in millions; totals sum only USD.
-- **Versioned specs.** Each spec has a key (`deals@2`) that prefixes its run-log
+- **Versioned specs.** Each spec has a key (`deals@3`) that prefixes its run-log
   entries. Changing a spec means a new version, so a rebuild pays for the new
   spec on purpose, and every stored record says which spec produced it.
 

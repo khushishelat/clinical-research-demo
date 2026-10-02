@@ -186,9 +186,10 @@ export const FACTS = {
 // deals@2: the run says what each deal is for (`about`), so the headline value
 // counts asset deals only, and financings are limited to money raised for drug
 // development. Both are decided in this run from the announcement; code only
-// reads the fields.
+// reads the fields. deals@3: licensed programs for this indication are assets
+// at any stage, named or not; research is work with no program yet.
 export const DEALS = {
-  key: 'deals@2',
+  key: 'deals@3',
   processor: 'pro',
   schema: O({
     deals: A(
@@ -199,7 +200,7 @@ export const DEALS = {
         type: E(['license', 'acquisition', 'collaboration', 'option', 'divestiture', 'other']),
         about: E(
           ['asset', 'company_for_asset', 'portfolio', 'commercial', 'research', 'other'],
-          'What the deal is for, from the announcement. asset: rights to named drugs for this indication. company_for_asset: buying a company chiefly for a drug for this indication. portfolio: a company or product portfolio in which this indication is a small part. commercial: distribution, co-promotion, supply, formulary, pricing or awareness agreements. research: discovery or platform work with no named drug for this indication.'
+          'What the deal is for, from the announcement. asset: rights to specific drugs or programs for this indication, at any stage, named or not (e.g. licensing several preclinical programs). company_for_asset: buying a company chiefly for a drug for this indication. portfolio: a company or product portfolio in which this indication is a small part. commercial: distribution, co-promotion, supply, formulary, pricing or awareness agreements. research: discovery or platform work that has not yet produced a program for this indication.'
         ),
         upfront: N('As announced, e.g. "$50M upfront".'),
         total: N('The headline value as announced, including milestones, e.g. "up to $4.4B".'),
