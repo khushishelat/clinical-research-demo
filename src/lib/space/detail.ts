@@ -8,6 +8,8 @@ import { drugLabels, hostOf } from './view';
 type S = Space;
 const present = <T>(x: T | undefined | null): x is T => x != null;
 
+// Arms that aren't the drug under test.
+const COMPARATOR = /placebo|matching|vehicle|sham|standard of care|usual care|saline|diet|lifestyle|exercise/i;
 const HIDDEN_SITE = /investigational site|clinical study site|research site|site\s*\d+|study site/i;
 const title = (x: string | null | undefined) => (x ?? '').toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
 const place = (city?: string | null, state?: string | null, country?: string | null) => {
@@ -59,11 +61,36 @@ export function trialDetail(s: S, nct: string) {
   for (const d of company?.drugs ?? []) for (const n of [d.name, ...(d.codes ?? []), ...(d.name.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]) if (n) names.add(n.split('(')[0].trim().toLowerCase());
   const text = [t.title, t.acronym, ...t.interventions.flatMap((i) => [i.name, ...i.other_names])].join(' ').toLowerCase();
   const tested = drugs.filter((l) => [...names].some((n) => n.length > 3 && text.includes(n) && l.toLowerCase().includes(n.split(' ')[0])) || text.includes(l.split(' (')[0].toLowerCase()));
-  const lead = tested[0] ?? t.interventions.find((i) => i.type !== 'OTHER')?.name ?? '';
+  // When no company drug is named, fall back to what the experimental arm gives, never a placebo or comparator.
+  const experimental = new Set(t.arms.filter((a) => a.type === 'EXPERIMENTAL').flatMap((a) => a.interventions.map((n) => n.toLowerCase())));
+  const candidates = t.interventions.filter((i) => i.type !== 'OTHER' && !COMPARATOR.test(i.name));
+  const lead = tested[0] ?? (candidates.find((i) => experimental.has(i.name.toLowerCase())) ?? candidates[0])?.name ?? '';
 
   // Web items that name this trial or its drug.
   const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
   const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
+
+  // Other trials of the same company testing the same lead drug: the rabbit hole.
+  const leadNeedles = [lead.split(' (')[0], ...(lead.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]
+    .map((x) => x.trim().toLowerCase())
+    .filter((x) => x.length > 3);
+  const siblings = company
+    ? [...company.trials, ...company.investigator_trials]
+        .filter((n) => n !== nct)
+        .map((n) => s.trials.find((x) => x.nct === n))
+        .filter(present)
+        .filter((o) => {
+          const text = [o.title, o.acronym, ...o.interventions.flatMap((i) => [i.name, ...i.other_names])]
+            .join(' ')
+            .toLowerCase();
+          return leadNeedles.some((n) => text.includes(n));
+        })
+        .map((o) => ({
+          nct: o.nct,
+          label: o.acronym || o.nct,
+          phase: o.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase n/a',
+        }))
+    : [];
   const items: { date: string | null; headline: string; drug: string; source_url: string | null }[] = [
     ...(f?.milestones ?? []),
     ...(f?.deals ?? []).map((x) => ({ ...x, drug: '' })),
@@ -76,6 +103,9 @@ export function trialDetail(s: S, nct: string) {
     .filter((m, i, all) => all.findIndex((x) => x.date === m.date && (x.source_url === m.source_url || hostOf(x.source_url) === hostOf(m.source_url))) === i)
     .slice(0, 4)
     .map((m) => ({ date: m.date, headline: m.headline, source: m.source_url, host: hostOf(m.source_url) }));
+
+  // Provenance for the "From the web" section: how many distinct sources the items come from.
+  const webSources = new Set(web.map((w) => w.host).filter((h) => h)).size;
 
   // Investigators the registry names, most involved first.
   const named = t.people
@@ -127,7 +157,16 @@ export function trialDetail(s: S, nct: string) {
     countries: t.countries.length,
     firstPosted: t.first_posted,
     primaryCompletion: t.primary_completion,
+    // Step 08: when the web first announced this trial, against its registry date. Per-trial only — never invented per news item.
+    firstSeen: (() => {
+      const seen = s.firstSeen[nct];
+      return seen && seen.days_earlier > 0 && seen.first_announced
+        ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url, what: seen.what }
+        : null;
+    })(),
     web,
+    webSources,
+    siblings,
     named,
     hiddenSites,
     hiddenLabel,

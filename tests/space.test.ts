@@ -132,3 +132,61 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
+
+test('trial drawer: first-seen surfaces only when the web announced the trial earlier', () => {
+  const s = space();
+  const t = trialDetail(s, 'NCT1')!;
+  assert.equal(t.firstSeen?.days, 28);
+  assert.equal(t.firstSeen?.date, '2026-08-13');
+  assert.equal(t.firstSeen?.source, 'https://ir.acme.com/alpha');
+  // No step-08 record for NCT2: no badge, no invented dates.
+  assert.equal(trialDetail(s, 'NCT2')!.firstSeen, null);
+});
+
+test('trial drawer: web items join by drug/acronym mention, nothing else', () => {
+  const s = space();
+  s.facts.acme.milestones!.push(
+    { type: 'data', date: '2026-09-11', drug: 'acmetide', headline: 'ALPHA-1 subgroup analysis published', source_url: 'https://ir.acme.com/sub' },
+    { type: 'other', date: '2026-09-12', drug: 'placebex', headline: 'Acme opens new Boston office', source_url: null },
+  );
+  const t = trialDetail(s, 'NCT1')!;
+  const headlines = t.web.map((w) => w.headline);
+  assert.ok(headlines.includes('ALPHA-1 meets primary endpoint'));
+  assert.ok(headlines.includes('ALPHA-1 subgroup analysis published'));
+  assert.ok(!headlines.includes('Acme opens new Boston office'));
+});
+
+test('trial drawer: sibling trials test the same lead drug', () => {
+  const s = space();
+  // A same-company trial of a different drug is not a sibling.
+  s.trials.push(trial('NCT4', { interventions: [{ name: 'placebex', type: 'DRUG', other_names: [] }] }) as never);
+  (s.companies[0] as { trials: string[] }).trials.push('NCT4');
+  const t = trialDetail(s, 'NCT1')!;
+  assert.deepEqual(t.siblings.map((o) => o.nct), ['NCT2']);
+  assert.equal(t.siblings[0].label, 'NCT2');
+  // Symmetry: NCT2's sibling is NCT1.
+  assert.deepEqual(trialDetail(s, 'NCT2')!.siblings.map((o) => o.nct), ['NCT1']);
+});
+
+test('trial drawer: web research carries its distinct source count', () => {
+  const t = trialDetail(space(), 'NCT1')!;
+  assert.equal(t.webSources, 1);
+});
+
+test('trial drawer: the lead falls back to the experimental drug, never the placebo', () => {
+  const s = space();
+  s.trials.push(
+    trial('NCT5', {
+      interventions: [
+        { name: 'Placebo', type: 'DRUG', other_names: [] },
+        { name: 'XYZ-77 Injection', type: 'DRUG', other_names: [] },
+      ],
+      arms: [
+        { type: 'PLACEBO_COMPARATOR', interventions: ['Placebo'] },
+        { type: 'EXPERIMENTAL', interventions: ['XYZ-77 Injection'] },
+      ],
+    }) as never,
+  );
+  (s.companies[0] as { trials: string[] }).trials.push('NCT5');
+  assert.equal(trialDetail(s, 'NCT5')!.lead, 'XYZ-77 Injection');
+});
