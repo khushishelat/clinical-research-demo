@@ -140,12 +140,16 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             { value: fmt(t.primaryCompletion), label: 'Primary completion' },
           ]}
         />
+        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.05em] text-faint">Registry · ClinicalTrials.gov</p>
       </div>
 
       {t.web.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">
             <span className="h-2 w-2 bg-orange" /> From the web
+            <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.05em] text-faint">
+              Web research · {t.webSources} source{t.webSources === 1 ? '' : 's'}
+            </span>
           </h3>
           <ul className="mt-2">
             {t.web.map((w, i) => (
@@ -168,7 +172,8 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       <section className="mt-6">
         <div className="flex flex-wrap items-baseline justify-between gap-2 px-6">
           <h3 className="text-[14px]">
-            {t.named.length} investigator{t.named.length === 1 ? '' : 's'} named
+            {t.named.length} investigator{t.named.length === 1 ? '' : 's'} named{' '}
+            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Registry</span>
           </h3>
           {t.hiddenSites ? <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">Sites appear as “{t.hiddenLabel}”</span> : null}
         </div>
@@ -206,7 +211,8 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.fromWeb.length ? (
         <section className="mt-6">
           <h3 className="flex items-center gap-2 px-6 text-[14px]">
-            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} found on the web
+            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} found on the web{' '}
+            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Web research</span>
           </h3>
           <div className="mt-2">
             {t.fromWeb.map((p) => (

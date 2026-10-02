@@ -77,6 +77,9 @@ export function trialDetail(s: S, nct: string) {
     .slice(0, 4)
     .map((m) => ({ date: m.date, headline: m.headline, source: m.source_url, host: hostOf(m.source_url) }));
 
+  // Provenance for the "From the web" section: how many distinct sources the items come from.
+  const webSources = new Set(web.map((w) => w.host).filter((h) => h)).size;
+
   // Investigators the registry names, most involved first.
   const named = t.people
     .map((p) => {
@@ -128,6 +131,7 @@ export function trialDetail(s: S, nct: string) {
     firstPosted: t.first_posted,
     primaryCompletion: t.primary_completion,
     web,
+    webSources,
     named,
     hiddenSites,
     hiddenLabel,

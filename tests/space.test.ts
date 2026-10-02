@@ -132,3 +132,8 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
+
+test('trial drawer: web research carries its distinct source count', () => {
+  const t = trialDetail(space(), 'NCT1')!;
+  assert.equal(t.webSources, 1);
+});
