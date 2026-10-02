@@ -6,8 +6,8 @@
 // changed. Clicking a dot or a clinician opens a drawer.
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState, useSyncExternalStore } from 'react';
-import type { Dot, FeedItem, MapView, Mark, Row } from '@/lib/space/view';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { newSince, type Dot, type FeedItem, type MapView, type Mark, type Row } from '@/lib/space/view';
 import { Drawer } from './Drawer';
 import { Favicon } from './Favicon';
 
@@ -92,7 +92,20 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const all = scope === 'all' ? view.rows : view.rows.filter((r) => r.key !== '_unassigned');
   const rows = more ? all : all.slice(0, SHOWN);
   const s = view.stats;
-  const newCount = view.feed.length;
+  // The "N new" badge counts feed items newer than this browser's last visit
+  // to the disease — never the whole recent window. First visit (or private
+  // mode): no stored date, no badge.
+  const [lastSeen, setLastSeen] = useState<string | null>(null);
+  useEffect(() => {
+    const key = `tc-last-seen-${view.disease.key}`;
+    try {
+      setLastSeen(localStorage.getItem(key));
+      localStorage.setItem(key, today);
+    } catch {
+      // private mode: treated like a first visit
+    }
+  }, [view.disease.key, today]);
+  const newCount = newSince(view.feed, lastSeen);
   const todayAt = x(today);
 
   return (

@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { datasetCsv, datasetView } from '../src/lib/space/dataset';
 import { clinicianDetail, trialDetail } from '../src/lib/space/detail';
 import type { Space } from '../src/lib/space/load';
-import { bdDeals, dollars, drugLabels, mapView, shortMechanism } from '../src/lib/space/view';
+import { bdDeals, dollars, drugLabels, mapView, newSince, shortMechanism } from '../src/lib/space/view';
 
 const trial = (nct: string, over: Record<string, unknown> = {}) => ({
   nct,
@@ -131,4 +131,12 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   const v = mapView(s, 'companies', '2026-10-01');
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
+});
+
+test('what-changed: new count is items since the last visit, never a guess', () => {
+  const feed = [{ date: '2026-09-28' }, { date: '2026-10-01' }];
+  assert.equal(newSince(feed, '2026-09-29'), 1);
+  assert.equal(newSince(feed, '2026-10-01'), 0);
+  assert.equal(newSince(feed, null), 0);
+  assert.equal(newSince([], '2026-09-29'), 0);
 });

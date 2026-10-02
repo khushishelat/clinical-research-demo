@@ -280,3 +280,10 @@ function monthlyBars(s: Space, today: string) {
 }
 
 export type MapView = ReturnType<typeof mapView>;
+
+/** Honest "new" count: feed items dated after the viewer's last visit to this
+ * disease. A null last visit (first visit, or private mode) counts 0 — the
+ * badge hides rather than guessing. */
+export function newSince(feed: { date: string }[], lastSeen: string | null): number {
+  return lastSeen ? feed.filter((f) => f.date > lastSeen).length : 0;
+}
