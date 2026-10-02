@@ -4,10 +4,12 @@
 
 import type { Space } from './load';
 import type { Company, Deal, Facts } from './types';
+import { mentionsNeedles, trialNeedles } from './match';
 
 export type Scope = 'companies' | 'all';
 export type Dot = { nct: string; label: string; x: string; kind: 'company' | 'investigator'; phase: number; acquiredFrom: string | null };
-export type Mark = { date: string; type: string; headline: string; source: string | null; host: string | null };
+/** A dated mark on a company's row. `nct` joins it to a trial when the headline names one of the company's drugs or trial acronyms. */
+export type Mark = { date: string; type: string; headline: string; source: string | null; host: string | null; nct?: string };
 export type Row = {
   key: string;
   name: string;
@@ -160,10 +162,23 @@ export function mapView(s: Space, scope: Scope, today: string) {
     // A deal another company recorded with this one as a party, unless this company recorded it too.
     const near = (a: string | null, b: string | null) => Boolean(a && b && Math.abs(Date.parse(a) - Date.parse(b)) <= 3 * 86_400_000);
     const theirs = allDeals.filter((x) => x.owner !== c.key && x.parties.some((p) => sameCompany(p, c.name)) && !(f?.deals ?? []).some((own) => near(own.date, x.deal.date))).map((x) => x.deal);
-    const news: Mark[] = [...(f?.milestones ?? []), ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal' }))].flatMap((m) => (isDay(m.date) ? [{ date: m.date, type: m.type, headline: m.headline, source: m.source_url ?? null, host: hostOf(m.source_url) }] : []));
+    // Join marks to trials the same way the trial drawer does: a mark naming one of the company's drugs or trial acronyms opens that trial.
+    const needlesByNct = [...c.trials, ...c.investigator_trials]
+      .map((n) => trialsBy.get(n))
+      .filter(present)
+      .map((t) => ({ nct: t.nct, needles: trialNeedles(t, c.drugs) }));
+    const markNct = (headline: string, drug?: string | null): string | undefined =>
+      needlesByNct.find(({ needles }) => mentionsNeedles(`${headline} ${drug ?? ''}`, needles))?.nct;
+    const news: Mark[] = [...(f?.milestones ?? []), ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal' }))].flatMap((m) => {
+      if (!isDay(m.date)) return [];
+      const nct = markNct(m.headline, 'drug' in m ? (m.drug as string | undefined) : undefined);
+      return [{ date: m.date, type: m.type, headline: m.headline, source: m.source_url ?? null, host: hostOf(m.source_url), ...(nct ? { nct } : {}) }];
+    });
     const next = (f?.next ?? []).flatMap((n) => {
       const date = n.earliest ?? n.date;
-      return isDay(date) && date >= today ? [{ date, window: n.timing_text ?? null, type: 'next', headline: n.what, source: n.source_url ?? null, host: hostOf(n.source_url) }] : [];
+      if (!isDay(date) || date < today) return [];
+      const nct = markNct(n.what);
+      return [{ date, window: n.timing_text ?? null, type: 'next', headline: n.what, source: n.source_url ?? null, host: hostOf(n.source_url), ...(nct ? { nct } : {}) }];
     });
     const drugs = drugLabels(c.drugs ?? []).slice(0, 2);
     rows.push({

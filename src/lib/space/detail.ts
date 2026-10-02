@@ -3,6 +3,7 @@
 
 import type { Space } from './load';
 import type { Clinician } from './types';
+import { drugNameSet, mentionsNeedles, trialNeedles } from './match';
 import { drugLabels, hostOf } from './view';
 
 type S = Space;
@@ -55,15 +56,14 @@ export function trialDetail(s: S, nct: string) {
   const drugs = company ? drugLabels(company.drugs ?? []) : [];
 
   // Which of the company's drugs this trial tests, by any name it goes by.
-  const names = new Set<string>();
-  for (const d of company?.drugs ?? []) for (const n of [d.name, ...(d.codes ?? []), ...(d.name.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]) if (n) names.add(n.split('(')[0].trim().toLowerCase());
+  const names = drugNameSet(company?.drugs);
   const text = [t.title, t.acronym, ...t.interventions.flatMap((i) => [i.name, ...i.other_names])].join(' ').toLowerCase();
   const tested = drugs.filter((l) => [...names].some((n) => n.length > 3 && text.includes(n) && l.toLowerCase().includes(n.split(' ')[0])) || text.includes(l.split(' (')[0].toLowerCase()));
   const lead = tested[0] ?? t.interventions.find((i) => i.type !== 'OTHER')?.name ?? '';
 
   // Web items that name this trial or its drug.
-  const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
-  const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
+  const needles = trialNeedles(t, company?.drugs);
+  const mentions = (h: string) => mentionsNeedles(h, needles);
   const items: { date: string | null; headline: string; drug: string; source_url: string | null }[] = [
     ...(f?.milestones ?? []),
     ...(f?.deals ?? []).map((x) => ({ ...x, drug: '' })),

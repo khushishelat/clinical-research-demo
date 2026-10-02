@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { datasetCsv, datasetView } from '../src/lib/space/dataset';
 import { clinicianDetail, trialDetail } from '../src/lib/space/detail';
 import type { Space } from '../src/lib/space/load';
+import { mentionsNeedles, trialNeedles } from '../src/lib/space/match';
 import { bdDeals, dollars, drugLabels, mapView, shortMechanism } from '../src/lib/space/view';
 
 const trial = (nct: string, over: Record<string, unknown> = {}) => ({
@@ -131,4 +132,25 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   const v = mapView(s, 'companies', '2026-10-01');
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
+});
+
+test('match: trial needles name the acronym and drug, and nothing else', () => {
+  const s = space();
+  const t = s.trials[0];
+  const needles = trialNeedles(t, s.companies[0].drugs);
+  assert.ok(needles.includes('alpha-1'));
+  assert.ok(needles.includes('acmetide'));
+  assert.ok(mentionsNeedles('ALPHA-1 meets primary endpoint', needles));
+  assert.ok(!mentionsNeedles('Acme opens new Boston office', needles));
+});
+
+test('map: news marks carry nct when the headline names a trial or its drug', () => {
+  const s = space();
+  s.facts.acme.milestones!.push({ type: 'other', date: '2026-09-12', drug: 'placebex', headline: 'Acme opens new Boston office', source_url: null });
+  const v = mapView(s, 'companies', '2026-10-01');
+  const acme = v.rows.find((r) => r.key === 'acme')!;
+  const alpha = acme.news.find((m) => m.headline.includes('ALPHA-1'))!;
+  assert.equal(alpha.nct, 'NCT1');
+  const office = acme.news.find((m) => m.headline.includes('Boston office'))!;
+  assert.equal(office.nct, undefined);
 });

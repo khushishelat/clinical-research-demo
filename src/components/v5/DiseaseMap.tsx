@@ -6,7 +6,7 @@
 // changed. Clicking a dot or a clinician opens a drawer.
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { Dot, FeedItem, MapView, Mark, Row } from '@/lib/space/view';
 import { Drawer } from './Drawer';
 import { Favicon } from './Favicon';
@@ -57,12 +57,22 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const [tab, setTab] = useState<'clinicians' | 'changed'>('clinicians');
   const [tip, setTip] = useState<Tip>(null);
   const [tipDismissed, setTipDismissed] = useState(false);
+  // Persistent popover for a mark that joins to no trial: headline, date and
+  // source stay in the app; the external link is secondary, never the click.
+  const [pop, setPop] = useState<{ x: number; y: number; mark: Mark } | null>(null);
+  useEffect(() => {
+    if (!pop) return;
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setPop(null);
+    document.addEventListener('keydown', esc);
+    return () => document.removeEventListener('keydown', esc);
+  }, [pop]);
   const drawer = params.get('trial') ? ({ kind: 'trial', id: params.get('trial')! } as const) : params.get('clinician') ? ({ kind: 'clinician', id: params.get('clinician')! } as const) : null;
   const open = (kind: 'trial' | 'clinician', id: string) => {
     const p = new URLSearchParams(params.toString());
     p.delete('trial');
     p.delete('clinician');
     p.set(kind, id);
+    setPop(null);
     router.push(`?${p}`, { scroll: false });
   };
   const close = () => {
@@ -91,6 +101,17 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
 
   const all = scope === 'all' ? view.rows : view.rows.filter((r) => r.key !== '_unassigned');
   const rows = more ? all : all.slice(0, SHOWN);
+  // A mark naming a trial opens that trial's drawer; anything else (deals,
+  // approvals, expectations with no trial) opens a persistent popover in-app.
+  const popFor = (e: React.MouseEvent, mark: Mark) => {
+    const box = (e.currentTarget as HTMLElement).closest('.relative.overflow-x-auto')!.getBoundingClientRect();
+    setTip(null);
+    setPop({ x: e.clientX - box.left, y: e.clientY - box.top, mark });
+  };
+  const onMark = (e: React.MouseEvent, m: Mark) => {
+    if (m.nct) open('trial', m.nct);
+    else popFor(e, m);
+  };
   const s = view.stats;
   const newCount = view.feed.length;
   const todayAt = x(today);
@@ -165,7 +186,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="text-right">Trials</span>
               </div>
               {rows.map((r, i) => (
-                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
+                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onMark={onMark} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
               ))}
               {all.length > SHOWN ? (
                 <button type="button" onClick={() => setMore((v) => !v)} className="w-full border-t border-line px-4 py-3 text-left font-mono text-[11px] uppercase tracking-[0.04em] text-muted hover:bg-wash hover:text-ink">
@@ -179,6 +200,25 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <p className="mt-0.5">{tip.body}</p>
                 {tip.foot ? <p className="mt-1 font-mono text-[10px] text-[#adadac]">{tip.foot}</p> : null}
               </div>
+            ) : null}
+            {pop ? (
+              <>
+                <button type="button" aria-label="Close" onClick={() => setPop(null)} className="absolute inset-0 z-20 cursor-default" />
+                <div role="dialog" aria-label={pop.mark.headline} className="absolute z-30 w-[300px] rounded-[4px] border border-line bg-card px-3 py-2.5 text-[13px] shadow-lg" style={{ left: `min(max(8px, ${pop.x - 150}px), calc(100% - 310px))`, top: pop.y + 12 }}>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
+                    {fmt(pop.mark.date)} · {labelOf(pop.mark)}
+                  </p>
+                  <p className="mt-1 font-medium">{pop.mark.headline}</p>
+                  {pop.mark.source ? (
+                    <a href={pop.mark.source} target="_blank" rel="noreferrer" className="mt-1.5 inline-flex items-center gap-1 font-mono text-[11px] text-muted hover:text-ink">
+                      {pop.mark.host ?? 'Source'} ↗
+                    </a>
+                  ) : null}
+                  <button type="button" onClick={() => setPop(null)} className="mt-2 block font-mono text-[10px] uppercase tracking-[0.05em] text-muted hover:text-ink">
+                    Close
+                  </button>
+                </div>
+              </>
             ) : null}
           </div>
         </section>
@@ -229,7 +269,7 @@ function Stat({ value, label, sub, accent }: { value: string; label: string; sub
   );
 }
 
-function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; onDot: (d: Dot) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
+function MapRow({ row, x, years, todayAt, onDot, onMark, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; onDot: (d: Dot) => void; onMark: (e: React.MouseEvent, m: Mark) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
   const firstAcquired = row.dots.find((d) => d.acquiredFrom);
   const tipFor = (e: React.MouseEvent, t: NonNullable<Tip>) => {
     const box = (e.currentTarget as HTMLElement).closest('.relative.overflow-x-auto')!.getBoundingClientRect();
@@ -265,26 +305,24 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
           </span>
         ) : null}
         {row.news.map((m, i) => (
-          <a
+          <button
             key={`n${i}`}
-            href={m.source ?? undefined}
-            target="_blank"
-            rel="noreferrer"
+            type="button"
             aria-label={`${fmt(m.date)}: ${m.headline}`}
+            onClick={(e) => onMark(e, m)}
             onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.host ?? undefined })}
-            className="absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150"
+            className="absolute h-2 w-2 -translate-x-1/2 cursor-pointer bg-orange hover:scale-150"
             style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }}
           />
         ))}
         {row.next.map((m, i) => (
-          <a
+          <button
             key={`x${i}`}
-            href={m.source ?? undefined}
-            target="_blank"
-            rel="noreferrer"
+            type="button"
             aria-label={`Expected: ${m.headline}`}
+            onClick={(e) => onMark(e, m)}
             onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Expected · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.host ?? undefined })}
-            className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150"
+            className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 cursor-pointer border border-dashed border-orange bg-card hover:scale-150"
             style={{ left: `${x(m.date)}%`, top: 26 }}
           />
         ))}
