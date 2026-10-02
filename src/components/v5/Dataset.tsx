@@ -3,18 +3,53 @@
 // The dataset view: every researched field per company. Clicking a cell shows
 // why it says what it says: the Task run's citations, reasoning and confidence.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Cell, DatasetRow, DatasetView } from '@/lib/space/dataset';
 import { Favicon } from './Favicon';
 import { RunReplay } from './RunReplay';
 
 type Basis = { field: string; citations: { title: string | null; url: string; excerpts: string[] | null }[]; reasoning: string; confidence: string | null };
 
+// Column filters. `one`: pick a value. `tokens`: pick one item of a list ("United States" in
+// "United States, Japan"). `has`: reported or not. `text`: contains. "—" is an empty cell.
+type Kind = 'text' | 'one' | 'tokens' | 'has';
+const KIND: Record<string, Kind> = { furthest_along: 'one', lead_assets: 'text', how_given: 'one', pivotal: 'one', latest_readout: 'has', regulatory: 'tokens', deals: 'has', approvals: 'tokens' };
+const NONE = '__none';
+const SOME = '__some';
+const EMPTY = '—';
+const tokens = (text: string) => (text === EMPTY ? [] : text.split(', ').map((t) => t.trim()).filter(Boolean));
+
+function options(rows: DatasetRow[], field: string, kind: Kind): { value: string; label: string }[] {
+  const texts = rows.map((r) => r.cells[field]?.text ?? EMPTY);
+  const empty = texts.some((t) => t === EMPTY) ? [{ value: NONE, label: 'None' }] : [];
+  if (kind === 'has') return [{ value: SOME, label: field === 'deals' ? 'Has deals' : 'Reported' }, ...empty];
+  if (kind === 'tokens') {
+    const n = new Map<string, number>();
+    for (const t of texts.flatMap(tokens)) n.set(t, (n.get(t) ?? 0) + 1);
+    return [...[...n].sort((a, b) => b[1] - a[1]).map(([t, c]) => ({ value: t, label: `${t} (${c})` })), ...empty];
+  }
+  // Rows arrive furthest-along first, so first appearance keeps phases in order.
+  return [...[...new Set(texts.filter((t) => t !== EMPTY))].map((t) => ({ value: t, label: t })), ...empty];
+}
+
+function matches(text: string, kind: Kind, want: string): boolean {
+  if (!want) return true;
+  if (want === NONE) return text === EMPTY;
+  if (want === SOME) return text !== EMPTY;
+  if (kind === 'text') return text.toLowerCase().includes(want.toLowerCase());
+  if (kind === 'tokens') return tokens(text).includes(want);
+  return text === want;
+}
+
 export function Dataset({ view }: { view: DatasetView }) {
   const [open, setOpen] = useState<{ row: DatasetRow; cell: Cell; label: string } | null>(null);
-  const [q, setQ] = useState('');
+  const [filters, setFilters] = useState<Record<string, string>>({});
   const [watch, setWatch] = useState(false);
-  const rows = q ? view.rows.filter((r) => `${r.name} ${Object.values(r.cells).map((c) => `${c.text} ${c.sub ?? ''}`).join(' ')}`.toLowerCase().includes(q.toLowerCase())) : view.rows;
+  const active = Object.values(filters).filter(Boolean).length;
+  const setFilter = (field: string, value: string) => setFilters((f) => ({ ...f, [field]: value }));
+  const opts = useMemo(() => Object.fromEntries(view.columns.map((c) => [c.field, options(view.rows, c.field, KIND[c.field] ?? 'text')])), [view]);
+  const rows = view.rows.filter((r) => matches(r.name, 'text', filters._company ?? '') && view.columns.every((c) => matches(r.cells[c.field]?.text ?? EMPTY, KIND[c.field] ?? 'text', filters[c.field] ?? '')));
+  const control = 'h-7 w-full min-w-0 rounded-[3px] border border-line-strong bg-card px-1.5 font-sans text-[12px] normal-case tracking-normal text-ink placeholder:text-faint focus:border-ink focus:outline-none';
   return (
     <main className="px-4 pb-12 sm:px-8">
       <section className="flex flex-wrap items-end justify-between gap-4 pt-8">
@@ -23,7 +58,11 @@ export function Dataset({ view }: { view: DatasetView }) {
           <p className="mt-1 max-w-[720px] text-[15px] text-muted">One row per company, researched by a Parallel Task run with the ClinicalTrials.gov and PubMed connectors. Click any cell to see its sources and how confident the run was.</p>
         </div>
         <div className="flex items-center gap-2">
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter companies or assets" aria-label="Filter" className="h-9 w-56 rounded-[4px] border border-line-strong bg-card px-3 text-[14px] placeholder:text-faint focus:border-ink focus:outline-none" />
+          {active ? (
+            <button type="button" onClick={() => setFilters({})} className="flex h-9 items-center rounded-[4px] border border-line-strong px-3 font-mono text-[11px] uppercase tracking-[0.05em] text-muted hover:border-ink hover:text-ink">
+              Clear {active} filter{active === 1 ? '' : 's'}
+            </button>
+          ) : null}
           <a href={`/api/d/${view.disease.key}/export`} className="flex h-9 items-center rounded-[4px] border border-ink bg-ink px-3 font-mono text-[11px] uppercase tracking-[0.05em] text-page hover:bg-ink/90">
             Download CSV
           </a>
@@ -59,6 +98,31 @@ export function Dataset({ view }: { view: DatasetView }) {
               ))}
               <th className="px-3 py-2.5 text-right font-normal">Trials</th>
             </tr>
+            <tr className="border-b border-line bg-page">
+              <th className="sticky left-0 z-10 bg-page px-4 pb-2.5 font-normal">
+                <input value={filters._company ?? ''} onChange={(e) => setFilter('_company', e.target.value)} placeholder="Company" aria-label="Filter by company" className={control} />
+              </th>
+              {view.columns.map((c) => {
+                const kind = KIND[c.field] ?? 'text';
+                return (
+                  <th key={c.field} className="px-3 pb-2.5 font-normal">
+                    {kind === 'text' ? (
+                      <input value={filters[c.field] ?? ''} onChange={(e) => setFilter(c.field, e.target.value)} placeholder="Contains" aria-label={`Filter by ${c.label}`} className={control} />
+                    ) : (
+                      <select value={filters[c.field] ?? ''} onChange={(e) => setFilter(c.field, e.target.value)} aria-label={`Filter by ${c.label}`} className={`${control} ${filters[c.field] ? 'border-ink' : 'text-muted'}`}>
+                        <option value="">All</option>
+                        {opts[c.field].map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </th>
+                );
+              })}
+              <th />
+            </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
@@ -87,6 +151,7 @@ export function Dataset({ view }: { view: DatasetView }) {
           </tbody>
         </table>
       </div>
+      {!rows.length ? <p className="mt-3 text-[13px] text-muted">No company matches these filters.</p> : null}
       <p className="mt-3 text-[12px] text-muted">
         {rows.length} of {view.rows.length} companies. Empty cells mean the run found no dated public source, not that nothing exists.
       </p>
