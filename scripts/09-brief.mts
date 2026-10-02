@@ -3,7 +3,7 @@
 // input; anything else is dropped.
 //   npx tsx scripts/09-brief.mts --disease mash [--days 14]
 
-import { disease, log, parallel, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
+import { disease, log, parallel, recorder, runLog, runOnce, saveReplay, spacePath, store, today, where } from './lib/pipeline';
 import { BRIEF } from './lib/specs';
 
 const d = disease();
@@ -27,7 +27,10 @@ if (!week.length) {
   process.exit(0);
 }
 const rl = await runLog(d, 'brief');
-const rec = await runOnce(client, rl, `${BRIEF.key}:${from}:${to}`, { processor: BRIEF.processor, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, disclosures, registryChanges, upcoming), metadata: { job: 'brief', disease: d.key } });
+// The run is recorded live, so the brief can show how it was made (replay/brief-<date>.json).
+const replay = recorder();
+const rec = await runOnce(client, rl, `${BRIEF.key}:${from}:${to}`, { processor: BRIEF.processor, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, disclosures, registryChanges, upcoming), metadata: { job: 'brief', disease: d.key } }, replay);
+if (replay.events.length) await saveReplay(d, `brief-${to}`, replay);
 const allowed = new Set([...week, ...upcoming].map((x) => x.source_url).filter(Boolean));
 const brief: any = rec.content;
 let dropped = 0;
