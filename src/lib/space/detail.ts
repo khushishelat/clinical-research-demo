@@ -64,6 +64,30 @@ export function trialDetail(s: S, nct: string) {
   // Web items that name this trial or its drug.
   const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
   const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
+
+  // Other trials of the same company testing the same lead drug: the rabbit hole.
+  // (Shares its matching idea with the mention-matcher extracted in PR #10;
+  // unify on trialNeedles once that merges.)
+  const leadNeedles = [lead.split(' (')[0], ...(lead.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]
+    .map((x) => x.trim().toLowerCase())
+    .filter((x) => x.length > 3);
+  const siblings = company
+    ? [...company.trials, ...company.investigator_trials]
+        .filter((n) => n !== nct)
+        .map((n) => s.trials.find((x) => x.nct === n))
+        .filter(present)
+        .filter((o) => {
+          const text = [o.title, o.acronym, ...o.interventions.flatMap((i) => [i.name, ...i.other_names])]
+            .join(' ')
+            .toLowerCase();
+          return leadNeedles.some((n) => text.includes(n));
+        })
+        .map((o) => ({
+          nct: o.nct,
+          label: o.acronym || o.nct,
+          phase: o.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase n/a',
+        }))
+    : [];
   const items: { date: string | null; headline: string; drug: string; source_url: string | null }[] = [
     ...(f?.milestones ?? []),
     ...(f?.deals ?? []).map((x) => ({ ...x, drug: '' })),
@@ -135,6 +159,7 @@ export function trialDetail(s: S, nct: string) {
         : null;
     })(),
     web,
+    siblings,
     named,
     hiddenSites,
     hiddenLabel,
