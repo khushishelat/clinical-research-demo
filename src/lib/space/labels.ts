@@ -12,5 +12,10 @@ export const regulatoryLabel = (k: string): string => REGULATORY[k] ?? k;
 /** "FDA Breakthrough Therapy designation", "EMA filing accepted", "EMA regulatory update". */
 export const regulatoryEvent = (agency: string, k: string): string => (k === 'other' ? `${agency} regulatory update` : `${agency} ${regulatoryLabel(k)}${['breakthrough', 'fast_track', 'orphan', 'prime'].includes(k) ? ' designation' : ''}`);
 
+const DEAL_ABOUT: Record<string, string> = { asset: 'Asset deal', company_for_asset: 'Acquisition for the asset', portfolio: 'Company or portfolio deal', commercial: 'Commercial agreement', research: 'Research collaboration', other: 'Other agreement' };
+export const dealAboutLabel = (k: string | null | undefined): string => DEAL_ABOUT[k ?? ''] ?? '';
+/** Deals whose value is about a drug for this indication (deals@2). Older records, with no `about`, all count. */
+export const isAssetDeal = (about: string | null | undefined): boolean => !about || about === 'asset' || about === 'company_for_asset';
+
 const COMPARATOR: Record<string, string> = { placebo: 'Placebo', active: 'Active comparator', standard_of_care: 'Standard of care', none: 'No comparator', unknown: 'Not stated' };
 export const comparatorLabel = (k: string): string => COMPARATOR[k] ?? k;

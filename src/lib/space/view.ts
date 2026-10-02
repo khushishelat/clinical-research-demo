@@ -3,7 +3,7 @@
 // files, never hard-coded.
 
 import type { Space } from './load';
-import { regulatoryEvent } from './labels';
+import { dealAboutLabel, isAssetDeal, regulatoryEvent } from './labels';
 import type { Company, Deal, Facts } from './types';
 
 export type Scope = 'companies' | 'all';
@@ -142,12 +142,16 @@ export const dealValue = (d: Deal): number => {
   return dollars(d.total) || dollars(d.upfront);
 };
 
-/** Licensing, M&A and partnership deals, once each: both parties often record the same deal. */
+/**
+ * Licensing, M&A and partnership deals for a drug in this indication, once each:
+ * both parties often record the same deal. Portfolio, commercial and research
+ * deals (deals@2 `about`) stay on the rows but not in this count.
+ */
 export function bdDeals(s: Space): Deal[] {
   const out: Deal[] = [];
   for (const f of Object.values(s.facts))
     for (const d of f.deals ?? []) {
-      if (!BD.has(d.type)) continue;
+      if (!BD.has(d.type) || !isAssetDeal(d.about)) continue;
       const dup = out.find((x) => x.date && d.date && Math.abs(Date.parse(x.date) - Date.parse(d.date)) <= 3 * 86_400_000 && x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length >= 2);
       if (dup) {
         // Keep the record that states a total.
@@ -187,7 +191,8 @@ export function mapView(s: Space, scope: Scope, today: string) {
         return names.some((n) => text.includes(n));
       }).slice(0, 6).map((d) => ({ nct: d.nct, label: d.phase ? `${d.label} · Phase ${d.phase}` : d.label }));
     };
-    const terms = (x: { upfront?: string | null; total?: string | null }) => [x.upfront, x.total].filter(Boolean).join(' · ') || null;
+    // A portfolio or commercial deal says so before its terms, so a whole-company price is not read as the asset's.
+    const terms = (x: { upfront?: string | null; total?: string | null; about?: string }) => [isAssetDeal(x.about) ? '' : dealAboutLabel(x.about), x.upfront, x.total].filter(Boolean).join(' · ') || null;
     const marks: { date: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; drug?: string | null; detail?: string | null }[] = [
       ...(f?.milestones ?? []),
       ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal', drug: x.drugs?.[0] ?? null, detail: terms(x) })),

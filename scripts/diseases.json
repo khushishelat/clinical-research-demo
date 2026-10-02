@@ -22,6 +22,7 @@
       "name": "Obesity",
       "subtitle": "Chronic weight management",
       "area": "Cardiometabolic",
+      "include_completed_since": "2024-01-01",
       "query_cond": "obesity",
       "pubmed_terms": "obesity OR \"weight management\" OR \"weight loss\"",
       "default_scope": {
@@ -69,6 +70,7 @@
       "name": "Alzheimer's disease",
       "subtitle": "Alzheimer's disease and early cognitive decline",
       "area": "Neuroscience",
+      "include_completed_since": "2024-01-01",
       "query_cond": "Alzheimer",
       "pubmed_terms": "Alzheimer OR \"amyloid\" OR dementia",
       "specialties": [
@@ -82,6 +84,7 @@
       "name": "Alopecia areata",
       "subtitle": "Autoimmune hair loss",
       "area": "Immunology",
+      "include_completed_since": "2024-01-01",
       "query_cond": "\"alopecia areata\"",
       "pubmed_terms": "\"alopecia areata\"",
       "specialties": [

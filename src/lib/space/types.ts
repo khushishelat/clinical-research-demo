@@ -69,7 +69,8 @@ export type CompanyReview = { company: string; include: boolean | null };
 
 /** spaces/<disease>/facts.json: one Task run (FACTS, pro) per company, plus READOUT runs (core) per trial. */
 export type Milestone = { date: string; type: string; drug: string; nct?: string | null; headline: string; source_url: string | null };
-export type Deal = { date: string | null; parties: string[]; drugs?: string[]; type: string; upfront: string | null; total: string | null; currency?: string | null; upfront_m?: number | null; total_m?: number | null; headline: string; source_url: string | null };
+/** `about` (deals@2): what the deal is for; only asset and company_for_asset deals count toward the headline value. */
+export type Deal = { date: string | null; parties: string[]; drugs?: string[]; type: string; about?: string; upfront: string | null; total: string | null; currency?: string | null; upfront_m?: number | null; total_m?: number | null; headline: string; source_url: string | null };
 export type Financing = { date: string | null; kind: string; amount: string | null; currency: string | null; amount_m: number | null; headline: string; source_url: string | null };
 export type Approval = { drug: string; region: string; date: string | null; indication: string; source_url: string | null };
 export type Regulatory = { drug: string; kind: string; agency: string; status: 'done' | 'expected'; date: string | null; window: string | null; source_url: string | null };

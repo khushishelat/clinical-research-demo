@@ -183,8 +183,12 @@ export const FACTS = {
 
 // Step 4 (v2): deal terms, financings and regulatory events, one run per company.
 // No connectors: these come from announcements, filings and regulators.
+// deals@2: the run says what each deal is for (`about`), so the headline value
+// counts asset deals only, and financings are limited to money raised for drug
+// development. Both are decided in this run from the announcement; code only
+// reads the fields.
 export const DEALS = {
-  key: 'deals@1',
+  key: 'deals@2',
   processor: 'pro',
   schema: O({
     deals: A(
@@ -193,6 +197,10 @@ export const DEALS = {
         parties: A(S()),
         drugs: A(DRUG),
         type: E(['license', 'acquisition', 'collaboration', 'option', 'divestiture', 'other']),
+        about: E(
+          ['asset', 'company_for_asset', 'portfolio', 'commercial', 'research', 'other'],
+          'What the deal is for, from the announcement. asset: rights to named drugs for this indication. company_for_asset: buying a company chiefly for a drug for this indication. portfolio: a company or product portfolio in which this indication is a small part. commercial: distribution, co-promotion, supply, formulary, pricing or awareness agreements. research: discovery or platform work with no named drug for this indication.'
+        ),
         upfront: N('As announced, e.g. "$50M upfront".'),
         total: N('The headline value as announced, including milestones, e.g. "up to $4.4B".'),
         currency: N('ISO code of the amounts, e.g. USD.'),
@@ -201,11 +209,11 @@ export const DEALS = {
         headline: S('12 words or fewer.'),
         source_url: SRC,
       }),
-      'Every licensing, acquisition, option and partnership deal touching this indication since January 2024, in or out. Read each announcement for its terms.'
+      'Every licensing, acquisition, option and partnership deal touching this indication since January 2024, in or out. Read each announcement for its terms and for what the deal is for.'
     ),
     financings: A(
-      O({ date: DATE, kind: E(['equity', 'debt', 'royalty', 'grant', 'other']), amount: N('As stated.'), currency: N('ISO code.'), amount_m: NUM('In millions of that currency.'), headline: S('12 words or fewer.'), source_url: SRC }),
-      'Financings since January 2025.'
+      O({ date: DATE, kind: E(['equity', 'venture', 'royalty', 'debt', 'grant', 'other']), amount: N('As stated.'), currency: N('ISO code.'), amount_m: NUM('In millions of that currency.'), headline: S('12 words or fewer.'), source_url: SRC }),
+      'Money this company raised to fund drug development since January 2025: public or private equity, venture rounds, royalty or synthetic-royalty funding, development or venture debt, convertible notes and grants. Leave out bonds, notes, commercial paper and credit facilities that a diversified company issues for general corporate purposes.'
     ),
     regulatory: A(
       O({
@@ -222,7 +230,7 @@ export const DEALS = {
   }),
   input: (d: Disease, today: string, company: Parameters<typeof registryInput>[2], registry: Parameters<typeof registryInput>[3]) => ({
     ...registryInput(d, today, company, registry),
-    rules: 'Only dated, sourced facts from the company, its partners, filings and regulators. For each deal give the upfront and the headline value exactly as announced, with currency and amounts in millions; if terms were not disclosed, say so by leaving them null. Leave a field null rather than guess.',
+    rules: 'Only dated, sourced facts from the company, its partners, filings and regulators. For each deal give the upfront and the headline value exactly as announced, with currency and amounts in millions; if terms were not disclosed, say so by leaving them null. Set about from what the announcement says the deal is for: when a whole company or a broad portfolio changes hands, it is portfolio unless the announcement names a drug for this indication as the reason. Leave a field null rather than guess.',
   }),
 };
 

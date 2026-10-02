@@ -116,7 +116,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? ` · +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
           <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
-          <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label={s.dealDollars ? 'Licensing and M&A since May 2025' : 'Licensing and M&A deals since May 2025'} sub={s.dealDollars ? `${s.deals} deals · disclosed headline value, USD` : undefined} accent />
+          <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label="Licensing and M&A since May 2025" sub={s.dealDollars ? `${s.deals} asset deals · disclosed headline value, USD` : `Asset deal${s.deals === 1 ? '' : 's'} · no value disclosed`} accent />
         </dl>
       </section>
 

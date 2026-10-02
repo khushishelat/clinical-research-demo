@@ -15,15 +15,16 @@ table view shows every researched field with its sources.
 
 **The MASH landscape** (built Oct 2, 2026):
 
-- 167 active trials, 95 of them on company rows
-- 63 companies: 46 registry sponsors, plus 17 found by web research and
+- 168 active trials, 98 of them on company rows
+- 68 companies: 48 registry sponsors, plus 22 found by web research and
   approved by a person
 - 749 investigators (PIs and study chairs) named in the registry; 229 US
   investigators matched to the NPI Registry
-- About $12B in disclosed licensing and M&A value since May 2025, across 14
-  deals (headline USD values only; financings and other currencies are not
-  counted)
-- 4 trials disclosed before ClinicalTrials.gov listed them, such as Altimmune's
+- About $12B in disclosed licensing and M&A value since May 2025, across 9
+  asset deals such as Novo Nordisk–Akero and Roche–89bio (headline USD values
+  only; whole-company, commercial and research deals are shown on the rows but
+  not counted)
+- 6 trials disclosed before ClinicalTrials.gov listed them, such as Altimmune's
   PERFORMA, 28 days earlier
 
 It's for BD, competitive-intelligence and investment analysts who cover an
@@ -54,25 +55,27 @@ One command builds an indication end to end:
 npm run pipeline -- --disease mash
 ```
 
-| Step | Source | Parallel processor | Data Connectors | MASH runs | MASH cost |
-| --- | --- | --- | --- | ---: | ---: |
-| 02 Registry | ClinicalTrials.gov API | | | | free |
-| 03 Who owns each sponsor | Task API, one run per sponsor | `pro` | ChEMBL, ClinicalTrials.gov | 48 | $4.80 |
-| 03 The web's company list | Task API, chained by `previous_interaction_id` until a page adds fewer than 2 new companies (at most 4 pages) | `ultra` | ClinicalTrials.gov, ChEMBL | 4 | $1.20 |
-| 03 Same company, different names | Task API | `core` | | 1 | $0.03 |
-| 04 Company facts | Task Group, one run per company, per-field citations | `pro` | ClinicalTrials.gov, PubMed | 63 | $6.30 |
-| 04 Medicare coverage | Task API | `core` | CMS Coverage | 1 | $0.03 |
-| 05 Investigators | NPI Registry and PubMed APIs | | | | free |
-| 05 Names with several NPI matches | Task Group | `base` | NPI Registry | 26 | $0.26 |
-| 05 Authorship of common names | Task Group | `core` | PubMed | 13 | $0.33 |
-| 05 Roles named in disclosures | Task Group, one run per company | `pro` | PubMed, NPI Registry | 63 | $6.30 |
-| 05 Profiles of the top 25 | Task Group | `core` | NPI Registry, PubMed, ClinicalTrials.gov | 30 | $0.75 |
-| 06 Events | Code, from steps 2–4 | | | | free |
-| 08 First disclosed | Task Group, trials registered in the last 90 days | `base` | | 16 | $0.16 |
-| 09 Weekly brief | Task API, from the period's disclosures and registry changes only | `core` | | 1 | $0.03 |
-| **Total** | | | | **266** | **$20.17** |
+| Step | Source | Parallel processor | Data Connectors | MASH runs | MASH cost | Migraine runs | Migraine cost |
+| --- | --- | --- | --- | ---: | ---: | ---: | ---: |
+| 02 Registry | ClinicalTrials.gov API: active trials, plus trials completed since a set date where the indication asks for it | | | | free | | free |
+| 03 Who owns each sponsor | Task API, one run per sponsor | `pro` | ChEMBL, ClinicalTrials.gov | 48 | $4.80 | 24 | $2.40 |
+| 03 The web's company list | Task API, chained by `previous_interaction_id`: at least 4 pages, then until a page adds fewer than 3 new companies (at most 8) | `ultra` | ClinicalTrials.gov, ChEMBL | 4 | $1.20 | 5 | $1.50 |
+| 03 Same company, different names | Task API | `core` | | 1 | $0.03 | 1 | $0.03 |
+| 04 Clinical facts | Task Group, one run per company, per-field citations | `pro` | ClinicalTrials.gov, PubMed | 68 | $6.80 | 37 | $3.70 |
+| 04 Deals, financings, regulatory | Task Group, one run per company, per-field citations | `pro` | | 68 | $6.80 | 37 | $3.70 |
+| 04 Readouts | Task Group, one run per company trial in Phase 2+ that is past primary completion or has reported | `core` | ClinicalTrials.gov, PubMed | 22 | $0.55 | 50 | $1.25 |
+| 04 Medicare coverage | Task API | `core` | CMS Coverage | 1 | $0.03 | 1 | $0.03 |
+| 05 Investigators | NPI Registry and PubMed APIs | | | | free | | free |
+| 05 Names with several NPI matches | Task Group | `base` | NPI Registry | 26 | $0.26 | 11 | $0.11 |
+| 05 Authorship of common names | Task Group | `core` | PubMed | 13 | $0.33 | 3 | $0.08 |
+| 05 Roles named in disclosures | Task Group, one run per company | `pro` | PubMed, NPI Registry | 68 | $6.80 | 37 | $3.70 |
+| 05 Profiles of the top 25 | Task Group | `core` | NPI Registry, PubMed, ClinicalTrials.gov | 25 | $0.63 | 25 | $0.63 |
+| 06 Events | Code, from steps 2–4 | | | | free | | free |
+| 08 First disclosed | Task Group, trials registered in the last 90 days | `core` | | 17 | $0.43 | 9 | $0.23 |
+| 09 Weekly brief | Task API, from the period's disclosures and registry changes only | `core` | | 1 | $0.03 | 1 | $0.03 |
+| **Total** | | | | **362** | **$28.69** | **241** | **$17.39** |
 
-Costs are [list prices](https://docs.parallel.ai/getting-started/pricing) per completed run. The connectors used here are free.
+Costs are [list prices](https://docs.parallel.ai/getting-started/pricing) per completed run for one build on the current specs. The connectors used here are free. Cost scales with the number of companies (three `pro` runs each) and late-stage trials; migraine also includes trials completed since 2024, which is where most of its readouts come from.
 
 The pipeline stops once, after step 3: companies found only on the web wait in
 `review/companies.json` until a person sets `include` to true or false.
@@ -80,7 +83,7 @@ The pipeline stops once, after step 3: companies found only on the web wait in
 ## The task specs
 
 Every Parallel run's processor, connectors and output schema live in
-`scripts/lib/specs.ts`. Four rules keep the output joinable and auditable:
+`scripts/lib/specs.ts`. Five rules keep the output joinable and auditable:
 
 - **The model returns IDs we gave it.** Each run gets the indication's
   registry trials and the company's known drugs. Anything about a trial comes
@@ -88,10 +91,17 @@ Every Parallel run's processor, connectors and output schema live in
   given name. Code drops any ID that isn't one of the company's trials, then
   joins exactly; nothing is matched from headline text.
 - **Enums wherever code groups.** Phases, deal types, regulatory events, routes
-  and comparators are fixed values, with an optional note for nuance.
+  and comparators are fixed values, with an optional note for nuance. The run
+  also says what each deal is for (an asset, a company bought for its asset, a
+  whole portfolio, a commercial or research agreement), and the headline value
+  counts only the first two.
+- **Scope is decided in the run, not after it.** When results are too broad
+  (corporate bonds listed as financings, a whole-company sale counted as an
+  asset deal), the fix is a sharper field description or a new enum in the
+  spec, never a second model pass over the output.
 - **Amounts as stated and as numbers.** "up to $4.4B" is kept as written, with a
   currency and a value in millions; totals sum only USD.
-- **Versioned specs.** Each spec has a key (`facts@1`) that prefixes its run-log
+- **Versioned specs.** Each spec has a key (`deals@2`) that prefixes its run-log
   entries. Changing a spec means a new version, so a rebuild pays for the new
   spec on purpose, and every stored record says which spec produced it.
 
@@ -104,7 +114,8 @@ noisy web, and a join between them.
    in `src/lib/space/types.ts`, for both sides. The app makes no Parallel calls.
 2. **Lists without a list API.** The company list is built by chaining Task
    runs with `previous_interaction_id`, each page asking for companies not yet
-   named, until a page adds fewer than two new ones or four pages have run.
+   named: at least four pages, then until a page adds fewer than three new
+   ones. A company found once stays on the list.
 3. **Connectors where a judgment needs a database.** Direct API calls do the
    bulk lookups for free. Only ambiguous cases go to a Task run: a name with
    several NPI records, or a common name in PubMed.

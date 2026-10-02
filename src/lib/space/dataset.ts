@@ -4,6 +4,7 @@
 
 import { comparatorLabel, phaseLabel, regulatoryLabel, routeLabel } from './labels';
 import type { Space } from './load';
+import { isAssetDeal } from './labels';
 import { dealValue, drugLabels, hostOf } from './view';
 
 type S = NonNullable<Space>;
@@ -59,7 +60,7 @@ export function datasetView(s: S) {
     const done = [...new Set(reg.filter((r) => r.status === 'done').map((r) => regulatoryLabel(r.kind)))];
     const expected = reg.find((r) => r.status === 'expected');
     cells.regulatory = { field: 'regulatory', text: done.join(', ') || (expected ? 'None yet' : '—'), sub: expected ? `Next: ${regulatoryLabel(expected.kind)}${expected.window || expected.date ? `, ${expected.window ?? expected.date}` : ''}` : undefined, source: expected?.source_url ?? reg[0]?.source_url ?? null };
-    const deals = (f.deals ?? []).slice().sort((a, b) => dealValue(b) - dealValue(a) || (b.date ?? '').localeCompare(a.date ?? ''));
+    const deals = (f.deals ?? []).slice().sort((a, b) => Number(isAssetDeal(b.about)) - Number(isAssetDeal(a.about)) || dealValue(b) - dealValue(a) || (b.date ?? '').localeCompare(a.date ?? ''));
     cells.deals = { field: 'deals', text: deals.length ? `${deals.length} deal${deals.length === 1 ? '' : 's'}` : '—', sub: deals[0] ? short(`${deals[0].headline}${deals[0].total || deals[0].upfront ? ` (${deals[0].total ?? `${deals[0].upfront} upfront`})` : ''}`, 90) : undefined, source: deals[0]?.source_url ?? null };
     const appr = f.approvals ?? [];
     cells.approvals = { field: 'approvals', text: appr.length ? [...new Set(appr.map((a) => a.region))].join(', ') : '—', sub: appr[0] ? `First ${appr.map((a) => a.date).filter(Boolean).sort()[0] ?? ''}` : undefined };

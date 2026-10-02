@@ -134,6 +134,20 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
 
+test('deals@2: only asset deals count toward the headline; a portfolio deal stays on the row, labelled', () => {
+  const s = space();
+  s.facts.acme.deals = [
+    { type: 'license', about: 'asset', date: '2025-06-01', headline: 'Acme licenses acmetide', total: 'up to $1.5 billion', upfront: null, currency: 'USD', total_m: 1500, parties: ['Acme Bio', 'BigCo Pharma'], source_url: null },
+    { type: 'acquisition', about: 'portfolio', date: '2025-08-01', headline: 'MegaCo buys Acme’s parent', total: '$12 billion', upfront: null, currency: 'USD', total_m: 12000, parties: ['MegaCo', 'Acme Bio'], source_url: null },
+    { type: 'collaboration', about: 'commercial', date: '2025-09-01', headline: 'Acme signs co-promotion', total: null, upfront: null, parties: ['Acme Bio', 'SellCo'], source_url: null },
+  ];
+  assert.equal(bdDeals(s).length, 1);
+  const v = mapView(s, 'companies', '2026-10-01');
+  assert.equal(v.stats.dealDollars, 1.5e9);
+  const portfolio = v.rows.find((r) => r.key === 'acme')!.news.find((m) => m.headline.startsWith('MegaCo'))!;
+  assert.match(portfolio.detail ?? '', /^Company or portfolio deal · \$12 billion/);
+});
+
 test('trial drawer: first-seen surfaces only when the web announced the trial earlier', () => {
   const s = space();
   const t = trialDetail(s, 'NCT1')!;
