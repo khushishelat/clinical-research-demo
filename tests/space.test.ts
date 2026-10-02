@@ -132,3 +132,16 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
+
+test('trial drawer: why-line names drug, mechanism, phase and the drug\'s next step', () => {
+  const s = space();
+  s.facts.acme.next!.push({ what: 'acmetide Phase 3 readout', date: null, earliest: '2027-06-01', latest: null, timing_text: 'H1 2027', stated_by: null, source_url: 'https://ir.acme.com/next2' });
+  const t = trialDetail(s, 'NCT1')!;
+  assert.equal(t.whyLine.drug, 'Acmezza (acmetide)');
+  assert.equal(t.whyLine.mechanism, 'THR-β agonist');
+  assert.equal(t.whyLine.phase, 'Phase 3');
+  assert.equal(t.whyLine.next?.what, 'acmetide Phase 3 readout');
+  assert.equal(t.whyLine.next?.window, 'H1 2027');
+  // Without a drug-mentioning next step, the clause is omitted rather than guessed.
+  assert.equal(trialDetail(space(), 'NCT1')!.whyLine.next, null);
+});

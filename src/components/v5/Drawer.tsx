@@ -132,6 +132,27 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             {t.nct} ↗
           </a>
         </p>
+        {t.whyLine.drug ? (
+          <p className="mt-3 border-l-2 border-orange pl-3 text-[14px] leading-snug">
+            <span className="font-medium">{t.whyLine.drug}</span>
+            {t.whyLine.mechanism ? <span className="text-muted"> · {t.whyLine.mechanism}</span> : null}
+            <span className="text-muted"> · {t.whyLine.phase}</span>
+            {t.whyLine.next ? (
+              <span className="text-muted">
+                {' '}
+                → Next:{' '}
+                {t.whyLine.next.source ? (
+                  <a href={t.whyLine.next.source} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                    {t.whyLine.next.what}
+                  </a>
+                ) : (
+                  t.whyLine.next.what
+                )}
+                {t.whyLine.next.window ? ` (${t.whyLine.next.window})` : null}
+              </span>
+            ) : null}
+          </p>
+        ) : null}
         <Facts
           items={[
             { value: t.enrollment ? t.enrollment.toLocaleString('en-US') : '—', label: 'Patients' },

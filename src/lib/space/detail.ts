@@ -3,7 +3,7 @@
 
 import type { Space } from './load';
 import type { Clinician } from './types';
-import { drugLabels, hostOf } from './view';
+import { drugLabels, hostOf, shortMechanism } from './view';
 
 type S = Space;
 const present = <T>(x: T | undefined | null): x is T => x != null;
@@ -64,6 +64,21 @@ export function trialDetail(s: S, nct: string) {
   // Web items that name this trial or its drug.
   const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
   const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
+
+  // One-line summary: what this trial is testing and what's next for it. The
+  // next-step clause only appears when a step actually mentions the drug —
+  // never an unrelated company's milestone.
+  const phaseLabel = t.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase not set';
+  const mechanism = shortMechanism(company?.drugs.find((d) => names.has(d.name.split('(')[0].trim().toLowerCase()))?.mechanism);
+  const nextForDrug = (f?.next ?? []).find((n) => mentions(n.what));
+  const whyLine = {
+    drug: lead || null,
+    mechanism,
+    phase: phaseLabel,
+    next: nextForDrug
+      ? { what: nextForDrug.what, window: nextForDrug.timing_text ?? null, source: nextForDrug.source_url ?? null }
+      : null,
+  };
   const items: { date: string | null; headline: string; drug: string; source_url: string | null }[] = [
     ...(f?.milestones ?? []),
     ...(f?.deals ?? []).map((x) => ({ ...x, drug: '' })),
@@ -117,7 +132,7 @@ export function trialDetail(s: S, nct: string) {
     acronym: t.acronym,
     title: t.title,
     status: t.status.replace(/_/g, ' '),
-    phase: t.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase not set',
+    phase: phaseLabel,
     company: company ? { key: company.key, name: company.name } : null,
     sponsor: t.sponsor,
     runBy: t.run_by,
@@ -128,6 +143,7 @@ export function trialDetail(s: S, nct: string) {
     firstPosted: t.first_posted,
     primaryCompletion: t.primary_completion,
     web,
+    whyLine,
     named,
     hiddenSites,
     hiddenLabel,
