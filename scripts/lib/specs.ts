@@ -393,11 +393,9 @@ export const FIRST_SEEN = {
   }),
 };
 
-// Step 9: the brief, written only from the period's sourced events.
-// v1: the title names the period's lead development (v0: "MASH Development:
-// Weekly Brief"); registry changes come as their own list.
-// Step 9 (v2): the weekly brief is a deep-research run (text output); v3 runs it
-// on ultra2x, the processor for difficult deep research.
+// Step 9: the weekly brief. v1 summarized the period's sourced events (core);
+// v2 made it a deep-research run with text output; v3 runs it on ultra2x, the
+// processor for difficult deep research.
 // It starts from the week's known events (registry changes and the pipeline's
 // disclosures), keeps the material ones, and searches for what we missed. In
 // the pilot, open research found the week's treatment guidance, and every
