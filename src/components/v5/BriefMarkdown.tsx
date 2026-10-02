@@ -12,7 +12,9 @@ import { Favicon } from './Favicon';
 export function BriefMarkdown({ markdown, references }: { markdown: string; references: NonNullable<Brief['references']> }) {
   const url = new Map(references.map((r) => [r.n, r.url]));
   // "[12]" becomes a link to reference 12; links already written as [text](url) are left alone.
-  const linked = markdown.replace(/\[(\d{1,3})\](?!\()/g, (m, n) => (url.has(Number(n)) ? `[[${n}]](${url.get(Number(n))})` : m));
+  const linked = markdown.replace(/\[(\d{1,3})\](?!\()/g, (m, n) => (url.has(Number(n)) ? `[[${n}]](${url.get(Number(n))})` : m))
+    // Each development ends with its "Why it matters" line; set it off so it scans.
+    .replace(/(^|[^*])Why it matters:/g, '$1**Why it matters:**');
   return (
     <div className="mt-6 text-[15px] leading-relaxed">
       <Markdown
