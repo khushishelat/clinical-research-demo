@@ -72,8 +72,8 @@ npm run pipeline -- --disease mash
 | 05 Profiles of the top 25 | Task Group | `core` | NPI Registry, PubMed, ClinicalTrials.gov | 25 | $0.63 | 25 | $0.63 |
 | 06 Events | Code, from steps 2–4 | | | | free | | free |
 | 08 First disclosed | Task Group, trials registered in the last 90 days | `core` | | 17 | $0.43 | 9 | $0.23 |
-| 09 Weekly brief | Task API deep research, text output: starts from the week's registry changes and disclosures, then researches what they miss; recorded for replay | `ultra` | ClinicalTrials.gov, PubMed | 1 | $0.30 | 1 | $0.30 |
-| **Total** | | | | **362** | **$28.96** | **241** | **$17.66** |
+| 09 Weekly brief | Task API deep research, text output: starts from the week's registry changes and disclosures, then researches what they miss; recorded for replay | `ultra2x` | ClinicalTrials.gov, PubMed | 1 | $0.60 | 1 | $0.60 |
+| **Total** | | | | **362** | **$29.26** | **241** | **$17.96** |
 
 Costs are [list prices](https://docs.parallel.ai/getting-started/pricing) per completed run for one build on the current specs. The connectors used here are free. Cost scales with the number of companies (three `pro` runs each) and late-stage trials; migraine also includes trials completed since 2024, which is where most of its readouts come from.
 

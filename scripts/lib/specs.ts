@@ -396,14 +396,15 @@ export const FIRST_SEEN = {
 // Step 9: the brief, written only from the period's sourced events.
 // v1: the title names the period's lead development (v0: "MASH Development:
 // Weekly Brief"); registry changes come as their own list.
-// Step 9 (v2): the weekly brief is a deep-research run (ultra, text output).
+// Step 9 (v2): the weekly brief is a deep-research run (text output); v3 runs it
+// on ultra2x, the processor for difficult deep research.
 // It starts from the week's known events (registry changes and the pipeline's
 // disclosures), keeps the material ones, and searches for what we missed. In
 // the pilot, open research found the week's treatment guidance, and every
 // unseeded variant missed three financings the pipeline already had.
 export const BRIEF = {
-  key: 'brief@2',
-  processor: 'ultra',
+  key: 'brief@3',
+  processor: 'ultra2x',
   connectors: ['clinical_trials', 'pubmed'],
   schema: TEXT('A weekly brief in markdown: a first line "# " headline naming the most important development (10 words or fewer, never "weekly brief"), an executive summary of 3 to 6 bullets, then one short section per development, most important first. Each bullet and section ends with a plain "Why it matters" sentence. Inline numbered citations [n] and a final "## References" list.'),
   input: (d: Disease, period: { from: string; to: string }, known: { disclosures: unknown[]; registry_changes: unknown[]; upcoming_30_days: unknown[] }, companies: { name: string; drugs: string[] }[], trials: { nct: string; acronym: string | null; sponsor: string; phase: string; status: string }[]) => ({

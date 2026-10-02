@@ -1,4 +1,4 @@
-// Step 9: the weekly brief, a deep-research Task run (ultra, text output, the
+// Step 9: the weekly brief, a deep-research Task run (ultra2x, text output, the
 // ClinicalTrials.gov and PubMed connectors). It starts from the week's known
 // events (registry changes, the pipeline's disclosures, catalysts due in the
 // next 30 days), keeps the material ones, and researches what they miss. The
