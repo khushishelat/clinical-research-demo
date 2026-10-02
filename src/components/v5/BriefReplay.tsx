@@ -58,7 +58,8 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
   }, [playing, r, speed]);
   const totals = useMemo(() => {
     const all = r?.events ?? [];
-    return { searches: all.filter((e) => e.k === 'search').length, pages: all.filter((e) => e.k === 'extract').length, tools: all.filter((e) => e.k === 'tool').length };
+    const last = [...all].reverse().find((e) => e.k === 'stats');
+    return { searches: all.filter((e) => e.k === 'search').length, considered: last?.considered ?? 0, pages: all.filter((e) => e.k === 'extract').length, tools: all.filter((e) => e.k === 'tool').length };
   }, [r]);
   if (!r || !r.events.length) return null;
 
@@ -79,7 +80,7 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
         <span className="min-w-0">
           <span className="block text-[14px] font-medium">Watch how this brief was made</span>
           <span className="mt-0.5 block font-mono text-[11px] text-muted">
-            One Task run · {clock(r.duration_s)} · {totals.searches} searches · {totals.pages} pages read{totals.tools ? ` · ${totals.tools} connector calls` : ''}
+            One Task run · {clock(r.duration_s)} · {totals.searches} searches · {totals.considered.toLocaleString('en-US')} sources considered · {totals.pages} read in full{totals.tools ? ` · ${totals.tools} connector calls` : ''}
           </span>
         </span>
         <span aria-hidden="true" className="font-mono text-[12px] text-muted">
@@ -99,8 +100,8 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
           </div>
           <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]">
             <span>{seen.filter((e) => e.k === 'search').length} searches</span>
-            <span>{seen.filter((e) => e.k === 'extract').length} pages read</span>
-            {stats ? <span className="text-muted">{stats.considered} sources considered</span> : null}
+            <span title="Sources whose search excerpts the run weighed">{(stats?.considered ?? 0).toLocaleString('en-US')} sources considered</span>
+            <span title="Pages the run fetched and read in full">{seen.filter((e) => e.k === 'extract').length} read in full</span>
             {Object.entries(tools).map(([k, n]) => (
               <span key={k} className="text-orange">
                 {CONNECTOR[k] ?? k} ×{n}

@@ -75,7 +75,7 @@ export function RunReplay({ disease, job, names }: { disease: string; job: strin
         </button>
         <input type="range" min={0} max={replay.duration_s} value={t} onChange={(e) => (setPlaying(false), setT(Number(e.target.value)))} aria-label="Position" className="w-48 accent-[var(--color-orange)]" />
         <span className="font-mono text-[12px] text-muted">
-          {clock(t)} of {clock(replay.duration_s)} · {done}/{runs.length} runs done · {totals.searches} searches · {totals.pages} pages read · {totals.tools} connector calls
+          {clock(t)} of {clock(replay.duration_s)} · {done}/{runs.length} runs done · {totals.searches} searches · {totals.pages} pages read in full · {totals.tools} connector calls
         </span>
       </div>
       <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
