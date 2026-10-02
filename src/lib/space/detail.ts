@@ -8,6 +8,8 @@ import { drugLabels, hostOf } from './view';
 type S = Space;
 const present = <T>(x: T | undefined | null): x is T => x != null;
 
+// Arms that aren't the drug under test.
+const COMPARATOR = /placebo|matching|vehicle|sham|standard of care|usual care|saline|diet|lifestyle|exercise/i;
 const HIDDEN_SITE = /investigational site|clinical study site|research site|site\s*\d+|study site/i;
 const title = (x: string | null | undefined) => (x ?? '').toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase());
 const place = (city?: string | null, state?: string | null, country?: string | null) => {
@@ -59,15 +61,16 @@ export function trialDetail(s: S, nct: string) {
   for (const d of company?.drugs ?? []) for (const n of [d.name, ...(d.codes ?? []), ...(d.name.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]) if (n) names.add(n.split('(')[0].trim().toLowerCase());
   const text = [t.title, t.acronym, ...t.interventions.flatMap((i) => [i.name, ...i.other_names])].join(' ').toLowerCase();
   const tested = drugs.filter((l) => [...names].some((n) => n.length > 3 && text.includes(n) && l.toLowerCase().includes(n.split(' ')[0])) || text.includes(l.split(' (')[0].toLowerCase()));
-  const lead = tested[0] ?? t.interventions.find((i) => i.type !== 'OTHER')?.name ?? '';
+  // When no company drug is named, fall back to what the experimental arm gives, never a placebo or comparator.
+  const experimental = new Set(t.arms.filter((a) => a.type === 'EXPERIMENTAL').flatMap((a) => a.interventions.map((n) => n.toLowerCase())));
+  const candidates = t.interventions.filter((i) => i.type !== 'OTHER' && !COMPARATOR.test(i.name));
+  const lead = tested[0] ?? (candidates.find((i) => experimental.has(i.name.toLowerCase())) ?? candidates[0])?.name ?? '';
 
   // Web items that name this trial or its drug.
   const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
   const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
 
   // Other trials of the same company testing the same lead drug: the rabbit hole.
-  // (Shares its matching idea with the mention-matcher extracted in PR #10;
-  // unify on trialNeedles once that merges.)
   const leadNeedles = [lead.split(' (')[0], ...(lead.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]
     .map((x) => x.trim().toLowerCase())
     .filter((x) => x.length > 3);

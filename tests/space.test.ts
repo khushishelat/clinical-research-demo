@@ -172,3 +172,21 @@ test('trial drawer: web research carries its distinct source count', () => {
   const t = trialDetail(space(), 'NCT1')!;
   assert.equal(t.webSources, 1);
 });
+
+test('trial drawer: the lead falls back to the experimental drug, never the placebo', () => {
+  const s = space();
+  s.trials.push(
+    trial('NCT5', {
+      interventions: [
+        { name: 'Placebo', type: 'DRUG', other_names: [] },
+        { name: 'XYZ-77 Injection', type: 'DRUG', other_names: [] },
+      ],
+      arms: [
+        { type: 'PLACEBO_COMPARATOR', interventions: ['Placebo'] },
+        { type: 'EXPERIMENTAL', interventions: ['XYZ-77 Injection'] },
+      ],
+    }) as never,
+  );
+  (s.companies[0] as { trials: string[] }).trials.push('NCT5');
+  assert.equal(trialDetail(s, 'NCT5')!.lead, 'XYZ-77 Injection');
+});
