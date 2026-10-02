@@ -33,7 +33,7 @@ await store.put(spacePath(d, 'registry-events.json'), merged);
 
 const company = trials.filter((t) => t.run_by === 'company');
 const people = new Set(trials.flatMap((t) => t.people.map((p) => p.key)));
-log(d, `${trials.length} active drug trials · ${company.length} company-run · ${new Set(company.map((t) => t.sponsor)).size} sponsors`);
+log(d, `${trials.length} drug trials · ${company.length} company-run · ${new Set(company.map((t) => t.sponsor)).size} sponsors`);
 log(d, `${company.filter((t) => t.people.length).length} company trials name an investigator · ${people.size} named investigators`);
 log(d, prev ? `${fresh.length} registry events since ${last}` : 'first snapshot; registry events start tomorrow');
 log(d, `saved to ${where}spaces/${d.key}/`);
