@@ -71,12 +71,13 @@ export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string
   );
 }
 
-function Facts({ items }: { items: { value: string; label: string }[] }) {
+function Facts({ items }: { items: { value: string; label: string; sub?: React.ReactNode }[] }) {
   return (
     <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-[4px] border border-line bg-line sm:grid-cols-4">
       {items.map((i) => (
         <div key={i.label} className="bg-card px-3 py-2.5">
           <dd className="text-[15px]">{i.value}</dd>
+          {i.sub ? <div className="mt-1 text-[11px] leading-snug text-muted">{i.sub}</div> : null}
           <dt className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">{i.label}</dt>
         </div>
       ))}
@@ -136,7 +137,24 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
           items={[
             { value: t.enrollment ? t.enrollment.toLocaleString('en-US') : '—', label: 'Patients' },
             { value: `${t.sites}${t.countries > 1 ? ` · ${t.countries}` : ''}`, label: t.countries > 1 ? 'Sites · countries' : 'Sites' },
-            { value: fmt(t.firstPosted), label: 'First posted' },
+            {
+              value: fmt(t.firstPosted),
+              label: 'First posted',
+              sub: t.firstSeen ? (
+                <span>
+                  <span className="mr-1 inline-block h-1.5 w-1.5 bg-orange" />
+                  Web announced it {t.firstSeen.days}d earlier
+                  {t.firstSeen.source ? (
+                    <>
+                      {' · '}
+                      <a href={t.firstSeen.source} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                        source
+                      </a>
+                    </>
+                  ) : null}
+                </span>
+              ) : undefined,
+            },
             { value: fmt(t.primaryCompletion), label: 'Primary completion' },
           ]}
         />
@@ -147,6 +165,20 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
           <h3 className="flex items-center gap-2 text-[14px]">
             <span className="h-2 w-2 bg-orange" /> From the web
           </h3>
+          {t.firstSeen ? (
+            <p className="mt-2 text-[13px] text-muted">
+              Earliest announcement {fmt(t.firstSeen.date)} — {t.firstSeen.days} days before the registry listing
+              {t.firstSeen.what ? `: ${t.firstSeen.what}` : ''}
+              {t.firstSeen.source ? (
+                <>
+                  {' · '}
+                  <a href={t.firstSeen.source} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                    source ↗
+                  </a>
+                </>
+              ) : null}
+            </p>
+          ) : null}
           <ul className="mt-2">
             {t.web.map((w, i) => (
               <li key={i} className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 border-t border-line py-2.5 text-[13px]">

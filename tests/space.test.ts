@@ -132,3 +132,26 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
+
+test('trial drawer: first-seen surfaces only when the web announced the trial earlier', () => {
+  const s = space();
+  const t = trialDetail(s, 'NCT1')!;
+  assert.equal(t.firstSeen?.days, 28);
+  assert.equal(t.firstSeen?.date, '2026-08-13');
+  assert.equal(t.firstSeen?.source, 'https://ir.acme.com/alpha');
+  // No step-08 record for NCT2: no badge, no invented dates.
+  assert.equal(trialDetail(s, 'NCT2')!.firstSeen, null);
+});
+
+test('trial drawer: web items join by drug/acronym mention, nothing else', () => {
+  const s = space();
+  s.facts.acme.milestones!.push(
+    { type: 'data', date: '2026-09-11', drug: 'acmetide', headline: 'ALPHA-1 subgroup analysis published', source_url: 'https://ir.acme.com/sub' },
+    { type: 'other', date: '2026-09-12', drug: 'placebex', headline: 'Acme opens new Boston office', source_url: null },
+  );
+  const t = trialDetail(s, 'NCT1')!;
+  const headlines = t.web.map((w) => w.headline);
+  assert.ok(headlines.includes('ALPHA-1 meets primary endpoint'));
+  assert.ok(headlines.includes('ALPHA-1 subgroup analysis published'));
+  assert.ok(!headlines.includes('Acme opens new Boston office'));
+});
