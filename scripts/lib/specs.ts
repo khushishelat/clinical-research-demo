@@ -5,6 +5,29 @@
 import type { Disease } from './pipeline';
 import { A, B, E, N, O, S } from './pipeline';
 
+// Step 3c: one company, one row. Registry sponsors and web finds name the same
+// company differently ("Hoffmann-La Roche" in the registry, "Roche" after the
+// 89bio acquisition). One run groups the names; code merges the rows. No
+// hand-written alias list.
+export const SAME_COMPANY = {
+  processor: 'core',
+  schema: O({
+    groups: A(
+      O({
+        names: A(S(), 'Two or more of the given names, exactly as given.'),
+        company: S('The company’s usual name today.'),
+        source_url: S('A source showing these names are one company.'),
+      }),
+      'Only groups of two or more names. Leave out every name that stands alone.'
+    ),
+  }),
+  input: (d: Disease, names: string[]) => ({
+    disease: d.name,
+    names,
+    task: 'Which of these names refer to the same company today? A parent and its wholly owned subsidiaries count as one company. Different companies that share a word are not the same (Merck & Co. and Merck KGaA are two companies). Copy names exactly as given.',
+  }),
+};
+
 // Step 3a: who owns a registry sponsor today, and its drugs for this disease.
 // Tested Oct 1 on 12 MASH sponsors: core and pro agreed on every owner, but only
 // pro returned real drug codes (core put NCT IDs in `codes`), so pro.

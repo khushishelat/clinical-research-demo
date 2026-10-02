@@ -59,66 +59,6 @@ a {
   outline-offset: 2px;
 }
 
-/* The signature detail: thin vertical bracket lines on the main container. */
-.bracket {
-  position: relative;
-}
-.bracket::before,
-.bracket::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--color-line);
-  pointer-events: none;
-}
-.bracket::before {
-  left: 0;
-}
-.bracket::after {
-  right: 0;
-}
-
-.mono-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-@keyframes fill-in {
-  from {
-    background: var(--color-orange-wash);
-  }
-  to {
-    background: transparent;
-  }
-}
-.just-landed {
-  animation: fill-in 1.6s var(--ease-brand);
-}
-
-@keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
-.pulse {
-  animation: pulse-dot 1.2s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .just-landed,
-  .pulse {
-    animation: none;
-  }
-}
-
 /* Tailwind v4 dropped the pointer cursor on buttons; without it nothing feels clickable. */
 button:not(:disabled),
 [role='button'],

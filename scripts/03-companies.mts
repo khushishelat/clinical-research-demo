@@ -5,12 +5,13 @@
 // found only on the web go to a review file for a person to approve.
 //   npx tsx scripts/03-companies.mts --disease mash [--seed-from-tests]
 
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
+import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
-import { COMPANY_CHAIN, OWNER } from './lib/specs';
+import { COMPANY_CHAIN, OWNER, SAME_COMPANY } from './lib/specs';
 
 const d = disease();
 const client = parallel(d, 'companies');
@@ -102,6 +103,14 @@ for (const w of web) {
   }
   companies.set(key, c);
 }
+
+// One company, one row: a Task run groups names that are the same company today.
+// Keyed by the names, so the same set of rows reuses the run.
+const rowNames = [...new Set([...companies.values()].flatMap((c) => [c.name, ...c.registry_sponsors]))].sort();
+const sameKey = `same:${createHash('sha1').update(rowNames.join('|')).digest('hex').slice(0, 12)}`;
+const same = client || rl.log[sameKey] ? await runOnce(client!, rl, sameKey, { processor: SAME_COMPANY.processor, schema: SAME_COMPANY.schema, input: SAME_COMPANY.input(d, rowNames), metadata: { job: 'same-company', disease: d.key } }) : null;
+const merges = mergeRows(companies, ((same?.content as any)?.groups ?? []) as { names: string[]; company: string }[]);
+for (const m of merges) log(d, `same company: ${m.from.join(', ')} → ${m.into}`);
 
 // Who a drug belongs to: the company with the most of its own trials of it,
 // counting every name and code of the drug (Innovent registers mazdutide as

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ClinicianDetail, TrialDetail } from '@/lib/space/detail';
 import { Favicon } from './Favicon';
 
-const REMOVAL = process.env.NEXT_PUBLIC_REMOVAL_URL || 'https://github.com/khushishelat/clinical-research-demo/blob/main/PRIVACY.md';
+const REMOVAL = process.env.NEXT_PUBLIC_REMOVAL_URL || 'https://github.com/khushishelat/clinical-research-demo/blob/main/PRIVACY.md#asking-to-be-removed';
 const fmt = (iso: string | null | undefined, month: 'short' | 'long' = 'short') => {
   if (!iso) return '—';
   const day = /^\d{4}-\d{2}-\d{2}$/.test(iso);
@@ -16,6 +16,12 @@ const fmt = (iso: string | null | undefined, month: 'short' | 'long' = 'short') 
   return d.toLocaleDateString('en-US', { month, ...(day ? { day: 'numeric' } : {}), year: 'numeric', timeZone: 'UTC' });
 };
 
+// A response from an older build can lack newer fields; the drawer renders it anyway.
+const withDefaults = (kind: 'trial' | 'clinician', body: Record<string, unknown>) =>
+  kind === 'trial'
+    ? ({ web: [], webSources: 0, siblings: [], named: [], fromWeb: [], firstSeen: null, ...body } as unknown as TrialDetail)
+    : ({ webRoles: [], roles: [], companies: [], otherTrials: [], papers: null, ...body } as unknown as ClinicianDetail);
+
 export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string; kind: 'trial' | 'clinician'; id: string; onClose: () => void; onOpen: (kind: 'trial' | 'clinician', id: string) => void }) {
   const [data, setData] = useState<{ id: string; body: TrialDetail | ClinicianDetail | null } | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -23,7 +29,7 @@ export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string
     let live = true;
     fetch(`/api/d/${disease}/${kind}/${encodeURIComponent(id)}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((body) => live && setData({ id, body }))
+      .then((body) => live && setData({ id, body: body && withDefaults(kind, body) }))
       .catch(() => live && setData({ id, body: null }));
     return () => {
       live = false;

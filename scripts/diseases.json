@@ -1,5 +1,5 @@
 {
-  "_note": "Diseases the pipeline can build. Add one by appending an entry here, then run the pipeline with --disease <key>. A person reviews this list. Diseases in \"exclude\" are never built.",
+  "_note": "Diseases the pipeline can build. Add one by appending an entry here, then run the pipeline with --disease <key>. A person reviews this list; the subtitle under each map title is written here, not researched. Diseases in \"exclude\" are never built.",
   "exclude": [
     "atopic dermatitis"
   ],
@@ -7,6 +7,7 @@
     {
       "key": "mash",
       "name": "MASH",
+      "subtitle": "Metabolic dysfunction-associated steatohepatitis",
       "query_cond": "MASH OR NASH OR \"nonalcoholic steatohepatitis\" OR \"metabolic dysfunction-associated steatohepatitis\"",
       "pubmed_terms": "MASH OR NASH OR steatohepatitis OR NAFLD OR MASLD OR \"fatty liver\"",
       "specialties": [
@@ -18,6 +19,7 @@
     {
       "key": "obesity",
       "name": "Obesity",
+      "subtitle": "Chronic weight management",
       "query_cond": "obesity",
       "pubmed_terms": "obesity OR \"weight management\" OR \"weight loss\"",
       "default_scope": {
@@ -34,6 +36,7 @@
     {
       "key": "pancreatic-cancer",
       "name": "Pancreatic cancer",
+      "subtitle": "Pancreatic adenocarcinoma and related tumors",
       "query_cond": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR \"pancreatic ductal adenocarcinoma\"",
       "pubmed_terms": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR PDAC",
       "default_scope": {
@@ -49,6 +52,7 @@
     {
       "key": "alzheimers",
       "name": "Alzheimer's disease",
+      "subtitle": "Alzheimer's disease and early cognitive decline",
       "query_cond": "Alzheimer",
       "pubmed_terms": "Alzheimer OR \"amyloid\" OR dementia",
       "specialties": [
@@ -60,6 +64,7 @@
     {
       "key": "alopecia-areata",
       "name": "Alopecia areata",
+      "subtitle": "Autoimmune hair loss",
       "query_cond": "\"alopecia areata\"",
       "pubmed_terms": "\"alopecia areata\"",
       "specialties": [
@@ -69,6 +74,7 @@
     {
       "key": "migraine",
       "name": "Migraine",
+      "subtitle": "Acute and preventive treatment",
       "query_cond": "migraine",
       "pubmed_terms": "migraine OR headache",
       "specialties": [

@@ -207,7 +207,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
   const registryCompanies = s.companies.filter((c) => !c.web_only).length;
 
   return {
-    disease: { key: s.config.key, name: s.config.name },
+    disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null },
     updated: s.fetched,
     stats: {
       trials: s.trials.length,

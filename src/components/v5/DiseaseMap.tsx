@@ -100,7 +100,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
       <section className="flex flex-wrap items-end justify-between gap-6 pt-8">
         <div>
           <h1 className="text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name}</h1>
-          <p className="mt-1 text-[15px] text-muted">{fullName(view.disease.key) ?? 'Every company racing in this disease, every active trial, and who runs them'}</p>
+          <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company racing in this disease, every active trial, and who runs them'}</p>
         </div>
         <dl className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4">
           <Stat value={String(s.trials)} label="Active drug trials" />
@@ -209,15 +209,6 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   );
 }
 
-const FULL: Record<string, string> = {
-  mash: 'Metabolic dysfunction-associated steatohepatitis',
-  obesity: 'Chronic weight management',
-  'pancreatic-cancer': 'Pancreatic adenocarcinoma and related tumors',
-  alzheimers: "Alzheimer's disease and early cognitive decline",
-  'alopecia-areata': 'Autoimmune hair loss',
-  migraine: 'Acute and preventive treatment',
-};
-const fullName = (k: string) => FULL[k];
 
 function Stat({ value, label, sub, accent }: { value: string; label: string; sub?: string; accent?: boolean }) {
   return (

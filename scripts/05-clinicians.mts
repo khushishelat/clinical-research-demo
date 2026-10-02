@@ -10,6 +10,7 @@
 import { affiliationMatches, cleanName, fromRegistry, narrowNpi, npiSearch, pacer, pubmedLookup, sameName, splitName, STATES, type Clinician } from './lib/clinicians';
 import { disease, groupRuns, log, parallel, pool, recorder, runLog, saveReplay, spacePath, store, where } from './lib/pipeline';
 import { assertNoContacts, personBase, stripAddress, type Trial } from './lib/registry';
+import { isRemoved, removedHashes } from './lib/removed';
 import { AUTHORSHIP, NPI_PICK, PROFILE, WEB_ROLES } from './lib/specs';
 
 const d = disease();
@@ -136,7 +137,9 @@ if (client) {
   log(d, `c. PubMed: ${matched.filter((c) => c.pubmed?.verified).length} verified (${check.length} checked by the PubMed connector) · e. ${top.filter((c) => c.profile).length} profiles`);
 }
 
-const out = people.sort((a, b) => b.score - a.score);
+// People who asked to be removed never reach the data.
+const removed = removedHashes();
+const out = people.filter((c) => !isRemoved(removed, [c.key, ...c.aliases])).sort((a, b) => b.score - a.score);
 assertNoContacts('clinicians', out);
 await store.put(spacePath(d, 'clinicians.json'), { disease: d.key, built: new Date().toISOString(), rule: 'Registry overall officials (principal investigator, study chair) and site principal investigators; sponsor placeholders removed; one record per name and state or country. Profiles are US-only and NPI-verified. Never contacts or opinions.', clinicians: out });
 log(d, `${out.length} clinicians (${usPeople.length} US) · top: ${ranked.slice(0, 3).map((c) => `${c.name} (${c.roles.length} trial roles${c.web_roles.length ? `, ${c.web_roles.length} web` : ''})`).join(' · ')}`);
