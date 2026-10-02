@@ -33,7 +33,7 @@ export function cleanPersonName(name: string): string {
   while (SUFFIX.test(s)) s = s.replace(SUFFIX, '').trim();
   return s || name.trim();
 }
-// Affiliations sometimes carry a street address ("…, 1200 West Broad Street, Richmond VA23298, USA").
+// Affiliations sometimes carry a street address ("…, 100 Example Street, Springfield VA00000, USA").
 // Keep the institution and place; drop street, suite and postal-code parts.
 const STREET = /^\d+[\w-]*\s|\s\d+[a-z]?$|\b(street|avenue|road|boulevard|blvd|suite|floor|p\.?o\.? box)\b|\w(straat|strasse|straße|gasse|vej|gatan)\b|^(rue|via|calle|avenida|viale|piazza)\s|\b[A-Z]{2}\s?\d{5}\b|\b\d{5}(-\d{4})?\b|\b[A-Z]-?\d{4,}\b/i;
 export const stripAddress = (x: string | undefined) =>
@@ -132,8 +132,8 @@ const EMAIL = /[\w.+-]+@[\w-]+\.[a-z]{2,}/gi;
 const PHONE = /(?:\+?\d{1,2}[\s.-])?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g;
 const STREET_ADDRESS = /\b\d{2,5}\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St\.|Avenue|Ave\.|Road|Rd\.|Boulevard|Blvd|Drive|Dr\.|Suite)\b/;
 
-/** Removes emails and phone numbers from quoted source text (citation excerpts). */
-export const redactContacts = (text: string) => text.replace(EMAIL, '[email removed]').replace(PHONE, '[phone removed]');
+/** Removes emails, phone numbers and street addresses from quoted source text (citation excerpts). */
+export const redactContacts = (text: string) => text.replace(EMAIL, '[email removed]').replace(PHONE, '[phone removed]').replace(new RegExp(STREET_ADDRESS.source, 'g'), '[address removed]');
 
 /** Throws if anything that looks like a phone number, email or street address reached the data. */
 export function assertNoContacts(label: string, data: unknown) {

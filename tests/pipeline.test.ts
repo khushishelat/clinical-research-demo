@@ -68,7 +68,7 @@ test('clinicians: an official without a site merges into their site record', () 
 });
 
 test('clinicians: country from the affiliation, else the trial', () => {
-  assert.deepEqual(inferPlace('VCU Health, 1200 West Broad Street, Richmond VA 23298, USA', [['United States', 'Canada']]), { country: 'United States', state: 'Virginia' });
+  assert.deepEqual(inferPlace('Example Health, 100 Example Street, Springfield VA 00000, USA', [['United States', 'Canada']]), { country: 'United States', state: 'Virginia' });
   assert.deepEqual(inferPlace('Beijing Hospital', [['China']]), { country: 'China', state: null });
   assert.deepEqual(inferPlace('Antwerp University Hospital, Belgium', [['Belgium', 'France']]), { country: 'Belgium', state: null });
   assert.deepEqual(inferPlace('Some Institute', [['France', 'Spain']]), { country: null, state: null });
@@ -110,11 +110,12 @@ test('replay events: compact, and still stats are thinned', () => {
 
 test('privacy: street addresses leave affiliations, contacts leave excerpts', async () => {
   const { stripAddress, redactContacts } = await import('../scripts/lib/registry');
-  assert.equal(stripAddress('VCU Health, Gastroenterology, 1200 West Broad Street, Richmond VA23298, USA'), 'VCU Health, Gastroenterology, USA');
+  assert.equal(stripAddress('Example Health, Gastroenterology, 100 Example Street, Springfield VA00000, USA'), 'Example Health, Gastroenterology, USA');
   assert.equal(stripAddress('Antwerp University Hospital, Wilrijkstraat 10, B-2650 Edegem, Belgium'), 'Antwerp University Hospital, Belgium');
   assert.equal(stripAddress('Washington University in St. Louis'), 'Washington University in St. Louis');
-  assert.equal(redactContacts('Contact clinicaltrials@acme.com or 844-734-6643.'), 'Contact [email removed] or [phone removed].');
-  assert.throws(() => assertNoContacts('x', { a: 'VCU, 1200 West Broad Street' }), /contact details/);
+  assert.equal(redactContacts('Contact clinicaltrials@acme.com or 555-010-0199.'), 'Contact [email removed] or [phone removed].');
+  assert.equal(redactContacts('Acme, 530 Industrial Park Boulevard, Montgomery'), 'Acme, [address removed], Montgomery');
+  assert.throws(() => assertNoContacts('x', { a: 'Example Health, 100 Example Street' }), /contact details/);
 });
 
 test('companies: rows a same-company run groups merge into one, keeping the usual name’s key', () => {
