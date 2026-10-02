@@ -42,8 +42,9 @@ Every fact on screen comes from one of these, and nothing is entered by hand:
   catalysts, investigators' disclosed roles, Medicare coverage, first-disclosure
   dates and the weekly brief
 
-What is written by hand: the indication list, therapeutic areas, search terms
-and subtitles in
+What is written by hand: the indication list, therapeutic areas, search terms,
+subtitles and scope (for example, alopecia areata keeps only trials whose
+conditions name it, because the registry search also returns other alopecias) in
 `scripts/diseases.json`, and matching rules in code (name and credential
 cleaning, comparator words such as "placebo").
 

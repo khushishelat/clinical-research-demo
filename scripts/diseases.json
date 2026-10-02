@@ -87,6 +87,9 @@
       "include_completed_since": "2024-01-01",
       "query_cond": "\"alopecia areata\"",
       "pubmed_terms": "\"alopecia areata\"",
+      "default_scope": {
+        "conditions_only": "areata"
+      },
       "specialties": [
         "dermatology"
       ]
