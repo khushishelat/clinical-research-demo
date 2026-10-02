@@ -39,10 +39,10 @@ function useRange(today: string) {
 }
 
 // Stable vertical placement for dots in a row, so they don't stack.
-const jitter = (s: string) => {
+const jitter = (s: string, spread = 26) => {
   let h = 0;
   for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return 14 + (h % 26);
+  return 14 + (h % spread);
 };
 const dotSize = (phase: number) => [6, 7, 9, 11, 12][Math.max(0, Math.min(4, phase))];
 
@@ -98,8 +98,10 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
     }
   };
 
-  const all = scope === 'all' ? view.rows : view.rows.filter((r) => r.key !== '_unassigned');
-  const rows = more ? all : all.slice(0, SHOWN);
+  // "All trials" adds the trials no company owns (academic and generic studies) as the first row, so the switch shows at once.
+  const companies = view.rows.filter((r) => r.key !== '_unassigned');
+  const other = scope === 'all' ? view.rows.filter((r) => r.key === '_unassigned') : [];
+  const rows = [...other, ...(more ? companies : companies.slice(0, SHOWN))];
   const s = view.stats;
   const newCount = view.feed.length;
   const todayAt = x(today);
@@ -183,11 +185,11 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="text-right">Trials</span>
               </div>
               {rows.map((r, i) => (
-                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
+                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === other.length} dismissTip={dismissTip} />
               ))}
-              {all.length > SHOWN ? (
+              {companies.length > SHOWN ? (
                 <button type="button" onClick={() => setMore((v) => !v)} className="w-full border-t border-line px-4 py-3 text-left font-mono text-[11px] uppercase tracking-[0.04em] text-muted hover:bg-wash hover:text-ink">
-                  {more ? 'Show fewer ▴' : `${all.length - SHOWN} more ${scope === 'all' ? 'rows' : 'companies'} ▾`}
+                  {more ? 'Show fewer ▴' : `${companies.length - SHOWN} more companies ▾`}
                 </button>
               ) : null}
             </div>
@@ -202,8 +204,10 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           </div>
         </section>
 
-        <aside className="min-w-0 rounded-[4px] border border-line bg-card">
-          <div role="tablist" className="flex gap-6 border-b border-line px-4">
+        {/* The rail is as tall as the map beside it and scrolls inside, so the page ends where the map does. */}
+        <aside className="relative flex min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[4px] border border-line bg-card max-xl:max-h-[80vh]">
+          <div className="flex min-h-0 flex-1 flex-col xl:absolute xl:inset-0">
+          <div role="tablist" className="flex shrink-0 gap-6 border-b border-line px-4">
             <button type="button" role="tab" aria-selected={tab === 'clinicians'} onClick={() => setTab('clinicians')} className={`border-b-2 py-3 text-[14px] ${tab === 'clinicians' ? 'border-ink' : 'border-transparent text-muted hover:text-ink'}`}>
               Investigators
             </button>
@@ -212,7 +216,8 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
               {newCount ? <span title="Events in the last 60 days" className="rounded-full bg-orange-wash px-1.5 font-mono text-[10px] text-ink">{newCount}</span> : null}
             </button>
           </div>
-          {tab === 'clinicians' ? <ClinicianRail view={view} onOpen={(k) => open('clinician', k)} /> : <ChangeRail view={view} onTrial={(n) => open('trial', n)} />}
+          <div className="min-h-0 flex-1 overflow-y-auto">{tab === 'clinicians' ? <ClinicianRail view={view} onOpen={(k) => open('clinician', k)} /> : <ChangeRail view={view} onTrial={(n) => open('trial', n)} />}</div>
+          </div>
         </aside>
       </div>
 
@@ -246,8 +251,10 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
     setTip({ ...t, x: e.clientX - box.left, y: e.clientY - box.top });
   };
   const firstDot = row.dots.slice().sort((a, b) => b.x.localeCompare(a.x))[0];
+  // A row with many trials gets more height, so its dots don't pile up.
+  const spread = Math.min(150, Math.max(26, Math.round(row.dots.length * 1.2)));
   return (
-    <div className="grid grid-cols-[260px_minmax(0,1fr)_64px] items-stretch border-b border-line px-4 last:border-b-0 hover:bg-page/60">
+    <div className={`grid grid-cols-[260px_minmax(0,1fr)_64px] items-stretch border-b border-line px-4 last:border-b-0 hover:bg-page/60 ${row.key === '_unassigned' ? 'bg-page/60' : ''}`}>
       <div className="min-w-0 py-2.5 pr-3">
         <p className="flex items-center gap-2 text-[14px] font-medium">
           <Favicon host={row.host} name={row.name} />
@@ -269,7 +276,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
           {row.webOnly ? <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">No active trials</span> : null}
         </p>
       </div>
-      <div className="relative min-h-[64px]">
+      <div className="relative" style={{ minHeight: spread + 38 }}>
         {years.map((y) => (
           <span key={y.at} className="absolute inset-y-0 border-l border-dashed border-line" style={{ left: `${y.at}%` }} />
         ))}
@@ -295,7 +302,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
               onClick={() => onDot(d)}
               onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Industry-sponsored' : "Investigator-sponsored, testing this company's asset"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for investigators and disclosures' })}
               className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.done ? `border-2 bg-card ${d.kind === 'company' ? 'border-ink' : 'border-[#adadac]'}` : d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
-              style={{ left: `${x(d.x)}%`, top: jitter(d.nct) + 10, width: size, height: size }}
+              style={{ left: `${x(d.x)}%`, top: jitter(d.nct, spread) + 10, width: size, height: size }}
             />
           );
         })}

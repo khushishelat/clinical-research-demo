@@ -233,9 +233,9 @@ export function mapView(s: Space, scope: Scope, today: string) {
   if (scope === 'all' && s.unassigned.length) {
     rows.push({
       key: '_unassigned',
-      name: 'Other investigator-sponsored trials',
+      name: 'Academic and generic trials',
       host: null,
-      lead: 'Generics and academic compounds with no company owner',
+      lead: 'Investigator-sponsored, no company owner',
       stage: '',
       approved: false,
       mechanisms: [],
