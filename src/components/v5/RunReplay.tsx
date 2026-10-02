@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; run: string; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number };
+type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; run: string; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number; sample?: string[] };
 type Replay = { job: string; started: string; duration_s: number; events: Ev[] };
 type Card = { status: string; searches: number; pages: number; tools: Record<string, number>; last: string | null };
 
@@ -58,6 +58,8 @@ export function RunReplay({ disease, job, names }: { disease: string; job: strin
         c.last = (e.m ?? '').replace(/^Query:\s*/, '');
         if (c.status === 'queued') c.status = 'running';
       } else if (e.k === 'extract') c.pages += 1;
+      // The run's own count of pages read (progress_stats) wins when it is higher.
+      else if (e.k === 'stats' && e.read) c.pages = Math.max(c.pages, e.read);
       else if (e.k === 'tool' && e.connector) c.tools[e.connector] = (c.tools[e.connector] ?? 0) + 1;
     }
     return out;

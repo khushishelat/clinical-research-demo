@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Favicon } from './Favicon';
 
-type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number };
+type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number; sample?: string[] };
 type Replay = { duration_s: number; events: Ev[] };
 
 const PLAY_SECONDS = 30;
@@ -56,14 +56,28 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
     }, 100);
     return () => window.clearInterval(id);
   }, [playing, r, speed]);
-  const totals = useMemo(() => {
+  // Pages read: each page once, from read events and the stats' sample of pages read, in time order.
+  const events = useMemo(() => {
     const all = r?.events ?? [];
-    const last = [...all].reverse().find((e) => e.k === 'stats');
-    return { searches: all.filter((e) => e.k === 'search').length, considered: last?.considered ?? 0, pages: all.filter((e) => e.k === 'extract').length, tools: all.filter((e) => e.k === 'tool').length };
+    const urls = new Set<string>();
+    const out: Ev[] = [];
+    for (const e of all) {
+      if (e.k === 'extract') {
+        if (urls.has(e.url!)) continue;
+        urls.add(e.url!);
+      }
+      out.push(e);
+      if (e.k === 'stats') for (const url of e.sample ?? []) if (!urls.has(url)) (urls.add(url), out.push({ k: 'extract', t: e.t, url }));
+    }
+    return out;
   }, [r]);
+  const totals = useMemo(() => {
+    const last = [...events].reverse().find((e) => e.k === 'stats');
+    return { searches: events.filter((e) => e.k === 'search').length, considered: last?.considered ?? 0, pages: Math.max(last?.read ?? 0, events.filter((e) => e.k === 'extract').length), tools: events.filter((e) => e.k === 'tool').length };
+  }, [events]);
   if (!r || !r.events.length) return null;
 
-  const seen = r.events.filter((e) => e.t <= t);
+  const seen = events.filter((e) => e.t <= t);
   const steps = seen.filter((e) => e.k === 'search' || e.k === 'extract' || e.k === 'tool').slice(-7).reverse();
   const stats = [...seen].reverse().find((e) => e.k === 'stats');
   const tools = seen.filter((e) => e.k === 'tool').reduce((m: Record<string, number>, e) => ((m[e.connector!] = (m[e.connector!] ?? 0) + 1), m), {});
@@ -101,7 +115,7 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
           <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]">
             <span>{seen.filter((e) => e.k === 'search').length} searches</span>
             <span title="Sources whose search excerpts the run weighed">{(stats?.considered ?? 0).toLocaleString('en-US')} sources considered</span>
-            <span title="Pages the run fetched and read in full">{seen.filter((e) => e.k === 'extract').length} read in full</span>
+            <span title="Pages the run fetched and read in full">{Math.max(stats?.read ?? 0, seen.filter((e) => e.k === 'extract').length)} read in full</span>
             {Object.entries(tools).map(([k, n]) => (
               <span key={k} className="text-orange">
                 {CONNECTOR[k] ?? k} ×{n}

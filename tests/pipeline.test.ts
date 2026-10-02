@@ -106,6 +106,11 @@ test('replay events: compact, and still stats are thinned', () => {
   assert.equal(compactRunEvent({ type: 'task_run.progress_msg.plan' }, 'r', 1), null);
   const s = (t: number, considered: number) => ({ k: 'stats' as const, run: 'r', t, considered, read: 0 });
   assert.equal(thinStats([s(1, 0), s(2, 0), s(3, 4)]).length, 2);
+  // The documented progress_stats fields: counts plus a sample of the pages read (URLs only).
+  assert.deepEqual(
+    compactRunEvent({ type: 'task_run.progress_stats', source_stats: { num_sources_considered: 223, num_sources_read: 22, sources_read_sample: ['http://example.org/a', 'not a url'] } }, 'r', 9),
+    { k: 'stats', run: 'r', t: 9, considered: 223, read: 22, sample: ['http://example.org/a'] },
+  );
 });
 
 test('privacy: street addresses leave affiliations, contacts leave excerpts', async () => {

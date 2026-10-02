@@ -130,6 +130,8 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
       task_spec: { output_schema: outputSchema(spec.schema) as any },
       ...(spec.connectors?.length ? { advanced_settings: { data_sources: { free: spec.connectors } } as any } : {}),
       metadata: { app: 'trial-check', ...(spec.metadata ?? {}) },
+      // Progress events are only tracked when asked for at creation (on by default from pro up).
+      ...(rec0 ? { enable_events: true } : {}),
       ...(spec.previous_interaction_id ? { previous_interaction_id: spec.previous_interaction_id } : {}),
     } as any);
     rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString() };
@@ -137,16 +139,30 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
   }
   if (rec.status) return rec;
   if (rec0) {
-    // Follow the run's event stream for the replay; fall back to polling if it drops.
-    try {
-      const stream: any = await client.taskRun.events(rec.run_id);
-      for await (const e of stream) {
-        const c = compactRunEvent(e, key, Math.round((Date.now() - rec0.start) / 1000));
-        if (c) rec0.events.push(c);
-        if (e.type === 'task_run.state' && e.run && !e.run.is_active) break;
+    // Follow the run's event stream for the replay. A stream stays open for up to 570 s, and
+    // reconnecting to an active run replays its reasoning trace from the start, so reconnect
+    // until the run ends and keep each message once. Times come from the events' own
+    // timestamps, so a stream joined late (a queued group run) still plays back in order.
+    const seen = new Set<string>();
+    for (let connection = 0; connection < 20; connection++) {
+      let ended = false;
+      try {
+        for await (const e of (await client.taskRun.events(rec.run_id)) as any) {
+          const at = e.timestamp ? Date.parse(e.timestamp) : Date.now();
+          const once = e.type === 'task_run.state' ? `state|${e.run?.status}` : e.type === 'task_run.progress_stats' ? null : `${e.type}|${e.timestamp ?? ''}|${e.message ?? ''}`;
+          if (once && seen.has(once)) continue;
+          if (once) seen.add(once);
+          const c = compactRunEvent(e, key, Math.max(0, Math.round((at - rec0.start) / 1000)));
+          if (c) rec0.events.push(c);
+          if (e.type === 'task_run.state' && e.run && !e.run.is_active) {
+            ended = true;
+            break;
+          }
+        }
+      } catch {
+        // reconnect, or fall through to polling
       }
-    } catch {
-      // polling below
+      if (ended || !(await again(() => client.taskRun.retrieve(rec.run_id))).is_active) break;
     }
   }
   for (;;) {
@@ -240,6 +256,7 @@ export async function groupRuns(
       task_spec: { output_schema: outputSchema(u.spec.schema) as any },
       ...(u.spec.connectors?.length ? { advanced_settings: { data_sources: { free: u.spec.connectors } } } : {}),
       metadata: { app: 'trial-check', job, disease: d.key, ...(u.spec.metadata ?? {}), unit: u.key },
+      ...(rec0 ? { enable_events: true } : {}),
     }));
     try {
       await client.taskGroup.addRuns(gid, { inputs: batch as any }, { maxRetries: 0 });
