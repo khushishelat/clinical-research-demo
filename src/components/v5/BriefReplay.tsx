@@ -67,13 +67,19 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
         urls.add(e.url!);
       }
       out.push(e);
-      if (e.k === 'stats') for (const url of e.sample ?? []) if (!urls.has(url)) (urls.add(url), out.push({ k: 'extract', t: e.t, url }));
+      if (e.k !== 'stats') continue;
+      for (const url of e.sample ?? []) {
+        if (urls.has(url)) continue;
+        urls.add(url);
+        out.push({ k: 'extract', t: e.t, url });
+      }
     }
     return out;
   }, [r]);
   const totals = useMemo(() => {
     const last = [...events].reverse().find((e) => e.k === 'stats');
-    return { searches: events.filter((e) => e.k === 'search').length, considered: last?.considered ?? 0, pages: Math.max(last?.read ?? 0, events.filter((e) => e.k === 'extract').length), tools: events.filter((e) => e.k === 'tool').length };
+    const tools = events.filter((e) => e.k === 'tool').reduce((m: Record<string, number>, e) => ((m[e.connector!] = (m[e.connector!] ?? 0) + 1), m), {});
+    return { considered: last?.considered ?? 0, tools };
   }, [events]);
   if (!r || !r.events.length) return null;
 
@@ -94,7 +100,7 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
         <span className="min-w-0">
           <span className="block text-[14px] font-medium">Watch how this brief was made</span>
           <span className="mt-0.5 block font-mono text-[11px] text-muted">
-            One Task run · {clock(r.duration_s)} · {totals.searches} searches · {totals.considered.toLocaleString('en-US')} sources considered · {totals.pages} read in full{totals.tools ? ` · ${totals.tools} connector calls` : ''}
+            {[`${totals.considered.toLocaleString('en-US')} sources considered`, ...Object.entries(totals.tools).map(([k, n]) => `${CONNECTOR[k] ?? k} ×${n}`)].join(' · ')}
           </span>
         </span>
         <span aria-hidden="true" className="font-mono text-[12px] text-muted">
@@ -113,9 +119,7 @@ export function BriefReplay({ disease, issue }: { disease: string; issue: string
             </span>
           </div>
           <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]">
-            <span>{seen.filter((e) => e.k === 'search').length} searches</span>
-            <span title="Sources whose search excerpts the run weighed">{(stats?.considered ?? 0).toLocaleString('en-US')} sources considered</span>
-            <span title="Pages the run fetched and read in full">{Math.max(stats?.read ?? 0, seen.filter((e) => e.k === 'extract').length)} read in full</span>
+            <span>{(stats?.considered ?? 0).toLocaleString('en-US')} sources considered</span>
             {Object.entries(tools).map(([k, n]) => (
               <span key={k} className="text-orange">
                 {CONNECTOR[k] ?? k} ×{n}
