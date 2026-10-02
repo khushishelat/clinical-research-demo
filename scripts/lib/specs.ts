@@ -89,8 +89,9 @@ export const OWNER = {
 
 // Step 3b: companies the web knows about, by interaction chaining until dry.
 // v1: MASH v0 stopped at the 4-page cap while pages still added 7 to 9 new
-// companies, so the cap is 8 and a page must add 3. Large indications chain
-// once per region (diseases.json `chain_regions`).
+// companies, so the cap is 8 and a page must add 3, but only from page 4 (the
+// MASH v1 run stopped at page 3 after one thin page and missed 8 companies v0
+// had found). Large indications chain once per region (`chain_regions`).
 export const COMPANY_CHAIN = {
   key: 'chain@1',
   processor: 'ultra',
@@ -98,6 +99,7 @@ export const COMPANY_CHAIN = {
   field: 'companies',
   maxPages: 8,
   minNew: 3,
+  minPages: 4,
   schema: O({
     companies: A(
       O({

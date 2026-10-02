@@ -155,3 +155,13 @@ test('v1 units: invented trial IDs are dropped; readouts go to trials that could
   // NCT2 has a data milestone; NCT1 has nothing yet; NCT3 is Phase 1; NCT4 is investigator-sponsored.
   assert.deepEqual(readoutTrials(c, byNct, f, '2026-10-02').map((x) => x.nct), ['NCT2']);
 });
+
+test('companies: older phase text maps onto the phase enum', async () => {
+  const { phaseFromText } = await import('../scripts/lib/companies');
+  assert.equal(phaseFromText('Phase 2b'), 'phase_2');
+  assert.equal(phaseFromText('Phase 2b/3'), 'phase_2_3');
+  assert.equal(phaseFromText('Approved for NASH/MASH in India; Phase 2b elsewhere'), 'approved');
+  assert.equal(phaseFromText('Phase 1/2'), 'phase_1_2');
+  assert.equal(phaseFromText('Phase 1 (healthy volunteers)'), 'phase_1');
+  assert.equal(phaseFromText(''), 'preclinical');
+});

@@ -58,6 +58,19 @@ export function trialUses(trial: Trial, alias: string): boolean {
 
 export { phaseLabel } from '../../src/lib/space/labels';
 
+/** A phase as older runs wrote it ("Phase 2b", "Approved for NASH in India") → the PHASES enum. */
+export function phaseFromText(text: string | null | undefined): string {
+  const t = (text ?? '').toLowerCase();
+  if (/approved|marketed|launched/.test(t)) return 'approved';
+  if (/filed|submitted|nda|bla|marketing application/.test(t)) return 'filed';
+  if (/(phase\s*)?(2|ii)[ab]?\s*[/-]\s*(phase\s*)?(3|iii)/.test(t)) return 'phase_2_3';
+  if (/phase\s*(3|iii)/.test(t)) return 'phase_3';
+  if (/(phase\s*)?(1|i)[ab]?\s*[/-]\s*(phase\s*)?(2|ii)/.test(t)) return 'phase_1_2';
+  if (/phase\s*(2|ii)/.test(t)) return 'phase_2';
+  if (/phase\s*(1|i)\b/.test(t)) return 'phase_1';
+  return 'preclinical';
+}
+
 export const isApproved = (phase: string) => /approved|marketed|launch/i.test(phase ?? '');
 export const phaseRank = (phase: string) => (isApproved(phase) ? 5 : /filed|submitted|nda|bla|registration/i.test(phase ?? '') ? 4 : /3/.test(phase ?? '') ? 3 : /2/.test(phase ?? '') ? 2 : /1/.test(phase ?? '') ? 1 : 0);
 

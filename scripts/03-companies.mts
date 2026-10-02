@@ -6,7 +6,7 @@
 //   npx tsx scripts/03-companies.mts --disease mash
 
 import { createHash } from 'node:crypto';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseLabel, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
+import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseFromText, phaseLabel, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
@@ -56,6 +56,20 @@ for (const region of regions) {
   web.push(...got);
   log(d, `company list${region ? ` (${region})` : ''}: ${got.length} companies over ${Object.keys(rl.log).filter((k) => k.startsWith(`${key}:p`)).length} pages`);
 }
+// The list only grows: companies from earlier chain runs (any version) stay, so a
+// run that stops early never drops a company found before. Review still decides.
+const known = new Set(web.map((w) => companyKey(w.company)));
+let carried = 0;
+for (const k of Object.keys(rl.log).filter((x) => /^(web:p\d+|chain@\d+:.+:p\d+)$/.test(x) && !x.startsWith(`${COMPANY_CHAIN.key}:`))) {
+  for (const w of ((rl.log[k].content as any)?.companies ?? []) as any[]) {
+    const ck = companyKey(w.company);
+    if (!ck || known.has(ck)) continue;
+    known.add(ck);
+    carried += 1;
+    web.push({ ...w, drugs: (w.drugs ?? []).map((x: any) => ({ ...x, phase: x.phase ?? phaseFromText(x.highest_phase) })) });
+  }
+}
+if (carried) log(d, `company list: ${carried} more carried from earlier runs`);
 
 // ── Join in code ─────────────────────────────────────────────────────────────
 const companies = new Map<string, Company>();

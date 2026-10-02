@@ -176,7 +176,7 @@ export async function chain<T>(
   client: Parallel,
   rl: { log: RunLog; save: () => Promise<void> },
   key: string,
-  opts: { first: string; next: string; field: string; dedupe: (x: T) => string; maxPages: number; minNew: number } & Omit<RunSpec, 'input' | 'previous_interaction_id'>
+  opts: { first: string; next: string; field: string; dedupe: (x: T) => string; maxPages: number; minNew: number; minPages?: number } & Omit<RunSpec, 'input' | 'previous_interaction_id'>
 ): Promise<T[]> {
   const items: T[] = [];
   const seen = new Set<string>();
@@ -192,7 +192,8 @@ export async function chain<T>(
       items.push(x);
       added += 1;
     }
-    if (rec.status !== 'completed' || added < opts.minNew) break;
+    // A page that adds few new items ends the list, but never before minPages: one thin page is noise.
+    if (rec.status !== 'completed' || (page >= (opts.minPages ?? 1) && added < opts.minNew)) break;
     prev = rec.interaction_id ?? null;
   }
   return items;
