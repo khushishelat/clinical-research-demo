@@ -187,9 +187,9 @@ export function mapView(s: Space, scope: Scope, today: string) {
   if (scope === 'all' && s.unassigned.length) {
     rows.push({
       key: '_unassigned',
-      name: 'Other investigator trials',
+      name: 'Other investigator-sponsored trials',
       host: null,
-      lead: 'Generic or academic drugs not tied to a company',
+      lead: 'Generics and academic compounds with no company owner',
       stage: '',
       approved: false,
       mechanisms: [],
@@ -207,7 +207,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
   const registryCompanies = s.companies.filter((c) => !c.web_only).length;
 
   return {
-    disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null },
+    disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null, area: s.config.area ?? null },
     updated: s.fetched,
     stats: {
       trials: s.trials.length,

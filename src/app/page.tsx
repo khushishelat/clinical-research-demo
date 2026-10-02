@@ -12,10 +12,10 @@ export default async function Home() {
   return (
     <main className="mx-auto max-w-[680px] px-4 py-24">
       <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-muted">Trial Check</p>
-      <h1 className="mt-4 text-[36px] leading-tight">No disease maps built yet</h1>
-      <p className="mt-4 text-[16px] text-muted">Each map is built by the pipeline in scripts/. Add your Parallel API key to .env.local, then build one disease:</p>
+      <h1 className="mt-4 text-[36px] leading-tight">No indications built yet</h1>
+      <p className="mt-4 text-[16px] text-muted">Each competitive landscape is built by the pipeline in scripts/. Add your Parallel API key to .env.local, then build one indication:</p>
       <pre className="mt-6 overflow-x-auto rounded-[4px] bg-ink p-4 font-mono text-[13px] text-page">npm run pipeline -- --disease mash</pre>
-      <p className="mt-4 text-[14px] text-muted">Diseases are listed in scripts/diseases.json. The README explains each step and what it costs.</p>
+      <p className="mt-4 text-[14px] text-muted">Indications are listed in scripts/diseases.json. The README explains each step and what it costs.</p>
     </main>
   );
 }

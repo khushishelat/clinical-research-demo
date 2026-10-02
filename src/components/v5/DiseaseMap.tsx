@@ -99,26 +99,27 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
     <main className="px-4 pb-12 sm:px-8">
       <section className="flex flex-wrap items-end justify-between gap-6 pt-8">
         <div>
-          <h1 className="text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name}</h1>
-          <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company racing in this disease, every active trial, and who runs them'}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted">{view.disease.area ? `${view.disease.area} · ` : ''}Competitive landscape</p>
+          <h1 className="mt-1 text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name}</h1>
+          <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
         </div>
         <dl className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4">
-          <Stat value={String(s.trials)} label="Active drug trials" />
-          <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} sponsor names in the registry${s.webCompanies ? ` · ${s.webCompanies} found on the web` : ''}`} />
-          <Stat value={String(s.investigators)} label="Investigators named" />
-          <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label={s.dealDollars ? 'In licensing and M&A since May 2025' : 'Licensing and M&A deals since May 2025'} sub={s.dealDollars ? `${s.deals} deals · stated USD totals` : undefined} accent />
+          <Stat value={String(s.trials)} label="Active trials" sub="Drug and biologic, all sponsors" />
+          <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
+          <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
+          <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label={s.dealDollars ? 'Licensing and M&A since May 2025' : 'Licensing and M&A deals since May 2025'} sub={s.dealDollars ? `${s.deals} deals · disclosed headline value, USD` : undefined} accent />
         </dl>
       </section>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
-        <section aria-label="Map of companies and their trials" className="min-w-0 rounded-[4px] border border-line bg-card">
+        <section aria-label="Companies and their trials over time" className="min-w-0 rounded-[4px] border border-line bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted">
               <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-ink" /> Company trial
+                <span className="h-2 w-2 rounded-full bg-ink" /> Industry-sponsored trial
               </li>
               <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#adadac]" /> Investigator trial of its drug
+                <span className="h-2 w-2 rounded-full bg-[#adadac]" /> Investigator-sponsored trial (IST)
               </li>
               <li className="flex items-center gap-1.5">
                 <span className="flex items-end gap-0.5">
@@ -129,21 +130,21 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 Phase 1 · 2 · 3
               </li>
               <li className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Came with an acquisition
+                <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Acquired asset
               </li>
               <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 bg-orange" /> News from the web
+                <span className="h-2 w-2 bg-orange" /> Disclosure
               </li>
               <li className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Expected next
+                <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Guided catalyst
               </li>
             </ul>
-            <div role="group" aria-label="Which trials" className="inline-flex rounded-[4px] border border-line-strong bg-page p-0.5 font-mono text-[11px] uppercase tracking-[0.04em]">
+            <div role="group" aria-label="Which trials to show" className="inline-flex rounded-[4px] border border-line-strong bg-page p-0.5 font-mono text-[11px] uppercase tracking-[0.04em]">
               <button type="button" onClick={() => setScope('companies')} aria-pressed={scope === 'companies'} className={`rounded-[3px] px-3 py-1.5 ${scope === 'companies' ? 'bg-ink text-page' : 'text-muted hover:text-ink'}`}>
-                Companies&apos; drugs · {s.onMap}
+                Company assets · {s.onMap}
               </button>
               <button type="button" onClick={() => setScope('all')} aria-pressed={scope === 'all'} className={`rounded-[3px] px-3 py-1.5 ${scope === 'all' ? 'bg-ink text-page' : 'text-muted hover:text-ink'}`}>
-                All active · {s.trials}
+                All active trials · {s.trials}
               </button>
             </div>
           </div>
@@ -154,7 +155,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <div className="relative overflow-x-auto" onMouseLeave={() => setTip(null)}>
             <div className="min-w-[860px]">
               <div className="grid grid-cols-[260px_minmax(0,1fr)_64px] border-b border-line bg-page px-4 py-2 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
-                <span>Company</span>
+                <span>Company · lead assets</span>
                 <span className="relative">
                   {years.map((y) => (
                     <span key={y.label} className="absolute" style={{ left: `${y.at}%` }}>
@@ -189,11 +190,11 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
         <aside className="min-w-0 rounded-[4px] border border-line bg-card">
           <div role="tablist" className="flex gap-6 border-b border-line px-4">
             <button type="button" role="tab" aria-selected={tab === 'clinicians'} onClick={() => setTab('clinicians')} className={`border-b-2 py-3 text-[14px] ${tab === 'clinicians' ? 'border-ink' : 'border-transparent text-muted hover:text-ink'}`}>
-              Clinicians
+              Investigators
             </button>
             <button type="button" role="tab" aria-selected={tab === 'changed'} onClick={() => setTab('changed')} className={`flex items-center gap-2 border-b-2 py-3 text-[14px] ${tab === 'changed' ? 'border-ink' : 'border-transparent text-muted hover:text-ink'}`}>
-              What changed
-              {newCount ? <span className="rounded-full bg-orange-wash px-1.5 font-mono text-[10px] text-ink">{newCount} new</span> : null}
+              Recent activity
+              {newCount ? <span title="Events in the last 60 days" className="rounded-full bg-orange-wash px-1.5 font-mono text-[10px] text-ink">{newCount}</span> : null}
             </button>
           </div>
           {tab === 'clinicians' ? <ClinicianRail view={view} onOpen={(k) => open('clinician', k)} /> : <ChangeRail view={view} onTrial={(n) => open('trial', n)} />}
@@ -201,7 +202,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
       </div>
 
       <p className="mt-10 border-t border-line pt-6 text-[12px] text-muted">
-        Research support from public sources. Not investment or medical advice. Coverage of trials and disclosures is not complete. Clinician details are professional facts only, never contact details or opinions.
+        Research support from public sources. Not investment or medical advice. Coverage of trials and disclosures is not complete. Investigator details are professional facts only, never contact details or opinions.
       </p>
 
       {drawer ? <Drawer disease={view.disease.key} kind={drawer.kind} id={drawer.id} onClose={close} onOpen={open} /> : null}
@@ -245,7 +246,7 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
               {m}
             </span>
           ))}
-          {row.webOnly ? <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">Found on the web</span> : null}
+          {row.webOnly ? <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">No active trials</span> : null}
         </p>
       </div>
       <div className="relative min-h-[64px]">
@@ -255,7 +256,7 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
         <span className="absolute inset-y-0 border-l border-ink" style={{ left: `${todayAt}%` }} />
         {firstAcquired ? (
           <span className="absolute font-mono text-[10px] text-orange" style={{ left: `${Math.max(0, x(firstAcquired.x) - 8)}%`, top: 2 }}>
-            from {firstAcquired.acquiredFrom!.split(' ')[0]}
+            acquired from {firstAcquired.acquiredFrom!.split(' ')[0]}
           </span>
         ) : null}
         {row.news.map((m, i) => (
@@ -276,8 +277,8 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
             href={m.source ?? undefined}
             target="_blank"
             rel="noreferrer"
-            aria-label={`Expected: ${m.headline}`}
-            onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Expected · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.host ?? undefined })}
+            aria-label={`Guided catalyst: ${m.headline}`}
+            onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Guided · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.host ?? undefined })}
             className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150"
             style={{ left: `${x(m.date)}%`, top: 26 }}
           />
@@ -288,9 +289,9 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
             <button
               key={d.nct}
               type="button"
-              aria-label={`${d.label}, phase ${d.phase || 'not set'}, ${d.kind === 'company' ? 'company trial' : 'investigator trial'}`}
+              aria-label={`${d.label}, phase ${d.phase || 'not set'}, ${d.kind === 'company' ? 'industry-sponsored' : 'investigator-sponsored'}`}
               onClick={() => onDot(d)}
-              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: d.kind === 'company' ? `Company trial, first posted ${fmt(d.x)}` : `Investigator trial of the company's drug, first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Came with ${d.acquiredFrom}` : 'Click to see who runs it' })}
+              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: d.kind === 'company' ? `Industry-sponsored · first posted ${fmt(d.x)}` : `Investigator-sponsored, testing this company's asset · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for investigators and disclosures' })}
               className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
               style={{ left: `${x(d.x)}%`, top: jitter(d.nct) + 10, width: size, height: size }}
             />
@@ -298,7 +299,7 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
         })}
         {showFirstTip && firstDot ? (
           <div className="absolute z-10 w-[220px] rounded-[4px] bg-ink px-3 py-2.5 text-[12px] text-page shadow-lg" style={{ left: `min(calc(${x(firstDot.x)}% + 14px), calc(100% - 230px))`, top: 8 }}>
-            <p className="font-medium">Each dot is a trial. Click one to see who runs it.</p>
+            <p className="font-medium">Each dot is a trial. Click one for its investigators and disclosures.</p>
             <p className="mt-1 font-mono text-[10px] text-[#adadac]">
               {firstDot.label} · {row.name}
             </p>
@@ -313,19 +314,20 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
   );
 }
 
-const labelOf = (m: Mark) => ({ data: 'Data', approval: 'Approval', regulatory: 'Regulatory', deal: 'Deal', trial_start: 'Trial started', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinued', exit: 'Exit', other: 'News' })[m.type] ?? 'News';
+const LABEL: Record<string, string> = { data: 'Data readout', approval: 'Approval', regulatory: 'Regulatory', deal: 'Deal', trial_start: 'Trial initiation', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinuation', exit: 'Exit', other: 'Disclosure' };
+const labelOf = (m: Mark) => LABEL[m.type] ?? 'Disclosure';
 
 function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) => void }) {
   return (
     <div>
       <div className="px-4 pb-2 pt-4">
-        <h2 className="text-[15px] font-medium">Most involved in {view.disease.name} trials</h2>
+        <h2 className="text-[15px] font-medium">Most active {view.disease.name} investigators</h2>
         <p className="mt-1 flex flex-wrap gap-4 text-[12px] text-muted">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 bg-ink" /> Trial role in the registry
+            <span className="h-2 w-2 bg-ink" /> Registry role (PI, study chair)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 bg-orange" /> Role found on the web
+            <span className="h-2 w-2 bg-orange" /> Disclosed role (data presentation, publication)
           </span>
         </p>
       </div>
@@ -339,7 +341,7 @@ function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) 
                 <span className="block truncate text-[12px] text-muted">
                   {c.specialty ?? 'Specialty not listed'} · {c.place}
                 </span>
-                <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.04em] text-faint">{c.papers != null ? `${c.papers} papers` : 'Papers not verified'}</span>
+                <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.04em] text-faint">{c.papers != null ? `${c.papers} publications` : 'Publications not verified'}</span>
               </span>
               <span className="text-right">
                 <span className="flex justify-end gap-0.5">
@@ -356,7 +358,7 @@ function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) 
           </li>
         ))}
       </ul>
-      <p className="border-t border-line px-4 py-3 text-[12px] text-muted">US clinicians verified in the NPI Registry. Others appear by name on their trials.</p>
+      <p className="border-t border-line px-4 py-3 text-[12px] text-muted">US investigators verified against the NPI Registry. Ex-US investigators appear by name on their trials.</p>
     </div>
   );
 }
@@ -370,13 +372,13 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
       <div className="flex gap-2 px-4 pt-4">
         {(['all', 'registry', 'web'] as const).map((o) => (
           <button key={o} type="button" aria-pressed={origin === o} onClick={() => setOrigin(o)} className={`rounded-full border px-3 py-1 text-[12px] ${origin === o ? 'border-ink bg-ink text-page' : 'border-line-strong text-muted hover:border-ink hover:text-ink'}`}>
-            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'Web'}
+            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'Disclosures'}
           </button>
         ))}
       </div>
       <div className="px-4 pt-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">New trials registered per month</p>
-        <div className="mt-2 flex h-16 items-end gap-1" role="img" aria-label={`New trials per month: ${view.monthly.map((m) => `${m.month} ${m.count}`).join(', ')}`}>
+        <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">New trial registrations by month</p>
+        <div className="mt-2 flex h-16 items-end gap-1" role="img" aria-label={`New trial registrations by month: ${view.monthly.map((m) => `${m.month} ${m.count}`).join(', ')}`}>
           {view.monthly.map((m) => (
             <div key={m.month} className="flex flex-1 flex-col items-center gap-1">
               <span className="font-mono text-[9px] text-muted">{m.count || ''}</span>
@@ -414,7 +416,7 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
                     {new URL(f.source).hostname.replace(/^www\./, '')} ↗
                   </a>
                 ) : null}
-                {f.webEarlier ? <span className="rounded-[3px] bg-orange-wash px-1.5 py-0.5 font-mono text-[10px] uppercase">On the web {f.webEarlier.days} days earlier</span> : null}
+                {f.webEarlier ? <span className="rounded-[3px] bg-orange-wash px-1.5 py-0.5 font-mono text-[10px] uppercase">Disclosed {f.webEarlier.days} days before registry</span> : null}
               </span>
             </span>
           </li>

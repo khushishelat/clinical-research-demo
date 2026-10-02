@@ -1,28 +1,33 @@
 # Trial Check
 
-Every company racing in a disease, every active drug trial, and the clinicians
-who run them.
+Competitive landscapes by indication: every company developing drugs in it,
+their active trials, what they've disclosed, and the investigators running the
+trials.
 
-Pick a disease. Each row is a company; each dot is one of its trials, placed
-where it was first posted and sized by phase. Orange squares are dated news,
-dashed diamonds are what the company says comes next, and an orange ring means
-the trial came with an acquisition. Click a dot to see who runs the trial;
-click a clinician for their roles and papers. The dataset view shows every
-researched field with its sources.
+Pick an indication. Each row is a company and its lead assets; each dot is one
+of its trials, placed at first posting and sized by phase. Black dots are
+industry-sponsored trials, grey dots are investigator-sponsored trials (ISTs)
+of the company's asset, and an orange ring marks an acquired asset. Orange
+squares are dated disclosures (readouts, deals, regulatory news) and dashed
+diamonds are company-guided catalysts. Click a trial for its investigators and
+disclosures, or an investigator for their trial roles and publications. The
+table view shows every researched field with its sources.
 
-**The MASH map** (built Oct 2, 2026):
+**The MASH landscape** (built Oct 2, 2026):
 
-- 167 active drug trials, 95 of them on company rows
-- 63 companies: 46 that sponsor trials in the registry, plus 17 the web found
-  and a person approved
-- 749 named investigators; 229 US clinicians matched to the NPI Registry
-- About $12B in licensing and M&A since May 2025, across 14 deals (stated USD
-  totals only; financings and other currencies are not counted)
-- 4 trials announced publicly before ClinicalTrials.gov listed them, such as
-  Altimmune's PERFORMA, 28 days earlier
+- 167 active trials, 95 of them on company rows
+- 63 companies: 46 registry sponsors, plus 17 found by web research and
+  approved by a person
+- 749 investigators (PIs and study chairs) named in the registry; 229 US
+  investigators matched to the NPI Registry
+- About $12B in disclosed licensing and M&A value since May 2025, across 14
+  deals (headline USD values only; financings and other currencies are not
+  counted)
+- 4 trials disclosed before ClinicalTrials.gov listed them, such as Altimmune's
+  PERFORMA, 28 days earlier
 
-It's for BD, competitive-intelligence and investment analysts who follow a
-disease area rather than one company.
+It's for BD, competitive-intelligence and investment analysts who cover an
+indication or therapeutic area rather than one company.
 
 ## Where the data comes from
 
@@ -30,19 +35,20 @@ Every fact on screen comes from one of these, and nothing is entered by hand:
 
 - **ClinicalTrials.gov API v2**: trials, sponsors, arms, investigators and sites
 - **NPI Registry API**: NPI match, specialty and practice city
-- **PubMed E-utilities**: paper counts and recent papers
-- **Parallel Task API runs** with Data Connectors: owners, drugs and
-  mechanisms, the web's company list, milestones, deals, approvals, next steps,
-  clinicians' public roles, Medicare coverage, first-announced dates and the
-  weekly brief
+- **PubMed E-utilities**: publication counts and recent publications
+- **Parallel Task API runs** with Data Connectors: asset owners and
+  mechanisms, the web's company list, readouts, deals, approvals, guided
+  catalysts, investigators' disclosed roles, Medicare coverage, first-disclosure
+  dates and the weekly brief
 
-What is written by hand: the disease list, search terms and map subtitles in
+What is written by hand: the indication list, therapeutic areas, search terms
+and subtitles in
 `scripts/diseases.json`, and matching rules in code (name and credential
 cleaning, comparator words such as "placebo").
 
 ## How it's built
 
-One command builds a disease end to end:
+One command builds an indication end to end:
 
 ```bash
 npm run pipeline -- --disease mash
@@ -56,14 +62,14 @@ npm run pipeline -- --disease mash
 | 03 Same company, different names | Task API | `core` | | 1 | $0.03 |
 | 04 Company facts | Task Group, one run per company, per-field citations | `pro` | ClinicalTrials.gov, PubMed | 63 | $6.30 |
 | 04 Medicare coverage | Task API | `core` | CMS Coverage | 1 | $0.03 |
-| 05 Clinicians | NPI Registry and PubMed APIs | | | | free |
+| 05 Investigators | NPI Registry and PubMed APIs | | | | free |
 | 05 Names with several NPI matches | Task Group | `base` | NPI Registry | 26 | $0.26 |
 | 05 Authorship of common names | Task Group | `core` | PubMed | 13 | $0.33 |
-| 05 Roles named on the web | Task Group, one run per company | `pro` | PubMed, NPI Registry | 63 | $6.30 |
+| 05 Roles named in disclosures | Task Group, one run per company | `pro` | PubMed, NPI Registry | 63 | $6.30 |
 | 05 Profiles of the top 25 | Task Group | `core` | NPI Registry, PubMed, ClinicalTrials.gov | 30 | $0.75 |
 | 06 Events | Code, from steps 2–4 | | | | free |
-| 08 First announced | Task Group, trials registered in the last 90 days | `base` | | 16 | $0.16 |
-| 09 Weekly brief | Task API, from the week's sourced events only | `core` | | 1 | $0.03 |
+| 08 First disclosed | Task Group, trials registered in the last 90 days | `base` | | 16 | $0.16 |
+| 09 Weekly brief | Task API, from the period's disclosures and registry changes only | `core` | | 1 | $0.03 |
 | **Total** | | | | **266** | **$20.17** |
 
 Costs are [list prices](https://docs.parallel.ai/getting-started/pricing) per completed run. The connectors used here are free.
@@ -87,7 +93,7 @@ noisy web, and a join between them.
 4. **One person, once.** Web-found companies need a yes or no before they cost
    anything further.
 5. **Never bill twice.** Every step keeps a run log and reuses finished runs, so
-   re-running a disease pays only for new work.
+   re-running an indication pays only for new work.
 6. **Privacy enforced in code.** No document holds phone numbers, emails,
    street addresses or site contacts, and a save fails if any remain. See
    [PRIVACY.md](PRIVACY.md).
@@ -105,9 +111,9 @@ The repository ships the pipeline, not the data. Without `BLOB_READ_WRITE_TOKEN`
 the pipeline writes to `.data/` (gitignored) and the app reads from there. With
 it, both use private Vercel Blob, for a deployment.
 
-To add a disease, append it to `scripts/diseases.json` and run the pipeline with
-its key. Each map is as of its last pipeline run, shown in the header; there is
-no scheduled refresh yet.
+To add an indication, append it to `scripts/diseases.json` and run the pipeline
+with its key. Each landscape is as of its last pipeline run, shown in the header;
+there is no scheduled refresh yet.
 
 ```bash
 npm test
@@ -119,9 +125,9 @@ npm run lint
 
 | Route | |
 | --- | --- |
-| `/` | Redirects to the default disease, or explains how to build one |
-| `/d/:disease` | The map, with the clinician and what-changed rails |
-| `/d/:disease/data` | The dataset: click any cell for its sources; replay of the research run; CSV download |
+| `/` | Redirects to the default indication, or explains how to build one |
+| `/d/:disease` | The landscape map, with the investigator and recent-activity rails |
+| `/d/:disease/data` | The landscape table: click any cell for its sources; replay of the research run; CSV download |
 | `/d/:disease/brief` | The weekly brief |
 | `GET /api/d/:disease/trial/:nct`, `/clinician/:key`, `/basis/:company`, `/replay/:job`, `/export` | Data behind the pages |
 

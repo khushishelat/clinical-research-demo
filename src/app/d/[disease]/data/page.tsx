@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<'/d/[disease]/data'>): Promise<Metadata> {
   const space = await loadSpace((await params).disease);
-  return space ? { title: `${space.config.name} dataset · Trial Check` } : {};
+  return space ? { title: `${space.config.name} landscape table · Trial Check` } : {};
 }
 
 export default async function DataPage({ params }: PageProps<'/d/[disease]/data'>) {

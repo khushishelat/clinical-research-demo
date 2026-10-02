@@ -7,7 +7,7 @@ export function Tabs({ disease, brief }: { disease: string; brief: boolean }) {
   const path = usePathname();
   const tabs = [
     { href: `/d/${disease}`, label: 'Map' },
-    { href: `/d/${disease}/data`, label: 'Dataset' },
+    { href: `/d/${disease}/data`, label: 'Table' },
     ...(brief ? [{ href: `/d/${disease}/brief`, label: 'Weekly brief' }] : []),
   ];
   return (

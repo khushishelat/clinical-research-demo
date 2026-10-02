@@ -19,11 +19,11 @@ export function Dataset({ view }: { view: DatasetView }) {
     <main className="px-4 pb-12 sm:px-8">
       <section className="flex flex-wrap items-end justify-between gap-4 pt-8">
         <div>
-          <h1 className="text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name} dataset</h1>
+          <h1 className="text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name} landscape table</h1>
           <p className="mt-1 max-w-[720px] text-[15px] text-muted">One row per company, researched by a Parallel Task run with the ClinicalTrials.gov and PubMed connectors. Click any cell to see its sources and how confident the run was.</p>
         </div>
         <div className="flex items-center gap-2">
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter companies or drugs" aria-label="Filter" className="h-9 w-56 rounded-[4px] border border-line-strong bg-card px-3 text-[14px] placeholder:text-faint focus:border-ink focus:outline-none" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter companies or assets" aria-label="Filter" className="h-9 w-56 rounded-[4px] border border-line-strong bg-card px-3 text-[14px] placeholder:text-faint focus:border-ink focus:outline-none" />
           <a href={`/api/d/${view.disease.key}/export`} className="flex h-9 items-center rounded-[4px] border border-ink bg-ink px-3 font-mono text-[11px] uppercase tracking-[0.05em] text-page hover:bg-ink/90">
             Download CSV
           </a>

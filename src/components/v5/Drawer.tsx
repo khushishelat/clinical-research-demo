@@ -47,14 +47,14 @@ export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string
   }, [onClose]);
   const ready = data?.id === id;
   return (
-    <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label={kind === 'trial' ? 'Trial' : 'Clinician'}>
+    <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label={kind === 'trial' ? 'Trial' : 'Investigator'}>
       <button type="button" aria-label="Close" onClick={onClose} className="absolute inset-0 bg-ink/20" />
       <div className="drawer-in relative flex h-full w-full max-w-[640px] flex-col overflow-y-auto border-l border-line bg-card">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-card px-6 py-3">
           <button ref={closeRef} type="button" onClick={onClose} className="text-[13px] text-muted hover:text-ink">
             ← Back to the map
           </button>
-          <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">{kind}</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">{kind === 'trial' ? 'Trial' : 'Investigator'}</span>
         </div>
         {!ready ? (
           <div className="space-y-3 p-6" aria-busy="true">
@@ -63,14 +63,14 @@ export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string
             <div className="h-24 animate-pulse rounded bg-wash" />
           </div>
         ) : !data.body ? (
-          <p className="p-6 text-[14px] text-muted">{kind === 'trial' ? 'This trial is not on this map.' : 'Profiles are shown only for US clinicians verified in the NPI Registry.'}</p>
+          <p className="p-6 text-[14px] text-muted">{kind === 'trial' ? 'This trial is not on this map.' : 'Profiles are shown only for US investigators verified against the NPI Registry.'}</p>
         ) : kind === 'trial' ? (
           <Trial t={data.body as TrialDetail} onOpen={onOpen} />
         ) : (
           <Clinician c={data.body as ClinicianDetail} onOpen={onOpen} />
         )}
         <p className="mt-auto border-t border-line px-6 py-4 text-[12px] text-muted">
-          Shown: names, specialties, cities, trial roles and papers from public sources. Left out: phone numbers, emails and site contacts.
+          Shown: names, specialties, cities, trial roles and publications from public sources. Left out: phone numbers, emails and site contacts.
         </p>
       </div>
     </div>
@@ -128,7 +128,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
         <p className="text-[13px] text-muted">
           {t.company?.name ?? t.sponsor}
           {t.lead ? ` · ${t.lead}` : ''}
-          {t.runBy === 'investigator' ? ` · run by ${t.sponsor}` : ''}
+          {t.runBy === 'investigator' ? ` · investigator-sponsored by ${t.sponsor}` : ''}
         </p>
         <h2 className="mt-1 text-[28px] leading-tight">{t.acronym || t.nct}</h2>
         <p className="mt-1 text-[15px] text-muted">{t.title}</p>
@@ -141,7 +141,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
         </p>
         <Facts
           items={[
-            { value: t.enrollment ? t.enrollment.toLocaleString('en-US') : '—', label: 'Patients' },
+            { value: t.enrollment ? t.enrollment.toLocaleString('en-US') : '—', label: 'Enrollment' },
             { value: `${t.sites}${t.countries > 1 ? ` · ${t.countries}` : ''}`, label: t.countries > 1 ? 'Sites · countries' : 'Sites' },
             {
               value: fmt(t.firstPosted),
@@ -149,7 +149,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
               sub: t.firstSeen ? (
                 <span>
                   <span className="mr-1 inline-block h-1.5 w-1.5 bg-orange" />
-                  Web announced it {t.firstSeen.days}d earlier
+                  Disclosed {t.firstSeen.days}d before registry
                   {t.firstSeen.source ? (
                     <>
                       {' · '}
@@ -188,14 +188,14 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.web.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">
-            <span className="h-2 w-2 bg-orange" /> From the web
+            <span className="h-2 w-2 bg-orange" /> Disclosures
             <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.05em] text-faint">
-              Web research · {t.webSources} source{t.webSources === 1 ? '' : 's'}
+              Parallel web research · {t.webSources} source{t.webSources === 1 ? '' : 's'}
             </span>
           </h3>
           {t.firstSeen ? (
             <p className="mt-2 text-[13px] text-muted">
-              Earliest announcement {fmt(t.firstSeen.date)} — {t.firstSeen.days} days before the registry listing
+              First disclosed {fmt(t.firstSeen.date)}, {t.firstSeen.days} days before the registry listing
               {t.firstSeen.what ? `: ${t.firstSeen.what}` : ''}
               {t.firstSeen.source ? (
                 <>
@@ -228,8 +228,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       <section className="mt-6">
         <div className="flex flex-wrap items-baseline justify-between gap-2 px-6">
           <h3 className="text-[14px]">
-            {t.named.length} investigator{t.named.length === 1 ? '' : 's'} named{' '}
-            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Registry</span>
+            {t.named.length} investigator{t.named.length === 1 ? '' : 's'} in the registry
           </h3>
           {t.hiddenSites ? <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">Sites appear as “{t.hiddenLabel}”</span> : null}
         </div>
@@ -238,8 +237,8 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             <div className="mt-2 flex gap-3 px-6 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
               <span className="w-9" />
               <span className="flex-1">Investigator · specialty · city (NPI)</span>
-              <span className="w-14 text-right">Trials here</span>
-              <span className="w-14 text-right">Papers</span>
+              <span className="w-14 text-right" title="Active trials in this indication">Trials</span>
+              <span className="w-14 text-right" title="Publications in this indication">Pubs</span>
             </div>
             <div className="mt-1">
               {shown.map((p) => (
@@ -267,8 +266,8 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.fromWeb.length ? (
         <section className="mt-6">
           <h3 className="flex items-center gap-2 px-6 text-[14px]">
-            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} found on the web{' '}
-            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Web research</span>
+            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} named in disclosures{' '}
+            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Parallel web research</span>
           </h3>
           <div className="mt-2">
             {t.fromWeb.map((p) => (
@@ -313,9 +312,9 @@ function Clinician({ c, onOpen }: { c: ClinicianDetail; onOpen: (kind: 'trial' |
       <div className="px-6">
         <Facts
           items={[
-            { value: String(c.activeTrials), label: 'Active trials here' },
-            { value: String(c.webRoles.length), label: 'Roles found on the web' },
-            { value: c.papers ? String(c.papers.count) : '—', label: 'Papers on this disease' },
+            { value: String(c.activeTrials), label: 'Active trials in indication' },
+            { value: String(c.webRoles.length), label: 'Disclosed roles' },
+            { value: c.papers ? String(c.papers.count) : '—', label: 'Publications in indication' },
             { value: c.papers ? String(c.papers.since2024) : '—', label: 'Since 2024' },
           ]}
         />
@@ -323,7 +322,7 @@ function Clinician({ c, onOpen }: { c: ClinicianDetail; onOpen: (kind: 'trial' |
         {c.companies.length ? (
           <div className="mt-5">
             <h3 className="text-[14px]">
-              Works with {c.companies.length} compan{c.companies.length === 1 ? 'y' : 'ies'} on this map
+              Works with {c.companies.length} sponsor{c.companies.length === 1 ? '' : 's'} on this map
             </h3>
             <p className="mt-2 flex flex-wrap gap-1.5">
               {c.companies.map((co) => (
@@ -377,7 +376,7 @@ function Clinician({ c, onOpen }: { c: ClinicianDetail; onOpen: (kind: 'trial' |
       {c.papers?.recent.length ? (
         <section className="mt-6">
           <h3 className="flex items-baseline justify-between px-6 text-[14px]">
-            Recent papers <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">PubMed</span>
+            Recent publications <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">PubMed</span>
           </h3>
           <ul className="mt-2">
             {c.papers.recent.slice(0, 5).map((p) => (

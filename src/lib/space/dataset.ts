@@ -10,14 +10,14 @@ export type Cell = { field: string; text: string; sub?: string; source?: string 
 export type DatasetRow = { key: string; name: string; host: string | null; webOnly: boolean; trials: number; cells: Record<string, Cell>; run: string | null; connectors: Record<string, number>; seconds: number | null };
 
 export const COLUMNS: { field: string; label: string; help: string }[] = [
-  { field: 'furthest_along', label: 'Furthest along', help: 'The company’s most advanced drug in this disease, its phase, and where.' },
-  { field: 'lead_assets', label: 'Drugs', help: 'Drugs the company is developing for this disease.' },
-  { field: 'how_given', label: 'How it’s given', help: 'Route and dosing frequency of the lead drug.' },
-  { field: 'pivotal_comparator', label: 'Pivotal trial vs', help: 'What the lead pivotal trial compares against.' },
-  { field: 'latest_readout', label: 'Latest data', help: 'The most recent reported result, with its date.' },
-  { field: 'next_regulatory_decision', label: 'Next regulatory decision', help: 'An agency decision date or window the company has stated.' },
-  { field: 'deals', label: 'Deals', help: 'Licenses, acquisitions and partnerships for these drugs.' },
-  { field: 'approvals', label: 'Approvals', help: 'Approvals in this disease, by region.' },
+  { field: 'furthest_along', label: 'Highest phase', help: 'The company’s most advanced asset in this indication, its phase, and where.' },
+  { field: 'lead_assets', label: 'Assets', help: 'Assets the company is developing in this indication.' },
+  { field: 'how_given', label: 'Route · frequency', help: 'Route of administration and frequency of the lead asset.' },
+  { field: 'pivotal_comparator', label: 'Pivotal comparator', help: 'What the lead pivotal trial compares against: placebo, standard of care, or a named drug.' },
+  { field: 'latest_readout', label: 'Latest readout', help: 'The most recent reported data, with its date.' },
+  { field: 'next_regulatory_decision', label: 'Next regulatory event', help: 'A filing, PDUFA date or agency decision window the company has stated.' },
+  { field: 'deals', label: 'Deals', help: 'Licensing, M&A, partnerships and financings for these assets.' },
+  { field: 'approvals', label: 'Approvals', help: 'Approvals in this indication, by region.' },
 ];
 
 /** "Approved for non-cirrhotic MASH" → "Approved"; "Phase IIb" → "Phase 2". The run's wording stays in the basis. */

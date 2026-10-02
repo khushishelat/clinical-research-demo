@@ -26,10 +26,10 @@ export default async function BriefPage({ params, searchParams }: PageProps<'/d/
     <main className="grid gap-10 px-4 pb-16 pt-8 sm:px-8 lg:grid-cols-[minmax(0,720px)_220px]">
       <article>
         <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted">
-          {space.config.name} · week of {fmt(brief.from)} to {fmt(brief.date)}
+          {space.config.name} · {fmt(brief.from)} to {fmt(brief.date)}
         </p>
         <h1 className="mt-2 text-[36px] leading-tight tracking-[-0.01em]">{brief.title}</h1>
-        <p className="mt-2 text-[14px] text-muted">Written by a Parallel Task run from this week&apos;s sourced events only. Every claim links to the event it came from; sources not in the input are dropped.</p>
+        <p className="mt-2 text-[14px] text-muted">Written by a Parallel Task run from the period&apos;s disclosures and registry changes only. Every claim links to its source; sources not in the input are dropped.</p>
         {brief.sections.map((s) => (
           <section key={s.heading} className="mt-8 border-t border-line pt-5">
             <h2 className="text-[20px]">{s.heading}</h2>
