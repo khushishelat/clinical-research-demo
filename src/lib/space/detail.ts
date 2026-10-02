@@ -127,6 +127,13 @@ export function trialDetail(s: S, nct: string) {
     countries: t.countries.length,
     firstPosted: t.first_posted,
     primaryCompletion: t.primary_completion,
+    // Step 08: when the web first announced this trial, against its registry date. Per-trial only — never invented per news item.
+    firstSeen: (() => {
+      const seen = s.firstSeen[nct];
+      return seen && seen.days_earlier > 0 && seen.first_announced
+        ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url, what: seen.what }
+        : null;
+    })(),
     web,
     named,
     hiddenSites,
