@@ -20,7 +20,7 @@ const rows = review.map((r) => {
   const best = (c?.drugs ?? []).find((x) => LATE.has(x.phase ?? '') || /^approved/i.test(x.highest_phase));
   return { r, c, recommend: Boolean(best), why: best ? `${best.name}: ${best.highest_phase}` : (c?.drugs ?? []).map((x) => `${x.name}: ${x.highest_phase || 'phase not stated'}`).join('; ') || 'no drug returned' };
 });
-const pending = rows.filter((x) => x.r.include === null);
+const pending = rows.filter((x) => x.r.include === null && x.r.listed !== false);
 console.log(`[${d.key}] ${review.length} companies found only on the web · ${review.length - pending.length} decided · ${pending.length} waiting\n`);
 for (const x of pending) console.log(`${x.recommend ? 'include ' : 'leave out'}  ${x.r.company}${x.c?.web?.country ? ` (${x.c.web.country})` : ''} · ${x.why}`);
 if (!pending.length) process.exit(0);

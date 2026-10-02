@@ -166,7 +166,9 @@ await store.put(spacePath(d, 'companies.json'), { disease: d.key, built: new Dat
 // Keep any decisions a person already made in the review file.
 const prior = new Map(((await store.get<{ company: string; include: boolean | null; decided?: string }[]>(spacePath(d, 'review/companies.json'))) ?? []).map((r) => [r.company, r]));
 const review = list.filter((c) => c.web_only).map((c) => ({ include: prior.get(c.name)?.include ?? null, ...(prior.get(c.name)?.decided ? { decided: prior.get(c.name)!.decided } : {}), company: c.name, country: c.web?.country, drugs: c.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: c.web?.source, registry_trials: c.trials.length + c.investigator_trials.length }));
-await store.put(spacePath(d, 'review/companies.json'), review);
+// Decisions outlive the list: a company missing from this run keeps its entry (listed: false), so a later run that finds it again finds the decision too.
+const unlisted = [...prior.values()].filter((r) => !review.some((x) => x.company === r.company) && r.include !== null).map((r) => ({ ...r, listed: false }));
+await store.put(spacePath(d, 'review/companies.json'), [...review, ...unlisted]);
 
 const withTrials = list.filter((c) => c.trials.length + c.investigator_trials.length);
 const companyRun = trials.filter((t) => t.run_by === 'company').length;
