@@ -167,3 +167,8 @@ test('trial drawer: sibling trials test the same lead drug', () => {
   // Symmetry: NCT2's sibling is NCT1.
   assert.deepEqual(trialDetail(s, 'NCT2')!.siblings.map((o) => o.nct), ['NCT1']);
 });
+
+test('trial drawer: web research carries its distinct source count', () => {
+  const t = trialDetail(space(), 'NCT1')!;
+  assert.equal(t.webSources, 1);
+});
