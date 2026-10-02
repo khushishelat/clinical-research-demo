@@ -113,7 +113,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
         </div>
         <dl className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4">
-          <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors`} />
+          <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? ` · +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
           <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
           <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label={s.dealDollars ? 'Licensing and M&A since May 2025' : 'Licensing and M&A deals since May 2025'} sub={s.dealDollars ? `${s.deals} deals · disclosed headline value, USD` : undefined} accent />
@@ -138,6 +138,11 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 </span>
                 Phase 1 · 2 · 3
               </li>
+              {s.completed ? (
+                <li className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full border-2 border-ink bg-card" /> Completed since {view.scope?.completed_since?.slice(0, 4)}
+                </li>
+              ) : null}
               <li className="flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Acquired asset
               </li>
@@ -153,7 +158,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 Company assets · {s.onMap}
               </button>
               <button type="button" onClick={() => setScope('all')} aria-pressed={scope === 'all'} className={`rounded-[3px] px-3 py-1.5 ${scope === 'all' ? 'bg-ink text-page' : 'text-muted hover:text-ink'}`}>
-                All active trials · {s.trials}
+                {s.completed ? 'All trials' : 'All active trials'} · {s.all}
               </button>
             </div>
           </div>
@@ -288,8 +293,8 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
               type="button"
               aria-label={`${d.label}, phase ${d.phase || 'not set'}, ${d.kind === 'company' ? 'industry-sponsored' : 'investigator-sponsored'}`}
               onClick={() => onDot(d)}
-              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: d.kind === 'company' ? `Industry-sponsored · first posted ${fmt(d.x)}` : `Investigator-sponsored, testing this company's asset · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for investigators and disclosures' })}
-              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
+              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Industry-sponsored' : "Investigator-sponsored, testing this company's asset"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for investigators and disclosures' })}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.done ? `border-2 bg-card ${d.kind === 'company' ? 'border-ink' : 'border-[#adadac]'}` : d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
               style={{ left: `${x(d.x)}%`, top: jitter(d.nct) + 10, width: size, height: size }}
             />
           );

@@ -98,7 +98,8 @@
       "specialties": [
         "neurology",
         "headache"
-      ]
+      ],
+      "include_completed_since": "2024-01-01"
     }
   ],
   "default": "mash"

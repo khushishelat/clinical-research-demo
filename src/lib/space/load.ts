@@ -22,7 +22,7 @@ export type Space = {
   config: DiseaseConfig;
   fetched: string;
   /** What the registry pull kept, if the indication is scoped (e.g. Phase 2 and later). */
-  scope: { min_phase?: number; conditions_only?: string } | null;
+  scope: { min_phase?: number; conditions_only?: string; completed_since?: string } | null;
   trials: Trial[];
   companies: Company[];
   unassigned: string[];

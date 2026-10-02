@@ -29,6 +29,8 @@ export type Disease = {
   area?: string;
   /** Large indications chain the company list once per region (COMPANY_CHAIN). */
   chain_regions?: string[];
+  /** Also keep trials that completed or stopped since this date (YYYY-MM-DD). */
+  include_completed_since?: string;
 };
 
 const config = JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')) as { diseases: Disease[]; default: string; exclude: string[] };

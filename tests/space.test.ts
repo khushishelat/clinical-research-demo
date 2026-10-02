@@ -222,3 +222,14 @@ test('v1: deal values count USD millions only', async () => {
   assert.equal(dealValue({ ...base, currency: 'EUR', total_m: 348, upfront_m: null }), 0);
   assert.equal(dealValue({ ...base, total: 'up to $1.0 billion' }), 1e9);
 });
+
+test('completed trials: hollow dots, not counted as active', () => {
+  const s = space();
+  (s.trials[0] as any).status = 'COMPLETED';
+  const v = mapView(s, 'companies', '2026-10-01');
+  const acme = v.rows.find((r) => r.key === 'acme')!;
+  assert.equal(acme.dots.find((d) => d.nct === 'NCT1')!.done, true);
+  assert.equal(v.stats.trials, 2);
+  assert.equal(v.stats.completed, 1);
+  assert.equal(v.stats.all, 3);
+});

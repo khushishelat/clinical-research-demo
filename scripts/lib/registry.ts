@@ -16,7 +16,7 @@ const FIELDS = [
   'LeadSponsorName', 'LeadSponsorClass', 'CollaboratorName',
   'InterventionName', 'InterventionType', 'InterventionOtherName', 'ArmGroupType', 'ArmGroupLabel', 'ArmGroupInterventionName',
   'DesignAllocation', 'DesignMasking', 'PrimaryOutcomeMeasure', 'PrimaryOutcomeTimeFrame',
-  'StudyFirstPostDate', 'LastUpdatePostDate', 'StartDate', 'PrimaryCompletionDate', 'EnrollmentCount',
+  'StudyFirstPostDate', 'LastUpdatePostDate', 'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount',
   'OverallOfficialName', 'OverallOfficialAffiliation', 'OverallOfficialRole',
   'LocationFacility', 'LocationCity', 'LocationState', 'LocationCountry', 'LocationContactName', 'LocationContactRole',
 ].join(',');
@@ -98,11 +98,25 @@ export function toTrial(study: any): Trial {
   };
 }
 
+export const FINISHED = 'COMPLETED,TERMINATED';
+export const isActive = (status: string) => ACTIVE.split(',').includes(status);
+
+/**
+ * Active drug trials for an indication, plus (if the indication sets
+ * `include_completed_since`) trials that completed or stopped since that date:
+ * in a commercial-stage market the recent readouts are most of the picture.
+ */
 export async function fetchTrials(d: Disease, fetchImpl: typeof fetch = fetch): Promise<Trial[]> {
   const out = new Map<string, Trial>();
+  await pull(d, ACTIVE, DRUG_TYPES, out, fetchImpl);
+  if (d.include_completed_since) await pull(d, FINISHED, `${DRUG_TYPES} AND AREA[PrimaryCompletionDate]RANGE[${d.include_completed_since},MAX]`, out, fetchImpl);
+  return [...out.values()].sort((a, b) => a.nct.localeCompare(b.nct));
+}
+
+async function pull(d: Disease, statuses: string, advanced: string, out: Map<string, Trial>, fetchImpl: typeof fetch) {
   let token: string | undefined;
   do {
-    const params = new URLSearchParams({ 'query.cond': d.query_cond, 'filter.overallStatus': ACTIVE, 'filter.advanced': DRUG_TYPES, fields: FIELDS, pageSize: '1000', ...(token ? { pageToken: token } : {}) });
+    const params = new URLSearchParams({ 'query.cond': d.query_cond, 'filter.overallStatus': statuses, 'filter.advanced': advanced, fields: FIELDS, pageSize: '1000', ...(token ? { pageToken: token } : {}) });
     const res = await fetchImpl(`${BASE}?${params}`, { headers: { accept: 'application/json' } });
     if (!res.ok) throw new Error(`ClinicalTrials.gov ${res.status}`);
     const body: any = await res.json();
@@ -112,7 +126,6 @@ export async function fetchTrials(d: Disease, fetchImpl: typeof fetch = fetch): 
     }
     token = body.nextPageToken;
   } while (token);
-  return [...out.values()].sort((a, b) => a.nct.localeCompare(b.nct));
 }
 
 const EMAIL = /[\w.+-]+@[\w-]+\.[a-z]{2,}/gi;

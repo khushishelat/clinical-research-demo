@@ -5,7 +5,7 @@
 //   npx tsx scripts/02-registry.mts --disease mash
 
 import { disease, log, spacePath, store, today, where } from './lib/pipeline';
-import { assertNoContacts, diffSnapshots, fetchTrials, type RegistryEvent, type Trial } from './lib/registry';
+import { assertNoContacts, diffSnapshots, fetchTrials, isActive, type RegistryEvent, type Trial } from './lib/registry';
 
 const d = disease();
 const date = today();
@@ -14,6 +14,7 @@ const date = today();
 const sc = d.default_scope;
 const fetched = await fetchTrials(d);
 const trials = fetched.filter((t) => (!sc?.min_phase || t.phase_level >= sc.min_phase) && (!sc?.conditions_only || t.conditions.some((c) => c.toLowerCase().includes(sc.conditions_only!))));
+if (d.include_completed_since) log(d, `${trials.filter((t) => !isActive(t.status)).length} trials completed or stopped since ${d.include_completed_since} kept alongside ${trials.filter((t) => isActive(t.status)).length} active`);
 if (trials.length !== fetched.length) log(d, `scope: ${trials.length} of ${fetched.length} active trials (${[sc?.min_phase ? `Phase ${sc.min_phase}+` : '', sc?.conditions_only ? `conditions naming "${sc.conditions_only}"` : ''].filter(Boolean).join(', ')})`);
 assertNoContacts('trials', trials);
 
@@ -27,7 +28,7 @@ const merged = [...events, ...fresh.filter((e) => !known.has(e.id))];
 
 await store.put(spacePath(d, `snapshots/trials-${date}.json`), trials);
 await store.put(spacePath(d, 'snapshots/index.json'), { dates: [...new Set([...index.dates, date])].sort() });
-await store.put(spacePath(d, 'trials.json'), { disease: d.key, fetched: new Date().toISOString(), source: 'ClinicalTrials.gov API v2', scope: sc ?? null, trials });
+await store.put(spacePath(d, 'trials.json'), { disease: d.key, fetched: new Date().toISOString(), source: 'ClinicalTrials.gov API v2', scope: sc || d.include_completed_since ? { ...(sc ?? {}), ...(d.include_completed_since ? { completed_since: d.include_completed_since } : {}) } : null, trials });
 await store.put(spacePath(d, 'registry-events.json'), merged);
 
 const company = trials.filter((t) => t.run_by === 'company');

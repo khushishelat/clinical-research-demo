@@ -7,7 +7,8 @@ import { regulatoryEvent } from './labels';
 import type { Company, Deal, Facts } from './types';
 
 export type Scope = 'companies' | 'all';
-export type Dot = { nct: string; label: string; x: string; kind: 'company' | 'investigator'; phase: number; acquiredFrom: string | null };
+/** `done`: completed or terminated (kept when the indication includes recent readouts). */
+export type Dot = { nct: string; label: string; x: string; kind: 'company' | 'investigator'; phase: number; acquiredFrom: string | null; done: boolean };
 /**
  * A dated mark on a company's row. `nct` is the trial it is about, when the research
  * run named one; otherwise `trials` lists the row's trials of the mark's drug.
@@ -129,6 +130,7 @@ export function dollars(s: string | null | undefined): number {
 }
 
 const ACTIVE_WINDOW_DAYS = 60;
+const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION']);
 export const DEALS_SINCE = '2025-05-01';
 const BD = new Set(['license', 'acquisition', 'collaboration', 'option', 'divestiture']);
 const firstWord = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ')[0];
@@ -169,7 +171,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
     const dots: Dot[] = [...c.trials, ...c.investigator_trials]
       .map((n) => trialsBy.get(n))
       .filter(present)
-      .map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: t.run_by, phase: t.phase_level, acquiredFrom: acquired.has(t.sponsor) ? t.sponsor.replace(/,?\s*Inc\.?$/, '') : null }));
+      .map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: t.run_by, phase: t.phase_level, acquiredFrom: acquired.has(t.sponsor) ? t.sponsor.replace(/,?\s*Inc\.?$/, '') : null, done: !ACTIVE.has(t.status) }));
     // A deal another company recorded with this one as a party, unless this company recorded it too.
     const near = (a: string | null, b: string | null) => Boolean(a && b && Math.abs(Date.parse(a) - Date.parse(b)) <= 3 * 86_400_000);
     const theirs = allDeals.filter((x) => x.owner !== c.key && x.parties.some((p) => sameCompany(p, c.name)) && !(f?.deals ?? []).some((own) => near(own.date, x.deal.date))).map((x) => x.deal);
@@ -231,7 +233,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       stage: '',
       approved: false,
       mechanisms: [],
-      dots: s.unassigned.map((n) => trialsBy.get(n)).filter(present).map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: 'investigator' as const, phase: t.phase_level, acquiredFrom: null })),
+      dots: s.unassigned.map((n) => trialsBy.get(n)).filter(present).map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: 'investigator' as const, phase: t.phase_level, acquiredFrom: null, done: !ACTIVE.has(t.status) })),
       news: [],
       next: [],
       trials: s.unassigned.length,
@@ -250,7 +252,9 @@ export function mapView(s: Space, scope: Scope, today: string) {
     updated: s.fetched,
     scope: s.scope,
     stats: {
-      trials: s.trials.length,
+      trials: s.trials.filter((t) => ACTIVE.has(t.status)).length,
+      completed: s.trials.filter((t) => !ACTIVE.has(t.status)).length,
+      all: s.trials.length,
       onMap: onMap.size,
       companies: rows.filter((r) => r.key !== '_unassigned').length,
       registryCompanies,
