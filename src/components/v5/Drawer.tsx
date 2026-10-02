@@ -142,6 +142,24 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
         />
       </div>
 
+      {t.siblings.length ? (
+        <section className="mt-6 px-6">
+          <h3 className="text-[14px]">Other trials of {t.lead}</h3>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {t.siblings.map((o) => (
+              <button
+                key={o.nct}
+                type="button"
+                onClick={() => onOpen('trial', o.nct)}
+                className="rounded-[3px] border border-line-strong px-2 py-1 text-[12px] hover:border-ink"
+              >
+                <span className="font-medium">{o.label}</span> <span className="text-muted">· {o.phase}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       {t.web.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">

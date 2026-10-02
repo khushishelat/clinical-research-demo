@@ -132,3 +132,15 @@ test('deals: licensing and M&A once each, on both parties’ rows', () => {
   assert.equal(v.stats.dealDollars, 1.5e9);
   assert.equal(v.rows.find((r) => r.key === 'bigco')!.news.filter((m) => m.type === 'deal').length, 1);
 });
+
+test('trial drawer: sibling trials test the same lead drug', () => {
+  const s = space();
+  // A same-company trial of a different drug is not a sibling.
+  s.trials.push(trial('NCT4', { interventions: [{ name: 'placebex', type: 'DRUG', other_names: [] }] }) as never);
+  (s.companies[0] as { trials: string[] }).trials.push('NCT4');
+  const t = trialDetail(s, 'NCT1')!;
+  assert.deepEqual(t.siblings.map((o) => o.nct), ['NCT2']);
+  assert.equal(t.siblings[0].label, 'NCT2');
+  // Symmetry: NCT2's sibling is NCT1.
+  assert.deepEqual(trialDetail(s, 'NCT2')!.siblings.map((o) => o.nct), ['NCT1']);
+});
