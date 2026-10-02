@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Brief } from '@/lib/space/types';
 import { hostOf } from '@/lib/space/view';
+import { BriefMarkdown } from './BriefMarkdown';
 import { BriefReplay } from './BriefReplay';
 import { Favicon } from './Favicon';
 
@@ -77,9 +78,14 @@ export function BriefModal({ disease, name, issues, issue, onIssue, onClose }: {
                   {fmt(b.from)} to {fmt(b.date)}
                 </p>
                 <h2 className="mt-2 text-[30px] leading-tight tracking-[-0.01em]">{b.title}</h2>
-                <p className="mt-2 text-[13px] text-muted">Written by a Parallel Task run from the period&apos;s disclosures and registry changes only. Every claim links to its source; sources not in the input are dropped.</p>
+                <p className="mt-2 text-[13px] text-muted">
+                  {b.markdown
+                    ? 'Researched and written by one Parallel deep-research Task run, starting from the week’s registry changes and disclosures and searching the web, ClinicalTrials.gov and PubMed for what they miss. Every claim cites its source.'
+                    : 'Written by a Parallel Task run from the period’s disclosures and registry changes only. Every claim links to its source; sources not in the input are dropped.'}
+                </p>
                 <BriefReplay disease={disease} issue={issue} />
-                {b.sections.map((s) => (
+                {b.markdown ? <BriefMarkdown markdown={b.markdown} references={b.references ?? []} /> : null}
+                {(b.sections ?? []).map((s) => (
                   <section key={s.heading} className="mt-7 border-t border-line pt-5">
                     <h3 className="text-[19px]">{s.heading}</h3>
                     <p className="mt-2 text-[15px] leading-relaxed">{s.body}</p>

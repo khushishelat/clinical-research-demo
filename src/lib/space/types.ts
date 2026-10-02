@@ -135,4 +135,5 @@ export type FirstSeen = { first_announced: string | null; source_url: string | n
 export type Coverage = { drug: string; policy: string; id: string; type: string; effective_date: string | null; summary: string; source_url: string };
 
 /** spaces/<disease>/briefs/<date>.json */
-export type Brief = { disease: string; date: string; from: string; title: string; sections: { heading: string; body: string; sources: string[] }[]; run_id: string };
+/** brief@1: sections from the given items. brief@2: a deep-research run's markdown with [n] citations and its references. */
+export type Brief = { disease: string; date: string; from: string; title: string; sections?: { heading: string; body: string; sources: string[] }[]; markdown?: string; references?: { n: number; title: string; url: string }[]; run_id: string; spec?: string; seconds?: number | null; connectors?: Record<string, number> };

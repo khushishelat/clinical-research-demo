@@ -13,7 +13,7 @@
 // types and event kinds are enums; amounts come as stated plus a number.
 
 import type { Disease } from './pipeline';
-import { A, B, E, N, O, S } from './pipeline';
+import { A, B, E, N, O, S, TEXT } from './pipeline';
 
 export const PHASES = ['preclinical', 'phase_1', 'phase_1_2', 'phase_2', 'phase_2_3', 'phase_3', 'filed', 'approved'] as const;
 const PHASE = (description: string) => E([...PHASES], description);
@@ -396,16 +396,22 @@ export const FIRST_SEEN = {
 // Step 9: the brief, written only from the period's sourced events.
 // v1: the title names the period's lead development (v0: "MASH Development:
 // Weekly Brief"); registry changes come as their own list.
+// Step 9 (v2): the weekly brief is a deep-research run (ultra, text output).
+// It starts from the week's known events (registry changes and the pipeline's
+// disclosures), keeps the material ones, and searches for what we missed. In
+// the pilot, open research found the week's treatment guidance, and every
+// unseeded variant missed three financings the pipeline already had.
 export const BRIEF = {
-  key: 'brief@1',
-  processor: 'core',
-  schema: O({ title: S('The most important development of the period, 10 words or fewer. Never "weekly brief".'), sections: A(O({ heading: S('6 words or fewer.'), body: S('2 to 4 sentences, plain and specific.'), sources: A(S('URLs taken from the input only.')) }), '4 to 6 sections.') }),
-  input: (d: Disease, period: { from: string; to: string }, disclosures: unknown[], registry_changes: unknown[], upcoming: unknown[]) => ({
+  key: 'brief@2',
+  processor: 'ultra',
+  connectors: ['clinical_trials', 'pubmed'],
+  schema: TEXT('A weekly brief in markdown: a first line "# " headline naming the most important development (10 words or fewer, never "weekly brief"), an executive summary of 3 to 6 bullets, then one short section per development, most important first. Each bullet and section ends with a plain "Why it matters" sentence. Inline numbered citations [n] and a final "## References" list.'),
+  input: (d: Disease, period: { from: string; to: string }, known: { disclosures: unknown[]; registry_changes: unknown[]; upcoming_30_days: unknown[] }, companies: { name: string; drugs: string[] }[], trials: { nct: string; acronym: string | null; sponsor: string; phase: string; status: string }[]) => ({
     indication: label(d),
     period,
-    disclosures,
-    registry_changes,
-    upcoming_30_days: upcoming,
-    task: `Write the brief on ${d.name} drug development for this period, for BD and competitive-intelligence readers: 4 to 6 short sections, most important first. Use only the items given; every section cites the source URLs of the items it uses. No speculation, no investment advice, no named individuals.`,
+    known_this_week: known,
+    companies,
+    registry_trials: trials,
+    task: `Write the brief on ${d.name} drug development from ${period.from} to ${period.to}, for BD and competitive-intelligence readers. Start from known_this_week: verify each item and include every material one with its source. Then research what it does not cover: data readouts, regulatory actions and treatment guidance, deals and financings, trial starts, completions, terminations and holds, safety signals, changes to company guidance, and new entrants, including companies not listed. Only developments dated within the period. Say what is new and why it matters, without recommendations or investment advice. Do not name individual clinicians or patients, and never include contact details.`,
   }),
 };

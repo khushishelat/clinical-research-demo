@@ -127,7 +127,7 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
     const run: any = await client.taskRun.create({
       processor: spec.processor,
       input: spec.input as any,
-      task_spec: { output_schema: { type: 'json', json_schema: spec.schema as Record<string, unknown> } },
+      task_spec: { output_schema: outputSchema(spec.schema) as any },
       ...(spec.connectors?.length ? { advanced_settings: { data_sources: { free: spec.connectors } } as any } : {}),
       metadata: { app: 'trial-check', ...(spec.metadata ?? {}) },
       ...(spec.previous_interaction_id ? { previous_interaction_id: spec.previous_interaction_id } : {}),
@@ -156,7 +156,7 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
       rec.seconds = secondsOf(run);
       if (run.status === 'completed') {
         const res: any = await again(() => client.taskRun.result(rec.run_id, { timeout: 30 }));
-        rec.content = typeof res.output.content === 'string' ? JSON.parse(res.output.content) : res.output.content;
+        rec.content = typeof res.output.content === 'string' && !isText(spec.schema) ? JSON.parse(res.output.content) : res.output.content;
         rec.basis = res.output.basis ?? [];
         rec.connectors = (res.output.mcp_tool_calls ?? []).reduce((m: Record<string, number>, c: any) => ((m[c.server_name] = (m[c.server_name] ?? 0) + 1), m), {});
       }
@@ -237,7 +237,7 @@ export async function groupRuns(
     const batch = missing.slice(i, i + 50).map((u) => ({
       processor: u.spec.processor,
       input: u.spec.input as any,
-      task_spec: { output_schema: { type: 'json', json_schema: u.spec.schema as Record<string, unknown> } },
+      task_spec: { output_schema: outputSchema(u.spec.schema) as any },
       ...(u.spec.connectors?.length ? { advanced_settings: { data_sources: { free: u.spec.connectors } } } : {}),
       metadata: { app: 'trial-check', job, disease: d.key, ...(u.spec.metadata ?? {}), unit: u.key },
     }));
@@ -278,3 +278,7 @@ export const E = (values: string[], description?: string) => ({ type: 'string', 
 export const A = (items: object, description?: string) => ({ type: 'array', items, ...(description ? { description } : {}) });
 export const O = (properties: Record<string, object>, required = Object.keys(properties)) => ({ type: 'object', properties, required, additionalProperties: false });
 export const B = (description: string) => ({ type: 'boolean', description });
+/** A text output schema: the run returns markdown with inline citations instead of JSON. */
+export const TEXT = (description: string) => ({ type: 'text', description });
+const isText = (schema: object) => (schema as { type?: string }).type === 'text';
+const outputSchema = (schema: object) => (isText(schema) ? schema : { type: 'json', json_schema: schema as Record<string, unknown> });
