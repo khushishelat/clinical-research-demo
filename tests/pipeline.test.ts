@@ -86,6 +86,8 @@ test('companies: one key per company across legal and place words', () => {
   assert.ok(companyKey('Qilu Pharmaceutical Co., Ltd.').length > 0);
   assert.equal(displayName('Merck Sharp & Dohme LLC').includes('&'), true);
   assert.ok(isHoldingCompany('Novo Holdings A/S'));
+  assert.ok(isHoldingCompany('Lundbeckfond Invest A/S'));
+  assert.ok(!isHoldingCompany('Eli Lilly and Company'));
 });
 
 test('registry diff: new trials, status and phase changes', () => {

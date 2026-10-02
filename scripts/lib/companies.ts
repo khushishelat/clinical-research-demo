@@ -91,7 +91,8 @@ export function trialTests(trial: Trial, alias: string): boolean {
 }
 
 /** A financial parent (a foundation or holding company) is not the company on the map. */
-export const isHoldingCompany = (name: string) => /\b(holdings?|foundation|fund|investments?|capital|ventures)\b/i.test(name ?? '');
+// "Lundbeckfond Invest": Danish fond (foundation) and a bare Invest count too.
+export const isHoldingCompany = (name: string) => /(\bholdings?|foundation|\bfund|fond(en)?\b|\binvest(ments?)?\b|\bcapital|\bventures|stiftung)\b/i.test(name ?? '');
 
 /**
  * Merge rows a same-company run grouped. The row whose key matches the group's
