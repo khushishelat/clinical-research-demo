@@ -148,6 +148,9 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
             </div>
           </div>
 
+          <p className="border-b border-line px-4 py-2 text-center font-mono text-[10px] uppercase tracking-[0.05em] text-faint sm:hidden">
+            Best experienced on desktop · scroll sideways to explore
+          </p>
           <div className="relative overflow-x-auto" onMouseLeave={() => setTip(null)}>
             <div className="min-w-[860px]">
               <div className="grid grid-cols-[260px_minmax(0,1fr)_64px] border-b border-line bg-page px-4 py-2 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
