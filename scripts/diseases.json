@@ -72,6 +72,9 @@
       "area": "Neuroscience",
       "include_completed_since": "2024-01-01",
       "query_cond": "Alzheimer",
+      "default_scope": {
+        "conditions_only": "alzheimer"
+      },
       "pubmed_terms": "Alzheimer OR \"amyloid\" OR dementia",
       "specialties": [
         "neurology",
