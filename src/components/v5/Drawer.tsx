@@ -19,7 +19,7 @@ const fmt = (iso: string | null | undefined, month: 'short' | 'long' = 'short') 
 // A response from an older build can lack newer fields; the drawer renders it anyway.
 const withDefaults = (kind: 'trial' | 'clinician', body: Record<string, unknown>) =>
   kind === 'trial'
-    ? ({ web: [], webSources: 0, siblings: [], named: [], fromWeb: [], firstSeen: null, ...body } as unknown as TrialDetail)
+    ? ({ summary: { drug: '', mechanism: null, modality: null, route: null, design: null, endpoint: null, timeframe: null, more_endpoints: 0, designations: [] }, web: [], programWeb: [], webSources: 0, guided: [], readout: null, pivotal: null, siblings: [], named: [], fromWeb: [], firstSeen: null, ...body } as unknown as TrialDetail)
     : ({ webRoles: [], roles: [], companies: [], otherTrials: [], papers: null, ...body } as unknown as ClinicianDetail);
 
 export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string; kind: 'trial' | 'clinician'; id: string; onClose: () => void; onOpen: (kind: 'trial' | 'clinician', id: string) => void }) {
@@ -74,6 +74,60 @@ export function Drawer({ disease, kind, id, onClose, onOpen }: { disease: string
         </p>
       </div>
     </div>
+  );
+}
+
+// What the trial is testing and how, in plain terms, before any numbers.
+function TrialSummary({ s }: { s: TrialDetail['summary'] }) {
+  if (!s.drug && !s.design && !s.endpoint) return null;
+  return (
+    <div className="mt-4 space-y-1.5 border-l-2 border-ink pl-3 text-[14px] leading-snug">
+      {s.drug ? (
+        <p>
+          <span className="text-muted">Testing </span>
+          <span className="font-medium">{s.drug}</span>
+          {[s.mechanism, s.modality, s.route].filter(Boolean).length ? <span className="text-muted"> · {[s.mechanism, s.modality, s.route].filter(Boolean).join(' · ')}</span> : null}
+        </p>
+      ) : null}
+      {s.design ? <p>{s.design}</p> : null}
+      {s.endpoint ? (
+        <p className="text-[13px] text-muted">
+          <span className="text-ink">Primary endpoint:</span> {s.endpoint}
+          {s.timeframe ? ` (${s.timeframe})` : ''}
+          {s.more_endpoints ? ` · +${s.more_endpoints} more` : ''}
+        </p>
+      ) : null}
+      {s.designations.length ? (
+        <p className="flex flex-wrap gap-1.5 pt-0.5">
+          {s.designations.map((d) => (
+            <span key={d} className="rounded-[2px] border border-orange px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.05em]">
+              {d}
+            </span>
+          ))}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function DisclosureList({ items, empty = null }: { items: { date: string | null; headline: string; source: string | null; host: string | null }[]; empty?: string | null }) {
+  if (!items.length) return empty ? <p className="mt-2 text-[13px] text-muted">{empty}</p> : null;
+  return (
+    <ul className="mt-2">
+      {items.map((w, i) => (
+        <li key={i} className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 border-t border-line py-2.5 text-[13px]">
+          <span className="font-mono text-[11px] text-muted">{fmt(w.date)}</span>
+          <span>
+            {w.headline}{' '}
+            {w.source ? (
+              <a href={w.source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] text-muted hover:text-ink">
+                <Favicon host={w.host} name={w.host ?? '?'} size={12} /> {w.host}
+              </a>
+            ) : null}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -139,6 +193,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             {t.nct} ↗
           </a>
         </p>
+        <TrialSummary s={t.summary} />
         <Facts
           items={[
             { value: t.enrollment ? t.enrollment.toLocaleString('en-US') : '—', label: 'Enrollment' },
@@ -164,8 +219,63 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             { value: fmt(t.primaryCompletion), label: 'Primary completion' },
           ]}
         />
-        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.05em] text-faint">Registry · ClinicalTrials.gov</p>
+        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.05em] text-faint">Registry · ClinicalTrials.gov{t.pivotal ? ` · pivotal, ${t.pivotal}` : ''}</p>
       </div>
+
+      {t.readout ? (
+        <section className="mx-6 mt-6 rounded-[4px] border border-line p-4">
+          <p className="flex flex-wrap items-baseline justify-between gap-2">
+            <span className="text-[14px] font-medium">Latest readout</span>
+            <span className="font-mono text-[11px] text-muted">
+              {fmt(t.readout.date)}
+              {t.readout.analysis ? ` · ${t.readout.analysis.split(/[.;]/)[0]}` : ''}
+            </span>
+          </p>
+          {t.readout.endpoint ? <p className="mt-1 text-[13px] text-muted">{t.readout.endpoint.length > 180 ? `${t.readout.endpoint.slice(0, 179).trimEnd()}…` : t.readout.endpoint}</p> : null}
+          <ul className="mt-2 space-y-1 text-[13px]">
+            {t.readout.arms.map((a) => (
+              <li key={a.arm} className="grid grid-cols-[minmax(0,140px)_minmax(0,1fr)] gap-3">
+                <span className="text-muted">{a.arm}</span>
+                <span>{a.result}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 font-mono text-[11px] text-muted">
+            {[t.readout.n ? `n = ${t.readout.n}` : null, t.readout.p_value ? `p ${/^[<>=]/.test(t.readout.p_value) ? '' : '= '}${t.readout.p_value}` : null].filter(Boolean).join(' · ')}
+            {t.readout.source_url ? (
+              <>
+                {' · '}
+                <a href={t.readout.source_url} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                  source ↗
+                </a>
+              </>
+            ) : null}
+          </p>
+        </section>
+      ) : null}
+
+      {t.guided.length ? (
+        <section className="mt-6 px-6">
+          <h3 className="flex items-center gap-2 text-[14px]">
+            <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Guided next
+          </h3>
+          <ul className="mt-2">
+            {t.guided.map((g, i) => (
+              <li key={i} className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 border-t border-line py-2.5 text-[13px]">
+                <span className="font-mono text-[11px] text-muted">{g.window ?? '—'}</span>
+                <span>
+                  {g.what}{' '}
+                  {g.source ? (
+                    <a href={g.source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] text-muted hover:text-ink">
+                      <Favicon host={g.host} name={g.host ?? '?'} size={12} /> {g.host}
+                    </a>
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {t.siblings.length ? (
         <section className="mt-6 px-6">
@@ -185,7 +295,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
         </section>
       ) : null}
 
-      {t.web.length ? (
+      {t.web.length || t.programWeb.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">
             <span className="h-2 w-2 bg-orange" /> Disclosures
@@ -207,21 +317,13 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
               ) : null}
             </p>
           ) : null}
-          <ul className="mt-2">
-            {t.web.map((w, i) => (
-              <li key={i} className="grid grid-cols-[96px_minmax(0,1fr)] gap-3 border-t border-line py-2.5 text-[13px]">
-                <span className="font-mono text-[11px] text-muted">{fmt(w.date)}</span>
-                <span>
-                  {w.headline}{' '}
-                  {w.source ? (
-                    <a href={w.source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] text-muted hover:text-ink">
-                      <Favicon host={w.host} name={w.host ?? '?'} size={12} /> {w.host}
-                    </a>
-                  ) : null}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <DisclosureList items={t.web} empty={t.programWeb.length ? 'Nothing disclosed about this trial specifically.' : null} />
+          {t.programWeb.length ? (
+            <>
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">{t.lead} program</p>
+              <DisclosureList items={t.programWeb} />
+            </>
+          ) : null}
         </section>
       ) : null}
 
@@ -356,7 +458,14 @@ function Clinician({ c, onOpen }: { c: ClinicianDetail; onOpen: (kind: 'trial' |
             <li key={`w${i}`} className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 border-t border-line px-6 py-3">
               <span className="min-w-0">
                 <span className="flex items-center gap-2 text-[14px] font-medium">
-                  <span className="h-2 w-2 bg-orange" /> {w.program}
+                  <span className="h-2 w-2 bg-orange" />{' '}
+                  {w.nct ? (
+                    <button type="button" onClick={() => onOpen('trial', w.nct!)} className="hover:underline">
+                      {w.program}
+                    </button>
+                  ) : (
+                    w.program
+                  )}
                 </span>
                 <span className="block text-[12px] text-muted">
                   {w.company} · {w.role}

@@ -56,6 +56,8 @@ export function trialUses(trial: Trial, alias: string): boolean {
   return trial.interventions.some((iv) => [iv.name, ...iv.other_names].some((n) => norm(n).includes(a) || (c.length >= 5 && /\d/.test(c) && compact(n).includes(c))));
 }
 
+export { phaseLabel } from '../../src/lib/space/labels';
+
 export const isApproved = (phase: string) => /approved|marketed|launch/i.test(phase ?? '');
 export const phaseRank = (phase: string) => (isApproved(phase) ? 5 : /filed|submitted|nda|bla|registration/i.test(phase ?? '') ? 4 : /3/.test(phase ?? '') ? 3 : /2/.test(phase ?? '') ? 2 : /1/.test(phase ?? '') ? 1 : 0);
 

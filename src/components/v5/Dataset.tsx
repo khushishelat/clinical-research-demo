@@ -11,7 +11,7 @@ import { RunReplay } from './RunReplay';
 type Basis = { field: string; citations: { title: string | null; url: string; excerpts: string[] | null }[]; reasoning: string; confidence: string | null };
 
 export function Dataset({ view }: { view: DatasetView }) {
-  const [open, setOpen] = useState<{ row: DatasetRow; cell: Cell } | null>(null);
+  const [open, setOpen] = useState<{ row: DatasetRow; cell: Cell; label: string } | null>(null);
   const [q, setQ] = useState('');
   const [watch, setWatch] = useState(false);
   const rows = q ? view.rows.filter((r) => `${r.name} ${Object.values(r.cells).map((c) => `${c.text} ${c.sub ?? ''}`).join(' ')}`.toLowerCase().includes(q.toLowerCase())) : view.rows;
@@ -74,7 +74,7 @@ export function Dataset({ view }: { view: DatasetView }) {
                   const empty = cell.text === '—';
                   return (
                     <td key={c.field} className="max-w-[240px] p-0">
-                      <button type="button" onClick={() => setOpen({ row: r, cell })} className={`h-full w-full px-3 py-3 text-left hover:bg-wash ${open?.row.key === r.key && open.cell.field === c.field ? 'bg-orange-wash/60' : ''}`}>
+                      <button type="button" onClick={() => setOpen({ row: r, cell, label: c.label })} className={`h-full w-full px-3 py-3 text-left hover:bg-wash ${open?.row.key === r.key && open.cell.field === cell.field ? 'bg-orange-wash/60' : ''}`}>
                         <span className={`block text-[13px] ${empty ? 'text-faint' : ''}`}>{cell.text}</span>
                         {cell.sub ? <span className="mt-0.5 block text-[12px] text-muted">{cell.sub}</span> : null}
                       </button>
@@ -90,7 +90,7 @@ export function Dataset({ view }: { view: DatasetView }) {
       <p className="mt-3 text-[12px] text-muted">
         {rows.length} of {view.rows.length} companies. Empty cells mean the run found no dated public source, not that nothing exists.
       </p>
-      {open ? <BasisPanel disease={view.disease.key} row={open.row} cell={open.cell} label={view.columns.find((c) => c.field === open.cell.field)?.label ?? open.cell.field} onClose={() => setOpen(null)} /> : null}
+      {open ? <BasisPanel disease={view.disease.key} row={open.row} cell={open.cell} label={open.label} onClose={() => setOpen(null)} /> : null}
     </main>
   );
 }

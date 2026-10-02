@@ -9,7 +9,8 @@ const study = (over: Record<string, unknown> = {}) => ({
   protocolSection: {
     identificationModule: { nctId: 'NCT00000001', briefTitle: 'A trial', acronym: 'ONE' },
     statusModule: { overallStatus: 'RECRUITING', studyFirstPostDateStruct: { date: '2025-01-02' } },
-    designModule: { phases: ['PHASE2', 'PHASE3'], enrollmentInfo: { count: 300 } },
+    designModule: { phases: ['PHASE2', 'PHASE3'], enrollmentInfo: { count: 300 }, designInfo: { allocation: 'RANDOMIZED', maskingInfo: { masking: 'DOUBLE' } } },
+    outcomesModule: { primaryOutcomes: [{ measure: 'MASH resolution at week 52', timeFrame: '52 weeks' }] },
     sponsorCollaboratorsModule: { leadSponsor: { name: 'Acme Bio, Inc.', class: 'INDUSTRY' } },
     armsInterventionsModule: { interventions: [{ name: 'acmetide', type: 'DRUG' }], armGroups: [{ type: 'EXPERIMENTAL', interventionNames: ['Drug: acmetide'] }] },
     contactsLocationsModule: {
@@ -30,7 +31,9 @@ test('registry: phases, run-by, arms, and people without placeholders', () => {
   const t = toTrial(study());
   assert.equal(t.phase_level, 3);
   assert.equal(t.run_by, 'company');
-  assert.deepEqual(t.arms, [{ type: 'EXPERIMENTAL', interventions: ['acmetide'] }]);
+  assert.deepEqual(t.arms, [{ type: 'EXPERIMENTAL', label: '', interventions: ['acmetide'] }]);
+  assert.deepEqual(t.design, { allocation: 'RANDOMIZED', masking: 'DOUBLE' });
+  assert.equal(t.primary_outcomes?.[0].measure, 'MASH resolution at week 52');
   assert.deepEqual(t.countries, ['United States', 'France']);
   // The official and the site PI are one person; call centers and contacts never appear.
   assert.equal(t.people.length, 1);
@@ -135,4 +138,20 @@ test('removal: a removed person is matched by hash under any of their keys', asy
   assert.ok(isRemoved(hashes, ['jane roe|univ hospital', 'Jane Roe|Texas']));
   assert.ok(!isRemoved(hashes, ['john doe|texas']));
   assert.ok(!removalHash('jane roe|texas').includes('jane'));
+});
+
+test('v1 units: invented trial IDs are dropped; readouts go to trials that could have them', async () => {
+  const { cleanFacts, readoutTrials } = await import('../scripts/lib/units');
+  const c = { key: 'acme', name: 'Acme', trials: ['NCT1', 'NCT2', 'NCT3'], investigator_trials: ['NCT4'], drugs: [] } as never;
+  const f = cleanFacts(c, { milestones: [{ date: '2026-01-01', type: 'data', drug: 'x', nct: 'NCT9', headline: 'h', source_url: null }, { date: '2026-01-02', type: 'data', drug: 'x', nct: 'NCT2', headline: 'h', source_url: null }] });
+  assert.deepEqual(f.milestones!.map((m) => m.nct), [null, 'NCT2']);
+  const t = (nct: string, over: Record<string, unknown>) => ({ ...toTrial(study()), nct, ...over }) as Trial;
+  const byNct = new Map([
+    ['NCT1', t('NCT1', { phase_level: 3, status: 'RECRUITING', primary_completion: '2028-01' })],
+    ['NCT2', t('NCT2', { phase_level: 2, status: 'RECRUITING', primary_completion: '2027-01' })],
+    ['NCT3', t('NCT3', { phase_level: 1, status: 'ACTIVE_NOT_RECRUITING', primary_completion: '2025-01' })],
+    ['NCT4', t('NCT4', { phase_level: 3, status: 'ACTIVE_NOT_RECRUITING', primary_completion: '2025-01' })],
+  ]);
+  // NCT2 has a data milestone; NCT1 has nothing yet; NCT3 is Phase 1; NCT4 is investigator-sponsored.
+  assert.deepEqual(readoutTrials(c, byNct, f, '2026-10-02').map((x) => x.nct), ['NCT2']);
 });

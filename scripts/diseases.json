@@ -33,6 +33,12 @@
         "obesity medicine",
         "internal medicine",
         "family medicine"
+      ],
+      "chain_regions": [
+        "the United States or Europe",
+        "China",
+        "Japan, South Korea or elsewhere in Asia-Pacific",
+        "the rest of the world"
       ]
     },
     {
@@ -50,6 +56,12 @@
         "hematology",
         "surgical oncology",
         "gastroenterology"
+      ],
+      "chain_regions": [
+        "the United States or Europe",
+        "China",
+        "Japan, South Korea or elsewhere in Asia-Pacific",
+        "the rest of the world"
       ]
     },
     {

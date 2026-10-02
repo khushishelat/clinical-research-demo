@@ -6,7 +6,7 @@
 // changed. Clicking a dot or a clinician opens a drawer.
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { Dot, FeedItem, MapView, Mark, Row } from '@/lib/space/view';
 import { Drawer } from './Drawer';
 import { Favicon } from './Favicon';
@@ -57,12 +57,21 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const [tab, setTab] = useState<'clinicians' | 'changed'>('clinicians');
   const [tip, setTip] = useState<Tip>(null);
   const [tipDismissed, setTipDismissed] = useState(false);
+  // A mark not tied to one trial opens this card in the app; its source is a secondary link.
+  const [card, setCard] = useState<{ mark: Mark; company: string; x: number; y: number } | null>(null);
+  useEffect(() => {
+    if (!card) return;
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setCard(null);
+    document.addEventListener('keydown', esc);
+    return () => document.removeEventListener('keydown', esc);
+  }, [card]);
   const drawer = params.get('trial') ? ({ kind: 'trial', id: params.get('trial')! } as const) : params.get('clinician') ? ({ kind: 'clinician', id: params.get('clinician')! } as const) : null;
   const open = (kind: 'trial' | 'clinician', id: string) => {
     const p = new URLSearchParams(params.toString());
     p.delete('trial');
     p.delete('clinician');
     p.set(kind, id);
+    setCard(null);
     router.push(`?${p}`, { scroll: false });
   };
   const close = () => {
@@ -104,7 +113,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
         </div>
         <dl className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4">
-          <Stat value={String(s.trials)} label="Active trials" sub="Drug and biologic, all sponsors" />
+          <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors`} />
           <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
           <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label={s.dealDollars ? 'Licensing and M&A since May 2025' : 'Licensing and M&A deals since May 2025'} sub={s.dealDollars ? `${s.deals} deals · disclosed headline value, USD` : undefined} accent />
@@ -169,7 +178,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="text-right">Trials</span>
               </div>
               {rows.map((r, i) => (
-                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
+                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
               ))}
               {all.length > SHOWN ? (
                 <button type="button" onClick={() => setMore((v) => !v)} className="w-full border-t border-line px-4 py-3 text-left font-mono text-[11px] uppercase tracking-[0.04em] text-muted hover:bg-wash hover:text-ink">
@@ -177,6 +186,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 </button>
               ) : null}
             </div>
+            {card ? <MarkCard card={card} onTrial={(n) => open('trial', n)} onClose={() => setCard(null)} /> : null}
             {tip ? (
               <div className="pointer-events-none absolute z-20 w-[280px] rounded-[4px] bg-ink/95 px-3 py-2 text-[12px] text-page" style={{ left: Math.max(8, tip.x - 140), top: tip.y + 14 }}>
                 <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#adadac]">{tip.title}</p>
@@ -224,7 +234,7 @@ function Stat({ value, label, sub, accent }: { value: string; label: string; sub
   );
 }
 
-function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; onDot: (d: Dot) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
+function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; onDot: (d: Pick<Dot, 'nct'>) => void; onCard: (m: Mark, at: { x: number; y: number }) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
   const firstAcquired = row.dots.find((d) => d.acquiredFrom);
   const tipFor = (e: React.MouseEvent, t: NonNullable<Tip>) => {
     const box = (e.currentTarget as HTMLElement).closest('.relative.overflow-x-auto')!.getBoundingClientRect();
@@ -246,6 +256,11 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
               {m}
             </span>
           ))}
+          {row.designations.map((d) => (
+            <span key={d} title="Regulatory designation" className="rounded-[2px] border border-orange px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em] text-ink">
+              {d}
+            </span>
+          ))}
           {row.webOnly ? <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">No active trials</span> : null}
         </p>
       </div>
@@ -260,28 +275,10 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
           </span>
         ) : null}
         {row.news.map((m, i) => (
-          <a
-            key={`n${i}`}
-            href={m.source ?? undefined}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${fmt(m.date)}: ${m.headline}`}
-            onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.host ?? undefined })}
-            className="absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150"
-            style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }}
-          />
+          <MarkLink key={`n${i}`} m={m} onTrial={onDot} onCard={onCard} label={`${fmt(m.date)}: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150" style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }} />
         ))}
         {row.next.map((m, i) => (
-          <a
-            key={`x${i}`}
-            href={m.source ?? undefined}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Guided catalyst: ${m.headline}`}
-            onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Guided · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.host ?? undefined })}
-            className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150"
-            style={{ left: `${x(m.date)}%`, top: 26 }}
-          />
+          <MarkLink key={`x${i}`} m={m} onTrial={onDot} onCard={onCard} label={`Guided catalyst: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Guided · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150" style={{ left: `${x(m.date)}%`, top: 26 }} />
         ))}
         {row.dots.map((d) => {
           const size = dotSize(d.phase);
@@ -314,7 +311,57 @@ function MapRow({ row, x, years, todayAt, onDot, setTip, showFirstTip, dismissTi
   );
 }
 
-const LABEL: Record<string, string> = { data: 'Data readout', approval: 'Approval', regulatory: 'Regulatory', deal: 'Deal', trial_start: 'Trial initiation', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinuation', exit: 'Exit', other: 'Disclosure' };
+// A mark the research run tied to a trial opens that trial; any other mark opens its card in the app.
+function MarkLink({ m, onTrial, onCard, label, onMouseEnter, className, style }: { m: Mark; onTrial: (d: Pick<Dot, 'nct'>) => void; onCard: (m: Mark, at: { x: number; y: number }) => void; label: string; onMouseEnter: (e: React.MouseEvent) => void; className: string; style: React.CSSProperties }) {
+  const openCard = (e: React.MouseEvent) => {
+    const box = (e.currentTarget as HTMLElement).closest('.relative.overflow-x-auto')!.getBoundingClientRect();
+    onCard(m, { x: e.clientX - box.left, y: e.clientY - box.top });
+  };
+  return <button type="button" aria-label={label} onClick={(e) => (m.nct ? onTrial({ nct: m.nct }) : openCard(e))} onMouseEnter={onMouseEnter} className={className} style={style} />;
+}
+
+function MarkCard({ card, onTrial, onClose }: { card: { mark: Mark; company: string; x: number; y: number }; onTrial: (nct: string) => void; onClose: () => void }) {
+  const m = card.mark;
+  return (
+    <>
+      <button type="button" aria-label="Close" onClick={onClose} className="absolute inset-0 z-20 cursor-default" />
+      <div role="dialog" aria-label={m.headline} className="absolute z-30 w-[320px] rounded-[4px] border border-line bg-card p-3 text-[13px] shadow-lg" style={{ left: `min(max(8px, ${card.x - 160}px), calc(100% - 330px))`, top: card.y + 12 }}>
+        <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
+          {m.type === 'next' ? 'Guided catalyst' : labelOf(m)} · {m.type === 'next' ? (m as Mark & { window?: string | null }).window ?? fmt(m.date) : fmt(m.date)} · {card.company}
+        </p>
+        <p className="mt-1 text-[14px] font-medium leading-snug">{m.headline}</p>
+        {m.detail ? <p className="mt-1 text-muted">{m.detail}</p> : null}
+        {m.drug ? <p className="mt-1 text-[12px] text-muted">Asset: {m.drug}</p> : null}
+        {m.trials.length ? (
+          <div className="mt-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">Trials of this asset</p>
+            <p className="mt-1 flex flex-wrap gap-1.5">
+              {m.trials.map((t) => (
+                <button key={t.nct} type="button" onClick={() => onTrial(t.nct)} className="rounded-[3px] border border-line-strong px-2 py-0.5 text-[12px] hover:border-ink">
+                  {t.label}
+                </button>
+              ))}
+            </p>
+          </div>
+        ) : null}
+        <p className="mt-2 flex items-center justify-between">
+          {m.source ? (
+            <a href={m.source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-mono text-[11px] text-muted hover:text-ink">
+              <Favicon host={m.host} name={m.host ?? '?'} size={12} /> {m.host ?? 'Source'} ↗
+            </a>
+          ) : (
+            <span />
+          )}
+          <button type="button" onClick={onClose} className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted hover:text-ink">
+            Close
+          </button>
+        </p>
+      </div>
+    </>
+  );
+}
+
+const LABEL: Record<string, string> = { data: 'Data readout', approval: 'Approval', regulatory: 'Regulatory', designation: 'Designation', filing: 'Filing', publication: 'Publication', presentation: 'Presentation', financing: 'Financing', deal: 'Deal', trial_start: 'Trial initiation', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinuation', exit: 'Exit', other: 'Disclosure' };
 const labelOf = (m: Mark) => LABEL[m.type] ?? 'Disclosure';
 
 function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) => void }) {

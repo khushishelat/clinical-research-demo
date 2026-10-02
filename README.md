@@ -77,6 +77,24 @@ Costs are [list prices](https://docs.parallel.ai/getting-started/pricing) per co
 The pipeline stops once, after step 3: companies found only on the web wait in
 `review/companies.json` until a person sets `include` to true or false.
 
+## The task specs
+
+Every Parallel run's processor, connectors and output schema live in
+`scripts/lib/specs.ts`. Four rules keep the output joinable and auditable:
+
+- **The model returns IDs we gave it.** Each run gets the indication's
+  registry trials and the company's known drugs. Anything about a trial comes
+  back with that trial's NCT ID (or null), and anything about a drug with its
+  given name. Code drops any ID that isn't one of the company's trials, then
+  joins exactly; nothing is matched from headline text.
+- **Enums wherever code groups.** Phases, deal types, regulatory events, routes
+  and comparators are fixed values, with an optional note for nuance.
+- **Amounts as stated and as numbers.** "up to $4.4B" is kept as written, with a
+  currency and a value in millions; totals sum only USD.
+- **Versioned specs.** Each spec has a key (`facts@1`) that prefixes its run-log
+  entries. Changing a spec means a new version, so a rebuild pays for the new
+  spec on purpose, and every stored record says which spec produced it.
+
 ## The recipe (steal this)
 
 Trial Check is one instance of a reusable pattern: an official database, a

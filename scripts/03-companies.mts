@@ -3,15 +3,15 @@
 // web's list of companies is built by interaction chaining (ultra, until dry).
 // Investigator-run trials join the company whose drug they test. Companies
 // found only on the web go to a review file for a person to approve.
-//   npx tsx scripts/03-companies.mts --disease mash [--seed-from-tests]
+//   npx tsx scripts/03-companies.mts --disease mash
 
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
+import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseLabel, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
 import { COMPANY_CHAIN, OWNER, SAME_COMPANY } from './lib/specs';
+import { ownerUnit } from './lib/units';
 
 const d = disease();
 const client = parallel(d, 'companies');
@@ -20,54 +20,42 @@ if (!trials.length) throw new Error('No trials yet. Run 02-registry first.');
 const sponsors = [...new Set(trials.filter((t) => t.run_by === 'company').map((t) => t.sponsor))].sort();
 const rl = await runLog(d, 'companies');
 
-// The Oct 1 tests ran this exact work (12 sponsors on pro, and MASH's 4-page
-// company chain). Reuse those runs by ID instead of paying again.
-const TESTS = '.data/tests/v5-survey.state.json';
-if (process.argv.includes('--seed-from-tests') && existsSync(TESTS)) {
-  const t = JSON.parse(readFileSync(TESTS, 'utf8'));
-  let n = 0;
-  for (const [k, v] of Object.entries<any>(t.owners ?? {})) {
-    const [proc, sponsor] = k.split('|');
-    if (proc !== 'pro' || rl.log[`owner:${sponsor}`] || !v.run_id) continue;
-    rl.log[`owner:${sponsor}`] = { run_id: v.run_id, processor: 'pro', created: '' };
-    n += 1;
-  }
-  for (const [i, p] of (t.chains?.[`${d.key}:companies`]?.pages ?? []).entries()) {
-    if (rl.log[`web:p${i + 1}`]) continue;
-    rl.log[`web:p${i + 1}`] = { run_id: p.run_id, interaction_id: p.interaction_id, previous_interaction_id: p.previous_interaction_id, processor: 'ultra', created: '' };
-    n += 1;
-  }
-  await rl.save();
-  log(d, `reused ${n} runs from the Oct 1 tests`);
-}
-
 // Runs sometimes explain instead of naming ("Lepu Medical group; the proposed transfer…"): keep the name.
 const ownerName = (x: string | null | undefined) => (x ?? '').split(/;|\(|,\s+(?:the|which|but|pending|not)\b/i)[0].replace(/\s+group$/i, '').trim();
 
 type Owner = { current_owner: string; relationship: string; announced: string | null; closed: string | null; value: string | null; owner_source_url: string; drugs: Drug[] };
-// Older runs named the fields mash_drugs / highest_phase_in_mash; trial IDs never count as drug codes.
-const ownerFrom = (c: any): Owner => ({ ...c, drugs: (c.drugs ?? c.mash_drugs ?? []).map((x: any) => ({ ...x, highest_phase: x.highest_phase ?? x.highest_phase_in_mash ?? '', codes: (x.codes ?? []).filter((y: string) => !/^NCT\d{8}$/i.test(y)) })) });
+// v1 returns a phase enum; rows show "Phase 3" or "Approved". Trial IDs never count as drug codes.
+const ownerFrom = (c: any): Owner => ({ ...c, drugs: (c.drugs ?? []).map((x: any) => ({ ...x, highest_phase: phaseLabel(x.phase), codes: (x.codes ?? []).filter((y: string) => !/^NCT\d{8}$/i.test(y)) })) });
 const owners: Record<string, Owner> = {};
 if (client) {
   await pool(sponsors, 8, async (sponsor) => {
-    const mine = trials.filter((t) => t.sponsor === sponsor).map((t) => ({ nct: t.nct, title: t.title, interventions: t.interventions.map((i) => i.name), phase: t.phases.join('/') }));
-    const rec = await runOnce(client, rl, `owner:${sponsor}`, { processor: OWNER.processor, connectors: OWNER.connectors, schema: OWNER.schema, input: OWNER.input(d, sponsor, today(), mine), metadata: { job: 'owner', disease: d.key } });
+    const u = ownerUnit(d, today(), sponsor, trials);
+    const rec = await runOnce(client, rl, u.key, u.spec);
     if (rec.content) owners[sponsor] = ownerFrom(rec.content);
     else log(d, `owner run for ${sponsor}: ${rec.status}`);
   });
 } else {
   for (const sponsor of sponsors) {
-    const c = rl.log[`owner:${sponsor}`]?.content;
+    const c = rl.log[`${OWNER.key}:${sponsor}`]?.content;
     if (c) owners[sponsor] = ownerFrom(c);
   }
 }
 
-type WebCompany = { company: string; country: string; drugs: { name: string; codes: string[]; mechanism: string; highest_phase: string; approved_in: string[] }[]; source_url: string };
-const web: WebCompany[] = client
-  ? await chain<WebCompany>(client, rl, 'web', { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today()), next: COMPANY_CHAIN.next(d), dedupe: (x) => companyKey(x.company), metadata: { job: 'company-chain', disease: d.key } })
-  : Object.keys(rl.log)
-      .filter((k) => k.startsWith('web:p'))
-      .flatMap((k) => ((rl.log[k].content as any)?.companies ?? []) as WebCompany[]);
+type WebCompany = { company: string; country: string; registry_sponsor_names?: string[]; drugs: { name: string; codes: string[]; mechanism: string; phase: string; approved_in: string[] }[]; source_url: string };
+// One chain per region for large indications, else one chain over all regions.
+const regions: (string | null)[] = d.chain_regions?.length ? d.chain_regions : [null];
+const slug = (r: string | null) => (r ? r.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : 'all');
+const web: WebCompany[] = [];
+for (const region of regions) {
+  const key = `${COMPANY_CHAIN.key}:${slug(region)}`;
+  const got = client
+    ? await chain<WebCompany>(client, rl, key, { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today(), region), next: COMPANY_CHAIN.next(d, region), dedupe: (x) => companyKey(x.company), metadata: { job: 'company-chain', disease: d.key, region: slug(region) } })
+    : Object.keys(rl.log)
+        .filter((k) => k.startsWith(`${key}:p`))
+        .flatMap((k) => ((rl.log[k].content as any)?.companies ?? []) as WebCompany[]);
+  web.push(...got);
+  log(d, `company list${region ? ` (${region})` : ''}: ${got.length} companies over ${Object.keys(rl.log).filter((k) => k.startsWith(`${key}:p`)).length} pages`);
+}
 
 // ── Join in code ─────────────────────────────────────────────────────────────
 const companies = new Map<string, Company>();
@@ -93,13 +81,13 @@ for (const sponsor of sponsors) {
 const bySponsorKey = new Map<string, string>();
 for (const c of companies.values()) for (const sp of c.registry_sponsors) bySponsorKey.set(companyKey(sp), c.key);
 for (const w of web) {
-  const key = bySponsorKey.get(companyKey(w.company)) ?? companyKey(w.company);
+  const key = [w.company, ...(w.registry_sponsor_names ?? [])].map((n) => bySponsorKey.get(companyKey(n))).find(Boolean) ?? companyKey(w.company);
   const existing = companies.get(key);
   const c = existing ?? { ...blank(key, displayName(w.company)), web_only: true };
   c.web = { country: w.country, source: w.source_url };
   for (const drug of w.drugs ?? []) {
     if (c.drugs.some((x) => x.name.toLowerCase() === drug.name.toLowerCase())) continue;
-    c.drugs.push({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, rights_holder: null, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : drug.highest_phase });
+    c.drugs.push({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, phase: drug.phase, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : phaseLabel(drug.phase) });
   }
   companies.set(key, c);
 }
@@ -107,7 +95,7 @@ for (const w of web) {
 // One company, one row: a Task run groups names that are the same company today.
 // Keyed by the names, so the same set of rows reuses the run.
 const rowNames = [...new Set([...companies.values()].flatMap((c) => [c.name, ...c.registry_sponsors]))].sort();
-const sameKey = `same:${createHash('sha1').update(rowNames.join('|')).digest('hex').slice(0, 12)}`;
+const sameKey = `${SAME_COMPANY.key}:${createHash('sha1').update(rowNames.join('|')).digest('hex').slice(0, 12)}`;
 const same = client || rl.log[sameKey] ? await runOnce(client!, rl, sameKey, { processor: SAME_COMPANY.processor, schema: SAME_COMPANY.schema, input: SAME_COMPANY.input(d, rowNames), metadata: { job: 'same-company', disease: d.key } }) : null;
 const merges = mergeRows(companies, ((same?.content as any)?.groups ?? []) as { names: string[]; company: string }[]);
 for (const m of merges) log(d, `same company: ${m.from.join(', ')} → ${m.into}`);

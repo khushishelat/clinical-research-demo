@@ -34,6 +34,7 @@ const space = (): NonNullable<Space> =>
   ({
     config: { key: 'mash', name: 'MASH', query_cond: 'MASH', specialties: [] },
     fetched: '2026-10-01T12:00:00Z',
+    scope: null,
     trials: [trial('NCT1'), trial('NCT2', { run_by: 'investigator', sponsor: 'Univ', first_posted: '2026-09-20' }), trial('NCT3', { sponsor: 'Univ' })],
     companies: [
       { key: 'acme', name: 'Acme Bio', web_only: false, approved: false, max_phase: 3, acquisitions: [], drugs: [{ name: 'acmetide', codes: ['ACM-101'], mechanism: 'Thyroid hormone receptor beta (THRβ) agonist' }, { name: 'Acmetide (Acmezza)', codes: ['ACM-101'], mechanism: 'THR-β agonist' }], trials: ['NCT1'], investigator_trials: ['NCT2'], owner_source: 'https://ir.acme.com/x' },
@@ -44,7 +45,7 @@ const space = (): NonNullable<Space> =>
     included: new Set(['WebCo']),
     facts: {
       acme: {
-        milestones: [{ type: 'data', date: '2026-09-10', headline: 'ALPHA-1 meets primary endpoint', source_url: 'https://ir.acme.com/alpha' }],
+        milestones: [{ type: 'data', date: '2026-09-10', drug: 'acmetide', nct: 'NCT1', headline: 'ALPHA-1 meets primary endpoint', source_url: 'https://ir.acme.com/alpha' }],
         deals: [{ type: 'license', date: '2025-06-01', headline: 'Acme licenses acmetide', total: 'up to $1.5 billion', source_url: 'https://ir.acme.com/deal' }],
         approvals: [],
         next: [{ what: 'Phase 3 readout', earliest: '2027-03-01', timing_text: 'H1 2027', source_url: 'https://ir.acme.com/next' }],
@@ -143,17 +144,17 @@ test('trial drawer: first-seen surfaces only when the web announced the trial ea
   assert.equal(trialDetail(s, 'NCT2')!.firstSeen, null);
 });
 
-test('trial drawer: web items join by drug/acronym mention, nothing else', () => {
+test('trial drawer: disclosures join on the run’s trial ID, never on headline text', () => {
   const s = space();
   s.facts.acme.milestones!.push(
-    { type: 'data', date: '2026-09-11', drug: 'acmetide', headline: 'ALPHA-1 subgroup analysis published', source_url: 'https://ir.acme.com/sub' },
-    { type: 'other', date: '2026-09-12', drug: 'placebex', headline: 'Acme opens new Boston office', source_url: null },
+    { type: 'data', date: '2026-09-11', drug: 'acmetide', nct: null, headline: 'Acmetide program update at EASL', source_url: 'https://ir.acme.com/easl' },
+    { type: 'other', date: '2026-09-12', drug: 'placebex', nct: null, headline: 'ALPHA-1 sites expand in Europe', source_url: 'https://ir.acme.com/sites' },
   );
   const t = trialDetail(s, 'NCT1')!;
-  const headlines = t.web.map((w) => w.headline);
-  assert.ok(headlines.includes('ALPHA-1 meets primary endpoint'));
-  assert.ok(headlines.includes('ALPHA-1 subgroup analysis published'));
-  assert.ok(!headlines.includes('Acme opens new Boston office'));
+  assert.deepEqual(t.web.map((w) => w.headline), ['ALPHA-1 meets primary endpoint']);
+  assert.deepEqual(t.programWeb.map((w) => w.headline), ['Acmetide program update at EASL']);
+  // A headline that names the trial but was not tied to it by the run stays out.
+  assert.ok(![...t.web, ...t.programWeb].some((w) => w.headline.startsWith('ALPHA-1 sites')));
 });
 
 test('trial drawer: sibling trials test the same lead drug', () => {
@@ -189,4 +190,35 @@ test('trial drawer: the lead falls back to the experimental drug, never the plac
   );
   (s.companies[0] as { trials: string[] }).trials.push('NCT5');
   assert.equal(trialDetail(s, 'NCT5')!.lead, 'XYZ-77 Injection');
+});
+
+test('trial summary: design and control come from the registry arms', () => {
+  const s = space();
+  (s.trials[0] as any).design = { allocation: 'RANDOMIZED', masking: 'QUADRUPLE' };
+  (s.trials[0] as any).arms = [{ type: 'PLACEBO_COMPARATOR', label: 'Placebo', interventions: ['Placebo', 'Liver biopsy'] }, { type: 'ACTIVE_COMPARATOR', label: '10 mg', interventions: ['acmetide'] }];
+  (s.trials[0] as any).primary_outcomes = [{ measure: 'MASH resolution', time_frame: '52 weeks' }];
+  const t = trialDetail(s, 'NCT1')!;
+  assert.equal(t.summary.design, 'Randomized, double-blind, placebo-controlled Phase 3 trial');
+  assert.equal(t.summary.endpoint, 'MASH resolution');
+  assert.equal(t.summary.mechanism, 'THR-β agonist');
+});
+
+test('v1: readout and guided next step reach their own trial only', () => {
+  const s = space();
+  s.facts.acme.readouts = [{ nct: 'NCT1', has_data: true, date: '2026-09-10', analysis: 'Week 52 topline', endpoint: 'MASH resolution', arms: [{ arm: 'acmetide 10 mg', result: '41%' }, { arm: 'placebo', result: '12%' }], n: 900, p_value: '<0.001', source_url: 'https://ir.acme.com/alpha' }];
+  s.facts.acme.next = [{ what: 'ALPHA-1 week 72 data', kind: 'readout', drug: 'acmetide', nct: 'NCT1', stated_on: '2026-09-10', earliest: '2027-03-01', latest: null, timing_text: '1H 2027', stated_by: 'Acme', source_url: 'https://ir.acme.com/next' }];
+  const t = trialDetail(s, 'NCT1')!;
+  assert.equal(t.readout?.arms[0].result, '41%');
+  assert.equal(t.guided[0].window, '1H 2027');
+  const other = trialDetail(s, 'NCT2')!;
+  assert.equal(other.readout, null);
+  assert.equal(other.guided.length, 0);
+});
+
+test('v1: deal values count USD millions only', async () => {
+  const { dealValue } = await import('../src/lib/space/view');
+  const base = { date: '2026-01-01', parties: [], type: 'license', upfront: null, total: null, headline: 'x', source_url: null };
+  assert.equal(dealValue({ ...base, currency: 'USD', total_m: 4400, upfront_m: null }), 4.4e9);
+  assert.equal(dealValue({ ...base, currency: 'EUR', total_m: 348, upfront_m: null }), 0);
+  assert.equal(dealValue({ ...base, total: 'up to $1.0 billion' }), 1e9);
 });

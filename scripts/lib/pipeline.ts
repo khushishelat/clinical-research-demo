@@ -25,6 +25,10 @@ export type Disease = {
   /** NPI taxonomy words that suggest the right person when a name matches several. */
   specialties: string[];
   default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string };
+  subtitle?: string;
+  area?: string;
+  /** Large indications chain the company list once per region (COMPANY_CHAIN). */
+  chain_regions?: string[];
 };
 
 const config = JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')) as { diseases: Disease[]; default: string; exclude: string[] };

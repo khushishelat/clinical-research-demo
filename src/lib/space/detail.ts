@@ -3,7 +3,8 @@
 
 import type { Space } from './load';
 import type { Clinician } from './types';
-import { drugLabels, hostOf } from './view';
+import { comparatorLabel, regulatoryEvent, regulatoryLabel, routeLabel } from './labels';
+import { drugLabels, hostOf, shortMechanism } from './view';
 
 type S = Space;
 const present = <T>(x: T | undefined | null): x is T => x != null;
@@ -66,10 +67,6 @@ export function trialDetail(s: S, nct: string) {
   const candidates = t.interventions.filter((i) => i.type !== 'OTHER' && !COMPARATOR.test(i.name));
   const lead = tested[0] ?? (candidates.find((i) => experimental.has(i.name.toLowerCase())) ?? candidates[0])?.name ?? '';
 
-  // Web items that name this trial or its drug.
-  const needles = [t.acronym, ...[...names].filter((n) => n.length > 3 && text.includes(n))].filter((x) => x).map((x) => x.toLowerCase());
-  const mentions = (h: string) => needles.some((n) => h.toLowerCase().includes(n));
-
   // Other trials of the same company testing the same lead drug: the rabbit hole.
   const leadNeedles = [lead.split(' (')[0], ...(lead.match(/\(([^)]+)\)/)?.[1].split(/[;,]/) ?? [])]
     .map((x) => x.trim().toLowerCase())
@@ -91,21 +88,52 @@ export function trialDetail(s: S, nct: string) {
           phase: o.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase n/a',
         }))
     : [];
-  const items: { date: string | null; headline: string; drug: string; source_url: string | null }[] = [
-    ...(f?.milestones ?? []),
-    ...(f?.deals ?? []).map((x) => ({ ...x, drug: '' })),
-    ...(f?.approvals ?? []).map((a) => ({ ...a, headline: `${a.region} approval: ${a.indication}` })),
+  // Disclosures the research run tied to this trial (v1 `nct`), then news about the
+  // trial's drug as a program. Nothing is matched from headlines.
+  type Item = { date: string | null; headline: string; source_url: string | null };
+  const aboutLead = (x: string | null | undefined) => Boolean(x) && leadNeedles.some((n) => x!.toLowerCase().includes(n));
+  const newest = (a: Item, b: Item) => (b.date ?? '').localeCompare(a.date ?? '');
+  const once = (m: Item, i: number, all: Item[]) => all.findIndex((x) => x.date === m.date && hostOf(x.source_url) === hostOf(m.source_url)) === i;
+  const row = (m: Item) => ({ date: m.date, headline: m.headline, source: m.source_url, host: hostOf(m.source_url) });
+  const web = (f?.milestones ?? []).filter((m) => m.nct === nct).sort(newest).slice(0, 6).map(row);
+  const program: Item[] = [
+    ...(f?.milestones ?? []).filter((m) => !m.nct && aboutLead(m.drug)),
+    ...(f?.deals ?? []).filter((x) => (x.drugs ?? []).some(aboutLead)),
+    ...(f?.approvals ?? []).filter((a) => aboutLead(a.drug)).map((a) => ({ ...a, headline: `${a.region} approval: ${a.indication}` })),
+    ...(f?.regulatory ?? []).filter((r) => r.status === 'done' && aboutLead(r.drug)).map((r) => ({ date: r.date, headline: regulatoryEvent(r.agency, r.kind), source_url: r.source_url })),
   ];
-  const web = items
-    .filter((m) => m.headline && mentions(`${m.headline} ${m.drug}`))
-    .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
-    // A milestone and an approval often describe the same day's news; keep the first.
-    .filter((m, i, all) => all.findIndex((x) => x.date === m.date && (x.source_url === m.source_url || hostOf(x.source_url) === hostOf(m.source_url))) === i)
-    .slice(0, 4)
-    .map((m) => ({ date: m.date, headline: m.headline, source: m.source_url, host: hostOf(m.source_url) }));
+  const programWeb = program.sort(newest).filter(once).slice(0, 4).map(row);
+  const webSources = new Set([...web, ...programWeb].map((w) => w.host).filter((h) => h)).size;
+  const guided = (f?.next ?? []).filter((n) => n.nct === nct).map((n) => ({ what: n.what, window: n.timing_text, source: n.source_url, host: hostOf(n.source_url) }));
+  const readout = f?.readouts?.find((r) => r.nct === nct) ?? null;
+  const pivot = f?.pivotal?.find((p) => p.nct === nct);
+  const pivotal = pivot ? (pivot.comparator === 'active' && pivot.comparator_name ? `vs ${pivot.comparator_name}` : `vs ${comparatorLabel(pivot.comparator).toLowerCase()}`) : null;
 
-  // Provenance for the "From the web" section: how many distinct sources the items come from.
-  const webSources = new Set(web.map((w) => w.host).filter((h) => h)).size;
+  // What the trial is, in plain terms: registry design and arms, plus the company's record of the drug. Nothing generated.
+  const drugRec = company?.drugs.find((x) => [x.name, ...(x.codes ?? [])].some((n) => leadNeedles.some((l) => n.toLowerCase().includes(l))));
+  const PLACEBO = /placebo|matching|vehicle|sham/i;
+  const BACKGROUND = /biopsy|procedure|diet|exercise|lifestyle|standard of care|background|counsel|imaging|mri|scan/i;
+  const testsLead = (a: { interventions: string[] }) => a.interventions.some((n) => leadNeedles.some((l) => n.toLowerCase().includes(l)));
+  const placebo = t.arms.some((a) => a.type === 'PLACEBO_COMPARATOR' || a.interventions.some((n) => PLACEBO.test(n)));
+  const others = [...new Set(t.arms.filter((a) => !testsLead(a)).flatMap((a) => a.interventions).filter((n) => !PLACEBO.test(n) && !BACKGROUND.test(n)))];
+  const control = placebo ? 'placebo-controlled' : others.length ? `vs ${others.slice(0, 2).join(' and ')}` : t.arms.length > 1 ? 'multiple arms' : t.arms.length === 1 ? 'single-arm' : null;
+  const ALLOC: Record<string, string> = { RANDOMIZED: 'Randomized', NON_RANDOMIZED: 'Non-randomized' };
+  const MASK: Record<string, string> = { NONE: 'open-label', SINGLE: 'single-blind', DOUBLE: 'double-blind', TRIPLE: 'double-blind', QUADRUPLE: 'double-blind' };
+  const MODALITY: Record<string, string> = { small_molecule: 'small molecule', peptide: 'peptide', protein: 'protein', antibody: 'antibody', oligonucleotide: 'oligonucleotide', gene_therapy: 'gene therapy', cell_therapy: 'cell therapy' };
+  const design = [ALLOC[t.design?.allocation ?? ''], MASK[t.design?.masking ?? ''], control].filter((x): x is string => Boolean(x));
+  const endpoint = t.primary_outcomes?.[0];
+  const sameDrug = (x: string | null | undefined) => Boolean(x) && leadNeedles.some((l) => x!.toLowerCase().includes(l));
+  const summary = {
+    drug: lead,
+    mechanism: drugRec ? (drugRec.phase && drugRec.mechanism.length <= 40 ? drugRec.mechanism : (shortMechanism(drugRec.mechanism) ?? null)) : null,
+    modality: drugRec?.modality ? (MODALITY[drugRec.modality] ?? null) : null,
+    route: f?.how_given?.route && (sameDrug(f.furthest_along?.drug) || sameDrug(f.lead_assets?.[0])) ? [routeLabel(f.how_given.route), f.how_given.frequency].filter(Boolean).join(', ') : null,
+    design: design.length ? `${design.join(', ')} ${t.phases.length ? t.phases.map((p) => p.replace('PHASE', 'Phase ')).join('/') : ''} trial`.replace(/^./, (c) => c.toUpperCase()).replace(/\s+/g, ' ') : null,
+    endpoint: endpoint?.measure ? (endpoint.measure.length > 200 ? `${endpoint.measure.slice(0, 199).trimEnd()}…` : endpoint.measure) : null,
+    timeframe: endpoint?.time_frame || null,
+    more_endpoints: Math.max(0, (t.primary_outcomes?.length ?? 0) - 1),
+    designations: [...new Set((f?.regulatory ?? []).filter((r) => r.status === 'done' && sameDrug(r.drug) && ['breakthrough', 'fast_track', 'orphan', 'prime', 'priority_review'].includes(r.kind)).map((r) => `${r.agency} ${regulatoryLabel(r.kind)}`))],
+  };
 
   // Investigators the registry names, most involved first.
   const named = t.people
@@ -126,16 +154,12 @@ export function trialDetail(s: S, nct: string) {
   const hiddenSites = t.people.filter((p) => HIDDEN_SITE.test(p.facility ?? '')).length;
   const hiddenLabel = hiddenSites ? (t.people.find((p) => HIDDEN_SITE.test(p.facility ?? ''))?.facility ?? null) : null;
 
-  // Investigators the web names for this trial: a role whose program is this trial's acronym or drug, at this company.
-  const prog = [t.acronym, ...tested.map((x) => x.split(' (')[0])].filter((x) => x).map((x) => x.toLowerCase().replace(/[^a-z0-9]/g, ''));
+  // Investigators named in disclosures on this trial (v1: the role's own `nct`).
   const fromWeb = s.clinicians
     .filter((c) => !t.people.some((p) => p.key === c.key || c.aliases.includes(p.key)))
     .flatMap((c) =>
       c.web_roles
-        .filter((r) => {
-          const p = (r.program ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
-          return p && prog.some((x) => p.includes(x) || x.includes(p)) && (!company || !r.company || r.company.toLowerCase().includes(company.name.split(' ')[0].toLowerCase()) || company.name.toLowerCase().includes(r.company.split(' ')[0].toLowerCase()));
-        })
+        .filter((r) => r.nct === nct)
         .slice(0, 1)
         .map((r) => ({ ...clinicianLine(s, c.key)!, role: roleLabel(r.role), program: r.program, date: r.date, source: r.source_url, host: hostOf(r.source_url) }))
     )
@@ -164,8 +188,13 @@ export function trialDetail(s: S, nct: string) {
         ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url, what: seen.what }
         : null;
     })(),
+    summary,
     web,
+    programWeb,
     webSources,
+    guided,
+    readout,
+    pivotal,
     siblings,
     named,
     hiddenSites,
@@ -206,7 +235,7 @@ export function clinicianDetail(s: S, key: string) {
     place: place(c.npi.city, c.npi.state),
     npiUrl: `https://npiregistry.cms.hhs.gov/provider-view/${c.npi.number}`,
     activeTrials: roles.length,
-    webRoles: c.web_roles.map((w) => ({ role: roleLabel(w.role), program: w.program, company: w.company, date: w.date, source: w.source_url, host: hostOf(w.source_url) })),
+    webRoles: c.web_roles.map((w) => ({ role: roleLabel(w.role), program: w.program, nct: w.nct ?? null, company: w.company, date: w.date, source: w.source_url, host: hostOf(w.source_url) })),
     papers: c.pubmed?.verified ? { count: c.pubmed.count, since2024: c.pubmed.since_2024, recent: c.pubmed.recent } : null,
     companies: companies.map((n) => ({ name: n, host: hostFor(n) })),
     roles,

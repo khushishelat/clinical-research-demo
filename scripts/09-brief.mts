@@ -1,5 +1,5 @@
-// Step 9: the weekly brief (core), written only from the week's sourced
-// events and the next 30 days of catalysts. Every source must come from the
+// Step 9: the brief (core), written only from the period's disclosures and
+// registry changes and the next 30 days of catalysts. Every source must come from the
 // input; anything else is dropped.
 //   npx tsx scripts/09-brief.mts --disease mash [--days 14]
 
@@ -17,14 +17,17 @@ const horizon = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10
 const { events, catalysts } = (await store.get<{ events: any[]; catalysts: any[] }>(spacePath(d, 'events.json')))!;
 const { companies } = (await store.get<{ companies: any[] }>(spacePath(d, 'companies.json')))!;
 const name = new Map(companies.map((c) => [c.key, c.name]));
-const week = events.filter((e) => e.date >= from && e.date <= to).map((e) => ({ date: e.date, company: name.get(e.company) ?? e.company, type: e.type, headline: e.headline, source_url: e.source_url }));
+const inPeriod = events.filter((e) => e.date >= from && e.date <= to).map((e) => ({ date: e.date, company: name.get(e.company) ?? e.company, type: e.type, headline: e.headline, source_url: e.source_url, origin: e.origin }));
+const disclosures = inPeriod.filter((e) => e.origin !== 'registry').map(({ origin: _, ...e }) => e);
+const registryChanges = inPeriod.filter((e) => e.origin === 'registry').map(({ origin: _, ...e }) => e);
+const week = [...disclosures, ...registryChanges];
 const upcoming = catalysts.filter((c) => (c.earliest ?? c.date ?? '') >= to && (c.earliest ?? c.date ?? '') <= horizon).map((c) => ({ company: name.get(c.company) ?? c.company, what: c.what, timing: c.timing_text, stated_by: c.stated_by, source_url: c.source_url }));
 if (!week.length) {
-  log(d, `no events between ${from} and ${to}; no brief this week`);
+  log(d, `no events between ${from} and ${to}; no brief for this period`);
   process.exit(0);
 }
 const rl = await runLog(d, 'brief');
-const rec = await runOnce(client, rl, `brief:${from}:${to}`, { processor: BRIEF.processor, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, week, upcoming), metadata: { job: 'brief', disease: d.key } });
+const rec = await runOnce(client, rl, `${BRIEF.key}:${from}:${to}`, { processor: BRIEF.processor, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, disclosures, registryChanges, upcoming), metadata: { job: 'brief', disease: d.key } });
 const allowed = new Set([...week, ...upcoming].map((x) => x.source_url).filter(Boolean));
 const brief: any = rec.content;
 let dropped = 0;

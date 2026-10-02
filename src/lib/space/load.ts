@@ -21,6 +21,8 @@ const doc = <T>(key: string, file: string) => appStore().get<T>(`spaces/${key}/$
 export type Space = {
   config: DiseaseConfig;
   fetched: string;
+  /** What the registry pull kept, if the indication is scoped (e.g. Phase 2 and later). */
+  scope: { min_phase?: number; conditions_only?: string } | null;
   trials: Trial[];
   companies: Company[];
   unassigned: string[];
@@ -39,7 +41,7 @@ export type Space = {
 async function loadSpaceRaw(key: string): Promise<Space | null> {
   const config = diseaseConfig().diseases.find((d) => d.key === key);
   if (!config) return null;
-  const trialsDoc = await doc<{ fetched: string; trials: Trial[] }>(key, 'trials.json');
+  const trialsDoc = await doc<{ fetched: string; scope?: Space['scope']; trials: Trial[] }>(key, 'trials.json');
   if (!trialsDoc) return null;
   const [companies, facts, events, clinicians, coverage, firstSeen, briefs, review] = await Promise.all([
     doc<{ companies: Company[]; unassigned_investigator_trials: string[] }>(key, 'companies.json'),
@@ -54,6 +56,7 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
   return {
     config,
     fetched: trialsDoc.fetched,
+    scope: trialsDoc.scope ?? null,
     trials: trialsDoc.trials,
     companies: companies?.companies ?? [],
     unassigned: companies?.unassigned_investigator_trials ?? [],
