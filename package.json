@@ -9,9 +9,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "build-sponsors": "tsx scripts/build-sponsors.mts",
-    "setup-monitors": "tsx --env-file-if-exists=.env.local scripts/setup-monitors.mts",
-    "compact-replay": "tsx scripts/compact-replay.mts"
+    "pipeline": "tsx scripts/pipeline.mts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",

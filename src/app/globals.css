@@ -118,3 +118,31 @@ a {
     animation: none;
   }
 }
+
+/* Tailwind v4 dropped the pointer cursor on buttons; without it nothing feels clickable. */
+button:not(:disabled),
+[role='button'],
+summary,
+select,
+label:has(input) {
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+}
+.drawer-in {
+  animation: drawer-in 220ms var(--ease-brand);
+}

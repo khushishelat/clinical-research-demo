@@ -1,0 +1,81 @@
+{
+  "_note": "Diseases the pipeline can build. Add one by appending an entry here, then run the pipeline with --disease <key>. A person reviews this list. Diseases in \"exclude\" are never built.",
+  "exclude": [
+    "atopic dermatitis"
+  ],
+  "diseases": [
+    {
+      "key": "mash",
+      "name": "MASH",
+      "query_cond": "MASH OR NASH OR \"nonalcoholic steatohepatitis\" OR \"metabolic dysfunction-associated steatohepatitis\"",
+      "pubmed_terms": "MASH OR NASH OR steatohepatitis OR NAFLD OR MASLD OR \"fatty liver\"",
+      "specialties": [
+        "hepatology",
+        "gastroenterology",
+        "endocrinology"
+      ]
+    },
+    {
+      "key": "obesity",
+      "name": "Obesity",
+      "query_cond": "obesity",
+      "pubmed_terms": "obesity OR \"weight management\" OR \"weight loss\"",
+      "default_scope": {
+        "min_phase": 2,
+        "top_companies": 12
+      },
+      "specialties": [
+        "endocrinology",
+        "obesity medicine",
+        "internal medicine",
+        "family medicine"
+      ]
+    },
+    {
+      "key": "pancreatic-cancer",
+      "name": "Pancreatic cancer",
+      "query_cond": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR \"pancreatic ductal adenocarcinoma\"",
+      "pubmed_terms": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR PDAC",
+      "default_scope": {
+        "conditions_only": "pancreatic"
+      },
+      "specialties": [
+        "oncology",
+        "hematology",
+        "surgical oncology",
+        "gastroenterology"
+      ]
+    },
+    {
+      "key": "alzheimers",
+      "name": "Alzheimer's disease",
+      "query_cond": "Alzheimer",
+      "pubmed_terms": "Alzheimer OR \"amyloid\" OR dementia",
+      "specialties": [
+        "neurology",
+        "psychiatry",
+        "geriatric"
+      ]
+    },
+    {
+      "key": "alopecia-areata",
+      "name": "Alopecia areata",
+      "query_cond": "\"alopecia areata\"",
+      "pubmed_terms": "\"alopecia areata\"",
+      "specialties": [
+        "dermatology"
+      ]
+    },
+    {
+      "key": "migraine",
+      "name": "Migraine",
+      "query_cond": "migraine",
+      "pubmed_terms": "migraine OR headache",
+      "specialties": [
+        "neurology",
+        "headache"
+      ]
+    }
+  ],
+  "default": "mash"
+}
