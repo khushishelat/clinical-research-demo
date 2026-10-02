@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { fromRegistry, inferPlace, sameName, splitName } from '../scripts/lib/clinicians';
-import { companyKey, displayName, isHoldingCompany } from '../scripts/lib/companies';
+import { companyKey, displayName, isHoldingCompany, mergeRows } from '../scripts/lib/companies';
 import { assertNoContacts, cleanPersonName, diffSnapshots, personBase, toTrial, type Trial } from '../scripts/lib/registry';
 import { compactRunEvent, thinStats } from '../src/lib/replay-events';
 
@@ -79,7 +79,7 @@ test('privacy: contact details anywhere stop the write', () => {
 
 test('companies: one key per company across legal and place words', () => {
   assert.equal(companyKey('Madrigal Pharmaceuticals, Inc.'), companyKey('Madrigal Pharmaceuticals'));
-  assert.equal(companyKey('Eli Lilly and Company'), companyKey('Lilly'));
+  assert.notEqual(companyKey('Merck KGaA'), companyKey('Merck & Co., Inc.'));
   assert.ok(companyKey('Qilu Pharmaceutical Co., Ltd.').length > 0);
   assert.equal(displayName('Merck Sharp & Dohme LLC').includes('&'), true);
   assert.ok(isHoldingCompany('Novo Holdings A/S'));
@@ -110,4 +110,29 @@ test('privacy: street addresses leave affiliations, contacts leave excerpts', as
   assert.equal(stripAddress('Washington University in St. Louis'), 'Washington University in St. Louis');
   assert.equal(redactContacts('Contact clinicaltrials@acme.com or 844-734-6643.'), 'Contact [email removed] or [phone removed].');
   assert.throws(() => assertNoContacts('x', { a: 'VCU, 1200 West Broad Street' }), /contact details/);
+});
+
+test('companies: rows a same-company run groups merge into one, keeping the usual name’s key', () => {
+  const row = (key: string, name: string, sponsors: string[], trials: string[], over: Record<string, unknown> = {}) => ({ key, name, relationship: 'independent', owner_source: null, acquisitions: [], registry_sponsors: sponsors, drugs: [], trials, investigator_trials: [], web: null, web_only: false, approved: false, max_phase: 3, ...over }) as never;
+  const rows = new Map<string, any>([
+    ['roche', row('roche', 'Roche', ['89bio, Inc.'], ['NCT1'])],
+    ['hoffmann la', row('hoffmann la', 'Hoffmann-La Roche', ['Hoffmann-La Roche'], ['NCT2', 'NCT3'])],
+    ['merck', row('merck', 'Merck', [], [], { web_only: true })],
+  ]);
+  const merges = mergeRows(rows, [
+    { names: ['Hoffmann-La Roche', 'Roche', '89bio, Inc.'], company: 'Roche' },
+    { names: ['Merck'], company: 'Merck' },
+  ]);
+  assert.deepEqual(merges, [{ into: 'roche', from: ['hoffmann la'] }]);
+  assert.deepEqual([...rows.keys()].sort(), ['merck', 'roche']);
+  assert.deepEqual(rows.get('roche').trials, ['NCT1', 'NCT2', 'NCT3']);
+  assert.deepEqual(rows.get('roche').registry_sponsors, ['89bio, Inc.', 'Hoffmann-La Roche']);
+});
+
+test('removal: a removed person is matched by hash under any of their keys', async () => {
+  const { isRemoved, removalHash } = await import('../scripts/lib/removed');
+  const hashes = new Set([removalHash('jane roe|texas')]);
+  assert.ok(isRemoved(hashes, ['jane roe|univ hospital', 'Jane Roe|Texas']));
+  assert.ok(!isRemoved(hashes, ['john doe|texas']));
+  assert.ok(!removalHash('jane roe|texas').includes('jane'));
 });

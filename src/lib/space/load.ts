@@ -9,7 +9,7 @@ import { cache } from 'react';
 import { blobStore, folderStore, type Store } from '../store';
 import type { Basis, Brief, Clinician, Company, CompanyReview, Coverage, EventsDoc, Facts, FirstSeen, Trial } from './types';
 
-export type DiseaseConfig = { key: string; name: string; query_cond: string; specialties: string[]; default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string } };
+export type DiseaseConfig = { key: string; name: string; subtitle?: string; query_cond: string; specialties: string[]; default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string } };
 
 let _store: Store | null = null;
 export const appStore = (): Store => (_store ??= process.env.BLOB_READ_WRITE_TOKEN ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data')));

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ClinicianDetail, TrialDetail } from '@/lib/space/detail';
 import { Favicon } from './Favicon';
 
-const REMOVAL = process.env.NEXT_PUBLIC_REMOVAL_URL || 'https://github.com/khushishelat/clinical-research-demo/blob/main/PRIVACY.md';
+const REMOVAL = process.env.NEXT_PUBLIC_REMOVAL_URL || 'https://github.com/khushishelat/clinical-research-demo/blob/main/PRIVACY.md#asking-to-be-removed';
 const fmt = (iso: string | null | undefined, month: 'short' | 'long' = 'short') => {
   if (!iso) return '—';
   const day = /^\d{4}-\d{2}-\d{2}$/.test(iso);

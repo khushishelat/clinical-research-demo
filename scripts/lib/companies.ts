@@ -2,34 +2,13 @@
 // companies the web finds. Investigator-run trials join the company whose
 // drug they test, matched on drug names and codes as whole tokens. Pure.
 
+import type { Company } from '../../src/lib/space/types';
 import type { Trial } from './registry';
 
 const LEGAL = /\b(inc|incorporated|ltd|limited|co|corp|corporation|company|plc|ag|sa|se|nv|bv|gmbh|llc|lp|a\/s|kk|pty|pvt|s\.?p\.?a)\b\.?/gi;
 // Place names that prefix many Chinese company names ("Guangdong Raynovent Biotech").
 const PLACES = ['hk', 'hong', 'kong', 'china', 'beijing', 'shanghai', 'guangdong', 'guangzhou', 'jiangsu', 'zhejiang', 'suzhou', 'shenzhen', 'hangzhou', 'nanjing', 'chengdu', 'sichuan', 'fujian', 'xiamen', 'changchun', 'wuhan', 'tianjin', 'hengqin', 'hainan', 'shandong', 'jilin', 'anhui', 'hubei', 'hunan'];
 const DESCRIPTIVE = new Set([...PLACES, 'holdings', 'holding', 'group', 'pharmaceuticals', 'pharmaceutical', 'pharma', 'therapeutics', 'biotherapeutics', 'biotech', 'biotechnology', 'biologics', 'biopharma', 'biopharmaceuticals', 'biosciences', 'bioscience', 'sciences', 'science', 'laboratories', 'labs', 'industrial', 'development', 'international', 'global', 'research', 'and', 'the', 'us', 'usa', 'innovation', 'medicine', 'medical', 'health', 'healthcare', 'bio']);
-// Names that refer to one company but share no first words.
-const SAME: Record<string, string> = {
-  'hoffmann la': 'roche',
-  'f hoffmann': 'roche',
-  'roche': 'roche',
-  'genentech': 'roche',
-  glaxosmithkline: 'gsk',
-  gsk: 'gsk',
-  'eli lilly': 'lilly',
-  lilly: 'lilly',
-  'merck sharp': 'merck',
-  msd: 'merck',
-  'jiangsu hengrui': 'hengrui',
-  hengrui: 'hengrui',
-  'shenzhen hec': 'hec',
-  'hec': 'hec',
-  'sino biopharmaceutical': 'sino biopharm',
-  'sino biopharm': 'sino biopharm',
-  'novo nordisk': 'novo nordisk',
-  'boehringer ingelheim': 'boehringer ingelheim',
-};
-
 /** A stable key for a company name: "Novo Nordisk A/S" and "Novo Nordisk" match. */
 export function companyKey(name: string): string {
   const all = (name ?? '')
@@ -43,7 +22,7 @@ export function companyKey(name: string): string {
   // Never reduce a name to nothing ("Qilu Pharmaceutical", "China Medical").
   const words = kept.length ? kept : all.filter((w) => !PLACES.includes(w)).length ? all.filter((w) => !PLACES.includes(w)) : all;
   const two = words.slice(0, 2).join(' ');
-  return SAME[two] ?? SAME[words[0]] ?? two;
+  return two;
 }
 
 /** "Novo Nordisk A/S" → "Novo Nordisk"; keeps descriptive words a reader expects. */
@@ -98,3 +77,34 @@ export function trialTests(trial: Trial, alias: string): boolean {
 
 /** A financial parent (a foundation or holding company) is not the company on the map. */
 export const isHoldingCompany = (name: string) => /\b(holdings?|foundation|fund|investments?|capital|ventures)\b/i.test(name ?? '');
+
+/**
+ * Merge rows a same-company run grouped. The row whose key matches the group's
+ * usual name keeps its key (else the row with the most trials), so research
+ * already run under that key is reused. Returns the merges made.
+ */
+export function mergeRows(rows: Map<string, Company>, groups: { names: string[]; company: string }[]): { into: string; from: string[] }[] {
+  const merges: { into: string; from: string[] }[] = [];
+  const byName = (n: string) => [...rows.values()].find((c) => c.name === n || c.registry_sponsors.includes(n));
+  for (const g of groups) {
+    const members = [...new Set(g.names.map(byName).filter((c): c is Company => Boolean(c)))];
+    if (members.length < 2) continue;
+    const wanted = companyKey(g.company);
+    const into = members.find((c) => c.key === wanted) ?? [...members].sort((a, b) => Number(a.web_only) - Number(b.web_only) || b.trials.length - a.trials.length)[0];
+    const from = members.filter((c) => c !== into);
+    for (const c of from) {
+      into.registry_sponsors.push(...c.registry_sponsors);
+      into.trials.push(...c.trials);
+      into.investigator_trials.push(...c.investigator_trials);
+      into.acquisitions.push(...c.acquisitions);
+      for (const drug of c.drugs) if (!into.drugs.some((x) => x.name.toLowerCase() === drug.name.toLowerCase())) into.drugs.push(drug);
+      into.owner_source ??= c.owner_source;
+      into.web ??= c.web;
+      into.web_only = into.web_only && c.web_only;
+      rows.delete(c.key);
+    }
+    if (into.key === wanted) into.name = displayName(g.company);
+    merges.push({ into: into.key, from: from.map((c) => c.key) });
+  }
+  return merges;
+}
