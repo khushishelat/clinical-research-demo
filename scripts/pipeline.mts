@@ -20,7 +20,7 @@ const pending = review.filter((r) => r.include === null);
 if (pending.length) {
   console.log(`\n[${d.key}] ${pending.length} companies found on the web, not in the registry, need a yes or no:`);
   for (const r of pending) console.log(`  · ${r.company}`);
-  console.log(`Set "include" to true or false in ${where}${spacePath(d, 'review/companies.json')}, then run this again.\n`);
+  console.log(`Set "include" to true or false in ${where}${spacePath(d, 'review/companies.json')}, or see recommendations with npm run review -- --disease ${d.key}; then run this again.\n`);
   process.exit(0);
 }
 

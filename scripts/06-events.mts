@@ -1,10 +1,12 @@
-// Step 6: one event list per disease, built in code (no model): web events
-// from step 4 (milestones, deals, approvals), registry events from the daily
-// diffs, and Monitor events when they arrive. Plus catalysts and monthly
-// registration counts.
+// Step 6: one event list per indication, built in code (no model): disclosures
+// from step 4 (milestones, deals, financings, approvals, regulatory events),
+// registry events from the daily diffs, and Monitor events when they arrive.
+// Plus guided catalysts and monthly registration counts. Events keep the trial
+// ID the research run gave, so the map and drawers join on it exactly.
 //   npx tsx scripts/06-events.mts --disease mash
 
 import { createHash } from 'node:crypto';
+import { regulatoryEvent } from '../src/lib/space/labels';
 import { disease, log, spacePath, store, where } from './lib/pipeline';
 import type { RegistryEvent, Trial } from './lib/registry';
 
@@ -17,13 +19,20 @@ const monitor = (await store.get<any[]>(spacePath(d, 'monitor-events.json'))) ??
 const companyOf = new Map<string, string>();
 for (const c of companies) for (const n of [...c.trials, ...c.investigator_trials]) if (!companyOf.has(n)) companyOf.set(n, c.key);
 const id = (...parts: string[]) => createHash('sha1').update(parts.join('|')).digest('hex').slice(0, 12);
-const valid = (s: unknown) => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
+const valid = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
 
-type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string; origin: 'web' | 'registry' | 'monitor' };
+type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; origin: 'web' | 'registry' | 'monitor' };
 const events: Event[] = [];
 for (const [key, f] of Object.entries(facts)) {
-  for (const m of f.milestones ?? []) if (valid(m.date)) events.push({ id: id(key, m.date, m.headline), date: m.date, company: key, drug: m.drug ?? null, type: m.type, headline: m.headline, source_url: m.source_url, origin: 'web' });
-  for (const x of f.deals ?? []) if (valid(x.date)) events.push({ id: id(key, x.date, 'deal', x.headline), date: x.date, company: key, drug: null, type: 'deal', headline: x.headline, source_url: x.source_url, origin: 'web' });
+  for (const m of f.milestones ?? []) if (valid(m.date)) events.push({ id: id(key, m.date, m.headline), date: m.date, company: key, drug: m.drug ?? null, type: m.type, headline: m.headline, source_url: m.source_url, nct: m.nct ?? null, origin: 'web' });
+  for (const x of f.deals ?? []) if (valid(x.date)) events.push({ id: id(key, x.date, 'deal', x.headline), date: x.date, company: key, drug: x.drugs?.[0] ?? null, type: 'deal', headline: x.headline, source_url: x.source_url, origin: 'web' });
+  for (const x of f.financings ?? []) if (valid(x.date)) events.push({ id: id(key, x.date, 'financing', x.headline), date: x.date, company: key, drug: null, type: 'financing', headline: x.headline, source_url: x.source_url, origin: 'web' });
+  // Designations and filings that happened, unless a milestone already carries that day.
+  for (const r of f.regulatory ?? []) {
+    if (r.status !== 'done' || !valid(r.date)) continue;
+    const dup = events.some((e) => e.company === key && ['regulatory', 'designation', 'filing'].includes(e.type) && Math.abs(Date.parse(e.date) - Date.parse(r.date)) < 4 * 86_400_000);
+    if (!dup) events.push({ id: id(key, r.date, r.kind, r.drug), date: r.date, company: key, drug: r.drug, type: 'regulatory', headline: `${regulatoryEvent(r.agency, r.kind)} for ${r.drug}`.slice(0, 90), source_url: r.source_url, origin: 'web' });
+  }
   for (const a of f.approvals ?? []) {
     if (!valid(a.date)) continue;
     const dup = events.some((e) => e.company === key && e.type === 'approval' && Math.abs(Date.parse(e.date) - Date.parse(a.date)) < 4 * 86_400_000);
@@ -58,7 +67,11 @@ for (const t of trials) {
 for (const m of monitor) if (m.company && valid(m.date)) events.push({ ...m, origin: 'monitor' });
 events.sort((a, b) => b.date.localeCompare(a.date));
 
-const catalysts = Object.entries(facts).flatMap(([key, f]) => (f.next ?? []).map((n: any) => ({ id: id(key, n.what, n.timing_text ?? ''), company: key, ...n })));
+// Guided catalysts: the company's stated next steps, plus expected regulatory events.
+const catalysts = Object.entries(facts).flatMap(([key, f]) => [
+  ...(f.next ?? []).map((n: any) => ({ id: id(key, n.what, n.timing_text ?? ''), company: key, ...n })),
+  ...(f.regulatory ?? []).filter((r: any) => r.status === 'expected').map((r: any) => ({ id: id(key, r.kind, r.drug, r.window ?? ''), company: key, what: `${regulatoryEvent(r.agency, r.kind)} for ${r.drug}`, kind: 'decision', drug: r.drug, nct: null, stated_on: null, earliest: r.date, latest: null, timing_text: r.window, stated_by: null, source_url: r.source_url })),
+]);
 const monthly: Record<string, { all: number; companies: number }> = {};
 for (const t of trials) {
   const m = t.first_posted.slice(0, 7);

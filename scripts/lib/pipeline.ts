@@ -25,6 +25,12 @@ export type Disease = {
   /** NPI taxonomy words that suggest the right person when a name matches several. */
   specialties: string[];
   default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string };
+  subtitle?: string;
+  area?: string;
+  /** Large indications chain the company list once per region (COMPANY_CHAIN). */
+  chain_regions?: string[];
+  /** Also keep trials that completed or stopped since this date (YYYY-MM-DD). */
+  include_completed_since?: string;
 };
 
 const config = JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')) as { diseases: Disease[]; default: string; exclude: string[] };
@@ -75,6 +81,8 @@ export type RunRecord = {
   basis?: unknown[];
   connectors?: Record<string, number>;
   seconds?: number | null;
+  /** Earlier runs for this key that failed (not billed), oldest first. */
+  failed_runs?: string[];
 };
 export type RunLog = Record<string, RunRecord>;
 
@@ -95,9 +103,13 @@ export type Recorder = { start: number; events: CompactEvent[] };
 export const recorder = (): Recorder => ({ start: Date.now(), events: [] });
 export async function saveReplay(d: Disease, job: string, r: Recorder) {
   const events = thinStats(r.events).sort((a, b) => a.t - b.t);
-  // A re-run that only reused finished runs records little; keep the fuller replay.
-  const prior = await store.get<{ events: unknown[] }>(spacePath(d, `replay/${job}.json`));
-  if (prior && prior.events.length >= events.length) return;
+  // A re-run that only reused finished runs records little; keep the fuller replay of the
+  // same runs. Runs are named by their run-log keys, which carry the spec version, so a
+  // recording of different runs (a new spec, a new period) always replaces the old one.
+  const prior = await store.get<{ events: { run: string }[] }>(spacePath(d, `replay/${job}.json`));
+  const before = new Set((prior?.events ?? []).map((e) => e.run));
+  const same = events.every((e) => before.has(e.run));
+  if (prior && same && prior.events.length >= events.length) return;
   await store.put(spacePath(d, `replay/${job}.json`), { job, started: new Date(r.start).toISOString(), duration_s: Math.round((Date.now() - r.start) / 1000), events });
 }
 
@@ -117,30 +129,50 @@ export type RunSpec = {
 /** Create a run once per key (or reuse the recorded one), wait for it, and record the result. */
 export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => Promise<void> }, key: string, spec: RunSpec, rec0?: Recorder): Promise<RunRecord> {
   let rec = rl.log[key];
+  // Failed runs are not billed (docs: pricing), so a failed unit gets one fresh run; the
+  // failed run's ID is kept. A second failure stands, so a broken input never loops.
+  const failed = rec?.status === 'failed' && !rec.failed_runs?.length ? [rec.run_id] : null;
+  if (failed) rec = undefined as unknown as RunRecord;
   if (!rec) {
     const run: any = await client.taskRun.create({
       processor: spec.processor,
       input: spec.input as any,
-      task_spec: { output_schema: { type: 'json', json_schema: spec.schema as Record<string, unknown> } },
+      task_spec: { output_schema: outputSchema(spec.schema) as any },
       ...(spec.connectors?.length ? { advanced_settings: { data_sources: { free: spec.connectors } } as any } : {}),
       metadata: { app: 'trial-check', ...(spec.metadata ?? {}) },
+      // Progress events are only tracked when asked for at creation (on by default from pro up).
+      ...(rec0 ? { enable_events: true } : {}),
       ...(spec.previous_interaction_id ? { previous_interaction_id: spec.previous_interaction_id } : {}),
     } as any);
-    rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString() };
+    rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString(), ...(failed ? { failed_runs: failed } : {}) };
     await rl.save();
   }
   if (rec.status) return rec;
   if (rec0) {
-    // Follow the run's event stream for the replay; fall back to polling if it drops.
-    try {
-      const stream: any = await client.taskRun.events(rec.run_id);
-      for await (const e of stream) {
-        const c = compactRunEvent(e, key, Math.round((Date.now() - rec0.start) / 1000));
-        if (c) rec0.events.push(c);
-        if (e.type === 'task_run.state' && e.run && !e.run.is_active) break;
+    // Follow the run's event stream for the replay. A stream stays open for up to 570 s, and
+    // reconnecting to an active run replays its reasoning trace from the start, so reconnect
+    // until the run ends and keep each message once. Times come from the events' own
+    // timestamps, so a stream joined late (a queued group run) still plays back in order.
+    const seen = new Set<string>();
+    for (let connection = 0; connection < 20; connection++) {
+      let ended = false;
+      try {
+        for await (const e of (await client.taskRun.events(rec.run_id)) as any) {
+          const at = e.timestamp ? Date.parse(e.timestamp) : Date.now();
+          const once = e.type === 'task_run.state' ? `state|${e.run?.status}` : e.type === 'task_run.progress_stats' ? null : `${e.type}|${e.timestamp ?? ''}|${e.message ?? ''}`;
+          if (once && seen.has(once)) continue;
+          if (once) seen.add(once);
+          const c = compactRunEvent(e, key, Math.max(0, Math.round((at - rec0.start) / 1000)));
+          if (c) rec0.events.push(c);
+          if (e.type === 'task_run.state' && e.run && !e.run.is_active) {
+            ended = true;
+            break;
+          }
+        }
+      } catch {
+        // reconnect, or fall through to polling
       }
-    } catch {
-      // polling below
+      if (ended || !(await again(() => client.taskRun.retrieve(rec.run_id))).is_active) break;
     }
   }
   for (;;) {
@@ -150,11 +182,13 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
       rec.seconds = secondsOf(run);
       if (run.status === 'completed') {
         const res: any = await again(() => client.taskRun.result(rec.run_id, { timeout: 30 }));
-        rec.content = typeof res.output.content === 'string' ? JSON.parse(res.output.content) : res.output.content;
+        rec.content = typeof res.output.content === 'string' && !isText(spec.schema) ? JSON.parse(res.output.content) : res.output.content;
         rec.basis = res.output.basis ?? [];
         rec.connectors = (res.output.mcp_tool_calls ?? []).reduce((m: Record<string, number>, c: any) => ((m[c.server_name] = (m[c.server_name] ?? 0) + 1), m), {});
       }
       await rl.save();
+      // A first failure is retried at once (see above), so one bad run doesn't end a chain.
+      if (rec.status === 'failed' && !rec.failed_runs?.length) return runOnce(client, rl, key, spec, rec0);
       return rec;
     }
     await sleep(15_000);
@@ -170,7 +204,7 @@ export async function chain<T>(
   client: Parallel,
   rl: { log: RunLog; save: () => Promise<void> },
   key: string,
-  opts: { first: string; next: string; field: string; dedupe: (x: T) => string; maxPages: number; minNew: number } & Omit<RunSpec, 'input' | 'previous_interaction_id'>
+  opts: { first: string; next: string; field: string; dedupe: (x: T) => string; maxPages: number; minNew: number; minPages?: number } & Omit<RunSpec, 'input' | 'previous_interaction_id'>
 ): Promise<T[]> {
   const items: T[] = [];
   const seen = new Set<string>();
@@ -186,7 +220,8 @@ export async function chain<T>(
       items.push(x);
       added += 1;
     }
-    if (rec.status !== 'completed' || added < opts.minNew) break;
+    // A page that adds few new items ends the list, but never before minPages: one thin page is noise.
+    if (rec.status !== 'completed' || (page >= (opts.minPages ?? 1) && added < opts.minNew)) break;
     prev = rec.interaction_id ?? null;
   }
   return items;
@@ -230,9 +265,10 @@ export async function groupRuns(
     const batch = missing.slice(i, i + 50).map((u) => ({
       processor: u.spec.processor,
       input: u.spec.input as any,
-      task_spec: { output_schema: { type: 'json', json_schema: u.spec.schema as Record<string, unknown> } },
+      task_spec: { output_schema: outputSchema(u.spec.schema) as any },
       ...(u.spec.connectors?.length ? { advanced_settings: { data_sources: { free: u.spec.connectors } } } : {}),
       metadata: { app: 'trial-check', job, disease: d.key, ...(u.spec.metadata ?? {}), unit: u.key },
+      ...(rec0 ? { enable_events: true } : {}),
     }));
     try {
       await client.taskGroup.addRuns(gid, { inputs: batch as any }, { maxRetries: 0 });
@@ -271,3 +307,7 @@ export const E = (values: string[], description?: string) => ({ type: 'string', 
 export const A = (items: object, description?: string) => ({ type: 'array', items, ...(description ? { description } : {}) });
 export const O = (properties: Record<string, object>, required = Object.keys(properties)) => ({ type: 'object', properties, required, additionalProperties: false });
 export const B = (description: string) => ({ type: 'boolean', description });
+/** A text output schema: the run returns markdown with inline citations instead of JSON. */
+export const TEXT = (description: string) => ({ type: 'text', description });
+const isText = (schema: object) => (schema as { type?: string }).type === 'text';
+const outputSchema = (schema: object) => (isText(schema) ? schema : { type: 'json', json_schema: schema as Record<string, unknown> });

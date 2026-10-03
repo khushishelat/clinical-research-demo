@@ -1,5 +1,5 @@
 {
-  "_note": "Diseases the pipeline can build. Add one by appending an entry here, then run the pipeline with --disease <key>. A person reviews this list; the subtitle under each map title is written here, not researched. Diseases in \"exclude\" are never built.",
+  "_note": "Indications the pipeline can build. Add one by appending an entry, then run the pipeline with --disease <key>. A person reviews this list; the subtitle and therapeutic area are written here, not researched. Indications in \"exclude\" are never built.",
   "exclude": [
     "atopic dermatitis"
   ],
@@ -8,6 +8,7 @@
       "key": "mash",
       "name": "MASH",
       "subtitle": "Metabolic dysfunction-associated steatohepatitis",
+      "area": "Cardiometabolic",
       "query_cond": "MASH OR NASH OR \"nonalcoholic steatohepatitis\" OR \"metabolic dysfunction-associated steatohepatitis\"",
       "pubmed_terms": "MASH OR NASH OR steatohepatitis OR NAFLD OR MASLD OR \"fatty liver\"",
       "specialties": [
@@ -20,6 +21,8 @@
       "key": "obesity",
       "name": "Obesity",
       "subtitle": "Chronic weight management",
+      "area": "Cardiometabolic",
+      "include_completed_since": "2024-01-01",
       "query_cond": "obesity",
       "pubmed_terms": "obesity OR \"weight management\" OR \"weight loss\"",
       "default_scope": {
@@ -31,12 +34,19 @@
         "obesity medicine",
         "internal medicine",
         "family medicine"
+      ],
+      "chain_regions": [
+        "the United States or Europe",
+        "China",
+        "Japan, South Korea or elsewhere in Asia-Pacific",
+        "the rest of the world"
       ]
     },
     {
       "key": "pancreatic-cancer",
       "name": "Pancreatic cancer",
       "subtitle": "Pancreatic adenocarcinoma and related tumors",
+      "area": "Oncology",
       "query_cond": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR \"pancreatic ductal adenocarcinoma\"",
       "pubmed_terms": "\"pancreatic cancer\" OR \"pancreatic adenocarcinoma\" OR PDAC",
       "default_scope": {
@@ -47,13 +57,24 @@
         "hematology",
         "surgical oncology",
         "gastroenterology"
+      ],
+      "chain_regions": [
+        "the United States or Europe",
+        "China",
+        "Japan, South Korea or elsewhere in Asia-Pacific",
+        "the rest of the world"
       ]
     },
     {
       "key": "alzheimers",
       "name": "Alzheimer's disease",
       "subtitle": "Alzheimer's disease and early cognitive decline",
+      "area": "Neuroscience",
+      "include_completed_since": "2024-01-01",
       "query_cond": "Alzheimer",
+      "default_scope": {
+        "conditions_only": "alzheimer"
+      },
       "pubmed_terms": "Alzheimer OR \"amyloid\" OR dementia",
       "specialties": [
         "neurology",
@@ -65,8 +86,13 @@
       "key": "alopecia-areata",
       "name": "Alopecia areata",
       "subtitle": "Autoimmune hair loss",
+      "area": "Immunology",
+      "include_completed_since": "2024-01-01",
       "query_cond": "\"alopecia areata\"",
       "pubmed_terms": "\"alopecia areata\"",
+      "default_scope": {
+        "conditions_only": "areata"
+      },
       "specialties": [
         "dermatology"
       ]
@@ -75,12 +101,14 @@
       "key": "migraine",
       "name": "Migraine",
       "subtitle": "Acute and preventive treatment",
+      "area": "Neuroscience",
       "query_cond": "migraine",
       "pubmed_terms": "migraine OR headache",
       "specialties": [
         "neurology",
         "headache"
-      ]
+      ],
+      "include_completed_since": "2024-01-01"
     }
   ],
   "default": "mash"

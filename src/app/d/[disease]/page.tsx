@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<'/d/[disease]'>): Promise<Metadata> {
   const space = await loadSpace((await params).disease);
-  return space ? { title: `${space.config.name} · Trial Check`, description: `Every company racing in ${space.config.name}: ${space.trials.length} active drug trials and the clinicians who run them, from public sources.` } : {};
+  return space ? { title: `${space.config.name} competitive landscape · Trial Check`, description: `The ${space.config.name} competitive landscape: ${space.trials.length} active trials, the companies behind them and their investigators, from public sources.` } : {};
 }
 
 export default async function DiseasePage({ params }: PageProps<'/d/[disease]'>) {

@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "pipeline": "tsx scripts/pipeline.mts",
-    "remove-clinician": "tsx scripts/remove-clinician.mts"
+    "remove-clinician": "tsx scripts/remove-clinician.mts",
+    "review": "tsx scripts/review.mts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
@@ -19,6 +20,8 @@
     "parallel-web": "^1.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1"
   },
   "devDependencies": {

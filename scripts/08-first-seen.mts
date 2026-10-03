@@ -25,12 +25,12 @@ const res = await groupRuns(
   'first-seen',
   recent.map((t) => {
     const c = owner.get(t.nct);
-    return { key: `seen2:${t.nct}`, spec: { processor: FIRST_SEEN.processor, schema: FIRST_SEEN.schema, input: FIRST_SEEN.input({ nct: t.nct, acronym: t.acronym, title: t.title, company: c.name, drugs: c.drugs.map((x: any) => x.name).slice(0, 4), first_posted: t.first_posted }), metadata: { nct: t.nct } } };
+    return { key: `${FIRST_SEEN.key}:${t.nct}`, spec: { processor: FIRST_SEEN.processor, schema: FIRST_SEEN.schema, input: FIRST_SEEN.input({ nct: t.nct, acronym: t.acronym, title: t.title, company: c.name, drugs: c.drugs.map((x: any) => x.name).slice(0, 4), first_posted: t.first_posted }), metadata: { nct: t.nct } } };
   })
 );
 const out: Record<string, unknown> = {};
 for (const t of recent) {
-  const c: any = res[`seen2:${t.nct}`]?.content;
+  const c: any = res[`${FIRST_SEEN.key}:${t.nct}`]?.content;
   if (!c?.first_announced || !/^\d{4}-\d{2}-\d{2}$/.test(c.first_announced)) continue;
   const days = Math.round((Date.parse(t.first_posted) - Date.parse(c.first_announced)) / 86_400_000);
   out[t.nct] = { first_announced: c.first_announced, source_url: c.source_url, what: c.what, how_it_refers: c.how_it_refers, plan_announced: c.plan_announced ?? null, registry_first_posted: t.first_posted, days_earlier: days > 0 ? days : 0 };

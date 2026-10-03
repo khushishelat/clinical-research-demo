@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; run: string; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number };
+type Ev = { k: 'state' | 'stats' | 'search' | 'tool' | 'extract'; run: string; t: number; status?: string; m?: string; connector?: string; tool?: string; url?: string; considered?: number; read?: number; sample?: string[] };
 type Replay = { job: string; started: string; duration_s: number; events: Ev[] };
 type Card = { status: string; searches: number; pages: number; tools: Record<string, number>; last: string | null };
 
@@ -58,6 +58,8 @@ export function RunReplay({ disease, job, names }: { disease: string; job: strin
         c.last = (e.m ?? '').replace(/^Query:\s*/, '');
         if (c.status === 'queued') c.status = 'running';
       } else if (e.k === 'extract') c.pages += 1;
+      // The run's own count of pages read (progress_stats) wins when it is higher.
+      else if (e.k === 'stats' && e.read) c.pages = Math.max(c.pages, e.read);
       else if (e.k === 'tool' && e.connector) c.tools[e.connector] = (c.tools[e.connector] ?? 0) + 1;
     }
     return out;
@@ -75,7 +77,7 @@ export function RunReplay({ disease, job, names }: { disease: string; job: strin
         </button>
         <input type="range" min={0} max={replay.duration_s} value={t} onChange={(e) => (setPlaying(false), setT(Number(e.target.value)))} aria-label="Position" className="w-48 accent-[var(--color-orange)]" />
         <span className="font-mono text-[12px] text-muted">
-          {clock(t)} of {clock(replay.duration_s)} · {done}/{runs.length} runs done · {totals.searches} searches · {totals.pages} pages read · {totals.tools} connector calls
+          {clock(t)} of {clock(replay.duration_s)} · {done}/{runs.length} runs done · {totals.searches} searches · {totals.pages} pages read in full · {totals.tools} connector calls
         </span>
       </div>
       <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">

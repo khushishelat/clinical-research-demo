@@ -1,9 +1,12 @@
-// Step 9: the weekly brief (core), written only from the week's sourced
-// events and the next 30 days of catalysts. Every source must come from the
-// input; anything else is dropped.
+// Step 9: the weekly brief, a deep-research Task run (ultra2x, text output, the
+// ClinicalTrials.gov and PubMed connectors). It starts from the week's known
+// events (registry changes, the pipeline's disclosures, catalysts due in the
+// next 30 days), keeps the material ones, and researches what they miss. The
+// run is recorded live, so the brief can show how it was made.
 //   npx tsx scripts/09-brief.mts --disease mash [--days 14]
 
-import { disease, log, parallel, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
+import { disease, log, parallel, recorder, runLog, runOnce, saveReplay, spacePath, store, today, where } from './lib/pipeline';
+import { assertNoContacts, redactContacts } from './lib/registry';
 import { BRIEF } from './lib/specs';
 
 const d = disease();
@@ -16,25 +19,40 @@ const from = new Date(Date.now() - days * 86_400_000).toISOString().slice(0, 10)
 const horizon = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
 const { events, catalysts } = (await store.get<{ events: any[]; catalysts: any[] }>(spacePath(d, 'events.json')))!;
 const { companies } = (await store.get<{ companies: any[] }>(spacePath(d, 'companies.json')))!;
+const { trials } = (await store.get<{ trials: any[] }>(spacePath(d, 'trials.json')))!;
+const review = (await store.get<{ company: string; include: boolean | null }[]>(spacePath(d, 'review/companies.json'))) ?? [];
+const included = new Set(review.filter((r) => r.include).map((r) => r.company));
 const name = new Map(companies.map((c) => [c.key, c.name]));
-const week = events.filter((e) => e.date >= from && e.date <= to).map((e) => ({ date: e.date, company: name.get(e.company) ?? e.company, type: e.type, headline: e.headline, source_url: e.source_url }));
+const inPeriod = events.filter((e) => e.date >= from && e.date <= to).map((e) => ({ date: e.date, company: name.get(e.company) ?? e.company, type: e.type, headline: e.headline, nct: e.nct ?? null, source_url: e.source_url, origin: e.origin }));
+const disclosures = inPeriod.filter((e) => e.origin !== 'registry').map(({ origin: _, ...e }) => e);
+const registryChanges = inPeriod.filter((e) => e.origin === 'registry').map(({ origin: _, ...e }) => e);
 const upcoming = catalysts.filter((c) => (c.earliest ?? c.date ?? '') >= to && (c.earliest ?? c.date ?? '') <= horizon).map((c) => ({ company: name.get(c.company) ?? c.company, what: c.what, timing: c.timing_text, stated_by: c.stated_by, source_url: c.source_url }));
-if (!week.length) {
-  log(d, `no events between ${from} and ${to}; no brief this week`);
-  process.exit(0);
-}
+const onMap = companies.filter((c) => !c.web_only || included.has(c.name)).map((c) => ({ name: c.name, drugs: c.drugs.slice(0, 3).map((x: any) => x.name) }));
+const companyTrials = trials.filter((t) => t.run_by === 'company').map((t) => ({ nct: t.nct, acronym: t.acronym || null, sponsor: t.sponsor, phase: t.phases.join('/'), status: t.status }));
+
 const rl = await runLog(d, 'brief');
-const rec = await runOnce(client, rl, `brief:${from}:${to}`, { processor: BRIEF.processor, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, week, upcoming), metadata: { job: 'brief', disease: d.key } });
-const allowed = new Set([...week, ...upcoming].map((x) => x.source_url).filter(Boolean));
-const brief: any = rec.content;
-let dropped = 0;
-for (const s of brief?.sections ?? []) {
-  const before = s.sources.length;
-  s.sources = s.sources.filter((u: string) => allowed.has(u));
-  dropped += before - s.sources.length;
-}
-const sections = (brief?.sections ?? []).filter((s: any) => s.sources.length);
-await store.put(spacePath(d, `briefs/${to}.json`), { disease: d.key, date: to, from, title: brief?.title, sections, run_id: rec.run_id });
+const replay = recorder();
+const rec = await runOnce(
+  client,
+  rl,
+  `${BRIEF.key}:${from}:${to}`,
+  { processor: BRIEF.processor, connectors: BRIEF.connectors, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, { disclosures, registry_changes: registryChanges, upcoming_30_days: upcoming }, onMap, companyTrials), metadata: { job: 'brief', disease: d.key } },
+  replay
+);
+if (replay.events.length) await saveReplay(d, `brief-${to}`, replay);
+if (rec.status !== 'completed' || typeof rec.content !== 'string') throw new Error(`brief run ${rec.run_id} ${rec.status ?? 'returned no text'}`);
+
+// Connector lookups are cited as "pubmed: get_article_metadata"; name the record instead.
+const connectorTitle = (t: string) => (/^pubmed:\s*\w+$/.test(t) ? 'PubMed record' : /^clinical_trials:\s*\w+$/.test(t) ? 'ClinicalTrials.gov record' : t);
+// The headline is the first "# " line; numbered references become links for the inline [n] citations.
+const markdown = redactContacts(rec.content.trim());
+const title = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim() ?? `${d.name} this week`;
+const refs = markdown.split(/^##\s+References\s*$/im)[1] ?? '';
+const references = [...refs.matchAll(/^\s*(\d+)\.\s+(.*?)\s*(https?:\/\/\S+?)\s*$/gm)].map((m) => ({ n: Number(m[1]), title: connectorTitle(m[2].replace(/[*.]+\s*$/, '').replace(/^\*|\*$/g, '').trim()), url: m[3] }));
+const body = markdown.replace(/^#\s+.+\n+/, '').split(/^##\s+References\s*$/im)[0].trim();
+const doc = { disease: d.key, date: to, from, title, markdown: body, references, run_id: rec.run_id, spec: BRIEF.key, seconds: rec.seconds ?? null, connectors: rec.connectors ?? {} };
+assertNoContacts('brief', doc);
+await store.put(spacePath(d, `briefs/${to}.json`), doc);
 const idx = (await store.get<{ issues: string[] }>(spacePath(d, 'briefs/index.json'))) ?? { issues: [] };
 await store.put(spacePath(d, 'briefs/index.json'), { issues: [...new Set([...idx.issues, to])].sort().reverse() });
-log(d, `brief "${brief?.title}": ${sections.length} sections from ${week.length} events (${dropped} uncited sources dropped) · saved to ${where}spaces/${d.key}/briefs/${to}.json`);
+log(d, `brief "${title}": ${references.length} references, from ${disclosures.length} disclosures and ${registryChanges.length} registry changes · saved to ${where}spaces/${d.key}/briefs/${to}.json`);
