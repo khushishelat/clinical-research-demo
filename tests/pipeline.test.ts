@@ -76,6 +76,9 @@ test('clinicians: country from the affiliation, else the trial', () => {
 
 test('privacy: contact details anywhere stop the write', () => {
   assert.throws(() => assertNoContacts('x', { a: 'reach me at jane@example.org' }), /contact details/);
+  assert.throws(() => assertNoContacts('x', { a: 'ir@acme-bio.example.com' }), /contact details/);
+  // A file name with an @ is not an address.
+  assert.doesNotThrow(() => assertNoContacts('x', { title: 'ASC30_Phase_2_@_ADA_2026-final.pdf' }));
   assert.throws(() => assertNoContacts('x', [{ note: 'call 512-555-0134' }]), /contact details/);
   assert.doesNotThrow(() => assertNoContacts('x', { nct: 'NCT05000000', enrollment: 1200, npi: '1134336662' }));
 });

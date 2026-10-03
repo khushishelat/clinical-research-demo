@@ -128,7 +128,8 @@ async function pull(d: Disease, statuses: string, advanced: string, out: Map<str
   } while (token);
 }
 
-const EMAIL = /[\w.+-]+@[\w-]+\.[a-z]{2,}/gi;
+// A domain label starts with a letter or digit, so a file name such as "Deck_@_ADA_2026.pdf" is not an address.
+const EMAIL = /[\w.+-]+@[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.[a-z]{2,}/gi;
 const PHONE = /(?:\+?\d{1,2}[\s.-])?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g;
 const STREET_ADDRESS = /\b\d{2,5}\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St\.|Avenue|Ave\.|Road|Rd\.|Boulevard|Blvd|Drive|Dr\.|Suite)\b/;
 
@@ -138,7 +139,7 @@ export const redactContacts = (text: string) => text.replace(EMAIL, '[email remo
 /** Throws if anything that looks like a phone number, email or street address reached the data. */
 export function assertNoContacts(label: string, data: unknown) {
   const text = JSON.stringify(data);
-  const email = text.match(/[\w.+-]+@[\w-]+\.[a-z]{2,}/i);
+  const email = text.match(new RegExp(EMAIL.source, 'i'));
   const phone = text.match(PHONE);
   const street = text.match(STREET_ADDRESS);
   if (email || phone || street) throw new Error(`${label}: contact details found (${(email ?? phone ?? street)![0]}). Nothing was saved.`);
