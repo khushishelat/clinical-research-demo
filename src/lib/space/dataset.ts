@@ -55,7 +55,8 @@ export function datasetView(s: S) {
     const trial = ro ? s.trials.find((t) => t.nct === ro.nct) : undefined;
     cells.latest_readout = ro
       ? { field: `readouts.${ro.nct}`, text: short(ro.arms.map((a) => `${a.arm}: ${a.result}`).join('; ')) || short(ro.endpoint) || 'Reported', sub: [trial?.acronym || ro.nct, ro.date].filter(Boolean).join(' · '), source: ro.source_url }
-      : { field: 'latest_readout', text: '—' };
+      : // No reported results: the readout runs that found none sit under readouts.<nct>.
+        { field: 'readouts', text: '—' };
     const reg = f.regulatory ?? [];
     const done = [...new Set(reg.filter((r) => r.status === 'done').map((r) => regulatoryLabel(r.kind)))];
     const expected = reg.find((r) => r.status === 'expected');

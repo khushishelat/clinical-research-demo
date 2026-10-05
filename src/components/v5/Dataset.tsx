@@ -182,6 +182,8 @@ function BasisPanel({ disease, row, cell, label, onClose }: { disease: string; r
   }, [onClose]);
   const items = basis?.key === row.key ? basis.items.filter((b) => b.field === cell.field || b.field.startsWith(`${cell.field}.`)) : null;
   const top = items?.find((b) => b.field === cell.field) ?? items?.[0];
+  // An empty readout cell: one note per trial the readout runs checked (readouts.<nct>.has_data).
+  const checked = cell.field === 'readouts' && items ? [...new Map(items.filter((b) => b.field.endsWith('.has_data')).map((b) => [b.field.split('.')[1], b])).entries()] : [];
   const cites = items ? [...new Map(items.flatMap((b) => b.citations).map((c) => [c.url, c])).values()] : [];
   return (
     <aside aria-label={`Basis for ${label}`} className="drawer-in fixed inset-y-0 right-0 z-50 flex w-full max-w-[520px] flex-col overflow-y-auto border-l border-line bg-card shadow-[-8px_0_24px_rgba(29,27,22,0.06)]">
@@ -201,7 +203,19 @@ function BasisPanel({ disease, row, cell, label, onClose }: { disease: string; r
         <div className="m-6 h-24 animate-pulse rounded bg-wash" />
       ) : (
         <>
-          {top ? (
+          {checked.length ? (
+            <div className="mx-6 mt-5 space-y-2">
+              <p className="text-[13px] text-muted">
+                {checked.length} trial{checked.length === 1 ? ' was' : 's were'} checked for reported results; none had any.
+              </p>
+              {checked.map(([nct, b]) => (
+                <div key={nct} className="rounded-[4px] border border-line p-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">{nct}</p>
+                  <p className="mt-1 text-[14px]">{b.reasoning}</p>
+                </div>
+              ))}
+            </div>
+          ) : top ? (
             <div className="mx-6 mt-5 rounded-[4px] border border-line p-4">
               <p className="flex items-center justify-between">
                 <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">Reasoning</span>
@@ -210,7 +224,11 @@ function BasisPanel({ disease, row, cell, label, onClose }: { disease: string; r
               <p className="mt-2 text-[14px]">{top.reasoning}</p>
             </div>
           ) : (
-            <p className="mx-6 mt-5 text-[14px] text-muted">The run returned no basis for this field.</p>
+            <p className="mx-6 mt-5 text-[14px] text-muted">
+              {cell.field === 'readouts'
+                ? 'No readout check ran for this company. Readouts are checked for its trials in Phase 2 or later that are past primary completion or have announced data, and none qualified.'
+                : 'The run returned no basis for this field.'}
+            </p>
           )}
           {cites.length ? (
             <section className="mt-5">
