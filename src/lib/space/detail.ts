@@ -95,9 +95,11 @@ export function trialDetail(s: S, nct: string) {
   const newest = (a: Item, b: Item) => (b.date ?? '').localeCompare(a.date ?? '');
   const once = (m: Item, i: number, all: Item[]) => all.findIndex((x) => x.date === m.date && hostOf(x.source_url) === hostOf(m.source_url)) === i;
   const row = (m: Item) => ({ date: m.date, headline: m.headline, source: m.source_url, host: hostOf(m.source_url) });
-  const web = (f?.milestones ?? []).filter((m) => m.nct === nct).sort(newest).slice(0, 6).map(row);
+  const news = s.events.filter((e) => e.origin === 'monitor' && company && e.company === company.key);
+  const web = [...(f?.milestones ?? []).filter((m) => m.nct === nct), ...news.filter((e) => e.nct === nct)].sort(newest).filter(once).slice(0, 6).map(row);
   const program: Item[] = [
     ...(f?.milestones ?? []).filter((m) => !m.nct && aboutLead(m.drug)),
+    ...news.filter((e) => !e.nct && aboutLead(e.drug)),
     ...(f?.deals ?? []).filter((x) => (x.drugs ?? []).some(aboutLead)),
     ...(f?.approvals ?? []).filter((a) => aboutLead(a.drug)).map((a) => ({ ...a, headline: `${a.region} approval: ${a.indication}` })),
     ...(f?.regulatory ?? []).filter((r) => r.status === 'done' && aboutLead(r.drug)).map((r) => ({ date: r.date, headline: regulatoryEvent(r.agency, r.kind), source_url: r.source_url })),

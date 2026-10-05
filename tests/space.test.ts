@@ -148,6 +148,16 @@ test('deals@2: only asset deals count toward the headline; a portfolio deal stay
   assert.match(portfolio.detail ?? '', /^Company or portfolio deal · \$12 billion/);
 });
 
+test('monitor news: shows on its company row and in the drawer of the trial it names', () => {
+  const s = space();
+  s.events.push({ id: 'mon1', date: '2026-09-30', company: 'acme', drug: 'acmetide', nct: 'NCT1', type: 'data', headline: 'Acme reports topline data', source_url: 'https://ir.acme.com/news', origin: 'monitor' } as never);
+  const row = mapView(s, 'companies', '2026-10-01').rows.find((r) => r.key === 'acme')!;
+  const mark = row.news.find((m) => m.headline === 'Acme reports topline data')!;
+  assert.equal(mark.nct, 'NCT1');
+  assert.equal(mark.detail, 'From the daily news monitor');
+  assert.ok(trialDetail(s, 'NCT1')!.web.some((w) => w.headline === 'Acme reports topline data'));
+});
+
 test('trial drawer: first-seen surfaces only when the web announced the trial earlier', () => {
   const s = space();
   const t = trialDetail(s, 'NCT1')!;

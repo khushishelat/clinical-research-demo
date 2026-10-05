@@ -1,8 +1,9 @@
 // Daily news for an indication from one Monitor (base, daily). The monitor's ID
 // is kept in the store next to the indication (monitor.json); events land in
 // monitor-events.json, joined to a company on the map by name, and step 6 adds
-// them to the feed. Creating a monitor starts a daily charge, so it is only
-// done on request (scripts/monitors.mts --create), never by the cron job.
+// them to the feed. Creating a monitor starts a daily charge, so it happens only
+// when the indication's config sets `monitor: true` (the daily job creates it,
+// with the deployment's API key) or on request from the CLI.
 
 import type { Company } from '../../../src/lib/space/types';
 import { companyKey } from '../companies';

@@ -31,6 +31,8 @@ export type Disease = {
   chain_regions?: string[];
   /** Also keep trials that completed or stopped since this date (YYYY-MM-DD). */
   include_completed_since?: string;
+  /** Run a daily news Monitor for this indication (created by the daily job if missing). */
+  monitor?: boolean;
 };
 
 const config = JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')) as { diseases: Disease[]; default: string; exclude: string[] };

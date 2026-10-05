@@ -1,5 +1,6 @@
 // Daily refresh for every built indication: today's ClinicalTrials.gov snapshot
-// and diff (free), new Monitor events (free to read), the event feed, and the
+// and diff (free), the indication's news Monitor (created here when its config
+// turns it on and none exists; ~$0.01 a day) and its new events (free to read), the event feed, and the
 // first-disclosure check for newly registered trials (a few core runs). Every
 // step resumes from its run log, so a run that outlives this invocation is
 // picked up by the next one.
@@ -9,7 +10,7 @@ import { NextResponse } from 'next/server';
 import { disease as byKey } from '../../../../../scripts/lib/pipeline';
 import { eventsStep } from '../../../../../scripts/lib/steps/events';
 import { firstSeenStep } from '../../../../../scripts/lib/steps/first-seen';
-import { collectMonitorEvents } from '../../../../../scripts/lib/steps/monitors';
+import { collectMonitorEvents, createMonitor } from '../../../../../scripts/lib/steps/monitors';
 import { registryStep } from '../../../../../scripts/lib/steps/registry';
 import { builtKeys, unauthorized } from '@/lib/cron';
 
@@ -26,6 +27,8 @@ export async function GET(req: Request) {
     done[key] = [];
     await registryStep(d);
     done[key].push('registry');
+    // A monitor is created with this deployment's API key, so this job can read its events.
+    if (d.monitor) await createMonitor(d);
     await collectMonitorEvents(d);
     done[key].push('monitor');
     await eventsStep(d);

@@ -15,7 +15,8 @@
         "hepatology",
         "gastroenterology",
         "endocrinology"
-      ]
+      ],
+      "monitor": true
     },
     {
       "key": "obesity",
@@ -40,7 +41,8 @@
         "China",
         "Japan, South Korea or elsewhere in Asia-Pacific",
         "the rest of the world"
-      ]
+      ],
+      "monitor": true
     },
     {
       "key": "pancreatic-cancer",
@@ -80,7 +82,8 @@
         "neurology",
         "psychiatry",
         "geriatric"
-      ]
+      ],
+      "monitor": true
     },
     {
       "key": "alopecia-areata",
@@ -95,7 +98,8 @@
       },
       "specialties": [
         "dermatology"
-      ]
+      ],
+      "monitor": true
     },
     {
       "key": "migraine",
@@ -108,7 +112,8 @@
         "neurology",
         "headache"
       ],
-      "include_completed_since": "2024-01-01"
+      "include_completed_since": "2024-01-01",
+      "monitor": true
     }
   ],
   "default": "mash"

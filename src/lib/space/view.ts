@@ -198,6 +198,8 @@ export function mapView(s: Space, scope: Scope, today: string) {
       ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal', drug: x.drugs?.[0] ?? null, detail: terms(x) })),
       ...(f?.financings ?? []).map((x) => ({ ...x, type: 'financing', drug: null, detail: x.amount })),
       ...(f?.regulatory ?? []).filter((r) => r.status === 'done').map((r) => ({ date: r.date, type: 'regulatory', headline: regulatoryEvent(r.agency, r.kind), source_url: r.source_url, drug: r.drug, detail: null })),
+      // News from the indication's daily Monitor, joined to this company by the pipeline.
+      ...s.events.filter((e) => e.origin === 'monitor' && e.company === c.key).map((e) => ({ date: e.date, type: e.type, headline: e.headline, source_url: e.source_url, nct: e.nct ?? null, drug: e.drug ?? null, detail: 'From the daily news monitor' })),
     ];
     const news: Mark[] = marks
       .filter((m, i, all) => all.findIndex((x) => x.date === m.date && x.headline === m.headline) === i)
