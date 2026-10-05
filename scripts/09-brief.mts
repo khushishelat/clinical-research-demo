@@ -28,7 +28,22 @@ const disclosures = inPeriod.filter((e) => e.origin !== 'registry').map(({ origi
 const registryChanges = inPeriod.filter((e) => e.origin === 'registry').map(({ origin: _, ...e }) => e);
 const upcoming = catalysts.filter((c) => (c.earliest ?? c.date ?? '') >= to && (c.earliest ?? c.date ?? '') <= horizon).map((c) => ({ company: name.get(c.company) ?? c.company, what: c.what, timing: c.timing_text, stated_by: c.stated_by, source_url: c.source_url }));
 const onMap = companies.filter((c) => !c.web_only || included.has(c.name)).map((c) => ({ name: c.name, drugs: c.drugs.slice(0, 3).map((x: any) => x.name) }));
-const companyTrials = trials.filter((t) => t.run_by === 'company').map((t) => ({ nct: t.nct, acronym: t.acronym || null, sponsor: t.sponsor, phase: t.phases.join('/'), status: t.status }));
+// A Task run's spec and input together must stay under 60,000 characters. A large
+// indication's trial list alone can pass that (obesity: 380 company trials), and the run can
+// look any trial up with the ClinicalTrials.gov connector, so the list is trimmed to fit:
+// active trials first, then the latest phase, then the newest.
+const LIMIT = 55_000;
+const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION']);
+const allTrials = trials
+  .filter((t) => t.run_by === 'company')
+  .sort((a, b) => Number(ACTIVE.has(b.status)) - Number(ACTIVE.has(a.status)) || b.phase_level - a.phase_level || String(b.first_posted).localeCompare(String(a.first_posted)))
+  .map((t) => ({ nct: t.nct, acronym: t.acronym || null, sponsor: t.sponsor, phase: t.phases.join('/'), status: t.status }));
+const known = { disclosures, registry_changes: registryChanges, upcoming_30_days: upcoming };
+const size = (n: number) => JSON.stringify(BRIEF.schema).length + JSON.stringify(BRIEF.input(d, { from, to }, known, onMap, allTrials.slice(0, n))).length;
+let keep = allTrials.length;
+while (keep > 0 && size(keep) > LIMIT) keep = Math.floor(keep * 0.9);
+const companyTrials = allTrials.slice(0, keep);
+if (keep < allTrials.length) log(d, `brief input: ${keep} of ${allTrials.length} company trials (active first, latest phase first) to stay under the 60,000-character limit`);
 
 const rl = await runLog(d, 'brief');
 const replay = recorder();
@@ -36,7 +51,7 @@ const rec = await runOnce(
   client,
   rl,
   `${BRIEF.key}:${from}:${to}`,
-  { processor: BRIEF.processor, connectors: BRIEF.connectors, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, { disclosures, registry_changes: registryChanges, upcoming_30_days: upcoming }, onMap, companyTrials), metadata: { job: 'brief', disease: d.key } },
+  { processor: BRIEF.processor, connectors: BRIEF.connectors, schema: BRIEF.schema, input: BRIEF.input(d, { from, to }, known, onMap, companyTrials), metadata: { job: 'brief', disease: d.key } },
   replay
 );
 if (replay.events.length) await saveReplay(d, `brief-${to}`, replay);
