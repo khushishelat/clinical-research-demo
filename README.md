@@ -157,6 +157,23 @@ The repository ships the pipeline, not the data. Without `BLOB_READ_WRITE_TOKEN`
 the pipeline writes to `.data/` (gitignored) and the app reads from there. With
 it, both use private Vercel Blob, for a deployment.
 
+To deploy on Vercel:
+
+1. Import the repository as a project (Next.js, no build settings to change).
+2. Create a Blob store under Storage and connect it to the project. This sets
+   `BLOB_READ_WRITE_TOKEN`. The app needs no Parallel API key; it makes no
+   Parallel calls.
+3. Copy the indications you built into the store. With the token in
+   `.env.local` (`vercel env pull`), run:
+   ```bash
+   npm run sync-blob
+   ```
+4. Redeploy, so the build sees the data, then add your domain under
+   Settings → Domains.
+
+Optionally set `NEXT_PUBLIC_REMOVAL_URL` to where removal requests should go.
+The default is the removal section of PRIVACY.md.
+
 To add an indication, append it to `scripts/diseases.json` and run the pipeline
 with its key. Each landscape is as of its last pipeline run, shown in the header;
 there is no scheduled refresh yet.
