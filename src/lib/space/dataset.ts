@@ -56,9 +56,9 @@ function readoutWhy(s: S, c: S['companies'][number], f: NonNullable<S['facts'][s
     .map((t) => ({
       nct: t.nct,
       label: t.acronym || t.nct,
-      detail: [phaseOf(t.phases), STATUS[t.status] ?? t.status.toLowerCase(), t.primary_completion ? `primary completion ${t.primary_completion}` : 'primary completion not stated', t.phase_level < 2 ? 'earlier than Phase 2' : due(t) ? 'due for a check at the next company refresh' : 'not yet at a readout point'].join(' · '),
+      detail: [phaseOf(t.phases), STATUS[t.status] ?? t.status.toLowerCase(), t.primary_completion ? `primary completion ${t.primary_completion}` : 'primary completion not stated', t.phase_level < 2 ? 'earlier than Phase 2' : due(t) ? 'due for a check in the next daily refresh' : 'not yet at a readout point'].join(' · '),
     }));
-  return { text: own.some(due) ? 'A trial has reached its readout point since the last research run; it will be checked at the next company refresh.' : 'None of its trials has reached a readout point yet: readouts are checked from Phase 2, once a trial is past primary completion, closed to enrollment, or named in a data disclosure.', trials };
+  return { text: own.some(due) ? 'A trial has reached its readout point since the last check; it will be checked in the next daily refresh.' : 'None of its trials has reached a readout point yet: readouts are checked from Phase 2, once a trial is past primary completion, closed to enrollment, or named in a data disclosure.', trials };
 }
 
 const short = (x: string | null | undefined, n = 110) => (!x ? '' : x.length > n ? `${x.slice(0, n - 1).trimEnd()}…` : x);
