@@ -411,32 +411,40 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
   const [origin, setOrigin] = useState<'all' | 'registry' | 'web'>('all');
   const items = view.feed.filter((f: FeedItem) => origin === 'all' || (origin === 'web' ? f.origin !== 'registry' : f.origin === 'registry'));
   const max = Math.max(1, ...view.monthly.map((m) => m.count));
+  // Monthly counts of trials first posted on ClinicalTrials.gov, last 12 months; the current month is partial.
+  const label = (m: string) => fmt(`${m}-01`, { month: 'short' });
+  const yearOf = (m: string, i: number) => (i === 0 || m.endsWith('-01') ? `'${m.slice(2, 4)}` : '');
   return (
     <div>
-      <div className="flex gap-2 px-4 pt-4">
+      <div className="px-4 pt-4">
+        <p className="text-[13px] font-medium">New trials registered</p>
+        <p className="mt-0.5 text-[12px] text-muted">Trials in this landscape by the month ClinicalTrials.gov first posted them. Updated daily.</p>
+        <div className="mt-3 flex h-20 items-end gap-1" role="img" aria-label={`New trials registered by month: ${view.monthly.map((m) => `${fmt(`${m.month}-01`, { month: 'long', year: 'numeric' })} ${m.count}`).join(', ')}`}>
+          {view.monthly.map((m, i) => {
+            const current = i === view.monthly.length - 1;
+            return (
+              <div key={m.month} className="flex flex-1 flex-col items-center gap-1" title={`${fmt(`${m.month}-01`, { month: 'long', year: 'numeric' })}: ${m.count} trial${m.count === 1 ? '' : 's'} registered${current ? ' so far' : ''}`}>
+                <span className="font-mono text-[10px] text-muted">{m.count || ''}</span>
+                <span className={`w-full rounded-t-[2px] ${current ? 'bg-ink/35' : 'bg-ink'}`} style={{ height: `${Math.max(2, (m.count / max) * 52)}px` }} />
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-1 flex gap-1 font-mono text-[9px] leading-tight text-muted">
+          {view.monthly.map((m, i) => (
+            <span key={m.month} className="flex-1 text-center">
+              {label(m.month)}
+              <span className="block text-faint">{i === view.monthly.length - 1 ? 'so far' : yearOf(m.month, i) || '\u00a0'}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 flex gap-2 border-t border-line px-4 pt-3">
         {(['all', 'registry', 'web'] as const).map((o) => (
           <button key={o} type="button" aria-pressed={origin === o} onClick={() => setOrigin(o)} className={`rounded-full border px-3 py-1 text-[12px] ${origin === o ? 'border-ink bg-ink text-page' : 'border-line-strong text-muted hover:border-ink hover:text-ink'}`}>
             {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'Disclosures'}
           </button>
         ))}
-      </div>
-      <div className="px-4 pt-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">New trial registrations by month</p>
-        <div className="mt-2 flex h-16 items-end gap-1" role="img" aria-label={`New trial registrations by month: ${view.monthly.map((m) => `${m.month} ${m.count}`).join(', ')}`}>
-          {view.monthly.map((m) => (
-            <div key={m.month} className="flex flex-1 flex-col items-center gap-1">
-              <span className="font-mono text-[9px] text-muted">{m.count || ''}</span>
-              <span className="w-full rounded-t-[2px] bg-ink" style={{ height: `${Math.max(2, (m.count / max) * 44)}px` }} />
-            </div>
-          ))}
-        </div>
-        <div className="mt-1 flex gap-1 font-mono text-[9px] text-faint">
-          {view.monthly.map((m) => (
-            <span key={m.month} className="flex-1 text-center">
-              {fmt(`${m.month}-01`, { month: 'narrow' })}
-            </span>
-          ))}
-        </div>
       </div>
       <ul className="mt-3">
         {items.map((f) => (
