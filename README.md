@@ -27,6 +27,22 @@ table view shows every researched field with its sources.
 - 6 trials disclosed before ClinicalTrials.gov listed them, such as Altimmune's
   PERFORMA, 28 days earlier
 
+**Indications built so far** (October 2026, same pipeline and specs for each):
+
+| Indication | Area | Trials | Companies | Investigators | Asset deals since May 2025 | Cost to build |
+| --- | --- | ---: | ---: | ---: | --- | ---: |
+| MASH | Cardiometabolic | 168 active | 68 | 749 | ≈$19B, 12 deals | $29.50 |
+| Obesity | Cardiometabolic | 476 active + 232 completed since 2024 (Phase 2+) | 106 | 1,754 | ≈$39B, 27 deals | $58.54 |
+| Alzheimer's disease | Neuroscience | 292 active + 115 completed | 125 | 471 | ≈$10B, 18 deals | $59.22 |
+| Migraine | Neuroscience | 153 active + 79 completed | 37 | 158 | 1 deal, value not disclosed | $17.96 |
+| Alopecia areata | Immunology | 48 active + 19 completed | 29 | 165 | ≈$2.2B, 4 deals | $26.09 |
+
+Cost is list price for the completed Task runs of one build on the current
+specs. It scales with the number of companies (three `pro` runs each) and of
+late-stage trials. Alopecia areata's figure includes about $12 spent on
+sponsors of other alopecias before its scope was narrowed to trials that name
+it. Pancreatic cancer is configured but not built.
+
 It's for BD, competitive-intelligence and investment analysts who cover an
 indication or therapeutic area rather than one company.
 
