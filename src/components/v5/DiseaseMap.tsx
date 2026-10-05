@@ -51,7 +51,6 @@ type Tip = { x: number; y: number; title: string; body: string; foot?: string } 
 export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const router = useRouter();
   const params = useSearchParams();
-  const scope: 'companies' | 'all' = params.get('scope') === 'all' ? 'all' : 'companies';
   const { x, years } = useRange(today);
   const [more, setMore] = useState(false);
   const [tab, setTab] = useState<'clinicians' | 'changed'>('clinicians');
@@ -80,12 +79,6 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
     p.delete('clinician');
     router.push(p.size ? `?${p}` : '?', { scroll: false });
   };
-  const setScope = (s: 'companies' | 'all') => {
-    const p = new URLSearchParams(params.toString());
-    if (s === 'all') p.set('scope', 'all');
-    else p.delete('scope');
-    router.push(p.size ? `?${p}` : '?', { scroll: false });
-  };
   // The first-visit tip shows until dismissed; remembered per browser when storage allows.
   const tipSeen = useSyncExternalStore(onStorage, readTipSeen, () => true);
   const firstTip = !tipSeen && !tipDismissed;
@@ -98,10 +91,9 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
     }
   };
 
-  // "All trials" adds the trials no company owns (academic and generic studies) as the first row, so the switch shows at once.
+  // One row per company; trials no company owns (academic and generic studies) stay off the map.
   const companies = view.rows.filter((r) => r.key !== '_unassigned');
-  const other = scope === 'all' ? view.rows.filter((r) => r.key === '_unassigned') : [];
-  const rows = [...other, ...(more ? companies : companies.slice(0, SHOWN))];
+  const rows = more ? companies : companies.slice(0, SHOWN);
   const s = view.stats;
   const newCount = view.feed.length;
   const todayAt = x(today);
@@ -155,14 +147,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Guided catalyst
               </li>
             </ul>
-            <div role="group" aria-label="Which trials to show" className="inline-flex rounded-[4px] border border-line-strong bg-page p-0.5 font-mono text-[11px] uppercase tracking-[0.04em]">
-              <button type="button" onClick={() => setScope('companies')} aria-pressed={scope === 'companies'} className={`rounded-[3px] px-3 py-1.5 ${scope === 'companies' ? 'bg-ink text-page' : 'text-muted hover:text-ink'}`}>
-                Company assets · {s.onMap}
-              </button>
-              <button type="button" onClick={() => setScope('all')} aria-pressed={scope === 'all'} className={`rounded-[3px] px-3 py-1.5 ${scope === 'all' ? 'bg-ink text-page' : 'text-muted hover:text-ink'}`}>
-                {s.completed ? 'All trials' : 'All active trials'} · {s.all}
-              </button>
-            </div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.04em] text-muted">{s.onMap} trials on company rows</p>
           </div>
 
           <p className="border-b border-line px-4 py-2 text-center font-mono text-[10px] uppercase tracking-[0.05em] text-faint sm:hidden">
@@ -185,7 +170,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="text-right">Trials</span>
               </div>
               {rows.map((r, i) => (
-                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === other.length} dismissTip={dismissTip} />
+                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
               ))}
               {companies.length > SHOWN ? (
                 <button type="button" onClick={() => setMore((v) => !v)} className="w-full border-t border-line px-4 py-3 text-left font-mono text-[11px] uppercase tracking-[0.04em] text-muted hover:bg-wash hover:text-ink">
@@ -254,7 +239,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
   // A row with many trials gets more height, so its dots don't pile up.
   const spread = Math.min(150, Math.max(26, Math.round(row.dots.length * 1.2)));
   return (
-    <div className={`grid grid-cols-[260px_minmax(0,1fr)_64px] items-stretch border-b border-line px-4 last:border-b-0 hover:bg-page/60 ${row.key === '_unassigned' ? 'bg-page/60' : ''}`}>
+    <div className="grid grid-cols-[260px_minmax(0,1fr)_64px] items-stretch border-b border-line px-4 last:border-b-0 hover:bg-page/60">
       <div className="min-w-0 py-2.5 pr-3">
         <p className="flex items-center gap-2 text-[14px] font-medium">
           <Favicon host={row.host} name={row.name} />

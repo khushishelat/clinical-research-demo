@@ -20,8 +20,7 @@ export default async function DiseasePage({ params }: PageProps<'/d/[disease]'>)
   const space = await loadSpace((await params).disease);
   if (!space) notFound();
   const today = new Date().toISOString().slice(0, 10);
-  // Both scopes in one payload: "All active" only adds the unassigned row.
-  const view = mapView(space, 'all', today);
+  const view = mapView(space, 'companies', today);
   return (
     <Suspense>
       <DiseaseMap view={view} today={today} />
