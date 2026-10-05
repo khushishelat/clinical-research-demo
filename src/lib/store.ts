@@ -1,10 +1,16 @@
-// Server-only JSON documents. Private Vercel Blob when BLOB_READ_WRITE_TOKEN is
-// set (production), a local folder (.data/, gitignored) otherwise, memory in
-// tests. The pipeline writes here and the app reads from here; the repo ships
-// no generated data.
+// Server-only JSON documents. Private Vercel Blob when a Blob store is connected
+// (production), a local folder (.data/, gitignored) otherwise, memory in tests.
+// The pipeline writes here and the app reads from here; the repo ships no
+// generated data.
+//
+// A connected store gives the project BLOB_STORE_ID, and Vercel supplies an OIDC
+// token at runtime, so no secret is stored; an older store gives
+// BLOB_READ_WRITE_TOKEN instead. Either one selects Blob.
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+
+export const blobConfigured = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
 
 export interface Store {
   get<T>(path: string): Promise<T | null>;
@@ -42,12 +48,14 @@ export function folderStore(root: string): Store {
   };
 }
 
-export function blobStore(token: string): Store {
+/** With no token, the Blob SDK uses BLOB_STORE_ID with Vercel's OIDC token. */
+export function blobStore(token?: string): Store {
+  const auth = token ? { token } : {};
   return {
     async get<T>(path: string) {
       const { get } = await import('@vercel/blob');
       try {
-        const res = await get(path, { access: 'private', token, useCache: false });
+        const res = await get(path, { access: 'private', ...auth, useCache: false });
         if (!res || res.statusCode !== 200) return null;
         return JSON.parse(await new Response(res.stream).text()) as T;
       } catch (error) {
@@ -57,7 +65,7 @@ export function blobStore(token: string): Store {
     },
     async put(path, data) {
       const { put } = await import('@vercel/blob');
-      await put(path, JSON.stringify(data), { access: 'private', token, allowOverwrite: true, addRandomSuffix: false, contentType: 'application/json' });
+      await put(path, JSON.stringify(data), { access: 'private', ...auth, allowOverwrite: true, addRandomSuffix: false, contentType: 'application/json' });
     },
   };
 }

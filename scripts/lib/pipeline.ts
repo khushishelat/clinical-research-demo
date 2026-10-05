@@ -1,14 +1,14 @@
 // Shared pipeline plumbing. Every script builds one disease ("space") and is
 // resumable: run IDs are recorded before waiting on them, so a crash or a
-// re-run never pays twice. Output goes to private Vercel Blob when
-// BLOB_READ_WRITE_TOKEN is set, else to .data/ (gitignored). Generated data is
-// never committed.
+// re-run never pays twice. Output goes to private Vercel Blob when a store is
+// connected (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN), else to .data/ (gitignored).
+// Generated data is never committed.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Parallel from 'parallel-web';
 import { compactRunEvent, thinStats, type CompactEvent } from '../../src/lib/replay-events';
-import { blobStore, folderStore, type Store } from '../../src/lib/store';
+import { blobConfigured, blobStore, folderStore, type Store } from '../../src/lib/store';
 import { again } from './retry';
 
 try {
@@ -47,8 +47,8 @@ export function disease(): Disease {
 export const flag = (name: string) => process.argv.includes(`--${name}`);
 export const today = () => new Date().toISOString().slice(0, 10);
 
-export const store: Store = process.env.BLOB_READ_WRITE_TOKEN ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data'));
-export const where = process.env.BLOB_READ_WRITE_TOKEN ? 'Vercel Blob' : '.data/';
+export const store: Store = blobConfigured() ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data'));
+export const where = blobConfigured() ? 'Vercel Blob' : '.data/';
 export const spacePath = (d: Disease, file: string) => `spaces/${d.key}/${file}`;
 
 export function log(d: Disease, msg: string) {

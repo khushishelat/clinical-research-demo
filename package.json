@@ -12,7 +12,7 @@
     "pipeline": "tsx scripts/pipeline.mts",
     "remove-clinician": "tsx scripts/remove-clinician.mts",
     "review": "tsx scripts/review.mts",
-    "sync-blob": "tsx scripts/sync-blob.mts"
+    "sync-blob": "tsx --env-file-if-exists=.env.vercel scripts/sync-blob.mts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",

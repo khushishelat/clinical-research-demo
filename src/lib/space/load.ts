@@ -1,18 +1,18 @@
 // Server-only. Reads a disease ("space") built by the pipeline (scripts/) from
-// storage: private Vercel Blob when BLOB_READ_WRITE_TOKEN is set, else .data/.
+// storage: private Vercel Blob when a store is connected, else .data/.
 // The repo ships no generated data; a disease appears once its pipeline has run.
 
 import 'server-only';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { cache } from 'react';
-import { blobStore, folderStore, type Store } from '../store';
+import { blobConfigured, blobStore, folderStore, type Store } from '../store';
 import type { Basis, Brief, Clinician, Company, CompanyReview, Coverage, EventsDoc, Facts, FirstSeen, Trial } from './types';
 
 export type DiseaseConfig = { key: string; name: string; subtitle?: string; area?: string; query_cond: string; specialties: string[]; default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string } };
 
 let _store: Store | null = null;
-export const appStore = (): Store => (_store ??= process.env.BLOB_READ_WRITE_TOKEN ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data')));
+export const appStore = (): Store => (_store ??= blobConfigured() ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data')));
 
 export const diseaseConfig = cache((): { diseases: DiseaseConfig[]; default: string } => JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')));
 
