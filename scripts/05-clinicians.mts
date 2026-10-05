@@ -107,13 +107,28 @@ const matched = usPeople.filter((c) => c.npi_status === 'matched');
 log(d, `b. NPI: ${matched.length} of ${usPeople.length} US clinicians matched (${matched.filter((c) => c.npi?.how === 'connector').length} by the NPI connector, ${ambiguous.length} were ambiguous) · ${people.length - usPeople.length} outside the US get no NPI`);
 
 // c. PubMed: direct counts, kept only when an affiliation confirms the person.
+// Lookups are saved every 50, so an interrupted run resumes; one that still fails after its
+// retries leaves that person's publications unverified instead of stopping the step.
 const pmPace = pacer(3);
+let looked = 0;
+let unreachable = 0;
+let saving = Promise.resolve();
 await pool(matched, 3, async (c) => {
-  const r = (cache.pubmed[c.key] ??= await pubmedLookup(c, d.pubmed_terms, pmPace));
+  if (!cache.pubmed[c.key]) {
+    try {
+      cache.pubmed[c.key] = await pubmedLookup(c, d.pubmed_terms, pmPace);
+    } catch {
+      unreachable += 1;
+      return;
+    }
+    if (++looked % 50 === 0) await (saving = saving.then(() => store.put(cachePath, cache)));
+  }
+  const r = cache.pubmed[c.key];
   const verified = r.count > 0 && affiliationMatches(c, r.affiliations);
   c.pubmed = { count: r.count, since_2024: r.since_2024, recent: r.recent, verified, how: verified ? 'affiliation' : 'unverified' };
   if (r.count) c.sources.push('PubMed');
 });
+if (unreachable) log(d, `PubMed unreachable for ${unreachable} people; their publications stay unverified until the next run`);
 
 await store.put(cachePath, cache);
 
