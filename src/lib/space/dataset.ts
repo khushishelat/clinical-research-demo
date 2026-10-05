@@ -8,7 +8,9 @@ import { isAssetDeal } from './labels';
 import { dealValue, drugLabels, hostOf } from './view';
 
 type S = NonNullable<Space>;
-export type Cell = { field: string; text: string; sub?: string; source?: string | null };
+/** Why a cell is empty when no research run covers it: computed from the registry, with each trial cited. */
+export type Why = { text: string; trials: { nct: string; label: string; detail: string }[] };
+export type Cell = { field: string; text: string; sub?: string; source?: string | null; why?: Why };
 export type DatasetRow = { key: string; name: string; host: string | null; webOnly: boolean; trials: number; cells: Record<string, Cell>; run: string | null; connectors: Record<string, number>; seconds: number | null };
 
 export const COLUMNS: { field: string; label: string; help: string }[] = [
@@ -34,9 +36,34 @@ function stageOf(phase: string | null | undefined): string {
   return /preclinical/i.test(p) ? 'Preclinical' : p.split(/[;,(]/)[0].trim();
 }
 
+const STATUS: Record<string, string> = { RECRUITING: 'recruiting', NOT_YET_RECRUITING: 'not yet recruiting', ACTIVE_NOT_RECRUITING: 'active, not recruiting', ENROLLING_BY_INVITATION: 'enrolling by invitation', COMPLETED: 'completed', TERMINATED: 'terminated', SUSPENDED: 'suspended', WITHDRAWN: 'withdrawn' };
+const phaseOf = (phases: string[]) => phases.map((p) => p.replace('EARLY_PHASE1', 'Early Phase 1').replace('PHASE', 'Phase ')).join('/').replace('/Phase ', '/') || 'Phase n/a';
+
+/**
+ * Why a company has no readout to show, from the rule the pipeline uses (scripts/lib/units.ts
+ * readoutTrials): its own trials are checked once they are Phase 2 or later and past primary
+ * completion, closed to enrollment, or named in a data disclosure.
+ */
+function readoutWhy(s: S, c: S['companies'][number], f: NonNullable<S['facts'][string]>, today: string): Why {
+  const own = c.trials.map((n) => s.trials.find((t) => t.nct === n)).filter((t): t is S['trials'][number] => Boolean(t));
+  if (!own.length) return { text: c.investigator_trials.length ? 'Only investigator-sponsored trials of its drugs are in the registry, and those are not checked for readouts.' : 'The company has no trials in the registry for this indication; it was added from web research.', trials: [] };
+  const withData = new Set((f.milestones ?? []).filter((m) => m.type === 'data' && m.nct).map((m) => m.nct));
+  const due = (t: (typeof own)[number]) => t.phase_level >= 2 && (withData.has(t.nct) || t.status === 'ACTIVE_NOT_RECRUITING' || (t.primary_completion !== '' && t.primary_completion.slice(0, 7) <= today.slice(0, 7)));
+  const trials = own
+    .slice()
+    .sort((a, b) => b.phase_level - a.phase_level || (a.primary_completion || '9').localeCompare(b.primary_completion || '9'))
+    .slice(0, 8)
+    .map((t) => ({
+      nct: t.nct,
+      label: t.acronym || t.nct,
+      detail: [phaseOf(t.phases), STATUS[t.status] ?? t.status.toLowerCase(), t.primary_completion ? `primary completion ${t.primary_completion}` : 'primary completion not stated', t.phase_level < 2 ? 'earlier than Phase 2' : due(t) ? 'due for a check at the next company refresh' : 'not yet at a readout point'].join(' · '),
+    }));
+  return { text: own.some(due) ? 'A trial has reached its readout point since the last research run; it will be checked at the next company refresh.' : 'None of its trials has reached a readout point yet: readouts are checked from Phase 2, once a trial is past primary completion, closed to enrollment, or named in a data disclosure.', trials };
+}
+
 const short = (x: string | null | undefined, n = 110) => (!x ? '' : x.length > n ? `${x.slice(0, n - 1).trimEnd()}…` : x);
 
-export function datasetView(s: S) {
+export function datasetView(s: S, today = new Date().toISOString().slice(0, 10)) {
   const rows: DatasetRow[] = [];
   for (const c of s.companies) {
     if (c.web_only && !s.included.has(c.name)) continue;
@@ -55,8 +82,9 @@ export function datasetView(s: S) {
     const trial = ro ? s.trials.find((t) => t.nct === ro.nct) : undefined;
     cells.latest_readout = ro
       ? { field: `readouts.${ro.nct}`, text: short(ro.arms.map((a) => `${a.arm}: ${a.result}`).join('; ')) || short(ro.endpoint) || 'Reported', sub: [trial?.acronym || ro.nct, ro.date].filter(Boolean).join(' · '), source: ro.source_url }
-      : // No reported results: the readout runs that found none sit under readouts.<nct>.
-        { field: 'readouts', text: '—' };
+      : // No reported results: the readout runs that found none sit under readouts.<nct>; when no
+        // run covered the company, `why` explains from the registry.
+        { field: 'readouts', text: '—', why: readoutWhy(s, c, f, today) };
     const reg = f.regulatory ?? [];
     const done = [...new Set(reg.filter((r) => r.status === 'done').map((r) => regulatoryLabel(r.kind)))];
     const expected = reg.find((r) => r.status === 'expected');

@@ -257,3 +257,12 @@ test('completed trials: hollow dots, not counted as active', () => {
   assert.equal(v.stats.completed, 1);
   assert.equal(v.stats.all, 3);
 });
+
+test('table: an empty readout cell explains itself from the registry when no run covered it', () => {
+  const s = space();
+  s.facts.acme.readouts = [];
+  const cell = datasetView(s, '2026-10-01').rows.find((r) => r.key === 'acme')!.cells.latest_readout;
+  assert.equal(cell.field, 'readouts');
+  assert.ok(cell.why && cell.why.text.length > 0);
+  assert.ok(cell.why!.trials.every((t) => /^NCT/.test(t.nct) && t.detail.includes('·')));
+});

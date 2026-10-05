@@ -224,11 +224,26 @@ function BasisPanel({ disease, row, cell, label, onClose }: { disease: string; r
               <p className="mt-2 text-[14px]">{top.reasoning}</p>
             </div>
           ) : (
-            <p className="mx-6 mt-5 text-[14px] text-muted">
-              {cell.field === 'readouts'
-                ? 'No readout check ran for this company. Readouts are checked for its trials in Phase 2 or later that are past primary completion or have announced data, and none qualified.'
-                : 'The run returned no basis for this field.'}
-            </p>
+            cell.why ? (
+              <div className="mx-6 mt-5 rounded-[4px] border border-line p-4">
+                <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">From the registry · no research run covered this</p>
+                <p className="mt-2 text-[14px]">{cell.why.text}</p>
+                {cell.why.trials.length ? (
+                  <ul className="mt-3 space-y-2">
+                    {cell.why.trials.map((t) => (
+                      <li key={t.nct} className="text-[13px]">
+                        <a href={`https://clinicaltrials.gov/study/${t.nct}`} target="_blank" rel="noreferrer" className="font-medium hover:underline">
+                          {t.label} ↗
+                        </a>
+                        <span className="block text-muted">{t.detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            ) : (
+              <p className="mx-6 mt-5 text-[14px] text-muted">The run returned no basis for this field.</p>
+            )
           )}
           {cites.length ? (
             <section className="mt-5">
@@ -250,16 +265,19 @@ function BasisPanel({ disease, row, cell, label, onClose }: { disease: string; r
           ) : null}
         </>
       )}
-      <div className="mt-auto border-t border-line px-6 py-4 font-mono text-[11px] text-muted">
-        {row.run ? <p>Task run {row.run}</p> : null}
-        <p className="mt-1">
-          Connectors used:{' '}
-          {Object.entries(row.connectors)
-            .map(([k, n]) => `${CONNECTOR[k] ?? k} ×${n}`)
-            .join(' · ') || 'none'}
-          {row.seconds ? ` · ${Math.round(row.seconds)}s` : ''}
-        </p>
-      </div>
+      {/* The run footer belongs to cells a research run filled; a registry explanation has none. */}
+      {cell.why && !items?.length ? null : (
+        <div className="mt-auto border-t border-line px-6 py-4 font-mono text-[11px] text-muted">
+          {row.run ? <p>Task run {row.run}</p> : null}
+          <p className="mt-1">
+            Connectors used:{' '}
+            {Object.entries(row.connectors)
+              .map(([k, n]) => `${CONNECTOR[k] ?? k} ×${n}`)
+              .join(' · ') || 'none'}
+            {row.seconds ? ` · ${Math.round(row.seconds)}s` : ''}
+          </p>
+        </div>
+      )}
     </aside>
   );
 }
