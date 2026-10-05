@@ -35,9 +35,10 @@ export type Disease = {
 
 const config = JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')) as { diseases: Disease[]; default: string; exclude: string[] };
 
-export function disease(): Disease {
+/** The indication named by `key`, or by --disease on the command line. */
+export function disease(name?: string): Disease {
   const i = process.argv.indexOf('--disease');
-  const key = i > 0 ? process.argv[i + 1] : config.default;
+  const key = name ?? (i > 0 ? process.argv[i + 1] : config.default);
   const d = config.diseases.find((x) => x.key === key);
   if (!d) throw new Error(`Unknown disease "${key}". Add it to scripts/diseases.json.`);
   if (config.exclude.some((e) => d.name.toLowerCase().includes(e))) throw new Error(`${d.name} is excluded.`);

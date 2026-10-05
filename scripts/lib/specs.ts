@@ -267,6 +267,26 @@ export const READOUT = {
   }),
 };
 
+// Daily news (Monitor API, base): one event_stream monitor per indication. Each
+// event names its company and, where it can, the drug and trial, so code joins
+// it to the map like a disclosure from step 4. Monitors can't call Data
+// Connectors; registry changes come from the daily ClinicalTrials.gov diff.
+export const MONITOR = {
+  key: 'monitor@1',
+  processor: 'base' as const,
+  frequency: '1d',
+  query: (d: Disease) =>
+    `New developments in ${label(d)} drug development from any company: clinical trial results and data readouts, conference presentations, regulatory filings, designations, approvals and rejections, trial starts, enrollment milestones, holds and discontinuations, safety signals, licensing deals, acquisitions and financings.`,
+  schema: O({
+    company: S('The company the development is about, by its usual name.'),
+    drug: N('The drug, by its INN or code, or null.'),
+    nct: N('The ClinicalTrials.gov NCT ID named in the source, or null.'),
+    type: E(['data', 'presentation', 'publication', 'regulatory', 'approval', 'trial_start', 'enrollment_complete', 'discontinuation', 'deal', 'financing', 'other']),
+    date: S('YYYY-MM-DD the development was announced.'),
+    headline: S('12 words or fewer.'),
+  }),
+};
+
 // Medicare coverage for the drugs approved in this disease (CMS Coverage connector).
 export const COVERAGE = {
   key: 'coverage',
