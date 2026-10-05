@@ -82,7 +82,7 @@ export type RunRecord = {
   basis?: unknown[];
   connectors?: Record<string, number>;
   seconds?: number | null;
-  /** Earlier runs for this key that failed (not billed), oldest first. */
+  /** Earlier runs for this key that failed (not billed) or that this API key can't see, oldest first. */
   failed_runs?: string[];
 };
 export type RunLog = Record<string, RunRecord>;
@@ -177,7 +177,16 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
     }
   }
   for (;;) {
-    const run: any = await again(() => client.taskRun.retrieve(rec.run_id));
+    let run: any;
+    try {
+      run = await again(() => client.taskRun.retrieve(rec.run_id));
+    } catch (error) {
+      // A run this key can't see (created with another workspace's key) is treated like a
+      // failure: one fresh run, with the old ID kept in failed_runs.
+      if ((error as { status?: number }).status !== 404 || rec.failed_runs?.length) throw error;
+      rl.log[key] = { ...rec, status: 'failed' };
+      return runOnce(client, rl, key, spec, rec0);
+    }
     if (!run.is_active) {
       rec.status = run.status;
       rec.seconds = secondsOf(run);
@@ -244,23 +253,34 @@ export async function groupRuns(
   rec0?: Recorder
 ): Promise<Record<string, RunRecord>> {
   const now = () => new Date().toISOString();
-  let gid = rl.log.__group?.run_id;
-  if (!gid) {
+  const newGroup = async () => {
     const g: any = await client.taskGroup.create({ metadata: { app: 'trial-check', job, disease: d.key } });
-    gid = g.taskgroup_id as string;
-    rl.log.__group = { run_id: gid, processor: 'group', created: now() };
+    rl.log.__group = { run_id: g.taskgroup_id as string, processor: 'group', created: now() };
     await rl.save();
-  }
+    return g.taskgroup_id as string;
+  };
+  let gid = rl.log.__group?.run_id ?? (await newGroup());
   const sync = () =>
     again(async () => {
-      for await (const e of await client.taskGroup.getRuns(gid!, { include_output: false })) {
+      for await (const e of await client.taskGroup.getRuns(gid, { include_output: false })) {
         const ev: any = e;
         const unit = ev.type === 'task_run.state' ? ev.run?.metadata?.unit : null;
         if (unit && !rl.log[unit]) rl.log[unit] = { run_id: ev.run.run_id, processor: ev.run.processor ?? '', created: now() };
       }
       await rl.save();
     });
-  await sync();
+  // Reconcile only when some unit has no run on record (a run added before a crash).
+  // A group this key can't see (expired, or created with another workspace's key)
+  // can't be reconciled; its recorded runs are kept and new ones go to a new group.
+  if (units.some((u) => !rl.log[u.key])) {
+    try {
+      await sync();
+    } catch (error) {
+      if ((error as { status?: number }).status !== 404) throw error;
+      log(d, `group ${gid} is not visible to this API key; starting a new one`);
+      gid = await newGroup();
+    }
+  }
   const missing = units.filter((u) => !rl.log[u.key]);
   for (let i = 0; i < missing.length; i += 50) {
     const batch = missing.slice(i, i + 50).map((u) => ({
