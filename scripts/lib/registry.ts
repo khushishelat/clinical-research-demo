@@ -14,8 +14,9 @@ export const DRUG_TYPES = 'AREA[InterventionType](DRUG OR BIOLOGICAL OR COMBINAT
 const FIELDS = [
   'NCTId', 'BriefTitle', 'Acronym', 'OverallStatus', 'Phase', 'Condition',
   'LeadSponsorName', 'LeadSponsorClass', 'CollaboratorName',
-  'InterventionName', 'InterventionType', 'InterventionOtherName', 'ArmGroupType', 'ArmGroupInterventionName',
-  'StudyFirstPostDate', 'LastUpdatePostDate', 'StartDate', 'PrimaryCompletionDate', 'EnrollmentCount',
+  'InterventionName', 'InterventionType', 'InterventionOtherName', 'ArmGroupType', 'ArmGroupLabel', 'ArmGroupInterventionName',
+  'DesignAllocation', 'DesignMasking', 'PrimaryOutcomeMeasure', 'PrimaryOutcomeTimeFrame',
+  'StudyFirstPostDate', 'LastUpdatePostDate', 'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount',
   'OverallOfficialName', 'OverallOfficialAffiliation', 'OverallOfficialRole',
   'LocationFacility', 'LocationCity', 'LocationState', 'LocationCountry', 'LocationContactName', 'LocationContactRole',
 ].join(',');
@@ -32,7 +33,7 @@ export function cleanPersonName(name: string): string {
   while (SUFFIX.test(s)) s = s.replace(SUFFIX, '').trim();
   return s || name.trim();
 }
-// Affiliations sometimes carry a street address ("…, 1200 West Broad Street, Richmond VA23298, USA").
+// Affiliations sometimes carry a street address ("…, 100 Example Street, Springfield VA00000, USA").
 // Keep the institution and place; drop street, suite and postal-code parts.
 const STREET = /^\d+[\w-]*\s|\s\d+[a-z]?$|\b(street|avenue|road|boulevard|blvd|suite|floor|p\.?o\.? box)\b|\w(straat|strasse|straße|gasse|vej|gatan)\b|^(rue|via|calle|avenida|viale|piazza)\s|\b[A-Z]{2}\s?\d{5}\b|\b\d{5}(-\d{4})?\b|\b[A-Z]-?\d{4,}\b/i;
 export const stripAddress = (x: string | undefined) =>
@@ -82,7 +83,9 @@ export function toTrial(study: any): Trial {
     run_by: lead.class === 'INDUSTRY' ? 'company' : 'investigator',
     collaborators: (p.sponsorCollaboratorsModule?.collaborators ?? []).map((c: any) => c.name),
     interventions: (p.armsInterventionsModule?.interventions ?? []).map((i: any) => ({ name: i.name, type: i.type, other_names: i.otherNames ?? [] })),
-    arms: (p.armsInterventionsModule?.armGroups ?? []).map((a: any) => ({ type: a.type ?? 'OTHER', interventions: (a.interventionNames ?? []).map((n: string) => n.replace(/^[A-Za-z ]+:\s*/, '')) })),
+    arms: (p.armsInterventionsModule?.armGroups ?? []).map((a: any) => ({ type: a.type ?? 'OTHER', label: a.label ?? '', interventions: (a.interventionNames ?? []).map((n: string) => n.replace(/^[A-Za-z ]+:\s*/, '')) })),
+    design: { allocation: p.designModule?.designInfo?.allocation ?? null, masking: p.designModule?.designInfo?.maskingInfo?.masking ?? null },
+    primary_outcomes: (p.outcomesModule?.primaryOutcomes ?? []).slice(0, 3).map((o: any) => ({ measure: o.measure ?? '', time_frame: o.timeFrame ?? '' })),
     first_posted: p.statusModule.studyFirstPostDateStruct?.date ?? '',
     last_update: p.statusModule.lastUpdatePostDateStruct?.date ?? '',
     start: p.statusModule.startDateStruct?.date ?? '',
@@ -95,11 +98,25 @@ export function toTrial(study: any): Trial {
   };
 }
 
+export const FINISHED = 'COMPLETED,TERMINATED';
+export const isActive = (status: string) => ACTIVE.split(',').includes(status);
+
+/**
+ * Active drug trials for an indication, plus (if the indication sets
+ * `include_completed_since`) trials that completed or stopped since that date:
+ * in a commercial-stage market the recent readouts are most of the picture.
+ */
 export async function fetchTrials(d: Disease, fetchImpl: typeof fetch = fetch): Promise<Trial[]> {
   const out = new Map<string, Trial>();
+  await pull(d, ACTIVE, DRUG_TYPES, out, fetchImpl);
+  if (d.include_completed_since) await pull(d, FINISHED, `${DRUG_TYPES} AND AREA[PrimaryCompletionDate]RANGE[${d.include_completed_since},MAX]`, out, fetchImpl);
+  return [...out.values()].sort((a, b) => a.nct.localeCompare(b.nct));
+}
+
+async function pull(d: Disease, statuses: string, advanced: string, out: Map<string, Trial>, fetchImpl: typeof fetch) {
   let token: string | undefined;
   do {
-    const params = new URLSearchParams({ 'query.cond': d.query_cond, 'filter.overallStatus': ACTIVE, 'filter.advanced': DRUG_TYPES, fields: FIELDS, pageSize: '1000', ...(token ? { pageToken: token } : {}) });
+    const params = new URLSearchParams({ 'query.cond': d.query_cond, 'filter.overallStatus': statuses, 'filter.advanced': advanced, fields: FIELDS, pageSize: '1000', ...(token ? { pageToken: token } : {}) });
     const res = await fetchImpl(`${BASE}?${params}`, { headers: { accept: 'application/json' } });
     if (!res.ok) throw new Error(`ClinicalTrials.gov ${res.status}`);
     const body: any = await res.json();
@@ -109,20 +126,20 @@ export async function fetchTrials(d: Disease, fetchImpl: typeof fetch = fetch): 
     }
     token = body.nextPageToken;
   } while (token);
-  return [...out.values()].sort((a, b) => a.nct.localeCompare(b.nct));
 }
 
-const EMAIL = /[\w.+-]+@[\w-]+\.[a-z]{2,}/gi;
+// A domain label starts with a letter or digit, so a file name such as "Deck_@_ADA_2026.pdf" is not an address.
+const EMAIL = /[\w.+-]+@[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.[a-z]{2,}/gi;
 const PHONE = /(?:\+?\d{1,2}[\s.-])?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g;
 const STREET_ADDRESS = /\b\d{2,5}\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St\.|Avenue|Ave\.|Road|Rd\.|Boulevard|Blvd|Drive|Dr\.|Suite)\b/;
 
-/** Removes emails and phone numbers from quoted source text (citation excerpts). */
-export const redactContacts = (text: string) => text.replace(EMAIL, '[email removed]').replace(PHONE, '[phone removed]');
+/** Removes emails, phone numbers and street addresses from quoted source text (citation excerpts). */
+export const redactContacts = (text: string) => text.replace(EMAIL, '[email removed]').replace(PHONE, '[phone removed]').replace(new RegExp(STREET_ADDRESS.source, 'g'), '[address removed]');
 
 /** Throws if anything that looks like a phone number, email or street address reached the data. */
 export function assertNoContacts(label: string, data: unknown) {
   const text = JSON.stringify(data);
-  const email = text.match(/[\w.+-]+@[\w-]+\.[a-z]{2,}/i);
+  const email = text.match(new RegExp(EMAIL.source, 'i'));
   const phone = text.match(PHONE);
   const street = text.match(STREET_ADDRESS);
   if (email || phone || street) throw new Error(`${label}: contact details found (${(email ?? phone ?? street)![0]}). Nothing was saved.`);

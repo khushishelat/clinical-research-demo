@@ -1,6 +1,6 @@
-# Clinicians on Trial Check
+# Investigators on Trial Check
 
-Trial Check shows which clinicians run trials in a disease. It holds
+Trial Check shows which investigators run trials in an indication. It holds
 professional facts from public sources, and nothing else.
 
 ## What a profile shows
@@ -9,9 +9,9 @@ professional facts from public sources, and nothing else.
   registry names the person as an overall official (principal investigator or
   study chair) or a site principal investigator.
 - **Specialty and practice city** from the NPI Registry. Profiles exist only for
-  US clinicians matched to an NPI record. Everyone else appears by name on their
+  US investigators matched to an NPI record. Everyone else appears by name on their
   trials, with no profile.
-- **Paper counts and recent titles** from PubMed, kept only when an affiliation
+- **Publication counts and recent titles** from PubMed, kept only when an affiliation
   confirms the author is the same person.
 - **Roles named in public sources**, such as presenting a trial's data at a
   conference, each with its source link.
@@ -19,7 +19,7 @@ professional facts from public sources, and nothing else.
 ## What it never holds
 
 Phone numbers, email addresses, street addresses, site contacts, or any rating
-or opinion of a clinician. The pipeline strips street addresses from
+or opinion of an investigator. The pipeline strips street addresses from
 affiliations and contact details from quoted sources, and it refuses to save a
 file if any remain.
 
@@ -35,6 +35,6 @@ To remove someone, run:
 npm run remove-clinician -- "First Last" --yes
 ```
 
-This deletes them from every built disease right away and adds a hash of their
+This deletes them from every built indication right away and adds a hash of their
 record to `scripts/removed.json`, so later builds skip them. The file holds
 hashes, not names, so the list of people who asked is not itself public.

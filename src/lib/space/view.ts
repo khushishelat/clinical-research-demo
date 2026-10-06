@@ -3,11 +3,17 @@
 // files, never hard-coded.
 
 import type { Space } from './load';
+import { dealAboutLabel, isAssetDeal, regulatoryEvent } from './labels';
 import type { Company, Deal, Facts } from './types';
 
 export type Scope = 'companies' | 'all';
-export type Dot = { nct: string; label: string; x: string; kind: 'company' | 'investigator'; phase: number; acquiredFrom: string | null };
-export type Mark = { date: string; type: string; headline: string; source: string | null; host: string | null };
+/** `done`: completed or terminated (kept when the indication includes recent readouts). */
+export type Dot = { nct: string; label: string; x: string; kind: 'company' | 'investigator'; phase: number; acquiredFrom: string | null; done: boolean };
+/**
+ * A dated mark on a company's row. `nct` is the trial it is about, when the research
+ * run named one; otherwise `trials` lists the row's trials of the mark's drug.
+ */
+export type Mark = { date: string; type: string; headline: string; source: string | null; host: string | null; nct: string | null; drug: string | null; detail: string | null; trials: { nct: string; label: string }[] };
 export type Row = {
   key: string;
   name: string;
@@ -22,6 +28,8 @@ export type Row = {
   trials: number;
   webOnly: boolean;
   acquisitions: { from: string; closed: string | null; source: string }[];
+  /** Regulatory designations granted, e.g. "BTD", "PRIME". */
+  designations: string[];
 };
 export type RailClinician = { key: string; name: string; specialty: string | null; place: string; registryRoles: number; webRoles: number; papers: number | null; npi: boolean; initials: string };
 export type FeedItem = { id: string; date: string; company: string; companyKey: string; host: string | null; origin: 'registry' | 'web' | 'monitor'; type: string; headline: string; source: string | null; nct?: string; webEarlier?: { days: number; date: string; source: string | null } };
@@ -122,21 +130,32 @@ export function dollars(s: string | null | undefined): number {
 }
 
 const ACTIVE_WINDOW_DAYS = 60;
+const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION']);
 export const DEALS_SINCE = '2025-05-01';
 const BD = new Set(['license', 'acquisition', 'collaboration', 'option', 'divestiture']);
 const firstWord = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ')[0];
 const sameCompany = (a: string, b: string) => firstWord(a).length > 2 && firstWord(a) === firstWord(b);
 
-/** Licensing, M&A and partnership deals, once each: both parties often record the same deal. */
+/** A deal's headline value in dollars: v1 runs give USD millions; older records are parsed from the stated text. */
+export const dealValue = (d: Deal): number => {
+  if (d.currency) return d.currency === 'USD' ? (d.total_m ?? d.upfront_m ?? 0) * 1e6 : 0;
+  return dollars(d.total) || dollars(d.upfront);
+};
+
+/**
+ * Licensing, M&A and partnership deals for a drug in this indication, once each:
+ * both parties often record the same deal. Portfolio, commercial and research
+ * deals (deals@2 `about`) stay on the rows but not in this count.
+ */
 export function bdDeals(s: Space): Deal[] {
   const out: Deal[] = [];
   for (const f of Object.values(s.facts))
     for (const d of f.deals ?? []) {
-      if (!BD.has(d.type)) continue;
+      if (!BD.has(d.type) || !isAssetDeal(d.about)) continue;
       const dup = out.find((x) => x.date && d.date && Math.abs(Date.parse(x.date) - Date.parse(d.date)) <= 3 * 86_400_000 && x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length >= 2);
       if (dup) {
         // Keep the record that states a total.
-        if (!dup.total && d.total) Object.assign(dup, d);
+        if (!dealValue(dup) && dealValue(d)) Object.assign(dup, d);
       } else out.push({ ...d, parties: d.parties ?? [] });
     }
   return out;
@@ -156,15 +175,41 @@ export function mapView(s: Space, scope: Scope, today: string) {
     const dots: Dot[] = [...c.trials, ...c.investigator_trials]
       .map((n) => trialsBy.get(n))
       .filter(present)
-      .map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: t.run_by, phase: t.phase_level, acquiredFrom: acquired.has(t.sponsor) ? t.sponsor.replace(/,?\s*Inc\.?$/, '') : null }));
+      .map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: t.run_by, phase: t.phase_level, acquiredFrom: acquired.has(t.sponsor) ? t.sponsor.replace(/,?\s*Inc\.?$/, '') : null, done: !ACTIVE.has(t.status) }));
     // A deal another company recorded with this one as a party, unless this company recorded it too.
     const near = (a: string | null, b: string | null) => Boolean(a && b && Math.abs(Date.parse(a) - Date.parse(b)) <= 3 * 86_400_000);
     const theirs = allDeals.filter((x) => x.owner !== c.key && x.parties.some((p) => sameCompany(p, c.name)) && !(f?.deals ?? []).some((own) => near(own.date, x.deal.date))).map((x) => x.deal);
-    const news: Mark[] = [...(f?.milestones ?? []), ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal' }))].flatMap((m) => (isDay(m.date) ? [{ date: m.date, type: m.type, headline: m.headline, source: m.source_url ?? null, host: hostOf(m.source_url) }] : []));
+    // Marks keep the trial ID the research run gave (v1), so a click can open exactly that trial.
+    // A drug-level mark lists the row's trials of that drug (registry interventions), so its card can lead into them.
+    const trialsOf = (drug: string | null | undefined) => {
+      if (!drug) return [];
+      const known = c.drugs.find((x) => x.name.toLowerCase() === drug.toLowerCase() || drug.toLowerCase().includes(x.name.split('(')[0].trim().toLowerCase()));
+      const names = [drug, ...(known ? [known.name, ...known.codes] : [])].map((x) => x.split('(')[0].trim().toLowerCase()).filter((x) => x.length > 3);
+      return dots.filter((d) => {
+        const t = trialsBy.get(d.nct)!;
+        const text = [t.title, ...t.interventions.flatMap((i) => [i.name, ...i.other_names])].join(' ').toLowerCase();
+        return names.some((n) => text.includes(n));
+      }).slice(0, 6).map((d) => ({ nct: d.nct, label: d.phase ? `${d.label} · Phase ${d.phase}` : d.label }));
+    };
+    // A portfolio or commercial deal says so before its terms, so a whole-company price is not read as the asset's.
+    const terms = (x: { upfront?: string | null; total?: string | null; about?: string }) => [isAssetDeal(x.about) ? '' : dealAboutLabel(x.about), x.upfront, x.total].filter(Boolean).join(' · ') || null;
+    const marks: { date: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; drug?: string | null; detail?: string | null }[] = [
+      ...(f?.milestones ?? []),
+      ...[...(f?.deals ?? []), ...theirs].map((x) => ({ ...x, type: 'deal', drug: x.drugs?.[0] ?? null, detail: terms(x) })),
+      ...(f?.financings ?? []).map((x) => ({ ...x, type: 'financing', drug: null, detail: x.amount })),
+      ...(f?.regulatory ?? []).filter((r) => r.status === 'done').map((r) => ({ date: r.date, type: 'regulatory', headline: regulatoryEvent(r.agency, r.kind), source_url: r.source_url, drug: r.drug, detail: null })),
+      // News from the indication's daily Monitor, joined to this company by the pipeline.
+      ...s.events.filter((e) => e.origin === 'monitor' && e.company === c.key).map((e) => ({ date: e.date, type: e.type, headline: e.headline, source_url: e.source_url, nct: e.nct ?? null, drug: e.drug ?? null, detail: 'From the daily news monitor' })),
+    ];
+    const news: Mark[] = marks
+      .filter((m, i, all) => all.findIndex((x) => x.date === m.date && x.headline === m.headline) === i)
+      .flatMap((m) => (isDay(m.date) ? [{ date: m.date, type: m.type, headline: m.headline, source: m.source_url ?? null, host: hostOf(m.source_url), nct: m.nct ?? null, drug: m.drug ?? null, detail: m.detail ?? null, trials: m.nct ? [] : trialsOf(m.drug) }] : []));
     const next = (f?.next ?? []).flatMap((n) => {
-      const date = n.earliest ?? n.date;
-      return isDay(date) && date >= today ? [{ date, window: n.timing_text ?? null, type: 'next', headline: n.what, source: n.source_url ?? null, host: hostOf(n.source_url) }] : [];
+      const date = n.earliest ?? n.latest;
+      return isDay(date) && date >= today ? [{ date, window: n.timing_text ?? null, type: 'next', headline: n.what, source: n.source_url ?? null, host: hostOf(n.source_url), nct: n.nct ?? null, drug: n.drug ?? null, detail: n.stated_by ? `Stated by ${n.stated_by}` : null, trials: n.nct ? [] : trialsOf(n.drug) }] : [];
     });
+    const SHORT: Record<string, string> = { breakthrough: 'BTD', prime: 'PRIME', fast_track: 'Fast Track', orphan: 'Orphan', priority_review: 'Priority review' };
+    const designations = [...new Set((f?.regulatory ?? []).filter((r) => r.status === 'done' && SHORT[r.kind]).map((r) => SHORT[r.kind]))];
     const drugs = drugLabels(c.drugs ?? []).slice(0, 2);
     rows.push({
       key: c.key,
@@ -173,13 +218,16 @@ export function mapView(s: Space, scope: Scope, today: string) {
       lead: drugs.join(' · '),
       stage: c.approved ? 'Approved' : STAGE[Math.min(c.max_phase, 4)],
       approved: c.approved,
-      mechanisms: [...new Set((c.drugs ?? []).map((x) => shortMechanism(x.mechanism)).filter(present))].slice(0, 2),
+      // v1 drugs carry a short mechanism phrase from the run; older records go through shortMechanism.
+      // One tag per mechanism: "CGRP receptor antagonist" and "CGRP-receptor antagonist" are the same.
+      mechanisms: [...new Map((c.drugs ?? []).map((x) => (x.phase && x.mechanism.length <= 32 ? x.mechanism : shortMechanism(x.mechanism))).filter(present).map((m) => [m.toLowerCase().replace(/[-\s]+/g, ' '), m] as const)).values()].slice(0, 2),
       dots,
       news,
       next,
       trials: dots.length,
       webOnly: c.web_only,
       acquisitions: c.acquisitions.map((a) => ({ from: a.sponsor, closed: a.closed, source: a.source })),
+      designations,
     });
   }
   // Furthest along first; within a stage, registry companies before web-only ones, then by trials.
@@ -187,30 +235,34 @@ export function mapView(s: Space, scope: Scope, today: string) {
   if (scope === 'all' && s.unassigned.length) {
     rows.push({
       key: '_unassigned',
-      name: 'Other investigator trials',
+      name: 'Academic and generic trials',
       host: null,
-      lead: 'Generic or academic drugs not tied to a company',
+      lead: 'Investigator-sponsored, no company owner',
       stage: '',
       approved: false,
       mechanisms: [],
-      dots: s.unassigned.map((n) => trialsBy.get(n)).filter(present).map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: 'investigator' as const, phase: t.phase_level, acquiredFrom: null })),
+      dots: s.unassigned.map((n) => trialsBy.get(n)).filter(present).map((t) => ({ nct: t.nct, label: t.acronym || t.nct, x: t.first_posted, kind: 'investigator' as const, phase: t.phase_level, acquiredFrom: null, done: !ACTIVE.has(t.status) })),
       news: [],
       next: [],
       trials: s.unassigned.length,
       webOnly: false,
       acquisitions: [],
+      designations: [],
     });
   }
   const onMap = new Set(rows.filter((r) => r.key !== '_unassigned').flatMap((r) => r.dots.map((d) => d.nct)));
   const deals = bdDeals(s).filter((x) => (x.date ?? '') >= DEALS_SINCE);
-  const dealDollars = deals.reduce((n: number, x) => n + (dollars(x.total) || dollars(x.upfront)), 0);
+  const dealDollars = deals.reduce((n: number, x) => n + dealValue(x), 0);
   const registryCompanies = s.companies.filter((c) => !c.web_only).length;
 
   return {
-    disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null },
+    disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null, area: s.config.area ?? null },
     updated: s.fetched,
+    scope: s.scope,
     stats: {
-      trials: s.trials.length,
+      trials: s.trials.filter((t) => ACTIVE.has(t.status)).length,
+      completed: s.trials.filter((t) => !ACTIVE.has(t.status)).length,
+      all: s.trials.length,
       onMap: onMap.size,
       companies: rows.filter((r) => r.key !== '_unassigned').length,
       registryCompanies,

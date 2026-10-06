@@ -12,6 +12,7 @@ import { disease, groupRuns, log, parallel, pool, recorder, runLog, saveReplay, 
 import { assertNoContacts, personBase, stripAddress, type Trial } from './lib/registry';
 import { isRemoved, removedHashes } from './lib/removed';
 import { AUTHORSHIP, NPI_PICK, PROFILE, WEB_ROLES } from './lib/specs';
+import { ownNct, rolesUnit } from './lib/units';
 
 const d = disease();
 const client = parallel(d, 'clinicians');
@@ -29,20 +30,18 @@ if (client) {
   const review = (await store.get<{ company: string; include: boolean | null }[]>(spacePath(d, 'review/companies.json'))) ?? [];
   const approved = new Set(review.filter((r) => r.include).map((r) => r.company));
   const targets = companies.filter((c) => (c.web_only ? approved.has(c.name) : c.trials.length + c.investigator_trials.length > 0));
-  const units = targets.map((c) => ({
-    key: `web:${c.key}`,
-    spec: { processor: WEB_ROLES.processor, connectors: WEB_ROLES.connectors, schema: WEB_ROLES.schema, input: WEB_ROLES.input(d, c.name, c.drugs.map((x: any) => x.name).slice(0, 6), [...c.trials, ...c.investigator_trials].map((n: string) => ({ nct: n, acronym: trials.find((t) => t.nct === n)?.acronym ?? '' }))), metadata: { company: c.key } },
-  }));
+  const byNct = new Map(trials.map((t) => [t.nct, t]));
+  const units = targets.map((c) => rolesUnit(d, c, byNct));
   const rec = recorder();
   const res = await groupRuns(client, rl, d, 'web-roles', units, 12, rec);
   await saveReplay(d, 'web-roles', rec);
   let found = 0;
   for (const c of targets) {
-    for (const w of ((res[`web:${c.key}`]?.content as any)?.clinicians ?? []) as any[]) {
+    for (const w of ((res[`${WEB_ROLES.key}:${c.key}`]?.content as any)?.clinicians ?? []) as any[]) {
       if (!w.name || !/^https?:/.test(w.source_url ?? '')) continue; // a web role always has a source
       const us = /^(united states|usa|us)$/i.test(w.country ?? '');
       const match = [...byKey.values()].find((x) => sameName(x.name, w.name) && (!w.city || !x.city || x.city.toLowerCase() === w.city.toLowerCase() || x.us === us));
-      const role = { role: w.role, program: w.program, company: c.name, date: w.date ?? null, source_url: w.source_url };
+      const role = { role: w.role, program: w.program, nct: ownNct(c, w.nct), company: c.name, date: w.date ?? null, source_url: w.source_url };
       if (match) {
         match.web_roles.push(role);
         if (!match.sources.includes('web')) match.sources.push('web');
@@ -92,10 +91,10 @@ if (client && ambiguous.length) {
     rl,
     d,
     'npi-pick',
-    ambiguous.map(({ c, left }) => ({ key: `npi:${c.key}`, spec: { processor: NPI_PICK.processor, connectors: NPI_PICK.connectors, schema: NPI_PICK.schema, input: NPI_PICK.input(d, c.name, c.roles.slice(0, 4).map((r) => ({ facility: r.facility, city: r.city, state: r.state })), left.map(({ npi, credential, taxonomy, city, state }) => ({ npi, credential, taxonomy, city, state }))), metadata: { person: c.key.slice(0, 60) } } }))
+    ambiguous.map(({ c, left }) => ({ key: `${NPI_PICK.key}:${c.key}`, spec: { processor: NPI_PICK.processor, connectors: NPI_PICK.connectors, schema: NPI_PICK.schema, input: NPI_PICK.input(d, c.name, c.roles.slice(0, 4).map((r) => ({ facility: r.facility, city: r.city, state: r.state })), left.map(({ npi, credential, taxonomy, city, state }) => ({ npi, credential, taxonomy, city, state }))), metadata: { person: c.key.slice(0, 60) } } }))
   );
   for (const { c, left } of ambiguous) {
-    const out: any = res[`npi:${c.key}`]?.content;
+    const out: any = res[`${NPI_PICK.key}:${c.key}`]?.content;
     const hit = out?.npi && out.confidence !== 'low' ? left.find((x) => x.npi === out.npi) : null;
     if (hit) {
       c.npi = { number: hit.npi, taxonomy: hit.taxonomy, city: hit.city, state: hit.state, how: 'connector' };
@@ -108,13 +107,28 @@ const matched = usPeople.filter((c) => c.npi_status === 'matched');
 log(d, `b. NPI: ${matched.length} of ${usPeople.length} US clinicians matched (${matched.filter((c) => c.npi?.how === 'connector').length} by the NPI connector, ${ambiguous.length} were ambiguous) · ${people.length - usPeople.length} outside the US get no NPI`);
 
 // c. PubMed: direct counts, kept only when an affiliation confirms the person.
+// Lookups are saved every 50, so an interrupted run resumes; one that still fails after its
+// retries leaves that person's publications unverified instead of stopping the step.
 const pmPace = pacer(3);
+let looked = 0;
+let unreachable = 0;
+let saving = Promise.resolve();
 await pool(matched, 3, async (c) => {
-  const r = (cache.pubmed[c.key] ??= await pubmedLookup(c, d.pubmed_terms, pmPace));
+  if (!cache.pubmed[c.key]) {
+    try {
+      cache.pubmed[c.key] = await pubmedLookup(c, d.pubmed_terms, pmPace);
+    } catch {
+      unreachable += 1;
+      return;
+    }
+    if (++looked % 50 === 0) await (saving = saving.then(() => store.put(cachePath, cache)));
+  }
+  const r = cache.pubmed[c.key];
   const verified = r.count > 0 && affiliationMatches(c, r.affiliations);
   c.pubmed = { count: r.count, since_2024: r.since_2024, recent: r.recent, verified, how: verified ? 'affiliation' : 'unverified' };
   if (r.count) c.sources.push('PubMed');
 });
+if (unreachable) log(d, `PubMed unreachable for ${unreachable} people; their publications stay unverified until the next run`);
 
 await store.put(cachePath, cache);
 
@@ -125,15 +139,15 @@ const ranked = people.filter((c) => c.us && c.npi_status === 'matched').sort((a,
 if (client) {
   // Common names among the top 50: let the PubMed connector check authorship by affiliation.
   const check = ranked.slice(0, 50).filter((c) => c.pubmed && c.pubmed.count > 0 && !c.pubmed.verified);
-  const res = await groupRuns(client, rl, d, 'authorship', check.map((c) => ({ key: `pm:${c.key}`, spec: { processor: AUTHORSHIP.processor, connectors: AUTHORSHIP.connectors, schema: AUTHORSHIP.schema, input: AUTHORSHIP.input(d, c, d.pubmed_terms), metadata: { person: c.key.slice(0, 60) } } })));
+  const res = await groupRuns(client, rl, d, 'authorship', check.map((c) => ({ key: `${AUTHORSHIP.key}:${c.key}`, spec: { processor: AUTHORSHIP.processor, connectors: AUTHORSHIP.connectors, schema: AUTHORSHIP.schema, input: AUTHORSHIP.input(d, c, d.pubmed_terms), metadata: { person: c.key.slice(0, 60) } } })));
   for (const c of check) {
-    const out: any = res[`pm:${c.key}`]?.content;
+    const out: any = res[`${AUTHORSHIP.key}:${c.key}`]?.content;
     if (out?.is_same_person && out.verified_count != null) c.pubmed = { count: out.verified_count, since_2024: out.since_2024 ?? 0, recent: out.recent ?? [], verified: true, how: 'connector' };
   }
   // e. Profiles for the 25 shown on screen.
   const top = ranked.slice(0, 25);
-  const prof = await groupRuns(client, rl, d, 'profiles', top.map((c) => ({ key: `profile:${c.key}`, spec: { processor: PROFILE.processor, connectors: PROFILE.connectors, schema: PROFILE.schema, input: PROFILE.input(d, { ...c, npi: c.npi?.number ?? null }), metadata: { person: c.key.slice(0, 60) } } })));
-  for (const c of top) c.profile = (prof[`profile:${c.key}`]?.content as Clinician['profile']) ?? null;
+  const prof = await groupRuns(client, rl, d, 'profiles', top.map((c) => ({ key: `${PROFILE.key}:${c.key}`, spec: { processor: PROFILE.processor, connectors: PROFILE.connectors, schema: PROFILE.schema, input: PROFILE.input(d, { ...c, npi: c.npi?.number ?? null }), metadata: { person: c.key.slice(0, 60) } } })));
+  for (const c of top) c.profile = (prof[`${PROFILE.key}:${c.key}`]?.content as Clinician['profile']) ?? null;
   log(d, `c. PubMed: ${matched.filter((c) => c.pubmed?.verified).length} verified (${check.length} checked by the PubMed connector) · e. ${top.filter((c) => c.profile).length} profiles`);
 }
 

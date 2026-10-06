@@ -1,0 +1,7 @@
+# A CLI deploy uploads the working tree; generated data and keys never go with it.
+# The deployment reads its data from private Vercel Blob (npm run sync-blob).
+.data/
+.env*
+!.env.example
+.next/
+node_modules/

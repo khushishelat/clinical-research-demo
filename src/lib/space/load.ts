@@ -1,18 +1,18 @@
 // Server-only. Reads a disease ("space") built by the pipeline (scripts/) from
-// storage: private Vercel Blob when BLOB_READ_WRITE_TOKEN is set, else .data/.
+// storage: private Vercel Blob when a store is connected, else .data/.
 // The repo ships no generated data; a disease appears once its pipeline has run.
 
 import 'server-only';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { cache } from 'react';
-import { blobStore, folderStore, type Store } from '../store';
+import { blobConfigured, blobStore, folderStore, type Store } from '../store';
 import type { Basis, Brief, Clinician, Company, CompanyReview, Coverage, EventsDoc, Facts, FirstSeen, Trial } from './types';
 
-export type DiseaseConfig = { key: string; name: string; subtitle?: string; query_cond: string; specialties: string[]; default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string } };
+export type DiseaseConfig = { key: string; name: string; subtitle?: string; area?: string; query_cond: string; specialties: string[]; default_scope?: { min_phase?: number; top_companies?: number; conditions_only?: string } };
 
 let _store: Store | null = null;
-export const appStore = (): Store => (_store ??= process.env.BLOB_READ_WRITE_TOKEN ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data')));
+export const appStore = (): Store => (_store ??= blobConfigured() ? blobStore(process.env.BLOB_READ_WRITE_TOKEN) : folderStore(join(process.cwd(), '.data')));
 
 export const diseaseConfig = cache((): { diseases: DiseaseConfig[]; default: string } => JSON.parse(readFileSync(join(process.cwd(), 'scripts/diseases.json'), 'utf8')));
 
@@ -21,6 +21,8 @@ const doc = <T>(key: string, file: string) => appStore().get<T>(`spaces/${key}/$
 export type Space = {
   config: DiseaseConfig;
   fetched: string;
+  /** What the registry pull kept, if the indication is scoped (e.g. Phase 2 and later). */
+  scope: { min_phase?: number; conditions_only?: string; completed_since?: string } | null;
   trials: Trial[];
   companies: Company[];
   unassigned: string[];
@@ -39,7 +41,7 @@ export type Space = {
 async function loadSpaceRaw(key: string): Promise<Space | null> {
   const config = diseaseConfig().diseases.find((d) => d.key === key);
   if (!config) return null;
-  const trialsDoc = await doc<{ fetched: string; trials: Trial[] }>(key, 'trials.json');
+  const trialsDoc = await doc<{ fetched: string; scope?: Space['scope']; trials: Trial[] }>(key, 'trials.json');
   if (!trialsDoc) return null;
   const [companies, facts, events, clinicians, coverage, firstSeen, briefs, review] = await Promise.all([
     doc<{ companies: Company[]; unassigned_investigator_trials: string[] }>(key, 'companies.json'),
@@ -54,6 +56,7 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
   return {
     config,
     fetched: trialsDoc.fetched,
+    scope: trialsDoc.scope ?? null,
     trials: trialsDoc.trials,
     companies: companies?.companies ?? [],
     unassigned: companies?.unassigned_investigator_trials ?? [],
@@ -72,12 +75,12 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
 /** One load per request, shared by layout, page and route handlers. */
 export const loadSpace = cache(loadSpaceRaw);
 
-/** Diseases with built data, with their sizes, for the picker. */
+/** Indications with built data, with their sizes, for the picker. */
 export const builtDiseases = cache(async () => {
-  const out: { key: string; name: string; trials: number; companies: number; clinicians: number }[] = [];
+  const out: { key: string; name: string; area: string | null; trials: number; companies: number; investigators: number }[] = [];
   for (const d of diseaseConfig().diseases) {
     const s = await loadSpace(d.key);
-    if (s) out.push({ key: d.key, name: d.name, trials: s.trials.length, companies: s.companies.length, clinicians: s.clinicians.length });
+    if (s) out.push({ key: d.key, name: d.name, area: d.area ?? null, trials: s.trials.length, companies: s.companies.filter((c) => !c.web_only || s.included.has(c.name)).length, investigators: s.clinicians.filter((c) => c.roles.length).length });
   }
   return out;
 });
