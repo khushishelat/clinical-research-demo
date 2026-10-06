@@ -6,6 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 
 type Indication = { key: string; name: string; area: string | null; trials: number; companies: number; investigators: number };
 
+// Requests open a GitHub issue form (.github/ISSUE_TEMPLATE/request-indication.yml) for a person to review.
+const REPO = process.env.NEXT_PUBLIC_REPO_URL || 'https://github.com/khushishelat/clinical-research-demo';
+const REQUEST_URL = `${REPO}/issues/new?template=request-indication.yml`;
+
 const fmt = (iso: string) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 export function Header({ current, diseases, updated }: { current: string; diseases: Indication[]; updated: string | null }) {
@@ -81,7 +85,12 @@ export function Header({ current, diseases, updated }: { current: string; diseas
                     ))}
                 </div>
               ))}
-              <p className="border-t border-line px-4 py-2 text-[12px] text-muted">Trial counts from ClinicalTrials.gov. Add an indication with the pipeline in scripts/.</p>
+              <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2">
+                <p className="text-[12px] text-muted">Trial counts from ClinicalTrials.gov.</p>
+                <a href={REQUEST_URL} target="_blank" rel="noreferrer" className="shrink-0 rounded-[4px] border border-line-strong px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] hover:border-ink">
+                  Request an indication ↗
+                </a>
+              </div>
             </div>
           ) : null}
         </div>
