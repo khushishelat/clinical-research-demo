@@ -209,9 +209,11 @@ about $5.
 
 In production each monitor also calls `/api/monitor/webhook` when it finds
 something, so news reaches the map within minutes instead of at the next daily
-job. Set `PARALLEL_WEBHOOK_SECRET` to the webhook secret of the Parallel account
-that owns `PARALLEL_API_KEY` (platform.parallel.ai → Settings → Webhooks). Without
-it the route refuses every request and the daily job still collects.
+job. The call is only a nudge: the route stores nothing from the request, only
+re-reads the named monitor (if it is one of this app's) with its own API key.
+Optionally set `PARALLEL_WEBHOOK_SECRET` (platform.parallel.ai → Settings →
+Webhooks, for the account that owns `PARALLEL_API_KEY`) to refuse unsigned
+requests as well.
 
 **Changing the Parallel API key.** Stored research doesn't need the old key:
 the daily job starts fresh runs, and replaces monitors the new key can't see.

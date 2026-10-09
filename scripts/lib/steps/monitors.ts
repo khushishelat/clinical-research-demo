@@ -278,7 +278,7 @@ const safeJson = (t: string) => {
  * goes to monitor-unmatched.json with the reason. Returns how many were added. A monitor
  * this API key can't see is marked lost, and reconcileMonitors replaces it.
  */
-export async function collectMonitorEvents(d: Disease, only?: { monitor_id: string; event_group_id: string }): Promise<{ added: number; merged: number; unmatched: number }> {
+export async function collectMonitorEvents(d: Disease, only?: { monitor_id: string; event_group_id?: string | null }): Promise<{ added: number; merged: number; unmatched: number }> {
   const result = { added: 0, merged: 0, unmatched: 0 };
   const doc = await monitorOf(d);
   const client = parallel(d, 'monitors');
@@ -293,7 +293,7 @@ export async function collectMonitorEvents(d: Disease, only?: { monitor_id: stri
   for (const [key, e] of entries) {
     const pages: any[][] = [];
     try {
-      if (only) pages.push(((await client.monitor.events(e.monitor_id, { event_group_id: only.event_group_id } as any)) as any).events ?? []);
+      if (only?.event_group_id) pages.push(((await client.monitor.events(e.monitor_id, { event_group_id: only.event_group_id } as any)) as any).events ?? []);
       else {
         let cursor: string | undefined;
         // Newest first: stop at the first page with nothing new.
@@ -349,8 +349,14 @@ export async function collectMonitorEvents(d: Disease, only?: { monitor_id: stri
   }
   const merged = mergeDuplicates(kept).sort((a, b) => b.date.localeCompare(a.date));
   result.merged += kept.length - merged.length;
-  await store.put(path(d, 'monitor-events.json'), merged);
-  await store.put(path(d, 'monitor-unmatched.json'), other.slice(0, 500));
+  const changed = result.added + result.merged + result.unmatched > 0;
+  const lost = Object.values(doc.monitors).some((e) => e.lost);
+  // A webhook that brings nothing new writes nothing; the daily job always records that it read.
+  if (!changed && !lost && only) return result;
+  if (changed) {
+    await store.put(path(d, 'monitor-events.json'), merged);
+    await store.put(path(d, 'monitor-unmatched.json'), other.slice(0, 500));
+  }
   // Re-read before writing: a webhook and the daily job can collect at the same time, and
   // only the lost marks and the health belong to this call.
   const latest = (await monitorOf(d)) ?? doc;
