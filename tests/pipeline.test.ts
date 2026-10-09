@@ -176,3 +176,36 @@ test('companies: older phase text maps onto the phase enum', async () => {
   assert.equal(phaseFromText('Phase 1 (healthy volunteers)'), 'phase_1');
   assert.equal(phaseFromText(''), 'preclinical');
 });
+
+test('scope: phase and condition filters', async () => {
+  const { inScope } = await import('../scripts/lib/registry');
+  const t = (phase_level: number, conditions: string[]) => ({ ...toTrial(study()), phase_level, conditions });
+  const keep = inScope({ default_scope: { min_phase: 2, conditions_only: 'areata' } });
+  assert.equal(keep(t(2, ['Alopecia Areata'])), true);
+  assert.equal(keep(t(1, ['Alopecia Areata'])), false);
+  assert.equal(keep(t(3, ['Androgenetic Alopecia'])), false);
+  assert.equal(inScope({})(t(1, ['anything'])), true);
+});
+
+test('estimate: runs scale with sponsors, late-stage trials and new trials', async () => {
+  const { estimate, PRICE } = await import('../scripts/lib/estimate');
+  const today = '2026-10-08';
+  const base = toTrial(study());
+  const trials = [
+    { ...base, nct: 'NCT1', sponsor: 'A', run_by: 'company' as const, phase_level: 3, status: 'ACTIVE_NOT_RECRUITING', primary_completion: '2027-01', first_posted: '2024-01-01' },
+    { ...base, nct: 'NCT2', sponsor: 'A', run_by: 'company' as const, phase_level: 2, status: 'RECRUITING', primary_completion: '2026-09', first_posted: '2026-09-01' },
+    { ...base, nct: 'NCT3', sponsor: 'B', run_by: 'company' as const, phase_level: 1, status: 'RECRUITING', primary_completion: '2026-01', first_posted: '2025-01-01' },
+    { ...base, nct: 'NCT4', sponsor: 'Univ', run_by: 'investigator' as const, phase_level: 3, status: 'RECRUITING', primary_completion: '2025-01', first_posted: '2026-10-01' },
+  ];
+  const e = estimate({}, trials, today);
+  assert.equal(e.sponsors, 2);
+  assert.equal(e.readouts, 2); // phase 2+, closed to enrollment or past primary completion; company-run only
+  assert.equal(e.recent, 1); // company trials first posted in the last 90 days
+  assert.deepEqual(e.companies, [2, 3]);
+  const owners = e.lines.find((l) => l.step.startsWith('Who owns'))!;
+  assert.deepEqual(owners.cost, [2 * PRICE.pro, 2 * PRICE.pro]);
+  assert.ok(e.total[0] < e.total[1]);
+  // Regions multiply the company-list pages.
+  const chain = (regions?: string[]) => estimate({ chain_regions: regions }, trials, today).lines.find((l) => l.step.startsWith('The web'))!.runs;
+  assert.deepEqual(chain(['a', 'b']), [chain()[0] * 2, chain()[1] * 2]);
+});

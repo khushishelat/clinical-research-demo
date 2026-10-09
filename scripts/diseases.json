@@ -1,5 +1,5 @@
 {
-  "_note": "Indications the pipeline can build. Add one by appending an entry, then run the pipeline with --disease <key>. A person reviews this list; the subtitle and therapeutic area are written here, not researched. Indications in \"exclude\" are never built.",
+  "_note": "Indications the pipeline can build. Add one with npm run new-indication -- \"<name>\": a scoping Task run proposes the entry from a ClinicalTrials.gov preview, and a person reviews it before building (see README, \"Add an indication\"). The first six entries were written by hand. Indications in \"exclude\" are never built.",
   "exclude": [
     "atopic dermatitis"
   ],

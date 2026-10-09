@@ -99,6 +99,15 @@ export function toTrial(study: any): Trial {
 }
 
 export const FINISHED = 'COMPLETED,TERMINATED';
+
+/**
+ * The trials an indication researches (diseases.json `default_scope`): Phase 2 and later only,
+ * or only trials whose conditions name the indication, when the search also finds neighbors.
+ */
+export const inScope = (d: Pick<Disease, 'default_scope'>) => (t: Trial) => {
+  const sc = d.default_scope;
+  return (!sc?.min_phase || t.phase_level >= sc.min_phase) && (!sc?.conditions_only || t.conditions.some((c) => c.toLowerCase().includes(sc.conditions_only!)));
+};
 export const isActive = (status: string) => ACTIVE.split(',').includes(status);
 
 /**
