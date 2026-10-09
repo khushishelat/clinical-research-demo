@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto';
 import { regulatoryEvent } from '../../../src/lib/space/labels';
 import { log, spacePath, store, where, type Disease } from '../pipeline';
-import type { RegistryEvent, Trial } from '../registry';
+import { registryHeadline, type RegistryEvent, type Trial } from '../registry';
 
 export async function eventsStep(d: Disease) {
   const { trials } = (await store.get<{ trials: Trial[] }>(spacePath(d, 'trials.json')))!;
@@ -51,8 +51,7 @@ export async function eventsStep(d: Disease) {
     const c = companyOf.get(r.nct);
     if (!c) continue;
     const t = byNct.get(r.nct);
-    const name = t?.acronym || r.nct;
-    events.push({ id: r.id, date: r.date, company: c, drug: null, type: r.type, headline: r.type === 'trial_registered' ? `${name} registered` : `${name}: ${r.detail}`, source_url: `https://clinicaltrials.gov/study/${r.nct}`, nct: r.nct, origin: 'registry' });
+    events.push({ id: r.id, date: r.date, company: c, drug: null, type: r.type, headline: registryHeadline(r, t), source_url: `https://clinicaltrials.gov/study/${r.nct}`, nct: r.nct, origin: 'registry' });
   }
   // New registrations come from each trial's first-posted date, so the feed works
   // from day one; snapshot diffs add status and phase changes on later days.

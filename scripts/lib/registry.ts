@@ -157,16 +157,57 @@ export function assertNoContacts(label: string, data: unknown) {
 export type RegistryEvent = { id: string; date: string; type: 'trial_registered' | 'status_changed' | 'phase_changed'; nct: string; sponsor: string; detail: string; origin: 'registry' };
 
 /** Diff two daily snapshots into registry events. */
+/** A trial new to a snapshot counts as registered only if first posted this recently; older ones entered the search some other way. */
+const NEW_TRIAL_DAYS = 30;
+
+/**
+ * What changed between two snapshots. Each event is dated when ClinicalTrials.gov
+ * says it happened (first posted, or last updated), not when the pull noticed it.
+ * A trial that appears with an old first-posted date is not news: it entered the
+ * search through an edit (its conditions, a status from outside the search, or this
+ * indication's own search terms), so it gets no event.
+ */
 export function diffSnapshots(prev: Trial[], next: Trial[], date: string): RegistryEvent[] {
   const before = new Map(prev.map((t) => [t.nct, t]));
+  const recent = new Date(Date.parse(date) - NEW_TRIAL_DAYS * 86_400_000).toISOString().slice(0, 10);
   const events: RegistryEvent[] = [];
   for (const t of next) {
     const b = before.get(t.nct);
-    if (!b) events.push({ id: `${date}:new:${t.nct}`, date, type: 'trial_registered', nct: t.nct, sponsor: t.sponsor, detail: t.title, origin: 'registry' });
-    else {
-      if (b.status !== t.status) events.push({ id: `${date}:status:${t.nct}`, date, type: 'status_changed', nct: t.nct, sponsor: t.sponsor, detail: `${b.status} → ${t.status}`, origin: 'registry' });
-      if (b.phase_level !== t.phase_level) events.push({ id: `${date}:phase:${t.nct}`, date, type: 'phase_changed', nct: t.nct, sponsor: t.sponsor, detail: `${b.phases.join('/')} → ${t.phases.join('/')}`, origin: 'registry' });
+    if (!b) {
+      if (t.first_posted >= recent) events.push({ id: `${date}:new:${t.nct}`, date: t.first_posted <= date ? t.first_posted : date, type: 'trial_registered', nct: t.nct, sponsor: t.sponsor, detail: t.title, origin: 'registry' });
+      continue;
     }
+    const when = t.last_update && t.last_update > b.last_update && t.last_update <= date ? t.last_update : date;
+    if (b.status !== t.status) events.push({ id: `${date}:status:${t.nct}`, date: when, type: 'status_changed', nct: t.nct, sponsor: t.sponsor, detail: `${b.status} → ${t.status}`, origin: 'registry' });
+    if (b.phase_level !== t.phase_level) events.push({ id: `${date}:phase:${t.nct}`, date: when, type: 'phase_changed', nct: t.nct, sponsor: t.sponsor, detail: `${b.phases.join('/')} → ${t.phases.join('/')}`, origin: 'registry' });
   }
   return events;
+}
+
+/** "Phase 2/3", "Early Phase 1", or "" when the registry gives none. */
+export function phaseText(phases: string[]): string {
+  if (phases.includes('EARLY_PHASE1')) return 'Early Phase 1';
+  const n = phases.map((p) => p.replace('PHASE', '')).filter((p) => /^\d$/.test(p));
+  return n.length ? `Phase ${n.join('/')}` : '';
+}
+
+/** A trial as a headline names it: its acronym, else "Phase 2 HRS9531 trial", else its NCT ID. */
+export function trialName(t: Trial | undefined, nct: string): string {
+  if (t?.acronym) return t.acronym;
+  const drug = t?.interventions.find((i) => !/placebo|vehicle|standard of care|usual care/i.test(i.name))?.name.split(/[(,;]/)[0].trim();
+  const phase = t ? phaseText(t.phases) : '';
+  return drug ? `${phase ? `${phase} ` : ''}${drug} trial` : nct;
+}
+
+/** A registry change in words: "ZUPREME-5 starts recruiting", "KaiNETIC-1 stops recruiting". */
+export function registryHeadline(r: Pick<RegistryEvent, 'type' | 'detail' | 'nct'>, t: Trial | undefined): string {
+  const name = trialName(t, r.nct);
+  if (r.type === 'trial_registered') return `${name} registered`;
+  const [from = '', to = ''] = r.detail.split(' → ');
+  if (r.type === 'phase_changed') return `${name} moves to ${phaseText(to.split('/')) || 'no stated phase'}${phaseText(from.split('/')) ? ` from ${phaseText(from.split('/'))}` : ''}`;
+  if (to === 'RECRUITING') return from === 'NOT_YET_RECRUITING' ? `${name} starts recruiting` : `${name} is recruiting again`;
+  if (to === 'ACTIVE_NOT_RECRUITING') return `${name} stops recruiting`;
+  if (to === 'COMPLETED') return `${name} completes`;
+  if (to === 'ENROLLING_BY_INVITATION') return `${name} enrolls by invitation`;
+  return `${name} is ${to.toLowerCase().replace(/_/g, ' ')}`;
 }
