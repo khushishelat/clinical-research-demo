@@ -159,6 +159,21 @@ export async function reconcileMonitors(d: Disease): Promise<MonitorDoc | null> 
   return doc;
 }
 
+/** Runs every monitor for this indication now, outside its schedule ($0.01 each). Each run reports news since the monitor's last run; what it finds arrives by webhook in production, or with --collect. */
+export async function triggerMonitors(d: Disease): Promise<number> {
+  const doc = await monitorOf(d);
+  const client = parallel(d, 'monitors');
+  if (!doc || !client) return 0;
+  let n = 0;
+  for (const e of Object.values(doc.monitors)) {
+    if (e.lost) continue;
+    await client.monitor.trigger(e.monitor_id);
+    n += 1;
+  }
+  log(d, `${n} monitors running now`);
+  return n;
+}
+
 /** Cancels every monitor for this indication (stops the daily charge). */
 export async function cancelMonitors(d: Disease) {
   const doc = await monitorOf(d);
