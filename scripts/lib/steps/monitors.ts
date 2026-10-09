@@ -293,8 +293,16 @@ export async function collectMonitorEvents(d: Disease, only?: { monitor_id: stri
   for (const [key, e] of entries) {
     const pages: any[][] = [];
     try {
-      if (only?.event_group_id) pages.push(((await client.monitor.events(e.monitor_id, { event_group_id: only.event_group_id } as any)) as any).events ?? []);
-      else {
+      if (only?.event_group_id) {
+        try {
+          pages.push(((await client.monitor.events(e.monitor_id, { event_group_id: only.event_group_id } as any)) as any).events ?? []);
+        } catch (error) {
+          // Not an execution of this monitor (a forged or stale webhook): read its newest events instead.
+          const status = (error as { status?: number }).status;
+          if (status !== 400 && status !== 422) throw error;
+        }
+      }
+      if (!pages.length) {
         let cursor: string | undefined;
         // Newest first: stop at the first page with nothing new.
         for (let page = 0; page < 5; page++) {
