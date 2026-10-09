@@ -3,14 +3,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { REQUEST_URL } from '@/lib/links';
+import { Ago } from './Ago';
 
 type Indication = { key: string; name: string; area: string | null; trials: number; companies: number; investigators: number };
-
-// Requests open a GitHub issue form (.github/ISSUE_TEMPLATE/request-indication.yml) for a person to review.
-const REPO = process.env.NEXT_PUBLIC_REPO_URL || 'https://github.com/khushishelat/clinical-research-demo';
-const REQUEST_URL = `${REPO}/issues/new?template=request-indication.yml`;
-
-const fmt = (iso: string) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 export function Header({ current, diseases, updated }: { current: string; diseases: Indication[]; updated: string | null }) {
   const [open, setOpen] = useState(false);
@@ -96,7 +92,7 @@ export function Header({ current, diseases, updated }: { current: string; diseas
         </div>
         {updated ? (
           <span className="ml-auto hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.05em] text-muted md:flex">
-            <span className="h-1.5 w-1.5 rounded-full bg-ok" /> Updated {fmt(updated)}
+            <span className="h-1.5 w-1.5 rounded-full bg-ok" /> <Ago iso={updated} /> · refreshed daily
           </span>
         ) : null}
       </div>

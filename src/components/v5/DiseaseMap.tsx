@@ -485,6 +485,8 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
   const [origin, setOrigin] = useState<'all' | 'registry' | 'web'>('all');
   const items = view.feed.filter((f: FeedItem) => origin === 'all' || (origin === 'web' ? f.origin !== 'registry' : f.origin === 'registry'));
   const max = Math.max(1, ...view.monthly.map((m) => m.count));
+  // Items from the two days before the latest refresh count as new.
+  const isNew = (date: string) => Boolean(view.updated) && Date.parse(view.updated!) - Date.parse(date) <= 2 * 86_400_000;
   // Monthly counts of trials first posted on ClinicalTrials.gov, last 12 months; the current month is partial.
   const label = (m: string) => fmt(`${m}-01`, { month: 'short' });
   const yearOf = (m: string, i: number) => (i === 0 || m.endsWith('-01') ? `'${m.slice(2, 4)}` : '');
@@ -530,6 +532,7 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
             <span className="min-w-0">
               <span className="flex items-center gap-1.5 text-[12px] text-muted">
                 <Favicon host={f.host} name={f.company} size={14} /> {f.company}
+                {isNew(f.date) ? <span className="rounded-[2px] bg-orange px-1 font-mono text-[9px] uppercase tracking-[0.05em] text-ink">New</span> : null}
               </span>
               <span className="mt-0.5 block text-[14px]">{f.headline}</span>
               <span className="mt-1 flex flex-wrap items-center gap-2">
