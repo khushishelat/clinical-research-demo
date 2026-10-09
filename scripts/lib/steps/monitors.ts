@@ -10,14 +10,15 @@ import { companyKey } from '../companies';
 import { log, parallel, spacePath, store, type Disease } from '../pipeline';
 import { MONITOR } from '../specs';
 
-type MonitorDoc = { monitor_id: string; spec: string; created: string; cancelled?: string | null };
+/** `lost`: the API key no longer sees this monitor (it was created with another key); `previous` keeps replaced IDs. */
+type MonitorDoc = { monitor_id: string; spec: string; created: string; cancelled?: string | null; lost?: string | null; previous?: string[] };
 export type MonitorEvent = { id: string; date: string; company: string; company_name: string; drug: string | null; nct: string | null; type: string; headline: string; source_url: string | null };
 
 export const monitorOf = (d: Disease) => store.get<MonitorDoc>(spacePath(d, 'monitor.json'));
 
 export async function createMonitor(d: Disease): Promise<MonitorDoc | null> {
   const existing = await monitorOf(d);
-  if (existing && !existing.cancelled) return existing;
+  if (existing && !existing.cancelled && !existing.lost) return existing;
   const client = parallel(d, 'monitor');
   if (!client) return null;
   const m: any = await client.monitor.create({
@@ -27,7 +28,8 @@ export async function createMonitor(d: Disease): Promise<MonitorDoc | null> {
     settings: { query: MONITOR.query(d), include_backfill: true, output_schema: { type: 'json', json_schema: MONITOR.schema } },
     metadata: { app: 'trial-check', disease: d.key, spec: MONITOR.key },
   } as any);
-  const doc = { monitor_id: m.monitor_id as string, spec: MONITOR.key, created: new Date().toISOString() };
+  const previous = existing ? [...(existing.previous ?? []), existing.monitor_id] : [];
+  const doc = { monitor_id: m.monitor_id as string, spec: MONITOR.key, created: new Date().toISOString(), ...(previous.length ? { previous } : {}) };
   await store.put(spacePath(d, 'monitor.json'), doc);
   log(d, `monitor ${doc.monitor_id} created (${MONITOR.processor}, daily)`);
   return doc;
@@ -42,11 +44,23 @@ export async function cancelMonitor(d: Disease) {
   log(d, `monitor ${doc.monitor_id} cancelled`);
 }
 
-/** Reads new events (free) and keeps those about a company on the map. Returns how many were added. */
+/**
+ * Reads new events (free) and keeps those about a company on the map. Returns how many were
+ * added, or -1 when this API key can't see the monitor (created with another key): the doc is
+ * marked lost so createMonitor makes a replacement.
+ */
 export async function collectMonitorEvents(d: Disease): Promise<number> {
   const doc = await monitorOf(d);
   const client = parallel(d, 'monitor');
-  if (!doc || doc.cancelled || !client) return 0;
+  if (!doc || doc.cancelled || doc.lost || !client) return 0;
+  try {
+    await client.monitor.retrieve(doc.monitor_id);
+  } catch (error) {
+    if ((error as { status?: number }).status !== 404) throw error;
+    await store.put(spacePath(d, 'monitor.json'), { ...doc, lost: new Date().toISOString() });
+    log(d, `monitor ${doc.monitor_id} is not visible to this API key; it will be replaced`);
+    return -1;
+  }
   const { companies } = (await store.get<{ companies: Company[] }>(spacePath(d, 'companies.json'))) ?? { companies: [] };
   const byKey = new Map(companies.map((c) => [companyKey(c.name), c]));
   for (const c of companies) for (const s of c.registry_sponsors ?? []) if (!byKey.has(companyKey(s))) byKey.set(companyKey(s), c);

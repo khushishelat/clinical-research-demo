@@ -76,11 +76,14 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
 export const loadSpace = cache(loadSpaceRaw);
 
 /** Indications with built data, with their sizes, for the picker. */
+// The picker shows active trials, matching the map's headline (completed trials kept for readouts are not counted).
+const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION']);
+
 export const builtDiseases = cache(async () => {
   const out: { key: string; name: string; area: string | null; trials: number; companies: number; investigators: number }[] = [];
   for (const d of diseaseConfig().diseases) {
     const s = await loadSpace(d.key);
-    if (s) out.push({ key: d.key, name: d.name, area: d.area ?? null, trials: s.trials.length, companies: s.companies.filter((c) => !c.web_only || s.included.has(c.name)).length, investigators: s.clinicians.filter((c) => c.roles.length).length });
+    if (s) out.push({ key: d.key, name: d.name, area: d.area ?? null, trials: s.trials.filter((t) => ACTIVE.has(t.status)).length, companies: s.companies.filter((c) => !c.web_only || s.included.has(c.name)).length, investigators: s.clinicians.filter((c) => c.roles.length).length });
   }
   return out;
 });

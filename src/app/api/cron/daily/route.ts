@@ -26,30 +26,37 @@ export async function GET(req: Request) {
   if (denied) return denied;
   const started = Date.now();
   const done: Record<string, string[]> = {};
+  const failed: Record<string, string> = {};
   for (const key of await builtKeys()) {
     const d = byKey(key);
     done[key] = [];
-    await registryStep(d);
-    done[key].push('registry');
-    // A monitor is created with this deployment's API key, so this job can read its events.
-    if (d.monitor) await createMonitor(d);
-    await collectMonitorEvents(d);
-    done[key].push('monitor');
-    await eventsStep(d);
-    done[key].push('events');
-    // Leave time for the rest; an unfinished check resumes tomorrow.
-    if (Date.now() - started < 9 * 60_000) {
-      await firstSeenStep(d);
+    // One indication's failure is logged and reported; the rest still refresh.
+    try {
+      await registryStep(d);
+      done[key].push('registry');
+      // A monitor is created with this deployment's API key, so this job can read its events.
+      if (d.monitor) await createMonitor(d);
+      if ((await collectMonitorEvents(d)) < 0 && d.monitor) await createMonitor(d);
+      done[key].push('monitor');
       await eventsStep(d);
-      done[key].push('first-seen');
-    }
-    // Trials that reached a readout point since the last check (core runs; usually none or a few).
-    if (Date.now() - started < 10 * 60_000) {
-      await readoutsStep(d);
-      done[key].push('readouts');
+      done[key].push('events');
+      // Leave time for the rest; an unfinished check resumes tomorrow.
+      if (Date.now() - started < 9 * 60_000) {
+        await firstSeenStep(d);
+        await eventsStep(d);
+        done[key].push('first-seen');
+      }
+      // Trials that reached a readout point since the last check (core runs; usually none or a few).
+      if (Date.now() - started < 10 * 60_000) {
+        await readoutsStep(d);
+        done[key].push('readouts');
+      }
+    } catch (error) {
+      failed[key] = (error as Error).message.slice(0, 300);
+      console.error(`[${key}] daily refresh failed after ${done[key].join(', ') || 'start'}:`, error);
     }
     revalidatePath(`/d/${key}`);
     revalidatePath(`/d/${key}/data`);
   }
-  return NextResponse.json({ ok: true, seconds: Math.round((Date.now() - started) / 1000), done });
+  return NextResponse.json({ ok: Object.keys(failed).length === 0, seconds: Math.round((Date.now() - started) / 1000), done, failed }, { status: Object.keys(failed).length ? 500 : 200 });
 }

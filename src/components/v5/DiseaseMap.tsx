@@ -55,6 +55,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const [more, setMore] = useState(false);
   const [tab, setTab] = useState<'clinicians' | 'changed'>('clinicians');
   const [tip, setTip] = useState<Tip>(null);
+  const [howTo, setHowTo] = useState(false);
   const [tipDismissed, setTipDismissed] = useState(false);
   // A mark not tied to one trial opens this card in the app; its source is a secondary link.
   const [card, setCard] = useState<{ mark: Mark; company: string; x: number; y: number } | null>(null);
@@ -110,7 +111,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? ` · +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
           <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
-          <Stat value={s.dealDollars ? `≈$${(s.dealDollars / 1e9).toFixed(s.dealDollars >= 1e10 ? 0 : 1)}B` : String(s.deals)} label="Licensing and M&A since May 2025" sub={s.dealDollars ? `${s.deals} asset deals · disclosed headline value, USD` : `Asset deal${s.deals === 1 ? '' : 's'} · no value disclosed`} accent />
+          <DealStat view={view} />
         </dl>
       </section>
 
@@ -118,13 +119,13 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
         <section aria-label="Companies and their trials over time" className="min-w-0 rounded-[4px] border border-line bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted">
-              <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-ink" /> Industry-sponsored trial
+              <li className="flex items-center gap-1.5" title="A trial the company runs, placed at the date it was first posted on ClinicalTrials.gov">
+                <span className="h-2 w-2 rounded-full bg-ink" /> Company trial
               </li>
-              <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#adadac]" /> Investigator-sponsored trial (IST)
+              <li className="flex items-center gap-1.5" title="A trial run by a hospital or academic investigator that tests the company's drug">
+                <span className="h-2 w-2 rounded-full bg-[#adadac]" /> Investigator-run trial
               </li>
-              <li className="flex items-center gap-1.5">
+              <li className="flex items-center gap-1.5" title="Bigger dots are later-phase trials">
                 <span className="flex items-end gap-0.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-ink" />
                   <span className="h-2 w-2 rounded-full bg-ink" />
@@ -133,21 +134,40 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 Phase 1 · 2 · 3
               </li>
               {s.completed ? (
-                <li className="flex items-center gap-1.5">
+                <li className="flex items-center gap-1.5" title="Trials that finished or stopped since then, kept for their results">
                   <span className="h-2.5 w-2.5 rounded-full border-2 border-ink bg-card" /> Completed since {view.scope?.completed_since?.slice(0, 4)}
                 </li>
               ) : null}
-              <li className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Acquired asset
+              <li className="flex items-center gap-1.5" title="A trial that came with an acquired company or drug">
+                <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Acquired
               </li>
-              <li className="flex items-center gap-1.5">
-                <span className="h-2 w-2 bg-orange" /> Disclosure
+              <li className="flex items-center gap-1.5" title="Something the company announced: results, a deal, an approval, a filing, a financing">
+                <span className="h-2 w-2 bg-orange" /> News
               </li>
-              <li className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Guided catalyst
+              <li className="flex items-center gap-1.5" title="Something the company has said is coming, at the time it gave, such as a readout or a filing">
+                <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Expected next step
               </li>
             </ul>
-            <p className="font-mono text-[11px] uppercase tracking-[0.04em] text-muted">{s.onMap} trials on company rows</p>
+            <div className="flex items-center gap-4">
+              <p className="font-mono text-[11px] uppercase tracking-[0.04em] text-muted">{s.onMap} trials on company rows</p>
+              <button type="button" onClick={() => setHowTo((v) => !v)} aria-expanded={howTo} className="font-mono text-[11px] uppercase tracking-[0.04em] text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">
+                {howTo ? 'Hide guide ▴' : 'How to read this map ▾'}
+              </button>
+            </div>
+            {howTo ? (
+              <div className="w-full border-t border-line pt-3 text-[13px] leading-relaxed">
+                <p>
+                  <strong className="font-medium">Each row is a company</strong> developing drugs for this indication, furthest along first. Left to right is time, from 2019; the solid line is today.
+                </p>
+                <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
+                  <li><span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />A <strong className="font-medium">dot is a trial</strong>, placed where it was first registered. Bigger means a later phase, grey means a hospital or academic investigator runs it, and hollow means it has finished.</li>
+                  <li><span className="mr-1.5 inline-block h-2 w-2 bg-orange" />An <strong className="font-medium">orange square is news</strong> the company announced: trial results, a deal, an approval, a filing or a financing, dated when it happened.</li>
+                  <li><span className="mr-1.5 inline-block h-2 w-2 rotate-45 border border-dashed border-orange" />A <strong className="font-medium">dashed diamond is an expected next step</strong>: something the company has said is coming, such as a readout or a filing, placed at the time it gave.</li>
+                  <li><span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink ring-2 ring-orange ring-offset-1" />An <strong className="font-medium">orange ring</strong> marks a trial that came with an acquisition.</li>
+                </ul>
+                <p className="mt-2 text-muted">Click a dot for the trial, its results and investigators; click a square or diamond for what happened and its source. Every item comes from ClinicalTrials.gov or a Parallel research run with its sources.</p>
+              </div>
+            ) : null}
           </div>
 
           <p className="border-b border-line px-4 py-2 text-center font-mono text-[10px] uppercase tracking-[0.05em] text-faint sm:hidden">
@@ -207,7 +227,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
       </div>
 
       <p className="mt-10 border-t border-line pt-6 text-[12px] text-muted">
-        Research support from public sources. Not investment or medical advice. Coverage of trials and disclosures is not complete. Investigator details are professional facts only, never contact details or opinions.
+        Research support from public sources. Not investment or medical advice. Coverage of trials and news is not complete. Investigator details are professional facts only, never contact details or opinions.
       </p>
 
       {drawer ? <Drawer disease={view.disease.key} kind={drawer.kind} id={drawer.id} onClose={close} onOpen={open} /> : null}
@@ -225,6 +245,60 @@ function Stat({ value, label, sub, accent }: { value: string; label: string; sub
         {label}
       </dt>
       {sub ? <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">{sub}</p> : null}
+    </div>
+  );
+}
+
+const money = (n: number) => (n >= 1e9 ? `$${(n / 1e9).toFixed(n >= 1e10 ? 0 : 1)}B` : `$${Math.round(n / 1e6)}M`);
+
+// The deal number with its working: the headline is the sum of "up to" values as announced, so
+// the deals behind it open in a list with each one's terms and source.
+function DealStat({ view }: { view: MapView }) {
+  const s = view.stats;
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <dd className="text-[28px] leading-none">{s.dealDollars ? `≈${money(s.dealDollars)}` : String(s.deals)}</dd>
+      <dt className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
+        <span className="h-1.5 w-1.5 bg-orange" />
+        {s.dealDollars ? 'Announced deal value' : 'Licensing and M&A deals'}
+      </dt>
+      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">
+        {s.deals} asset deal{s.deals === 1 ? '' : 's'} since May 2025{s.dealDollars ? ' · "up to", with milestones' : ' · no value disclosed'}
+      </p>
+      {s.deals ? (
+        <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="mt-1 font-mono text-[10px] uppercase tracking-[0.04em] text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">
+          {open ? 'Hide the deals ▴' : `See the ${s.deals} deal${s.deals === 1 ? '' : 's'} ▾`}
+        </button>
+      ) : null}
+      {open ? (
+        <div role="dialog" aria-label="Deals behind this number" className="absolute right-0 top-full z-30 mt-2 w-[min(440px,90vw)] rounded-[4px] border border-line bg-card p-4 text-[13px] shadow-[0_8px_24px_rgba(29,27,22,0.08)]">
+          <p className="text-muted">
+            Licensing deals and acquisitions for a drug in this indication, announced since May 2025. Values are the &ldquo;up to&rdquo; totals as announced, including milestone payments that are only paid if the drug succeeds
+            {s.dealUpfront ? `; about ${money(s.dealUpfront)} of the total was paid upfront` : ''}. Whole-company, commercial and research deals are not counted.
+          </p>
+          <ul className="mt-3 max-h-[320px] space-y-2.5 overflow-y-auto">
+            {view.dealList.map((x, i) => (
+              <li key={i} className="border-t border-line pt-2.5">
+                <p className="flex items-baseline justify-between gap-3">
+                  <span className="font-medium">{x.headline}</span>
+                  <span className="shrink-0 font-mono text-[12px]">{x.value ? money(x.value) : '—'}</span>
+                </p>
+                <p className="mt-0.5 flex flex-wrap gap-x-2 text-[12px] text-muted">
+                  {x.date ? <span>{fmt(x.date)}</span> : null}
+                  {x.total ? <span>{x.total}</span> : null}
+                  {x.upfront ? <span>· {x.upfront}</span> : null}
+                  {x.source ? (
+                    <a href={x.source} target="_blank" rel="noreferrer" className="hover:text-ink">
+                      · {x.host ?? 'source'} ↗
+                    </a>
+                  ) : null}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -275,7 +349,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
           <MarkLink key={`n${i}`} m={m} onTrial={onDot} onCard={onCard} label={`${fmt(m.date)}: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150" style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }} />
         ))}
         {row.next.map((m, i) => (
-          <MarkLink key={`x${i}`} m={m} onTrial={onDot} onCard={onCard} label={`Guided catalyst: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Guided · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150" style={{ left: `${x(m.date)}%`, top: 26 }} />
+          <MarkLink key={`x${i}`} m={m} onTrial={onDot} onCard={onCard} label={`Expected next step: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Expected · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150" style={{ left: `${x(m.date)}%`, top: 26 }} />
         ))}
         {row.dots.map((d) => {
           const size = dotSize(d.phase);
@@ -285,7 +359,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
               type="button"
               aria-label={`${d.label}, phase ${d.phase || 'not set'}, ${d.kind === 'company' ? 'industry-sponsored' : 'investigator-sponsored'}`}
               onClick={() => onDot(d)}
-              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Industry-sponsored' : "Investigator-sponsored, testing this company's asset"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for investigators and disclosures' })}
+              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Company trial' : "Investigator-run, testing this company's drug"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for results, news and investigators' })}
               className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.done ? `border-2 bg-card ${d.kind === 'company' ? 'border-ink' : 'border-[#adadac]'}` : d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
               style={{ left: `${x(d.x)}%`, top: jitter(d.nct, spread) + 10, width: size, height: size }}
             />
@@ -293,7 +367,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
         })}
         {showFirstTip && firstDot ? (
           <div className="absolute z-10 w-[220px] rounded-[4px] bg-ink px-3 py-2.5 text-[12px] text-page shadow-lg" style={{ left: `min(calc(${x(firstDot.x)}% + 14px), calc(100% - 230px))`, top: 8 }}>
-            <p className="font-medium">Each dot is a trial. Click one for its investigators and disclosures.</p>
+            <p className="font-medium">Each dot is a trial. Click one for its results, news and investigators.</p>
             <p className="mt-1 font-mono text-[10px] text-[#adadac]">
               {firstDot.label} · {row.name}
             </p>
@@ -324,7 +398,7 @@ function MarkCard({ card, onTrial, onClose }: { card: { mark: Mark; company: str
       <button type="button" aria-label="Close" onClick={onClose} className="absolute inset-0 z-20 cursor-default" />
       <div role="dialog" aria-label={m.headline} className="absolute z-30 w-[320px] rounded-[4px] border border-line bg-card p-3 text-[13px] shadow-lg" style={{ left: `min(max(8px, ${card.x - 160}px), calc(100% - 330px))`, top: card.y + 12 }}>
         <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
-          {m.type === 'next' ? 'Guided catalyst' : labelOf(m)} · {m.type === 'next' ? (m as Mark & { window?: string | null }).window ?? fmt(m.date) : fmt(m.date)} · {card.company}
+          {m.type === 'next' ? 'Expected next step' : labelOf(m)} · {m.type === 'next' ? (m as Mark & { window?: string | null }).window ?? fmt(m.date) : fmt(m.date)} · {card.company}
         </p>
         <p className="mt-1 text-[14px] font-medium leading-snug">{m.headline}</p>
         {m.detail ? <p className="mt-1 text-muted">{m.detail}</p> : null}
@@ -358,8 +432,8 @@ function MarkCard({ card, onTrial, onClose }: { card: { mark: Mark; company: str
   );
 }
 
-const LABEL: Record<string, string> = { data: 'Data readout', approval: 'Approval', regulatory: 'Regulatory', designation: 'Designation', filing: 'Filing', publication: 'Publication', presentation: 'Presentation', financing: 'Financing', deal: 'Deal', trial_start: 'Trial initiation', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinuation', exit: 'Exit', other: 'Disclosure' };
-const labelOf = (m: Mark) => LABEL[m.type] ?? 'Disclosure';
+const LABEL: Record<string, string> = { data: 'Data readout', approval: 'Approval', regulatory: 'Regulatory', designation: 'Designation', filing: 'Filing', publication: 'Publication', presentation: 'Presentation', financing: 'Financing', deal: 'Deal', trial_start: 'Trial initiation', enrollment_complete: 'Enrollment complete', discontinuation: 'Discontinuation', exit: 'Exit', other: 'News' };
+const labelOf = (m: Mark) => LABEL[m.type] ?? 'News';
 
 function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) => void }) {
   return (
@@ -411,6 +485,8 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
   const [origin, setOrigin] = useState<'all' | 'registry' | 'web'>('all');
   const items = view.feed.filter((f: FeedItem) => origin === 'all' || (origin === 'web' ? f.origin !== 'registry' : f.origin === 'registry'));
   const max = Math.max(1, ...view.monthly.map((m) => m.count));
+  // Items from the two days before the latest refresh count as new.
+  const isNew = (date: string) => Boolean(view.updated) && Date.parse(view.updated!) - Date.parse(date) <= 2 * 86_400_000;
   // Monthly counts of trials first posted on ClinicalTrials.gov, last 12 months; the current month is partial.
   const label = (m: string) => fmt(`${m}-01`, { month: 'short' });
   const yearOf = (m: string, i: number) => (i === 0 || m.endsWith('-01') ? `'${m.slice(2, 4)}` : '');
@@ -442,7 +518,7 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
       <div className="mt-4 flex gap-2 border-t border-line px-4 pt-3">
         {(['all', 'registry', 'web'] as const).map((o) => (
           <button key={o} type="button" aria-pressed={origin === o} onClick={() => setOrigin(o)} className={`rounded-full border px-3 py-1 text-[12px] ${origin === o ? 'border-ink bg-ink text-page' : 'border-line-strong text-muted hover:border-ink hover:text-ink'}`}>
-            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'Disclosures'}
+            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'News'}
           </button>
         ))}
       </div>
@@ -456,6 +532,7 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
             <span className="min-w-0">
               <span className="flex items-center gap-1.5 text-[12px] text-muted">
                 <Favicon host={f.host} name={f.company} size={14} /> {f.company}
+                {isNew(f.date) ? <span className="rounded-[2px] bg-orange px-1 font-mono text-[9px] uppercase tracking-[0.05em] text-ink">New</span> : null}
               </span>
               <span className="mt-0.5 block text-[14px]">{f.headline}</span>
               <span className="mt-1 flex flex-wrap items-center gap-2">

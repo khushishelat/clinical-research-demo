@@ -14,13 +14,21 @@ export const maxDuration = 800;
 export async function GET(req: Request) {
   const denied = unauthorized(req);
   if (denied) return denied;
+  // An indication whose brief fails is reported and skipped, so it can't hold up the others.
+  const failed: Record<string, string> = {};
   for (const key of await builtKeys()) {
     const d = byKey(key);
     const index = (await store.get<{ issues: string[] }>(spacePath(d, 'briefs/index.json'))) ?? { issues: [] };
     if (index.issues.includes(today())) continue;
-    await briefStep(d);
+    try {
+      await briefStep(d);
+    } catch (error) {
+      failed[key] = (error as Error).message.slice(0, 300);
+      console.error(`[${key}] brief failed:`, error);
+      continue;
+    }
     revalidatePath(`/d/${key}`);
-    return NextResponse.json({ ok: true, wrote: key });
+    return NextResponse.json({ ok: true, wrote: key, failed });
   }
-  return NextResponse.json({ ok: true, wrote: null, note: 'every indication has this week’s brief' });
+  return NextResponse.json({ ok: Object.keys(failed).length === 0, wrote: null, failed, note: 'every other indication has this week’s brief' }, { status: Object.keys(failed).length ? 500 : 200 });
 }

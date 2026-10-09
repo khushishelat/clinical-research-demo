@@ -175,8 +175,33 @@ Optionally set `NEXT_PUBLIC_REMOVAL_URL` to where removal requests should go.
 The default is the removal section of PRIVACY.md.
 
 To add an indication, append it to `scripts/diseases.json` and run the pipeline
-with its key. Each landscape is as of its last pipeline run, shown in the header;
-there is no scheduled refresh yet.
+with its key. Visitors can ask for one from the indication picker ("Request an
+indication"), which opens a GitHub issue form; a person reviews each request
+before it is built, since a build costs about $15–60 depending on its size.
+
+Once deployed, two scheduled jobs (`vercel.json`) keep every built indication
+current:
+
+- **Daily** (`/api/cron/daily`):
+  - the ClinicalTrials.gov diff;
+  - the indication's news Monitor (`monitor: true` in `diseases.json`);
+  - the event feed and the first-disclosure check for new trials;
+  - a readout check for trials that reach a readout point, plus a monthly re-check of those with no results yet.
+- **Weekly** (`/api/cron/brief`, Mondays): the brief.
+
+Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. They cost
+about $20 a month for five indications, most of it the weekly brief.
+
+**Changing the Parallel API key.** Stored research doesn't need the old key:
+the daily job starts fresh runs, and replaces monitors the new key can't see.
+The old key's monitors keep running and billing until cancelled. To cancel
+them, run this with both keys in your shell:
+
+```bash
+OLD_PARALLEL_API_KEY=… PARALLEL_API_KEY=… npx tsx --env-file=.env.vercel scripts/rotate-key.mts --dry-run
+```
+
+Drop `--dry-run` once the plan looks right.
 
 ```bash
 npm test

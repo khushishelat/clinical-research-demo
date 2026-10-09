@@ -1,0 +1,47 @@
+name: Request an indication
+description: Ask for a new indication on the Trial Check map.
+title: "Indication request: "
+labels: ["indication-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Each indication is built from ClinicalTrials.gov, the NPI Registry, PubMed and Parallel Task runs, then kept current daily. A person reviews every request before it is built.
+  - type: input
+    id: indication
+    attributes:
+      label: Indication
+      description: The disease or condition, as the industry names it.
+      placeholder: e.g. Idiopathic pulmonary fibrosis
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Therapeutic area
+      options:
+        - Cardiometabolic
+        - Immunology
+        - Neuroscience
+        - Oncology
+        - Rare disease
+        - Infectious disease
+        - Respiratory
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: terms
+    attributes:
+      label: Registry search terms (optional)
+      description: Condition names or synonyms that ClinicalTrials.gov uses for it.
+      placeholder: e.g. "idiopathic pulmonary fibrosis" OR IPF
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope (optional)
+      description: Anything to include or leave out, such as only Phase 2 and later, or a subtype.
+  - type: textarea
+    id: why
+    attributes:
+      label: What would you use it for? (optional)
