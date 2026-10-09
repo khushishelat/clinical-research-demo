@@ -2,13 +2,13 @@ import Link from 'next/link';
 import { Ago } from '@/components/v5/Ago';
 import { Favicon } from '@/components/v5/Favicon';
 import { Header } from '@/components/v5/Header';
+import { LiveRefresh, NextCheck, RelDay } from '@/components/v5/Live';
 import { REPO_URL, REQUEST_URL } from '@/lib/links';
 import { homeView } from '@/lib/space/home';
 import { builtDiseases } from '@/lib/space/load';
 
 export const revalidate = 3600;
 
-const fmt = (iso: string) => new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 const money = (n: number) => (n >= 1e9 ? `$${(n / 1e9).toFixed(n >= 1e10 ? 0 : 1)}B` : `$${Math.round(n / 1e6)}M`);
 
 export default async function Home() {
@@ -16,6 +16,7 @@ export default async function Home() {
   if (!built.length) return <Empty />;
   const { cards, latest } = await homeView(new Date().toISOString().slice(0, 10));
   const areas = [...new Set(cards.map((c) => c.area))];
+  const updated = cards.map((c) => c.updated).sort().at(-1) ?? null;
   return (
     <>
       <Header current="" diseases={built} updated={null} />
@@ -63,11 +64,17 @@ export default async function Home() {
                           {c.brief ? (
                             <p className="mt-4 border-t border-line pt-3 text-[13px]">
                               <span className="mr-1.5 inline-block h-1.5 w-1.5 bg-orange align-middle" />
-                              <span className="text-muted">This week: </span>
+                              <span className="text-muted">Weekly brief: </span>
                               {c.brief.title}
                             </p>
                           ) : null}
-                          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">
+                          <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">
+                            {c.week.registered + c.week.changes + c.week.news ? (
+                              <span className="flex items-center gap-1.5 text-ink">
+                                <span className="live-ping h-1.5 w-1.5 bg-orange" />
+                                {[c.week.registered && `+${c.week.registered} trial${c.week.registered === 1 ? '' : 's'}`, c.week.changes && `${c.week.changes} update${c.week.changes === 1 ? '' : 's'}`, c.week.news && `${c.week.news} news`].filter(Boolean).join(' · ')} this week
+                              </span>
+                            ) : null}
                             {c.updated ? <Ago iso={c.updated} /> : null}
                           </p>
                         </Link>
@@ -89,16 +96,16 @@ export default async function Home() {
             <div className="flex items-center justify-between border-b border-line px-4 py-3">
               <h2 className="text-[14px] font-medium">Latest across indications</h2>
               <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-ok" /> Daily
+                <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" /> <NextCheck updated={updated} />
               </span>
             </div>
             <ul>
               {latest.map((f) => (
                 <li key={`${f.indication}-${f.id}`} className="border-t border-line first:border-t-0">
-                  <Link href={f.nct ? `/d/${f.indication}?trial=${f.nct}` : `/d/${f.indication}`} className="grid grid-cols-[52px_minmax(0,1fr)] gap-3 px-4 py-3 hover:bg-wash">
+                  <Link href={f.nct ? `/d/${f.indication}?trial=${f.nct}` : `/d/${f.indication}`} className="grid grid-cols-[68px_minmax(0,1fr)] gap-3 px-4 py-3 hover:bg-wash">
                     <span className="flex items-start gap-1.5 font-mono text-[11px] text-muted">
                       <span className={`mt-1 h-1.5 w-1.5 shrink-0 ${f.origin === 'registry' ? 'bg-ink' : 'bg-orange'}`} />
-                      {fmt(f.date)}
+                      <RelDay iso={f.date} short />
                     </span>
                     <span className="min-w-0">
                       <span className="flex items-center gap-1.5 text-[12px] text-muted">
@@ -138,6 +145,7 @@ export default async function Home() {
           </p>
         </section>
 
+        <LiveRefresh updated={updated} />
         <p className="mt-10 border-t border-line pt-6 text-[12px] text-muted">Research support from public sources. Not investment or medical advice. Coverage of trials and news is not complete. Investigator details are professional facts only, never contact details or opinions.</p>
       </main>
     </>

@@ -23,6 +23,7 @@ export async function homeView(today: string) {
       deals: v.stats.deals,
       dealDollars: v.stats.dealDollars,
       updated: s.fetched,
+      week: v.pulse,
       brief: brief ? { title: brief.title, date: brief.date } : null,
     });
     latest.push(...v.feed.slice(0, 10).map((f) => ({ ...f, indication: b.key, indicationName: s.config.name })));

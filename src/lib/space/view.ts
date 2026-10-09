@@ -285,6 +285,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
     rail: railClinicians(s, 12),
     dealList,
     feed: feedView(s, rows, today),
+    pulse: pulseView(s, rows, today),
     monthly: monthlyBars(s, today),
   };
 }
@@ -329,6 +330,19 @@ function feedView(s: Space, rows: Row[], today: string): FeedItem[] {
         webEarlier: seen && seen.days_earlier > 0 && seen.first_announced ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url } : undefined,
       };
     });
+}
+
+/** This week at a glance: what changed in the last 7 days, for the "Live" strip and the homepage. */
+export function pulseView(s: Space, rows: Row[], today: string) {
+  const onMap = new Set(rows.map((r) => r.key));
+  const since = new Date(Date.parse(today) - 7 * 86_400_000).toISOString().slice(0, 10);
+  const week = s.events.filter((e) => e.date >= since && e.date <= today && onMap.has(e.company));
+  return {
+    since,
+    registered: week.filter((e) => e.origin === 'registry' && e.type === 'trial_registered').length,
+    changes: week.filter((e) => e.origin === 'registry' && e.type !== 'trial_registered').length,
+    news: week.filter((e) => e.origin !== 'registry').length,
+  };
 }
 
 function monthlyBars(s: Space, today: string) {

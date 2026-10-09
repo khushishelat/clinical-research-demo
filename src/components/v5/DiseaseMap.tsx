@@ -6,10 +6,11 @@
 // changed. Clicking a dot or a clinician opens a drawer.
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { Dot, FeedItem, MapView, Mark, Row } from '@/lib/space/view';
 import { Drawer } from './Drawer';
 import { Favicon } from './Favicon';
+import { LiveRefresh, RelDay, useSinceLastVisit } from './Live';
 
 const fmt = (iso: string, opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }) => new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
 const START = '2019-01-01';
@@ -98,6 +99,14 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
   const s = view.stats;
   const newCount = view.feed.length;
   const todayAt = x(today);
+  // What arrived since this browser last opened this indication; null on a first visit.
+  const fresh = useSinceLastVisit(view.disease.key, view.feed.map((f) => f.id));
+  const recent = (iso: string) => iso >= view.pulse.since && iso <= today;
+  const rail = useRef<HTMLElement>(null);
+  const showActivity = () => {
+    setTab('changed');
+    rail.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
 
   return (
     <main className="px-4 pb-12 sm:px-8">
@@ -115,7 +124,9 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
         </dl>
       </section>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
+      <WeekStrip view={view} fresh={fresh} onActivity={showActivity} onTrial={(n) => open('trial', n)} />
+
+      <div className="mt-4 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
         <section aria-label="Companies and their trials over time" className="min-w-0 rounded-[4px] border border-line bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted">
@@ -190,7 +201,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
                 <span className="text-right">Trials</span>
               </div>
               {rows.map((r, i) => (
-                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
+                <MapRow key={r.key} row={r} x={x} years={years} todayAt={todayAt} recent={recent} onDot={(d) => open('trial', d.nct)} onCard={(mark, at) => (setTip(null), setCard({ mark, company: r.name, ...at }))} setTip={setTip} showFirstTip={firstTip && i === 0} dismissTip={dismissTip} />
               ))}
               {companies.length > SHOWN ? (
                 <button type="button" onClick={() => setMore((v) => !v)} className="w-full border-t border-line px-4 py-3 text-left font-mono text-[11px] uppercase tracking-[0.04em] text-muted hover:bg-wash hover:text-ink">
@@ -210,7 +221,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
         </section>
 
         {/* The rail is as tall as the map beside it and scrolls inside, so the page ends where the map does. */}
-        <aside className="relative flex min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[4px] border border-line bg-card max-xl:max-h-[80vh]">
+        <aside ref={rail} className="relative flex min-h-[560px] min-w-0 flex-col overflow-hidden rounded-[4px] border border-line bg-card max-xl:max-h-[80vh]">
           <div className="flex min-h-0 flex-1 flex-col xl:absolute xl:inset-0">
           <div role="tablist" className="flex shrink-0 gap-6 border-b border-line px-4">
             <button type="button" role="tab" aria-selected={tab === 'clinicians'} onClick={() => setTab('clinicians')} className={`border-b-2 py-3 text-[14px] ${tab === 'clinicians' ? 'border-ink' : 'border-transparent text-muted hover:text-ink'}`}>
@@ -218,10 +229,18 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
             </button>
             <button type="button" role="tab" aria-selected={tab === 'changed'} onClick={() => setTab('changed')} className={`flex items-center gap-2 border-b-2 py-3 text-[14px] ${tab === 'changed' ? 'border-ink' : 'border-transparent text-muted hover:text-ink'}`}>
               Recent activity
-              {newCount ? <span title="Events in the last 60 days" className="rounded-full bg-orange-wash px-1.5 font-mono text-[10px] text-ink">{newCount}</span> : null}
+              {fresh?.size ? (
+                <span title="New since your last visit" className="rounded-full bg-orange px-1.5 font-mono text-[10px] text-ink">
+                  {fresh.size} new
+                </span>
+              ) : newCount ? (
+                <span title="Events in the last 60 days" className="rounded-full bg-orange-wash px-1.5 font-mono text-[10px] text-ink">
+                  {newCount}
+                </span>
+              ) : null}
             </button>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto">{tab === 'clinicians' ? <ClinicianRail view={view} onOpen={(k) => open('clinician', k)} /> : <ChangeRail view={view} onTrial={(n) => open('trial', n)} />}</div>
+          <div className="min-h-0 flex-1 overflow-y-auto">{tab === 'clinicians' ? <ClinicianRail view={view} onOpen={(k) => open('clinician', k)} /> : <ChangeRail view={view} fresh={fresh} onTrial={(n) => open('trial', n)} />}</div>
           </div>
         </aside>
       </div>
@@ -231,10 +250,60 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
       </p>
 
       {drawer ? <Drawer disease={view.disease.key} kind={drawer.kind} id={drawer.id} onClose={close} onOpen={open} /> : null}
+      <LiveRefresh updated={view.updated} scope={view.disease.key} />
     </main>
   );
 }
 
+
+// The last seven days at a glance, the latest item, and what is new since the last visit.
+function WeekStrip({ view, fresh, onActivity, onTrial }: { view: MapView; fresh: Set<string> | null; onActivity: () => void; onTrial: (nct: string) => void }) {
+  const p = view.pulse;
+  const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
+  const counts = [
+    { n: p.registered, label: plural(p.registered, 'trial') + ' registered', news: false },
+    { n: p.changes, label: plural(p.changes, 'registry update'), news: false },
+    { n: p.news, label: plural(p.news, 'news item'), news: true },
+  ].filter((c) => c.n);
+  const latest = view.feed[0];
+  return (
+    <section aria-label="The last seven days" className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-[4px] border border-line bg-card px-4 py-2.5">
+      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
+        <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.05em]">
+          <span className="live-dot h-2 w-2 rounded-full bg-ok" /> Last 7 days
+        </span>
+        {counts.length ? (
+          counts.map((c) => (
+            <span key={c.label} className="flex items-center gap-1.5">
+              <span className={`h-1.5 w-1.5 ${c.news ? 'bg-orange' : 'bg-ink'}`} />
+              {c.label}
+            </span>
+          ))
+        ) : (
+          <span className="text-muted">Quiet so far. The registry and a news Monitor are checked every day.</span>
+        )}
+      </p>
+      {latest ? (
+        <button type="button" onClick={() => (latest.nct ? onTrial(latest.nct) : onActivity())} className="flex min-w-0 flex-1 basis-[280px] items-center gap-2 text-left text-[13px] hover:underline hover:decoration-line-strong hover:underline-offset-2">
+          <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.05em] text-muted">
+            Latest · <RelDay iso={latest.date} short />
+          </span>
+          <Favicon host={latest.host} name={latest.company} size={14} />
+          <span className="truncate">
+            <span className="text-muted">{latest.company}:</span> {latest.headline}
+          </span>
+        </button>
+      ) : null}
+      {fresh?.size ? (
+        <button type="button" onClick={onActivity} className="ml-auto shrink-0 rounded-full bg-orange px-3 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-ink hover:bg-ink hover:text-page">
+          {fresh.size} new since your last visit →
+        </button>
+      ) : fresh ? (
+        <span className="ml-auto shrink-0 font-mono text-[11px] uppercase tracking-[0.04em] text-faint">Nothing new since your last visit</span>
+      ) : null}
+    </section>
+  );
+}
 
 function Stat({ value, label, sub, accent }: { value: string; label: string; sub?: string; accent?: boolean }) {
   return (
@@ -303,7 +372,7 @@ function DealStat({ view }: { view: MapView }) {
   );
 }
 
-function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; onDot: (d: Pick<Dot, 'nct'>) => void; onCard: (m: Mark, at: { x: number; y: number }) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
+function MapRow({ row, x, years, todayAt, recent, onDot, onCard, setTip, showFirstTip, dismissTip }: { row: Row; x: (iso: string) => number; years: { at: number }[]; todayAt: number; recent: (iso: string) => boolean; onDot: (d: Pick<Dot, 'nct'>) => void; onCard: (m: Mark, at: { x: number; y: number }) => void; setTip: (t: Tip) => void; showFirstTip: boolean; dismissTip: () => void }) {
   const firstAcquired = row.dots.find((d) => d.acquiredFrom);
   const tipFor = (e: React.MouseEvent, t: NonNullable<Tip>) => {
     const box = (e.currentTarget as HTMLElement).closest('.relative.overflow-x-auto')!.getBoundingClientRect();
@@ -346,7 +415,7 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
           </span>
         ) : null}
         {row.news.map((m, i) => (
-          <MarkLink key={`n${i}`} m={m} onTrial={onDot} onCard={onCard} label={`${fmt(m.date)}: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150" style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }} />
+          <MarkLink key={`n${i}`} m={m} onTrial={onDot} onCard={onCard} label={`${fmt(m.date)}: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${recent(m.date) ? 'New this week · ' : ''}${fmt(m.date)} · ${labelOf(m)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className={`absolute h-2 w-2 -translate-x-1/2 bg-orange hover:scale-150 ${recent(m.date) ? 'live-ping' : ''}`} style={{ left: `${x(m.date)}%`, top: 6 + (i % 2) * 6 }} />
         ))}
         {row.next.map((m, i) => (
           <MarkLink key={`x${i}`} m={m} onTrial={onDot} onCard={onCard} label={`Expected next step: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Expected · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150" style={{ left: `${x(m.date)}%`, top: 26 }} />
@@ -359,8 +428,8 @@ function MapRow({ row, x, years, todayAt, onDot, onCard, setTip, showFirstTip, d
               type="button"
               aria-label={`${d.label}, phase ${d.phase || 'not set'}, ${d.kind === 'company' ? 'industry-sponsored' : 'investigator-sponsored'}`}
               onClick={() => onDot(d)}
-              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Company trial' : "Investigator-run, testing this company's drug"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for results, news and investigators' })}
-              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.done ? `border-2 bg-card ${d.kind === 'company' ? 'border-ink' : 'border-[#adadac]'}` : d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''}`}
+              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${d.label} · ${d.phase ? `Phase ${d.phase}` : 'Phase n/a'}`, body: `${d.kind === 'company' ? 'Company trial' : "Investigator-run, testing this company's drug"}${d.done ? ' · completed' : ''} · first posted ${fmt(d.x)}`, foot: recent(d.x) ? 'Registered this week · click for details' : d.acquiredFrom ? `Acquired with ${d.acquiredFrom}` : 'Click for results, news and investigators' })}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-150 ${d.done ? `border-2 bg-card ${d.kind === 'company' ? 'border-ink' : 'border-[#adadac]'}` : d.kind === 'company' ? 'bg-ink' : 'bg-[#adadac]'} ${d.acquiredFrom ? 'ring-2 ring-orange ring-offset-1' : ''} ${recent(d.x) ? 'live-ping' : ''}`}
               style={{ left: `${x(d.x)}%`, top: jitter(d.nct, spread) + 10, width: size, height: size }}
             />
           );
@@ -481,12 +550,12 @@ function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) 
   );
 }
 
-function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) => void }) {
+function ChangeRail({ view, fresh, onTrial }: { view: MapView; fresh: Set<string> | null; onTrial: (nct: string) => void }) {
   const [origin, setOrigin] = useState<'all' | 'registry' | 'web'>('all');
   const items = view.feed.filter((f: FeedItem) => origin === 'all' || (origin === 'web' ? f.origin !== 'registry' : f.origin === 'registry'));
   const max = Math.max(1, ...view.monthly.map((m) => m.count));
-  // Items from the two days before the latest refresh count as new.
-  const isNew = (date: string) => Boolean(view.updated) && Date.parse(view.updated!) - Date.parse(date) <= 2 * 86_400_000;
+  // New since this browser's last visit; on a first visit, items from the two days before the latest refresh.
+  const isNew = (f: FeedItem) => (fresh ? fresh.has(f.id) : Boolean(view.updated) && Date.parse(view.updated!) - Date.parse(f.date) <= 2 * 86_400_000);
   // Monthly counts of trials first posted on ClinicalTrials.gov, last 12 months; the current month is partial.
   const label = (m: string) => fmt(`${m}-01`, { month: 'short' });
   const yearOf = (m: string, i: number) => (i === 0 || m.endsWith('-01') ? `'${m.slice(2, 4)}` : '');
@@ -524,15 +593,15 @@ function ChangeRail({ view, onTrial }: { view: MapView; onTrial: (nct: string) =
       </div>
       <ul className="mt-3">
         {items.map((f) => (
-          <li key={f.id} className="grid grid-cols-[54px_minmax(0,1fr)] gap-3 border-t border-line px-4 py-3">
+          <li key={f.id} className={`grid grid-cols-[68px_minmax(0,1fr)] gap-3 border-t border-line px-4 py-3 ${isNew(f) ? 'bg-orange-wash/40' : ''}`}>
             <span className="flex items-start gap-1.5 font-mono text-[11px] text-muted">
               <span className={`mt-1 h-1.5 w-1.5 shrink-0 ${f.origin === 'registry' ? 'bg-ink' : 'bg-orange'}`} />
-              {fmt(f.date, { month: 'short', day: 'numeric' })}
+              <RelDay iso={f.date} short />
             </span>
             <span className="min-w-0">
               <span className="flex items-center gap-1.5 text-[12px] text-muted">
                 <Favicon host={f.host} name={f.company} size={14} /> {f.company}
-                {isNew(f.date) ? <span className="rounded-[2px] bg-orange px-1 font-mono text-[9px] uppercase tracking-[0.05em] text-ink">New</span> : null}
+                {isNew(f) ? <span className="rounded-[2px] bg-orange px-1 font-mono text-[9px] uppercase tracking-[0.05em] text-ink">New</span> : null}
               </span>
               <span className="mt-0.5 block text-[14px]">{f.headline}</span>
               <span className="mt-1 flex flex-wrap items-center gap-2">

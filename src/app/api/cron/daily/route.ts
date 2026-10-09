@@ -57,6 +57,8 @@ export async function GET(req: Request) {
     }
     revalidatePath(`/d/${key}`);
     revalidatePath(`/d/${key}/data`);
+    revalidatePath('/api/status');
   }
+  revalidatePath('/');
   return NextResponse.json({ ok: Object.keys(failed).length === 0, seconds: Math.round((Date.now() - started) / 1000), done, failed }, { status: Object.keys(failed).length ? 500 : 200 });
 }

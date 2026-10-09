@@ -86,3 +86,30 @@ label:has(input) {
 .drawer-in {
   animation: drawer-in 220ms var(--ease-brand);
 }
+
+/* Something from the last week, or the live indicator: a slow ring that fades out. */
+@keyframes live-ping {
+  0% {
+    box-shadow: 0 0 0 0 var(--ping, rgb(251 99 27 / 0.55));
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+.live-ping {
+  animation: live-ping 2.2s ease-out infinite;
+}
+.live-dot {
+  --ping: rgb(47 125 69 / 0.5);
+  animation: live-ping 2.2s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-ping,
+  .live-dot {
+    animation: none;
+  }
+  .live-ping {
+    box-shadow: 0 0 0 2px var(--color-orange-wash);
+  }
+}
