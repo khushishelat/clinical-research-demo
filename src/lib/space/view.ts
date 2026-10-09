@@ -285,6 +285,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
     rail: railClinicians(s, 12),
     dealList,
     feed: feedView(s, rows, today),
+    pulse: pulseView(s, rows, today),
     monthly: monthlyBars(s, today),
   };
 }
@@ -329,6 +330,26 @@ function feedView(s: Space, rows: Row[], today: string): FeedItem[] {
         webEarlier: seen && seen.days_earlier > 0 && seen.first_announced ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url } : undefined,
       };
     });
+}
+
+/** The last week at a glance, and the last 14 days as daily counts for a sparkline. */
+export function pulseView(s: Space, rows: Row[], today: string) {
+  const onMap = new Set(rows.map((r) => r.key));
+  const day = (n: number) => new Date(Date.parse(today) - n * 86_400_000).toISOString().slice(0, 10);
+  const since = day(6);
+  const recent = s.events.filter((e) => e.date >= day(13) && e.date <= today && onMap.has(e.company));
+  const week = recent.filter((e) => e.date >= since);
+  return {
+    since,
+    registered: week.filter((e) => e.origin === 'registry' && e.type === 'trial_registered').length,
+    changes: week.filter((e) => e.origin === 'registry' && e.type !== 'trial_registered').length,
+    news: week.filter((e) => e.origin !== 'registry').length,
+    days: Array.from({ length: 14 }, (_, i) => {
+      const date = day(13 - i);
+      const on = recent.filter((e) => e.date === date);
+      return { date, registry: on.filter((e) => e.origin === 'registry').length, news: on.filter((e) => e.origin !== 'registry').length };
+    }),
+  };
 }
 
 function monthlyBars(s: Space, today: string) {

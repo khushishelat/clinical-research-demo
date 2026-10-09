@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { REQUEST_URL } from '@/lib/links';
 import { Ago } from './Ago';
+import { NextCheck } from './Live';
 
 type Indication = { key: string; name: string; area: string | null; trials: number; companies: number; investigators: number };
 
@@ -92,7 +93,7 @@ export function Header({ current, diseases, updated }: { current: string; diseas
         </div>
         {updated ? (
           <span className="ml-auto hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.05em] text-muted md:flex">
-            <span className="h-1.5 w-1.5 rounded-full bg-ok" /> <Ago iso={updated} /> · refreshed daily
+            <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" /> <Ago iso={updated} /> · <NextCheck updated={updated} />
           </span>
         ) : null}
       </div>

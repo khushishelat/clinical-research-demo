@@ -23,6 +23,12 @@ export async function homeView(today: string) {
       deals: v.stats.deals,
       dealDollars: v.stats.dealDollars,
       updated: s.fetched,
+      week: v.pulse.registered + v.pulse.changes + v.pulse.news,
+      // A thumbnail of the map: the first rows, each trial's first-posted date, phase and sponsor kind.
+      thumb: v.rows
+        .filter((r) => r.key !== '_unassigned')
+        .slice(0, 7)
+        .map((r) => ({ dots: r.dots.map((d) => ({ x: d.x, p: d.phase, c: d.kind === 'company', done: Boolean(d.done) })), news: r.news.map((m) => m.date) })),
       brief: brief ? { title: brief.title, date: brief.date } : null,
     });
     latest.push(...v.feed.slice(0, 10).map((f) => ({ ...f, indication: b.key, indicationName: s.config.name })));

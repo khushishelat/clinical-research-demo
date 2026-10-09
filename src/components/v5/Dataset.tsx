@@ -52,39 +52,31 @@ export function Dataset({ view }: { view: DatasetView }) {
   const control = 'h-7 w-full min-w-0 rounded-[3px] border border-line-strong bg-card px-1.5 font-sans text-[12px] normal-case tracking-normal text-ink placeholder:text-faint focus:border-ink focus:outline-none';
   return (
     <main className="px-4 pb-12 sm:px-8">
-      <section className="flex flex-wrap items-end justify-between gap-4 pt-8">
-        <div>
-          <h1 className="text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name} landscape table</h1>
-          <p className="mt-1 max-w-[720px] text-[15px] text-muted">One row per company, researched by a Parallel Task run with the ClinicalTrials.gov and PubMed connectors. Click any cell to see its sources and how confident the run was.</p>
-        </div>
+      <section className="flex flex-wrap items-center justify-between gap-3 pt-6">
+        <h1 className="sr-only">{view.disease.name} landscape table</h1>
+        <p className="font-mono text-[11px] uppercase tracking-[0.05em] text-muted">
+          {rows.length === view.rows.length ? `${rows.length} companies` : `${rows.length} of ${view.rows.length} companies`} · click a cell for its sources
+        </p>
         <div className="flex items-center gap-2">
           {active ? (
             <button type="button" onClick={() => setFilters({})} className="flex h-9 items-center rounded-[4px] border border-line-strong px-3 font-mono text-[11px] uppercase tracking-[0.05em] text-muted hover:border-ink hover:text-ink">
               Clear {active} filter{active === 1 ? '' : 's'}
             </button>
           ) : null}
+          <button type="button" onClick={() => setWatch((v) => !v)} aria-expanded={watch} title="A recording of the Task Group that filled these columns, one run per company" className="flex h-9 items-center gap-2 rounded-[4px] border border-line-strong bg-card px-3 font-mono text-[11px] uppercase tracking-[0.05em] hover:border-ink">
+            <span aria-hidden="true" className="text-orange">{watch ? '■' : '▶'}</span> Watch the research
+          </button>
           <a href={`/api/d/${view.disease.key}/export`} className="flex h-9 items-center rounded-[4px] border border-ink bg-ink px-3 font-mono text-[11px] uppercase tracking-[0.05em] text-page hover:bg-ink/90">
             Download CSV
           </a>
         </div>
       </section>
 
-      <section className="mt-6 rounded-[4px] border border-line bg-card">
-        <button type="button" onClick={() => setWatch((v) => !v)} aria-expanded={watch} className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left hover:bg-wash">
-          <span>
-            <span className="text-[14px] font-medium">Watch the research</span>
-            <span className="ml-2 text-[13px] text-muted">A recording of the Task Group that filled these columns, one run per company.</span>
-          </span>
-          <span aria-hidden="true" className="font-mono text-[12px] text-muted">
-            {watch ? '▴' : '▾'}
-          </span>
-        </button>
-        {watch ? (
-          <div className="border-t border-line p-4">
-            <RunReplay disease={view.disease.key} job="facts" names={Object.fromEntries(view.rows.map((r) => [r.key, r.name]))} />
-          </div>
-        ) : null}
-      </section>
+      {watch ? (
+        <section className="mt-4 rounded-[4px] border border-line bg-card p-4">
+          <RunReplay disease={view.disease.key} job="facts" names={Object.fromEntries(view.rows.map((r) => [r.key, r.name]))} />
+        </section>
+      ) : null}
 
       <div className="mt-4 overflow-x-auto rounded-[4px] border border-line bg-card">
         <table className="w-full min-w-[1280px] border-collapse text-left">

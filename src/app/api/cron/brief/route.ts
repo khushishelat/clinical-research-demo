@@ -28,6 +28,7 @@ export async function GET(req: Request) {
       continue;
     }
     revalidatePath(`/d/${key}`);
+    revalidatePath('/');
     return NextResponse.json({ ok: true, wrote: key, failed });
   }
   return NextResponse.json({ ok: Object.keys(failed).length === 0, wrote: null, failed, note: 'every other indication has this week’s brief' }, { status: Object.keys(failed).length ? 500 : 200 });
