@@ -224,9 +224,41 @@ const similar = (a: string, b: string) => {
   return both / Math.max(1, Math.min(x.size, y.size)) >= 0.5;
 };
 const near = (a: string, b: string, days = 3) => Math.abs(Date.parse(a) - Date.parse(b)) <= days * 86_400_000;
-/** The same development, found by two monitors or twice by one: same company and type, close dates, and the same source or a similar headline. */
-export const sameEvent = (a: Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 'source_url'>, b: typeof a) =>
-  a.company === b.company && near(a.date, b.date) && ((a.source_url && a.source_url === b.source_url) || (a.type === b.type && similar(a.headline, b.headline)));
+type Comparable = Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 'source_url'> & { company_name?: string };
+/**
+ * The same development, found by two monitors or twice by one: same company and close
+ * dates, with the same source or the same type and a similar headline. Partners report
+ * the same news under two companies (a licensee and the originator of its drug), so two
+ * companies also match when the headlines share a distinctive word: a code with digits
+ * ("HRS-4729", "KAI-4729") or a word of either company's name. "Lilly reports Phase 2
+ * results" and "Novo reports Phase 2 results" share neither.
+ */
+export function sameEvent(a: Comparable, b: Comparable): boolean {
+  if (!near(a.date, b.date)) return false;
+  if (a.source_url && a.source_url === b.source_url) return true;
+  if (a.type !== b.type || !similar(a.headline, b.headline)) return false;
+  if (a.company === b.company) return true;
+  if (!near(a.date, b.date, 2)) return false;
+  const names = new Set([...tokens(a.company_name ?? ''), ...tokens(b.company_name ?? '')]);
+  const shared = [...tokens(a.headline)].filter((t) => tokens(b.headline).has(t));
+  return shared.some((t) => /\d/.test(t) || names.has(t));
+}
+
+/** Folds duplicates already kept into one event (first found keeps its company), so a better rule also fixes earlier finds. */
+function mergeDuplicates(kept: MonitorEvent[]): MonitorEvent[] {
+  const out: MonitorEvent[] = [];
+  for (const e of [...kept].sort((a, b) => a.detected.localeCompare(b.detected))) {
+    const dup = out.find((k) => sameEvent(k, e));
+    if (!dup) out.push(e);
+    else {
+      dup.ids = [...new Set([...(dup.ids ?? [dup.id]), ...(e.ids ?? [e.id])])];
+      dup.found_by = [...new Set([...(dup.found_by ?? []), ...(e.found_by ?? [])])];
+      dup.nct ??= e.nct;
+      dup.source_url ??= e.source_url;
+    }
+  }
+  return out;
+}
 
 const safeJson = (t: string) => {
   try {
@@ -311,8 +343,9 @@ export async function collectMonitorEvents(d: Disease, only?: { monitor_id: stri
       }
     }
   }
-  kept.sort((a, b) => b.date.localeCompare(a.date));
-  await store.put(path(d, 'monitor-events.json'), kept);
+  const merged = mergeDuplicates(kept).sort((a, b) => b.date.localeCompare(a.date));
+  result.merged += kept.length - merged.length;
+  await store.put(path(d, 'monitor-events.json'), merged);
   await store.put(path(d, 'monitor-unmatched.json'), other.slice(0, 500));
   // Re-read before writing: a webhook and the daily job can collect at the same time, and
   // only the lost marks and the health belong to this call.
@@ -337,5 +370,5 @@ export async function monitorReport(d: Disease) {
     other_indication: other.filter((o) => o.monitor === key && o.reason === 'other_indication').length,
     not_on_map: other.filter((o) => o.monitor === key && o.reason === 'no_company_on_map').length,
   }));
-  return { since: Object.values(doc?.monitors ?? {}).map((e) => e.created).sort()[0] ?? null, events: kept.length, rows };
+  return { since: Object.values(doc?.monitors ?? {}).map((e) => e.created).sort()[0] ?? null, events: kept.length, rows, aside: other.slice(0, 30) };
 }
