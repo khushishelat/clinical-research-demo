@@ -260,3 +260,14 @@ test('monitors: partners reporting the same news are one event; different compan
   const novo = { company: 'novo', company_name: 'Novo Nordisk', type: 'data', date: '2026-10-01', headline: 'Novo reports Phase 2 results', source_url: null };
   assert.ok(!sameEvent(lilly, novo));
 });
+
+test('monitors: events kept by v1 monitors (no detected, ids or found_by) fold without error', async () => {
+  const { mergeDuplicates } = await import('../scripts/lib/steps/monitors');
+  const v1 = { id: 'old1', date: '2026-09-30', company: 'acme', company_name: 'Acme Bio', drug: null, nct: null, type: 'data', headline: 'Acme reports ALPHA-2 data', source_url: 'https://acme.com/a' };
+  const v2 = { ...v1, id: 'new1', ids: ['new1'], source_url: 'https://news.example/b', found_by: ['co:acme'], detected: '2026-10-09T17:30:00Z', headline: 'Acme reports ALPHA-2 topline data' };
+  const out = mergeDuplicates([v2, v1] as never);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].id, 'old1'); // the earlier find keeps the event
+  assert.deepEqual(out[0].ids, ['old1', 'new1']);
+  assert.deepEqual(out[0].found_by, ['co:acme']);
+});

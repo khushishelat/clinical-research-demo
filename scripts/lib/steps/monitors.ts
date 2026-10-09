@@ -245,9 +245,10 @@ export function sameEvent(a: Comparable, b: Comparable): boolean {
 }
 
 /** Folds duplicates already kept into one event (first found keeps its company), so a better rule also fixes earlier finds. */
-function mergeDuplicates(kept: MonitorEvent[]): MonitorEvent[] {
+export function mergeDuplicates(kept: MonitorEvent[]): MonitorEvent[] {
   const out: MonitorEvent[] = [];
-  for (const e of [...kept].sort((a, b) => a.detected.localeCompare(b.detected))) {
+  // Events kept by v1 monitors have no `detected`, `ids` or `found_by`; they sort first.
+  for (const e of [...kept].sort((a, b) => (a.detected ?? '').localeCompare(b.detected ?? ''))) {
     const dup = out.find((k) => sameEvent(k, e));
     if (!dup) out.push(e);
     else {
