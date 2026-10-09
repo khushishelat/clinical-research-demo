@@ -39,7 +39,7 @@ export default async function Home() {
                       <p className="truncate text-[20px] leading-tight">{c.name}</p>
                     </div>
                     {c.week ? (
-                      <span title="Trials registered, registry updates and news in the last 7 days" className="flex shrink-0 items-center gap-1.5 rounded-full bg-orange-wash px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.04em]">
+                      <span title={`Trials registered, registry updates and news in the last 7 days; a usual week has ${c.usual}`} className="flex shrink-0 items-center gap-1.5 rounded-full bg-orange-wash px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.04em]">
                         <span className="live-ping h-1.5 w-1.5 rounded-full bg-orange" />+{c.week} this week
                       </span>
                     ) : null}
@@ -85,6 +85,7 @@ export default async function Home() {
                       <span className="mt-0.5 line-clamp-2 text-[13px] leading-snug">{f.headline}</span>
                       <span className="mt-1 flex flex-wrap gap-1">
                         <span className={`h-1.5 w-1.5 self-center ${f.origin === 'registry' ? 'bg-ink' : 'bg-orange'}`} />
+                        {f.origin === 'monitor' ? <span className="font-mono text-[9px] uppercase tracking-[0.05em] text-orange">Monitor</span> : null}
                         {f.indicationNames.map((n) => (
                           <span key={n} className="font-mono text-[9px] uppercase tracking-[0.05em] text-faint">
                             {n}

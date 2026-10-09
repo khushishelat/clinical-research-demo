@@ -124,7 +124,7 @@ export type Clinician = {
 };
 
 /** spaces/<disease>/events.json */
-export type SpaceEvent = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string; origin: 'web' | 'registry' | 'monitor' };
+export type SpaceEvent = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string; origin: 'web' | 'registry' | 'monitor'; /** Monitor news: the monitors (keys in monitor.json) that found it, and when this app first read it. */ found_by?: string[]; detected?: string };
 export type Catalyst = NextStep & { id: string; company: string; date?: string | null };
 export type EventsDoc = { events: SpaceEvent[]; catalysts: Catalyst[]; monthly: Record<string, { all: number; companies: number }> };
 

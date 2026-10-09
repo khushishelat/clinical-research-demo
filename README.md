@@ -128,7 +128,9 @@ Trial Check is one instance of a reusable pattern: an official database, a
 noisy web, and a join between them.
 
 1. **The pipeline writes, the app reads.** Every stored document is typed once,
-   in `src/lib/space/types.ts`, for both sides. The app makes no Parallel calls.
+   in `src/lib/space/types.ts`, for both sides. The app starts no Parallel runs;
+   its one Parallel call reads a monitor's new events when the monitor's webhook
+   arrives.
 2. **Lists without a list API.** The company list is built by chaining Task
    runs with `previous_interaction_id`, each page asking for companies not yet
    named: at least four pages, then until a page adds fewer than three new
@@ -143,6 +145,17 @@ noisy web, and a join between them.
 6. **Privacy enforced in code.** No document holds phone numbers, emails,
    street addresses or site contacts, and a save fails if any remain. See
    [PRIVACY.md](PRIVACY.md).
+7. **Monitors that each ask one question.** Every indication has a broad news
+   Monitor, one per topic (data and conferences, regulatory, deals and
+   financings, trial starts and stops) and one per leading company, half
+   picked by size of program and half by how often they make the news. The
+   output schema says whether an event is about this indication, so the run
+   filters other diseases itself. Events join a company by name, drug or a
+   unique partial name; the rest are kept in `monitor-unmatched.json` with the
+   reason, never dropped silently. The same development found by two monitors
+   is one item that names both. `npx tsx scripts/monitors.mts --disease <key> --report`
+   shows what each monitor found and what only it found, so the set can be
+   pruned on evidence.
 
 ## Run it
 
@@ -183,13 +196,22 @@ current:
 
 - **Daily** (`/api/cron/daily`):
   - the ClinicalTrials.gov diff;
-  - the indication's news Monitor (`monitor: true` in `diseases.json`);
+  - the indication's news Monitors (`monitor: true` in `diseases.json`):
+    created when missing, replaced when the API key can't see them, and read;
   - the event feed and the first-disclosure check for new trials;
   - a readout check for trials that reach a readout point, plus a monthly re-check of those with no results yet.
 - **Weekly** (`/api/cron/brief`, Mondays): the brief.
 
-Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. They cost
-about $20 a month for five indications, most of it the weekly brief.
+Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. With five
+indications they cost about $40 a month: the monitors about $22 (15 per
+indication, $0.01 a run, daily), the weekly brief about $13, readout checks
+about $5.
+
+In production each monitor also calls `/api/monitor/webhook` when it finds
+something, so news reaches the map within minutes instead of at the next daily
+job. Set `PARALLEL_WEBHOOK_SECRET` to the webhook secret of the Parallel account
+that owns `PARALLEL_API_KEY` (platform.parallel.ai → Settings → Webhooks). Without
+it the route refuses every request and the daily job still collects.
 
 **Changing the Parallel API key.** Stored research doesn't need the old key:
 the daily job starts fresh runs, and replaces monitors the new key can't see.
@@ -232,7 +254,7 @@ Nothing is spent until you pass `--yes`, apart from one scoping run.
    npm run pipeline -- --disease idiopathic-pulmonary-fibrosis
    ```
 4. **Ship it.** Open a pull request with the new entry. For a deployment, run
-   `npm run sync-blob`; the daily job starts the indication's news Monitor.
+   `npm run sync-blob`; the daily job starts the indication's news Monitors.
 
 Who decides each field:
 

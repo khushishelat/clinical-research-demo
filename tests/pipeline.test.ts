@@ -222,3 +222,28 @@ test('estimate: runs scale with sponsors, late-stage trials and new trials', asy
   const chain = (regions?: string[]) => estimate({ chain_regions: regions }, trials, today).lines.find((l) => l.step.startsWith('The web'))!.runs;
   assert.deepEqual(chain(['a', 'b']), [chain()[0] * 2, chain()[1] * 2]);
 });
+
+test('monitors: an event joins its company by name, drug, or a unique partial name', async () => {
+  const { companyMatcher, sameEvent } = await import('../scripts/lib/steps/monitors');
+  const co = (key: string, name: string, drugs: string[], sponsors: string[] = []) => ({ key, name, registry_sponsors: sponsors, drugs: drugs.map((n) => ({ name: n, codes: [] })), trials: [], investigator_trials: [] }) as never;
+  const match = companyMatcher([co('lilly', 'Eli Lilly and Company', ['tirzepatide', 'orforglipron']), co('novo', 'Novo Nordisk', ['semaglutide']), co('zealand', 'Zealand Pharma', ['petrelintide'])]);
+  assert.equal(match('Eli Lilly and Company', null)?.key, 'lilly');
+  assert.equal(match('Lilly', null)?.key, 'lilly');
+  assert.equal(match('Hoffmann-La Roche', 'petrelintide')?.key, 'zealand'); // the drug decides when the name is a partner's
+  assert.equal(match('Amgen', 'maridebart cafraglutide'), null);
+  const e = { company: 'lilly', type: 'data', date: '2026-10-01', headline: 'Orforglipron ATTAIN-MAINTAIN meets primary endpoint', source_url: 'https://lilly.com/a' };
+  assert.ok(sameEvent(e, { ...e, date: '2026-10-02', source_url: 'https://reuters.com/b', headline: 'Lilly orforglipron ATTAIN-MAINTAIN trial meets endpoint' }));
+  assert.ok(!sameEvent(e, { ...e, headline: 'Lilly prices Zepbound vials lower', type: 'other', source_url: null }));
+});
+
+test('webhooks: Standard Webhooks signatures', async () => {
+  const { createHmac } = await import('node:crypto');
+  const { signed } = await import('../src/lib/webhook');
+  const secret = `whsec_${Buffer.from('test-signing-key').toString('base64')}`;
+  const body = '{"type":"monitor.event.detected"}';
+  const sig = createHmac('sha256', Buffer.from('test-signing-key')).update(`msg_1.1700000000.${body}`).digest('base64');
+  assert.equal(signed(secret, 'msg_1', '1700000000', body, `v1,${sig}`), true);
+  assert.equal(signed(secret, 'msg_1', '1700000000', body, `v1,bad v1,${sig}`), true); // rotated secrets: any one matches
+  assert.equal(signed(secret, 'msg_1', '1700000000', `${body} `, `v1,${sig}`), false);
+  assert.equal(signed(secret, '', '1700000000', body, `v1,${sig}`), false);
+});

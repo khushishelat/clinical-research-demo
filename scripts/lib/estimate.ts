@@ -48,9 +48,9 @@ export function estimate(d: Pick<Disease, 'chain_regions'>, trials: Trial[], tod
     line('Weekly brief', [1, 1], BRIEF.processor),
   ];
   const total: [number, number] = [lines.reduce((s, l) => s + l.cost[0], SMALL_JOBS), lines.reduce((s, l) => s + l.cost[1], SMALL_JOBS)];
-  // Kept current: the weekly brief, a daily news Monitor, and at most one re-check a month
+  // Kept current: the weekly brief, the daily news Monitors, and at most one re-check a month
   // for each late-stage trial that has not reported yet.
-  const base = (52 / 12) * PRICE[BRIEF.processor] + 30 * PRICE[MONITOR.processor];
+  const base = (52 / 12) * PRICE[BRIEF.processor] + 30 * (1 + MONITOR.topics.length + MONITOR.companies) * PRICE[MONITOR.processor];
   const monthly: [number, number] = [base, base + readouts * PRICE[READOUT.processor]];
   return { sponsors, companies, readouts, recent, lines, total, monthly };
 }
@@ -69,6 +69,6 @@ export function formatEstimate(e: Estimate): string {
     `${'Small jobs (name checks, coverage, same-company)'.padEnd(w[0] + w[1] + w[2] + 6)}   ${usd(SMALL_JOBS).padStart(w[3])}`,
     '',
     `First build: ${range(e.total, usd)} (${e.sponsors} sponsors → ${range(e.companies)} companies; ${e.readouts} late-stage trials past their readout point; ${e.recent} trials registered in the last 90 days)`,
-    `Kept current: ${range(e.monthly, usd)} a month (weekly brief, daily news Monitor, monthly readout re-checks)`,
+    `Kept current: ${range(e.monthly, usd)} a month (weekly brief, daily news Monitors, monthly readout re-checks)`,
   ].join('\n');
 }

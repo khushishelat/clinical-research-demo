@@ -9,19 +9,20 @@ import { createHash } from 'node:crypto';
 import { regulatoryEvent } from '../../../src/lib/space/labels';
 import { log, spacePath, store, where, type Disease } from '../pipeline';
 import { registryHeadline, type RegistryEvent, type Trial } from '../registry';
+import { sameEvent, type MonitorEvent } from './monitors';
 
 export async function eventsStep(d: Disease) {
   const { trials } = (await store.get<{ trials: Trial[] }>(spacePath(d, 'trials.json')))!;
   const { companies } = (await store.get<{ companies: any[] }>(spacePath(d, 'companies.json')))!;
   const { facts } = (await store.get<{ facts: Record<string, any> }>(spacePath(d, 'facts.json'))) ?? { facts: {} };
   const registry = (await store.get<RegistryEvent[]>(spacePath(d, 'registry-events.json'))) ?? [];
-  const monitor = (await store.get<any[]>(spacePath(d, 'monitor-events.json'))) ?? [];
+  const monitor = (await store.get<MonitorEvent[]>(spacePath(d, 'monitor-events.json'))) ?? [];
   const companyOf = new Map<string, string>();
   for (const c of companies) for (const n of [...c.trials, ...c.investigator_trials]) if (!companyOf.has(n)) companyOf.set(n, c.key);
   const id = (...parts: string[]) => createHash('sha1').update(parts.join('|')).digest('hex').slice(0, 12);
   const valid = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
 
-  type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; origin: 'web' | 'registry' | 'monitor' };
+  type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; origin: 'web' | 'registry' | 'monitor'; found_by?: string[]; detected?: string };
   const events: Event[] = [];
   for (const [key, f] of Object.entries(facts)) {
     for (const m of f.milestones ?? []) if (valid(m.date)) events.push({ id: id(key, m.date, m.headline), date: m.date, company: key, drug: m.drug ?? null, type: m.type, headline: m.headline, source_url: m.source_url, nct: m.nct ?? null, origin: 'web' });
@@ -63,7 +64,12 @@ export async function eventsStep(d: Disease) {
     const phase = t.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join('/') || 'Trial';
     events.push({ id: `posted:${t.nct}`, date: t.first_posted, company: c, drug: null, type: 'trial_registered', headline: `Registers ${t.acronym ? `${t.acronym}, ` : ''}a ${phase.replace('/Phase ', '/')}: ${t.title}`.slice(0, 120), source_url: `https://clinicaltrials.gov/study/${t.nct}`, nct: t.nct, origin: 'registry' });
   }
-  for (const m of monitor) if (m.company && valid(m.date)) events.push({ ...m, origin: 'monitor' });
+  // Monitor news, unless the build's research already has the same development.
+  const research = events.filter((e) => e.origin === 'web');
+  for (const m of monitor) {
+    if (!m.company || !valid(m.date) || research.some((w) => sameEvent(w, m))) continue;
+    events.push({ id: m.id, date: m.date, company: m.company, drug: m.drug, type: m.type, headline: m.headline, source_url: m.source_url, nct: m.nct, origin: 'monitor', found_by: m.found_by ?? [], detected: m.detected });
+  }
   events.sort((a, b) => b.date.localeCompare(a.date));
 
   // Guided catalysts: the company's stated next steps, plus expected regulatory events.
