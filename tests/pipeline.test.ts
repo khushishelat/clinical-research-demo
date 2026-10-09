@@ -95,13 +95,26 @@ test('companies: one key per company across legal and place words', () => {
 
 test('registry diff: new trials, status and phase changes', () => {
   const a = toTrial(study());
-  const b: Trial = { ...a, status: 'ACTIVE_NOT_RECRUITING' };
-  const c: Trial = { ...a, nct: 'NCT00000009' };
-  const ev = diffSnapshots([a], [b, c], '2026-10-01');
+  const b: Trial = { ...a, status: 'ACTIVE_NOT_RECRUITING', last_update: '2026-09-29' };
+  const c: Trial = { ...a, nct: 'NCT00000009', first_posted: '2026-09-28' };
+  const old: Trial = { ...a, nct: 'NCT00000010', first_posted: '2021-05-01' };
+  const ev = diffSnapshots([{ ...a, last_update: '2026-09-01' }], [b, c, old], '2026-10-01');
+  // Dated when the registry says (last update, first posted); an old trial new to the search is no event.
   assert.deepEqual(
-    ev.map((e) => e.type),
-    ['status_changed', 'trial_registered'],
+    ev.map((e) => [e.type, e.date]),
+    [['status_changed', '2026-09-29'], ['trial_registered', '2026-09-28']],
   );
+});
+
+test('registry headlines in words', async () => {
+  const { registryHeadline, trialName } = await import('../scripts/lib/registry');
+  const t = toTrial(study());
+  assert.equal(registryHeadline({ type: 'status_changed', detail: 'NOT_YET_RECRUITING → RECRUITING', nct: t.nct }, t), 'ONE starts recruiting');
+  assert.equal(registryHeadline({ type: 'status_changed', detail: 'RECRUITING → ACTIVE_NOT_RECRUITING', nct: t.nct }, t), 'ONE stops recruiting');
+  assert.equal(registryHeadline({ type: 'status_changed', detail: 'RECRUITING → TERMINATED', nct: t.nct }, t), 'ONE is terminated');
+  assert.equal(registryHeadline({ type: 'phase_changed', detail: 'PHASE2 → PHASE2/PHASE3', nct: t.nct }, t), 'ONE moves to Phase 2/3 from Phase 2');
+  assert.equal(trialName({ ...t, acronym: '' }, t.nct), 'Phase 2/3 acmetide trial');
+  assert.equal(trialName(undefined, 'NCT00000001'), 'NCT00000001');
 });
 
 test('replay events: compact, and still stats are thinned', () => {
