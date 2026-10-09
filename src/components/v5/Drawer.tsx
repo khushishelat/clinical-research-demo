@@ -257,7 +257,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.guided.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">
-            <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Guided next
+            <span className="h-2.5 w-2.5 rotate-45 border border-dashed border-orange" /> Expected next
           </h3>
           <ul className="mt-2">
             {t.guided.map((g, i) => (
@@ -298,7 +298,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.web.length || t.programWeb.length ? (
         <section className="mt-6 px-6">
           <h3 className="flex items-center gap-2 text-[14px]">
-            <span className="h-2 w-2 bg-orange" /> Disclosures
+            <span className="h-2 w-2 bg-orange" /> News
             <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.05em] text-faint">
               Parallel web research · {t.webSources} source{t.webSources === 1 ? '' : 's'}
             </span>
@@ -317,7 +317,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
               ) : null}
             </p>
           ) : null}
-          <DisclosureList items={t.web} empty={t.programWeb.length ? 'Nothing disclosed about this trial specifically.' : null} />
+          <DisclosureList items={t.web} empty={t.programWeb.length ? 'No news about this trial specifically.' : null} />
           {t.programWeb.length ? (
             <>
               <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">{t.lead} program</p>
@@ -368,7 +368,7 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
       {t.fromWeb.length ? (
         <section className="mt-6">
           <h3 className="flex items-center gap-2 px-6 text-[14px]">
-            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} named in disclosures{' '}
+            <span className="h-2 w-2 bg-orange" /> {t.fromWeb.length} investigator{t.fromWeb.length === 1 ? '' : 's'} named in the news{' '}
             <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-faint">· Parallel web research</span>
           </h3>
           <div className="mt-2">

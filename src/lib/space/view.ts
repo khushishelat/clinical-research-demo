@@ -142,6 +142,9 @@ export const dealValue = (d: Deal): number => {
   return dollars(d.total) || dollars(d.upfront);
 };
 
+/** The upfront payment in dollars, when stated (USD only for v1 records). */
+export const dealUpfront = (d: Deal): number => (d.currency ? (d.currency === 'USD' ? (d.upfront_m ?? 0) * 1e6 : 0) : dollars(d.upfront));
+
 /**
  * Licensing, M&A and partnership deals for a drug in this indication, once each:
  * both parties often record the same deal. Portfolio, commercial and research
@@ -253,6 +256,11 @@ export function mapView(s: Space, scope: Scope, today: string) {
   const onMap = new Set(rows.filter((r) => r.key !== '_unassigned').flatMap((r) => r.dots.map((d) => d.nct)));
   const deals = bdDeals(s).filter((x) => (x.date ?? '') >= DEALS_SINCE);
   const dealDollars = deals.reduce((n: number, x) => n + dealValue(x), 0);
+  // The deals behind the headline number, largest first, so the figure can be checked.
+  const dealList = deals
+    .slice()
+    .sort((a, b) => dealValue(b) - dealValue(a) || (b.date ?? '').localeCompare(a.date ?? ''))
+    .map((x) => ({ date: x.date, headline: x.headline, parties: x.parties, value: dealValue(x), total: x.total, upfront: x.upfront, source: x.source_url, host: hostOf(x.source_url) }));
   const registryCompanies = s.companies.filter((c) => !c.web_only).length;
 
   return {
@@ -270,10 +278,12 @@ export function mapView(s: Space, scope: Scope, today: string) {
       sponsors: new Set(s.trials.filter((t) => t.run_by === 'company').map((t) => t.sponsor)).size,
       investigators: s.clinicians.filter((c) => c.roles.length).length,
       dealDollars,
+      dealUpfront: deals.reduce((n: number, x) => n + dealUpfront(x), 0),
       deals: deals.length,
     },
     rows,
     rail: railClinicians(s, 12),
+    dealList,
     feed: feedView(s, rows, today),
     monthly: monthlyBars(s, today),
   };

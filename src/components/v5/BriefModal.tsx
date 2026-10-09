@@ -65,7 +65,7 @@ export function BriefModal({ disease, name, issues, issue, onIssue, onClose }: {
                 </li>
               ))}
             </ul>
-            <p className="border-t border-line px-4 py-3 font-mono text-[9px] leading-relaxed text-faint">A new issue each week, from that week&apos;s disclosures and registry changes.</p>
+            <p className="border-t border-line px-4 py-3 font-mono text-[9px] leading-relaxed text-faint">A new issue each week, from that week&apos;s news and registry changes.</p>
           </nav>
           <div className="min-w-0 flex-1 overflow-y-auto">
             {b === undefined ? (
@@ -80,8 +80,8 @@ export function BriefModal({ disease, name, issues, issue, onIssue, onClose }: {
                 <h2 className="mt-2 text-[30px] leading-tight tracking-[-0.01em]">{b.title}</h2>
                 <p className="mt-2 text-[13px] text-muted">
                   {b.markdown
-                    ? 'Researched and written by one Parallel deep-research Task run, starting from the week’s registry changes and disclosures and searching the web, ClinicalTrials.gov and PubMed for what they miss. Every claim cites its source.'
-                    : 'Written by a Parallel Task run from the period’s disclosures and registry changes only. Every claim links to its source; sources not in the input are dropped.'}
+                    ? 'Researched and written by one Parallel deep-research Task run, starting from the week’s registry changes and news and searching the web, ClinicalTrials.gov and PubMed for what they miss. Every claim cites its source.'
+                    : 'Written by a Parallel Task run from the period’s news and registry changes only. Every claim links to its source; sources not in the input are dropped.'}
                 </p>
                 <BriefReplay disease={disease} issue={issue} />
                 {b.markdown ? <BriefMarkdown markdown={b.markdown} references={b.references ?? []} /> : null}
