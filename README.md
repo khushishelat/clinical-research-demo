@@ -192,6 +192,17 @@ current:
 Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. They cost
 about $20 a month for five indications, most of it the weekly brief.
 
+**Changing the Parallel API key.** Stored research doesn't need the old key:
+the daily job starts fresh runs, and replaces monitors the new key can't see.
+The old key's monitors keep running and billing until cancelled. To cancel
+them, run this with both keys in your shell:
+
+```bash
+OLD_PARALLEL_API_KEY=… PARALLEL_API_KEY=… npx tsx --env-file=.env.vercel scripts/rotate-key.mts --dry-run
+```
+
+Drop `--dry-run` once the plan looks right.
+
 ```bash
 npm test
 npm run typecheck
