@@ -116,17 +116,16 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <h1 className="mt-1 text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name}</h1>
           <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
         </div>
-        <dl className="grid grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-4">
-          <Stat value={String(s.trials)} label="Active trials" sub={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? ` · +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
-          <Stat value={String(s.companies)} label="Companies" sub={`${s.sponsors} registry sponsors${s.webCompanies ? ` · ${s.webCompanies} via web research` : ''}`} />
-          <Stat value={String(s.investigators)} label="Investigators" sub="PIs and study chairs in the registry" />
+        <dl className="flex flex-wrap gap-x-10 gap-y-4">
+          <Stat value={String(s.trials)} label="Active trials" hint={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? `; +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
+          <Stat value={String(s.companies)} label="Companies" hint={`${s.sponsors} registry sponsors${s.webCompanies ? `, ${s.webCompanies} found by web research` : ''}`} />
+          <Stat value={String(s.investigators)} label="Investigators" hint="PIs and study chairs in the registry" />
           <DealStat view={view} />
+          <WeekStat view={view} fresh={fresh} onActivity={showActivity} />
         </dl>
       </section>
 
-      <WeekStrip view={view} fresh={fresh} onActivity={showActivity} onTrial={(n) => open('trial', n)} />
-
-      <div className="mt-4 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
         <section aria-label="Companies and their trials over time" className="min-w-0 rounded-[4px] border border-line bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-muted">
@@ -160,7 +159,6 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
               </li>
             </ul>
             <div className="flex items-center gap-4">
-              <p className="font-mono text-[11px] uppercase tracking-[0.04em] text-muted">{s.onMap} trials on company rows</p>
               <button type="button" onClick={() => setHowTo((v) => !v)} aria-expanded={howTo} className="font-mono text-[11px] uppercase tracking-[0.04em] text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">
                 {howTo ? 'Hide guide ▴' : 'How to read this map ▾'}
               </button>
@@ -256,64 +254,41 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
 }
 
 
-// The last seven days at a glance, the latest item, and what is new since the last visit.
-function WeekStrip({ view, fresh, onActivity, onTrial }: { view: MapView; fresh: Set<string> | null; onActivity: () => void; onTrial: (nct: string) => void }) {
+// The last 14 days as daily bars (this week solid), with this week's count. Opens Recent activity.
+function WeekStat({ view, fresh, onActivity }: { view: MapView; fresh: Set<string> | null; onActivity: () => void }) {
   const p = view.pulse;
-  const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
-  const counts = [
-    { n: p.registered, label: plural(p.registered, 'trial') + ' registered', news: false },
-    { n: p.changes, label: plural(p.changes, 'registry update'), news: false },
-    { n: p.news, label: plural(p.news, 'news item'), news: true },
-  ].filter((c) => c.n);
-  const latest = view.feed[0];
+  const total = p.registered + p.changes + p.news;
+  const max = Math.max(1, ...p.days.map((d) => d.registry + d.news));
   return (
-    <section aria-label="The last seven days" className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-[4px] border border-line bg-card px-4 py-2.5">
-      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
-        <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.05em]">
-          <span className="live-dot h-2 w-2 rounded-full bg-ok" /> Last 7 days
-        </span>
-        {counts.length ? (
-          counts.map((c) => (
-            <span key={c.label} className="flex items-center gap-1.5">
-              <span className={`h-1.5 w-1.5 ${c.news ? 'bg-orange' : 'bg-ink'}`} />
-              {c.label}
+    <button type="button" onClick={onActivity} title={`Last 7 days: ${p.registered} trials registered, ${p.changes} registry updates, ${p.news} news items`} className="group text-left">
+      <dd className="flex items-end gap-3">
+        <span className="text-[28px] leading-none">{total ? `+${total}` : '0'}</span>
+        <span aria-hidden="true" className="flex h-7 items-end gap-[2px]">
+          {p.days.map((d) => (
+            <span key={d.date} className={`flex h-full w-[5px] flex-col-reverse ${d.date < p.since ? 'opacity-35' : ''}`}>
+              <span className="h-px shrink-0 bg-line-strong" />
+              <span className="bg-ink" style={{ height: `${(d.registry / max) * 100}%` }} />
+              <span className="bg-orange" style={{ height: `${(d.news / max) * 100}%` }} />
             </span>
-          ))
-        ) : (
-          <span className="text-muted">Quiet so far. The registry and a news Monitor are checked every day.</span>
-        )}
-      </p>
-      {latest ? (
-        <button type="button" onClick={() => (latest.nct ? onTrial(latest.nct) : onActivity())} className="flex min-w-0 flex-1 basis-[280px] items-center gap-2 text-left text-[13px] hover:underline hover:decoration-line-strong hover:underline-offset-2">
-          <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.05em] text-muted">
-            Latest · <RelDay iso={latest.date} short />
-          </span>
-          <Favicon host={latest.host} name={latest.company} size={14} />
-          <span className="truncate">
-            <span className="text-muted">{latest.company}:</span> {latest.headline}
-          </span>
-        </button>
-      ) : null}
-      {fresh?.size ? (
-        <button type="button" onClick={onActivity} className="ml-auto shrink-0 rounded-full bg-orange px-3 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-ink hover:bg-ink hover:text-page">
-          {fresh.size} new since your last visit →
-        </button>
-      ) : fresh ? (
-        <span className="ml-auto shrink-0 font-mono text-[11px] uppercase tracking-[0.04em] text-faint">Nothing new since your last visit</span>
-      ) : null}
-    </section>
+          ))}
+        </span>
+      </dd>
+      <dt className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted group-hover:text-ink">
+        <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" /> This week
+        {fresh?.size ? <span className="rounded-full bg-orange px-1.5 text-ink">{fresh.size} new</span> : null}
+      </dt>
+    </button>
   );
 }
 
-function Stat({ value, label, sub, accent }: { value: string; label: string; sub?: string; accent?: boolean }) {
+function Stat({ value, label, hint, accent }: { value: string; label: string; hint?: string; accent?: boolean }) {
   return (
-    <div>
+    <div title={hint}>
       <dd className="text-[28px] leading-none">{value}</dd>
       <dt className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
         {accent ? <span className="h-1.5 w-1.5 bg-orange" /> : null}
         {label}
       </dt>
-      {sub ? <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">{sub}</p> : null}
     </div>
   );
 }
@@ -328,23 +303,16 @@ function DealStat({ view }: { view: MapView }) {
   return (
     <div className="relative">
       <dd className="text-[28px] leading-none">{s.dealDollars ? `≈${money(s.dealDollars)}` : String(s.deals)}</dd>
-      <dt className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
-        <span className="h-1.5 w-1.5 bg-orange" />
-        {s.dealDollars ? 'Announced deal value' : 'Licensing and M&A deals'}
-      </dt>
-      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.04em] text-faint">
-        {s.deals} asset deal{s.deals === 1 ? '' : 's'} since May 2025{s.dealDollars ? ' · "up to", with milestones' : ' · no value disclosed'}
-      </p>
-      {s.deals ? (
-        <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="mt-1 font-mono text-[10px] uppercase tracking-[0.04em] text-ink underline decoration-line-strong underline-offset-2 hover:decoration-ink">
-          {open ? 'Hide the deals ▴' : `See the ${s.deals} deal${s.deals === 1 ? '' : 's'} ▾`}
+      <dt className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
+        <button type="button" disabled={!s.deals} onClick={() => setOpen((v) => !v)} aria-expanded={open} title={'Licensing deals and acquisitions since May 2025, at their announced "up to" value'} className="flex items-center gap-1.5 hover:text-ink disabled:hover:text-muted">
+          <span className="h-1.5 w-1.5 bg-orange" />
+          {s.deals} asset deal{s.deals === 1 ? '' : 's'} {s.deals ? (open ? '▴' : '▾') : ''}
         </button>
-      ) : null}
+      </dt>
       {open ? (
         <div role="dialog" aria-label="Deals behind this number" className="absolute right-0 top-full z-30 mt-2 w-[min(440px,90vw)] rounded-[4px] border border-line bg-card p-4 text-[13px] shadow-[0_8px_24px_rgba(29,27,22,0.08)]">
-          <p className="text-muted">
-            Licensing deals and acquisitions for a drug in this indication, announced since May 2025. Values are the &ldquo;up to&rdquo; totals as announced, including milestone payments that are only paid if the drug succeeds
-            {s.dealUpfront ? `; about ${money(s.dealUpfront)} of the total was paid upfront` : ''}. Whole-company, commercial and research deals are not counted.
+          <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
+            Since May 2025 · &ldquo;up to&rdquo; values with milestones{s.dealUpfront ? ` · ≈${money(s.dealUpfront)} upfront` : ''}
           </p>
           <ul className="mt-3 max-h-[320px] space-y-2.5 overflow-y-auto">
             {view.dealList.map((x, i) => (
@@ -563,7 +531,6 @@ function ChangeRail({ view, fresh, onTrial }: { view: MapView; fresh: Set<string
     <div>
       <div className="px-4 pt-4">
         <p className="text-[13px] font-medium">New trials registered</p>
-        <p className="mt-0.5 text-[12px] text-muted">Trials in this landscape by the month ClinicalTrials.gov first posted them. Updated daily.</p>
         <div className="mt-3 flex h-20 items-end gap-1" role="img" aria-label={`New trials registered by month: ${view.monthly.map((m) => `${fmt(`${m.month}-01`, { month: 'long', year: 'numeric' })} ${m.count}`).join(', ')}`}>
           {view.monthly.map((m, i) => {
             const current = i === view.monthly.length - 1;

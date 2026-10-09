@@ -113,3 +113,26 @@ label:has(input) {
     box-shadow: 0 0 0 2px var(--color-orange-wash);
   }
 }
+
+/* The same pulse for SVG marks, which have no box-shadow. */
+@keyframes svg-ping {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.9);
+  }
+}
+.svg-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svg-ping 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .svg-ping {
+    animation: none;
+  }
+}
