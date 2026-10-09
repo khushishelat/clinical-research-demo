@@ -304,20 +304,43 @@ export const READOUT = {
 // event names its company and, where it can, the drug and trial, so code joins
 // it to the map like a disclosure from step 4. Monitors can't call Data
 // Connectors; registry changes come from the daily ClinicalTrials.gov diff.
+// Daily news, from a set of Monitors per indication (base, daily, $0.01 a run each).
+// v2 (Oct 9): v1 was one broad monitor per indication; in its first days it found 15
+// events, none for three of five indications, against a usual 1 to 9 news items a week
+// from the build's research. v2 adds monitors by topic and one per leading company, so
+// each asks one clear question (the docs: intent-heavy natural language, no dates). The
+// schema now says whether the event is about this indication, so news about a company's
+// other diseases is filtered by the run, not by a second model; the company comes by its
+// full name, and code also matches on drug names; headlines must be in English (a test
+// run returned one in Russian). Every kept event records which
+// monitors found it (npm run monitors -- --report), so the set can be pruned on evidence.
+const MONITOR_TYPES = ['data', 'presentation', 'publication', 'regulatory', 'approval', 'trial_start', 'enrollment_complete', 'discontinuation', 'deal', 'financing', 'other'];
 export const MONITOR = {
-  key: 'monitor@1',
+  key: 'monitor@2',
   processor: 'base' as const,
   frequency: '1d',
-  query: (d: Disease) =>
+  /** Company monitors for this many leading companies (by phase, then trials). */
+  companies: 10,
+  broad: (d: Disease) =>
     `New developments in ${label(d)} drug development from any company: clinical trial results and data readouts, conference presentations, regulatory filings, designations, approvals and rejections, trial starts, enrollment milestones, holds and discontinuations, safety signals, licensing deals, acquisitions and financings.`,
-  schema: O({
-    company: S('The company the development is about, by its usual name.'),
-    drug: N('The drug, by its INN or code, or null.'),
-    nct: N('The ClinicalTrials.gov NCT ID named in the source, or null.'),
-    type: E(['data', 'presentation', 'publication', 'regulatory', 'approval', 'trial_start', 'enrollment_complete', 'discontinuation', 'deal', 'financing', 'other']),
-    date: S('YYYY-MM-DD the development was announced.'),
-    headline: S('12 words or fewer.'),
-  }),
+  topics: [
+    { key: 'data', label: 'Data and conferences', query: (d: Disease) => `Clinical trial results, topline data readouts, and conference presentations or journal publications for drugs in development for ${label(d)}.` },
+    { key: 'regulatory', label: 'Regulatory', query: (d: Disease) => `Regulatory news for ${label(d)} drugs: FDA, EMA, China NMPA and Japan PMDA filings, approvals, rejections and complete response letters, breakthrough or fast track designations, label changes and advisory committees.` },
+    { key: 'business', label: 'Deals and financings', query: (d: Disease) => `Licensing deals, acquisitions, partnerships and financings by companies developing ${label(d)} drugs.` },
+    { key: 'trials', label: 'Trial starts and stops', query: (d: Disease) => `${label(d)} clinical trial starts and first patients dosed, enrollment completions, clinical holds, safety signals and discontinued programs.` },
+  ],
+  company: (d: Disease, name: string, drugs: string[]) =>
+    `${name} news about its ${d.name} drugs${drugs.length ? ` (${drugs.join(', ')})` : ''}: trial results, conference data, regulatory filings and decisions, trial starts and discontinuations, partnerships and deals.`,
+  schema: (d: Disease) =>
+    O({
+      company: S('The company the development is about, by its full usual name as in its press releases ("Eli Lilly and Company", not "Lilly").'),
+      drug: N('The drug, by its INN or code, or null.'),
+      nct: N('The ClinicalTrials.gov NCT ID named in the source, or null.'),
+      type: E(MONITOR_TYPES),
+      date: S('YYYY-MM-DD the development was announced.'),
+      headline: S('In English, 12 words or fewer.'),
+      about_indication: B(`True if the development concerns ${label(d)}, or is a deal or financing by a company whose lead drugs are for it. False when it is about the company's work in other diseases.`),
+    }),
 };
 
 // Medicare coverage for the drugs approved in this disease (CMS Coverage connector).

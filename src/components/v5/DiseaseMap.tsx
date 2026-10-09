@@ -117,7 +117,7 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
           <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
         </div>
         <dl className="flex flex-wrap gap-x-10 gap-y-4">
-          <Stat value={String(s.trials)} label="Active trials" hint={`Drug and biologic${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}, all sponsors${s.completed ? `; +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}`} />
+          <Stat value={String(s.trials)} label="Active trials" hint={`Active trials on company rows${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}: each company's own, and investigator-run trials of its drugs${s.completed ? `; +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}. The registry search finds ${s.allActive} active drug trials in all; the rest test generics, supplements or procedures and stay off the map.`} />
           <Stat value={String(s.companies)} label="Companies" hint={`${s.sponsors} registry sponsors${s.webCompanies ? `, ${s.webCompanies} found by web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" hint="PIs and study chairs in the registry" />
           <DealStat view={view} />
@@ -258,12 +258,20 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
 function WeekStat({ view, fresh, onActivity }: { view: MapView; fresh: Set<string> | null; onActivity: () => void }) {
   const p = view.pulse;
   const total = p.registered + p.changes + p.news;
-  const max = Math.max(1, ...p.days.map((d) => d.registry + d.news));
+  // Bars are days; the dashed line is a usual day (the 12-week average).
+  const daily = p.usual / 7;
+  const max = Math.max(1, daily, ...p.days.map((d) => d.registry + d.news));
+  const checked = p.news_checked ? fmt(p.news_checked, { month: 'short', day: 'numeric' }) : null;
   return (
-    <button type="button" onClick={onActivity} title={`Last 7 days: ${p.registered} trials registered, ${p.changes} registry updates, ${p.news} news items`} className="group text-left">
+    <button
+      type="button"
+      onClick={onActivity}
+      title={`Last 7 days: ${p.registered} trials registered, ${p.changes} registry updates, ${p.news} news items. A usual week has ${p.usual}.${p.news_delayed ? ` No news Monitor has reported since ${checked ?? 'they were set up'}.` : ''}`}
+      className="group text-left"
+    >
       <dd className="flex items-end gap-3">
         <span className="text-[28px] leading-none">{total ? `+${total}` : '0'}</span>
-        <span aria-hidden="true" className="flex h-7 items-end gap-[2px]">
+        <span aria-hidden="true" className="relative flex h-7 items-end gap-[2px]">
           {p.days.map((d) => (
             <span key={d.date} className={`flex h-full w-[5px] flex-col-reverse ${d.date < p.since ? 'opacity-35' : ''}`}>
               <span className="h-px shrink-0 bg-line-strong" />
@@ -271,10 +279,14 @@ function WeekStat({ view, fresh, onActivity }: { view: MapView; fresh: Set<strin
               <span className="bg-orange" style={{ height: `${(d.news / max) * 100}%` }} />
             </span>
           ))}
+          {p.usual ? <span className="absolute inset-x-0 border-t border-dashed border-muted" style={{ bottom: `${(daily / max) * 100}%` }} /> : null}
         </span>
       </dd>
       <dt className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted group-hover:text-ink">
-        <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" /> This week
+        {p.news_delayed ? <span className="h-1.5 w-1.5 rounded-full bg-orange" /> : <span className="live-dot h-1.5 w-1.5 rounded-full bg-ok" />}
+        This week
+        <span className="text-faint normal-case tracking-normal">usual {p.usual}</span>
+        {p.news_delayed ? <span className="text-orange">news delayed</span> : null}
         {fresh?.size ? <span className="rounded-full bg-orange px-1.5 text-ink">{fresh.size} new</span> : null}
       </dt>
     </button>
@@ -519,8 +531,9 @@ function ClinicianRail({ view, onOpen }: { view: MapView; onOpen: (key: string) 
 }
 
 function ChangeRail({ view, fresh, onTrial }: { view: MapView; fresh: Set<string> | null; onTrial: (nct: string) => void }) {
-  const [origin, setOrigin] = useState<'all' | 'registry' | 'web'>('all');
-  const items = view.feed.filter((f: FeedItem) => origin === 'all' || (origin === 'web' ? f.origin !== 'registry' : f.origin === 'registry'));
+  const [origin, setOrigin] = useState<'all' | 'registry' | 'monitor' | 'web'>('all');
+  const [monitor, setMonitor] = useState<string | null>(null);
+  const items = view.feed.filter((f: FeedItem) => (origin === 'all' || f.origin === origin) && (!monitor || f.foundBy?.some((m) => m.key === monitor)));
   const max = Math.max(1, ...view.monthly.map((m) => m.count));
   // New since this browser's last visit; on a first visit, items from the two days before the latest refresh.
   const isNew = (f: FeedItem) => (fresh ? fresh.has(f.id) : Boolean(view.updated) && Date.parse(view.updated!) - Date.parse(f.date) <= 2 * 86_400_000);
@@ -551,13 +564,36 @@ function ChangeRail({ view, fresh, onTrial }: { view: MapView; fresh: Set<string
           ))}
         </div>
       </div>
-      <div className="mt-4 flex gap-2 border-t border-line px-4 pt-3">
-        {(['all', 'registry', 'web'] as const).map((o) => (
-          <button key={o} type="button" aria-pressed={origin === o} onClick={() => setOrigin(o)} className={`rounded-full border px-3 py-1 text-[12px] ${origin === o ? 'border-ink bg-ink text-page' : 'border-line-strong text-muted hover:border-ink hover:text-ink'}`}>
-            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : 'News'}
+      <div className="mt-4 flex flex-wrap gap-2 border-t border-line px-4 pt-3">
+        {(['all', 'registry', 'monitor', 'web'] as const).map((o) => (
+          <button
+            key={o}
+            type="button"
+            aria-pressed={origin === o}
+            title={o === 'registry' ? 'Changes in the daily ClinicalTrials.gov pull' : o === 'monitor' ? 'News found by the daily news Monitors' : o === 'web' ? 'News from the research runs that built this map' : undefined}
+            onClick={() => (setOrigin(o), setMonitor(null))}
+            className={`rounded-full border px-3 py-1 text-[12px] ${origin === o ? 'border-ink bg-ink text-page' : 'border-line-strong text-muted hover:border-ink hover:text-ink'}`}
+          >
+            {o === 'all' ? 'All' : o === 'registry' ? 'Registry' : o === 'monitor' ? 'Monitors' : 'Research'}
           </button>
         ))}
       </div>
+      {origin === 'monitor' && view.monitors.length ? (
+        <div className="mt-2 flex flex-wrap gap-1.5 px-4" aria-label="Monitors">
+          {view.monitors.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              aria-pressed={monitor === m.key}
+              onClick={() => setMonitor((x) => (x === m.key ? null : m.key))}
+              className={`flex items-center gap-1.5 rounded-[3px] border px-2 py-0.5 font-mono text-[10px] ${monitor === m.key ? 'border-orange bg-orange-wash' : 'border-line text-muted hover:border-ink hover:text-ink'} ${m.count ? '' : 'opacity-60'}`}
+            >
+              {m.label}
+              <span className="text-ink">{m.count}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
       <ul className="mt-3">
         {items.map((f) => (
           <li key={f.id} className={`grid grid-cols-[68px_minmax(0,1fr)] gap-3 border-t border-line px-4 py-3 ${isNew(f) ? 'bg-orange-wash/40' : ''}`}>
@@ -582,11 +618,19 @@ function ChangeRail({ view, fresh, onTrial }: { view: MapView; fresh: Set<string
                   </a>
                 ) : null}
                 {f.webEarlier ? <span className="rounded-[3px] bg-orange-wash px-1.5 py-0.5 font-mono text-[10px] uppercase">Disclosed {f.webEarlier.days} days before registry</span> : null}
+                {f.foundBy?.length ? (
+                  <span title={`Found by the ${f.foundBy.map((m) => m.label).join(', ')} monitor${f.foundBy.length === 1 ? '' : 's'}`} className="flex items-center gap-1 rounded-[3px] border border-orange px-1.5 py-0.5 font-mono text-[10px] uppercase">
+                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-orange" />
+                    Monitor{f.foundBy.length > 1 ? ` ×${f.foundBy.length}` : ''}
+                  </span>
+                ) : null}
               </span>
             </span>
           </li>
         ))}
-        {!items.length ? <li className="border-t border-line px-4 py-6 text-[13px] text-muted">Nothing in the last two months.</li> : null}
+        {!items.length ? (
+          <li className="border-t border-line px-4 py-6 text-[13px] text-muted">{origin === 'monitor' ? `Nothing yet. ${view.monitors.length} monitors check the web daily.` : 'Nothing in the last two months.'}</li>
+        ) : null}
       </ul>
     </div>
   );

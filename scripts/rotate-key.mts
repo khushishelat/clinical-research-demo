@@ -9,7 +9,7 @@
 import { readFileSync } from 'node:fs';
 import Parallel from 'parallel-web';
 import { disease, spacePath, store } from './lib/pipeline';
-import { createMonitor, monitorOf } from './lib/steps/monitors';
+import { monitorOf, reconcileMonitors } from './lib/steps/monitors';
 
 const dry = process.argv.includes('--dry-run');
 const oldKey = process.env.OLD_PARALLEL_API_KEY?.trim();
@@ -24,36 +24,33 @@ for (const { key, monitor } of config.diseases) {
   if (!monitor || !(await store.get(spacePath(disease(key), 'trials.json')))) continue;
   const d = disease(key);
   const doc = await monitorOf(d);
-  const current = doc && !doc.cancelled ? doc.monitor_id : null;
-  const currentOk = current ? await visible(fresh, current) : false;
-  // Old monitors: replaced ones, plus the current one if the new key can't see it.
-  const stale = [...new Set([...(doc?.previous ?? []), ...(current && !currentOk ? [current] : [])])].filter((id) => !(doc as any)?.cancelled_previous?.includes(id));
-  const cancelled: string[] = [];
+  if (!doc) continue;
+  // Current monitors the new key can't see are marked lost, so they are replaced below.
+  const unseen: string[] = [];
+  for (const [k, e] of Object.entries(doc.monitors)) {
+    if (e.lost || (await visible(fresh, e.monitor_id))) continue;
+    unseen.push(e.monitor_id);
+    if (!dry) doc.monitors[k] = { ...e, lost: new Date().toISOString() };
+  }
+  const stale = [...new Set([...doc.previous, ...unseen])].filter((id) => !doc.cancelled_previous?.includes(id));
   for (const id of stale) {
     if (!old) {
       console.log(`[${key}] ${id} needs cancelling with the old key (set OLD_PARALLEL_API_KEY)`);
       continue;
     }
-    if (!(await visible(old, id))) {
-      console.log(`[${key}] ${id} isn't visible to the old key either; skipped`);
-      continue;
-    }
+    if (!(await visible(old, id))) continue;
     if (dry) console.log(`[${key}] would cancel ${id} with the old key`);
     else {
       await old.monitor.cancel(id);
-      cancelled.push(id);
+      doc.cancelled_previous = [...(doc.cancelled_previous ?? []), id];
       console.log(`[${key}] cancelled ${id} with the old key`);
     }
   }
-  if (cancelled.length) {
-    const latest = await monitorOf(d);
-    await store.put(spacePath(d, 'monitor.json'), { ...latest, cancelled_previous: [...((latest as any)?.cancelled_previous ?? []), ...cancelled] });
+  if (dry) {
+    console.log(`[${key}] ${unseen.length} of ${Object.keys(doc.monitors).length} monitors would be replaced with the new key`);
+    continue;
   }
-  if (currentOk) console.log(`[${key}] current monitor ${current} is readable with the new key`);
-  else if (dry) console.log(`[${key}] would create a monitor with the new key`);
-  else {
-    if (doc && current) await store.put(spacePath(d, 'monitor.json'), { ...(await monitorOf(d)), lost: new Date().toISOString() });
-    const made = await createMonitor(d);
-    console.log(`[${key}] monitor ${made?.monitor_id} created with the new key`);
-  }
+  await store.put(spacePath(d, 'monitor.json'), doc);
+  const made = await reconcileMonitors(d);
+  console.log(`[${key}] ${Object.keys(made?.monitors ?? {}).length} monitors readable with the new key`);
 }

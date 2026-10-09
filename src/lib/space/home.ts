@@ -22,8 +22,9 @@ export async function homeView(today: string) {
       companies: v.stats.companies,
       deals: v.stats.deals,
       dealDollars: v.stats.dealDollars,
-      updated: s.fetched,
+      updated: v.updated,
       week: v.pulse.registered + v.pulse.changes + v.pulse.news,
+      usual: v.pulse.usual,
       // A thumbnail of the map: the first rows, each trial's first-posted date, phase and sponsor kind.
       thumb: v.rows
         .filter((r) => r.key !== '_unassigned')

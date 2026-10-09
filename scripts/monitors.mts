@@ -1,15 +1,21 @@
-// One Monitor per indication for daily news (base, ~$0.01 a day each).
-//   npx tsx scripts/monitors.mts --disease mash --create     start it (backfills recent news)
-//   npx tsx scripts/monitors.mts --disease mash --collect    read new events now (free)
-//   npx tsx scripts/monitors.mts --disease mash --cancel     stop it
-// The daily job creates the monitor for indications with `monitor: true` in
-// diseases.json and collects events; it never cancels one. A monitor belongs to
-// the workspace of the API key that created it.
+// The news Monitors for one indication (MONITOR in specs.ts: broad, by topic, and one per
+// leading company; base, daily, $0.01 a run each).
+//   npx tsx scripts/monitors.mts --disease mash --reconcile   create the missing ones, cancel unwanted ones
+//   npx tsx scripts/monitors.mts --disease mash --collect     read new events now (free)
+//   npx tsx scripts/monitors.mts --disease mash --report      what each monitor found, and what only it found
+//   npx tsx scripts/monitors.mts --disease mash --cancel      stop them all
+// The daily job reconciles and collects for indications with `monitor: true` in
+// diseases.json. A monitor belongs to the workspace of the API key that created it.
 
 import { disease, flag } from './lib/pipeline';
-import { cancelMonitor, collectMonitorEvents, createMonitor } from './lib/steps/monitors';
+import { cancelMonitors, collectMonitorEvents, monitorReport, reconcileMonitors } from './lib/steps/monitors';
 
 const d = disease();
-if (flag('create')) await createMonitor(d);
+if (flag('reconcile')) await reconcileMonitors(d);
 if (flag('collect')) await collectMonitorEvents(d);
-if (flag('cancel')) await cancelMonitor(d);
+if (flag('cancel')) await cancelMonitors(d);
+if (flag('report')) {
+  const r = await monitorReport(d);
+  console.log(`[${d.key}] ${r.events} events since ${r.since?.slice(0, 10) ?? '—'}`);
+  console.table(r.rows);
+}

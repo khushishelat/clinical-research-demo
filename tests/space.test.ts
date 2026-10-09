@@ -64,6 +64,8 @@ const space = (): NonNullable<Space> =>
     coverage: [],
     firstSeen: { NCT1: { days_earlier: 28, first_announced: '2026-08-13', source_url: 'https://ir.acme.com/alpha' } },
     briefs: [],
+    monitors: [],
+    news: { last_collected: null, last_new: null },
   }) as unknown as NonNullable<Space>;
 
 test('map: rows for registry companies and approved web finds, others left out', () => {
@@ -150,11 +152,15 @@ test('deals@2: only asset deals count toward the headline; a portfolio deal stay
 
 test('monitor news: shows on its company row and in the drawer of the trial it names', () => {
   const s = space();
-  s.events.push({ id: 'mon1', date: '2026-09-30', company: 'acme', drug: 'acmetide', nct: 'NCT1', type: 'data', headline: 'Acme reports topline data', source_url: 'https://ir.acme.com/news', origin: 'monitor' } as never);
-  const row = mapView(s, 'companies', '2026-10-01').rows.find((r) => r.key === 'acme')!;
-  const mark = row.news.find((m) => m.headline === 'Acme reports topline data')!;
+  s.monitors = [{ key: 'co:acme', label: 'Acme Bio', kind: 'company' }];
+  s.events.push({ id: 'mon1', date: '2026-09-30', company: 'acme', drug: 'acmetide', nct: 'NCT1', type: 'data', headline: 'Acme reports topline data', source_url: 'https://ir.acme.com/news', origin: 'monitor', found_by: ['co:acme'] } as never);
+  const v = mapView(s, 'companies', '2026-10-01');
+  const mark = v.rows.find((r) => r.key === 'acme')!.news.find((m) => m.headline === 'Acme reports topline data')!;
   assert.equal(mark.nct, 'NCT1');
-  assert.equal(mark.detail, 'From the daily news monitor');
+  assert.equal(mark.detail, 'Found by the news Monitor (Acme Bio)');
+  // The feed names the monitor, and the monitor's chip counts it.
+  assert.deepEqual(v.feed.find((f) => f.id === 'mon1')!.foundBy, [{ key: 'co:acme', label: 'Acme Bio' }]);
+  assert.equal(v.monitors.find((m) => m.key === 'co:acme')!.count, 1);
   assert.ok(trialDetail(s, 'NCT1')!.web.some((w) => w.headline === 'Acme reports topline data'));
 });
 
@@ -253,7 +259,9 @@ test('completed trials: hollow dots, not counted as active', () => {
   const v = mapView(s, 'companies', '2026-10-01');
   const acme = v.rows.find((r) => r.key === 'acme')!;
   assert.equal(acme.dots.find((d) => d.nct === 'NCT1')!.done, true);
-  assert.equal(v.stats.trials, 2);
+  // The headline counts active trials on company rows; the search's full count is kept beside it.
+  assert.equal(v.stats.trials, 1);
+  assert.equal(v.stats.allActive, 2);
   assert.equal(v.stats.completed, 1);
   assert.equal(v.stats.all, 3);
 });

@@ -1,7 +1,7 @@
 // Daily refresh for every built indication:
 // - today's ClinicalTrials.gov snapshot and diff (free);
-// - the indication's news Monitor, created here when its config turns it on and
-//   none exists (~$0.01 a day), and its new events (free to read);
+// - the indication's news Monitors (broad, by topic, and per leading company), created
+//   here when its config turns them on ($0.01 a run each), and their new events (free);
 // - the event feed and the first-disclosure check for newly registered trials;
 // - a readout check for trials newly at a readout point, and a monthly re-check of
 //   those with no results yet (core runs, usually none or a few).
@@ -13,7 +13,7 @@ import { NextResponse } from 'next/server';
 import { disease as byKey } from '../../../../../scripts/lib/pipeline';
 import { eventsStep } from '../../../../../scripts/lib/steps/events';
 import { firstSeenStep } from '../../../../../scripts/lib/steps/first-seen';
-import { collectMonitorEvents, createMonitor } from '../../../../../scripts/lib/steps/monitors';
+import { collectMonitorEvents, reconcileMonitors } from '../../../../../scripts/lib/steps/monitors';
 import { readoutsStep } from '../../../../../scripts/lib/steps/readouts';
 import { registryStep } from '../../../../../scripts/lib/steps/registry';
 import { builtKeys, unauthorized } from '@/lib/cron';
@@ -34,10 +34,12 @@ export async function GET(req: Request) {
     try {
       await registryStep(d);
       done[key].push('registry');
-      // A monitor is created with this deployment's API key, so this job can read its events.
-      if (d.monitor) await createMonitor(d);
-      if ((await collectMonitorEvents(d)) < 0 && d.monitor) await createMonitor(d);
-      done[key].push('monitor');
+      // Monitors are created with this deployment's API key, so this job can read their
+      // events; a monitor the key can't see is marked lost while collecting, and replaced.
+      if (d.monitor) await reconcileMonitors(d);
+      await collectMonitorEvents(d);
+      if (d.monitor) await reconcileMonitors(d);
+      done[key].push('monitors');
       await eventsStep(d);
       done[key].push('events');
       // Leave time for the rest; an unfinished check resumes tomorrow.

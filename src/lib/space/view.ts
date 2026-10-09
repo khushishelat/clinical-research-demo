@@ -2,6 +2,7 @@
 // Pure: no I/O. Every number on screen is computed here from the pipeline's
 // files, never hard-coded.
 
+import { freshest } from './derive';
 import type { Space } from './load';
 import { dealAboutLabel, isAssetDeal, regulatoryEvent } from './labels';
 import type { Company, Deal, Facts } from './types';
@@ -32,7 +33,7 @@ export type Row = {
   designations: string[];
 };
 export type RailClinician = { key: string; name: string; specialty: string | null; place: string; registryRoles: number; webRoles: number; papers: number | null; npi: boolean; initials: string };
-export type FeedItem = { id: string; date: string; company: string; companyKey: string; host: string | null; origin: 'registry' | 'web' | 'monitor'; type: string; headline: string; source: string | null; nct?: string; webEarlier?: { days: number; date: string; source: string | null } };
+export type FeedItem = { id: string; date: string; company: string; companyKey: string; host: string | null; origin: 'registry' | 'web' | 'monitor'; type: string; headline: string; source: string | null; nct?: string; webEarlier?: { days: number; date: string; source: string | null }; /** Monitor news: the keys and names of the monitors that found it. */ foundBy?: { key: string; label: string }[] };
 
 export const hostOf = (url: string | null | undefined): string | null => {
   try {
@@ -202,7 +203,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       ...(f?.financings ?? []).map((x) => ({ ...x, type: 'financing', drug: null, detail: x.amount })),
       ...(f?.regulatory ?? []).filter((r) => r.status === 'done').map((r) => ({ date: r.date, type: 'regulatory', headline: regulatoryEvent(r.agency, r.kind), source_url: r.source_url, drug: r.drug, detail: null })),
       // News from the indication's daily Monitor, joined to this company by the pipeline.
-      ...s.events.filter((e) => e.origin === 'monitor' && e.company === c.key).map((e) => ({ date: e.date, type: e.type, headline: e.headline, source_url: e.source_url, nct: e.nct ?? null, drug: e.drug ?? null, detail: 'From the daily news monitor' })),
+      ...s.events.filter((e) => e.origin === 'monitor' && e.company === c.key).map((e) => ({ date: e.date, type: e.type, headline: e.headline, source_url: e.source_url, nct: e.nct ?? null, drug: e.drug ?? null, detail: `Found by the news Monitor${e.found_by?.length ? ` (${e.found_by.map((k) => s.monitors.find((m) => m.key === k)?.label ?? k).join(', ')})` : ''}` })),
     ];
     const news: Mark[] = marks
       .filter((m, i, all) => all.findIndex((x) => x.date === m.date && x.headline === m.headline) === i)
@@ -265,11 +266,13 @@ export function mapView(s: Space, scope: Scope, today: string) {
 
   return {
     disease: { key: s.config.key, name: s.config.name, subtitle: s.config.subtitle ?? null, area: s.config.area ?? null },
-    updated: s.fetched,
+    updated: freshest(s),
     scope: s.scope,
     stats: {
-      trials: s.trials.filter((t) => ACTIVE.has(t.status)).length,
-      completed: s.trials.filter((t) => !ACTIVE.has(t.status)).length,
+      // The headline counts trials on company rows; the search's full count is in the tooltip.
+      trials: s.trials.filter((t) => onMap.has(t.nct) && ACTIVE.has(t.status)).length,
+      completed: s.trials.filter((t) => onMap.has(t.nct) && !ACTIVE.has(t.status)).length,
+      allActive: s.trials.filter((t) => ACTIVE.has(t.status)).length,
       all: s.trials.length,
       onMap: onMap.size,
       companies: rows.filter((r) => r.key !== '_unassigned').length,
@@ -286,6 +289,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
     dealList,
     feed: feedView(s, rows, today),
     pulse: pulseView(s, rows, today),
+    monitors: monitorChips(s, rows, today),
     monthly: monthlyBars(s, today),
   };
 }
@@ -309,6 +313,7 @@ export function railClinicians(s: Space, n: number): RailClinician[] {
 
 function feedView(s: Space, rows: Row[], today: string): FeedItem[] {
   const byKey = new Map(rows.map((r) => [r.key, r]));
+  const labels = new Map(s.monitors.map((m) => [m.key, m.label]));
   const since = new Date(Date.parse(today) - ACTIVE_WINDOW_DAYS * 86_400_000).toISOString().slice(0, 10);
   return s.events
     .filter((e) => e.date >= since && e.date <= today && byKey.has(e.company))
@@ -328,6 +333,7 @@ function feedView(s: Space, rows: Row[], today: string): FeedItem[] {
         source: e.source_url,
         nct: e.nct,
         webEarlier: seen && seen.days_earlier > 0 && seen.first_announced ? { days: seen.days_earlier, date: seen.first_announced, source: seen.source_url } : undefined,
+        foundBy: e.found_by?.map((k) => ({ key: k, label: labels.get(k) ?? k })),
       };
     });
 }
@@ -339,8 +345,15 @@ export function pulseView(s: Space, rows: Row[], today: string) {
   const since = day(6);
   const recent = s.events.filter((e) => e.date >= day(13) && e.date <= today && onMap.has(e.company));
   const week = recent.filter((e) => e.date >= since);
+  // A usual week: the average over the 12 weeks before this one.
+  const usual = s.events.filter((e) => e.date >= day(90) && e.date < since && onMap.has(e.company)).length / 12;
+  // News is delayed when no monitor has been read for a day and a half.
+  const checked = s.news.last_collected;
   return {
     since,
+    usual: Math.round(usual),
+    news_checked: checked,
+    news_delayed: s.monitors.length > 0 && (!checked || Date.parse(today) - Date.parse(checked) > 1.5 * 86_400_000),
     registered: week.filter((e) => e.origin === 'registry' && e.type === 'trial_registered').length,
     changes: week.filter((e) => e.origin === 'registry' && e.type !== 'trial_registered').length,
     news: week.filter((e) => e.origin !== 'registry').length,
@@ -350,6 +363,16 @@ export function pulseView(s: Space, rows: Row[], today: string) {
       return { date, registry: on.filter((e) => e.origin === 'registry').length, news: on.filter((e) => e.origin !== 'registry').length };
     }),
   };
+}
+
+/** Each news Monitor and how many feed items it found in the last 60 days, most first. */
+function monitorChips(s: Space, rows: Row[], today: string) {
+  const onMap = new Set(rows.map((r) => r.key));
+  const since = new Date(Date.parse(today) - ACTIVE_WINDOW_DAYS * 86_400_000).toISOString().slice(0, 10);
+  const found = s.events.filter((e) => e.origin === 'monitor' && e.date >= since && onMap.has(e.company));
+  return s.monitors
+    .map((m) => ({ ...m, count: found.filter((e) => e.found_by?.includes(m.key)).length }))
+    .sort((a, b) => b.count - a.count || a.kind.localeCompare(b.kind));
 }
 
 function monthlyBars(s: Space, today: string) {
