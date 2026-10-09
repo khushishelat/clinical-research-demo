@@ -23,6 +23,39 @@ const NUM = (description: string) => ({ type: ['number', 'null'], description })
 const INT = (description: string) => ({ type: ['integer', 'null'], description });
 const label = (d: Disease) => (d.subtitle ? `${d.name} (${d.subtitle})` : d.name);
 
+// Step 1: what to search for. A new indication starts from its name and a free
+// registry preview: how many drug trials ClinicalTrials.gov returns for the name,
+// and the condition terms those trials use, with counts. ClinicalTrials.gov expands
+// a search to related conditions ("alopecia" also finds androgenetic alopecia), so
+// the counts show what the name pulls in. One run proposes the search terms, the
+// condition filter and the labels; code sets the size and cost decisions; a person
+// reviews the entry before anything is built (scripts/new-indication.mts).
+// v2, from v1 on the six configured indications (Oct 8): v1 copied long registry
+// condition strings into the search, set a "mash" filter that dropped every trial
+// labeled NASH, and gave two-letter PubMed abbreviations (AD, AA, CM) that match
+// unrelated papers. Agreement otherwise: the alopecia and Alzheimer's filters, and the
+// labels. core.
+export const AREAS = ['Cardiometabolic', 'Neuroscience', 'Immunology', 'Oncology', 'Infectious disease', 'Respiratory', 'Hematology', 'Ophthalmology', 'Nephrology', 'Hepatology', 'Musculoskeletal', 'Rare disease', "Women's health", 'Other'] as const;
+export const SCOPE = {
+  key: 'scope@2',
+  processor: 'core',
+  connectors: ['clinical_trials'],
+  schema: O({
+    name: S('The indication’s usual name in English, capitalized as a heading ("Alopecia areata", "MASH", "Alzheimer’s disease").'),
+    subtitle: S('Under 7 words saying what it is, for a reader who does not know the name ("Autoimmune hair loss").'),
+    area: E([...AREAS], 'The therapeutic area drug developers file it under.'),
+    registry_terms: A(S(), '1 to 6 short search terms for ClinicalTrials.gov: the name, its synonyms, older names and standard abbreviations. Not the long condition strings in registry_conditions: the search matches a term inside longer strings and adds synonyms itself. This indication only, never a broader category or a neighboring condition.'),
+    conditions_only: N('A lowercase word or phrase that the conditions of every trial for this indication contain, whichever synonym the trial uses, set only when registry_conditions shows the search also returns other conditions (for alopecia areata, "areata", since the search also returns androgenetic alopecia). Null when nearly all trials in the preview are this indication, and null when its trials use synonyms that share no word.'),
+    pubmed_terms: A(S(), 'Terms for finding investigators’ publications on PubMed: the name, its synonyms, and the closest research terms (for a liver disease: its older names and "fatty liver"). No abbreviation of three letters or fewer, since PubMed matches those to unrelated words.'),
+    specialties: A(S(), '2 to 5 lowercase words that appear in NPI taxonomy names for the physicians who run these trials ("hepatology", "endocrinology", "dermatology", "neurology", "oncology").'),
+  }),
+  input: (name: string, preview: unknown) => ({
+    indication: name,
+    registry_preview: preview,
+    task: 'Configure a competitive landscape of drug development for this indication, built from ClinicalTrials.gov. registry_preview shows what a ClinicalTrials.gov condition search for the name returns today: drug trials, and the condition terms they list with how many trials list each. Propose the search terms, a condition filter if the search returns other conditions, PubMed terms and physician specialties. Use the ClinicalTrials.gov connector to check terms if needed.',
+  }),
+};
+
 // Step 3c: one company, one row. Registry sponsors and web finds name the same
 // company differently ("Hoffmann-La Roche" in the registry, "Roche" after the
 // 89bio acquisition). One run groups the names; code merges the rows. No

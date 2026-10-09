@@ -8,14 +8,12 @@
 // cron job run the same code.
 
 import { log, spacePath, store, today, where, type Disease } from '../pipeline';
-import { assertNoContacts, diffSnapshots, fetchTrials, isActive, type RegistryEvent, type Trial } from '../registry';
+import { assertNoContacts, diffSnapshots, fetchTrials, inScope, isActive, type RegistryEvent, type Trial } from '../registry';
 
 export async function registryStep(d: Disease, date = today()) {
-  // An indication can narrow what gets researched (diseases.json `default_scope`):
-  // Phase 2 and later only, or only trials whose conditions name the indication.
   const sc = d.default_scope;
   const fetched = await fetchTrials(d);
-  const trials = fetched.filter((t) => (!sc?.min_phase || t.phase_level >= sc.min_phase) && (!sc?.conditions_only || t.conditions.some((c) => c.toLowerCase().includes(sc.conditions_only!))));
+  const trials = fetched.filter(inScope(d));
   if (d.include_completed_since) log(d, `${trials.filter((t) => !isActive(t.status)).length} trials completed or stopped since ${d.include_completed_since} kept alongside ${trials.filter((t) => isActive(t.status)).length} active`);
   if (trials.length !== fetched.length) log(d, `scope: ${trials.length} of ${fetched.length} active trials (${[sc?.min_phase ? `Phase ${sc.min_phase}+` : '', sc?.conditions_only ? `conditions naming "${sc.conditions_only}"` : ''].filter(Boolean).join(', ')})`);
   assertNoContacts('trials', trials);

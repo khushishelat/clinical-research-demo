@@ -7,6 +7,8 @@ body:
     attributes:
       value: |
         Each indication is built from ClinicalTrials.gov, the NPI Registry, PubMed and Parallel Task runs, then kept current daily. A person reviews every request before it is built.
+
+        To build one yourself, see [Add an indication](https://github.com/khushishelat/clinical-research-demo#add-an-indication) in the README.
   - type: input
     id: indication
     attributes:

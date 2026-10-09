@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "pipeline": "tsx scripts/pipeline.mts",
+    "new-indication": "tsx scripts/new-indication.mts",
     "remove-clinician": "tsx scripts/remove-clinician.mts",
     "review": "tsx scripts/review.mts",
     "sync-blob": "tsx --env-file-if-exists=.env.vercel scripts/sync-blob.mts"

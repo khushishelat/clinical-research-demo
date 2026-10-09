@@ -1,16 +1,28 @@
 // Build one disease map end to end.
 //   npm run pipeline -- --disease mash
+//   npm run pipeline -- --disease mash --estimate   (what a build costs, from the registry; free)
 //
 // Each step reads what the previous one wrote (to .data/ or Vercel Blob), keeps
-// a run log, and reuses finished runs, so re-running never bills twice. The
-// pipeline stops once for a person: web-found companies wait in
-// review/companies.json until someone sets include to true or false.
+// a run log, and reuses finished runs, so re-running never bills twice. A first
+// build shows its estimate and waits for --yes. The pipeline stops once for a
+// person: web-found companies wait in review/companies.json until someone sets
+// include to true or false.
 
 import { execFileSync } from 'node:child_process';
-import { disease, spacePath, store, where } from './lib/pipeline';
+import { estimate, formatEstimate } from './lib/estimate';
+import { disease, flag, spacePath, store, today, where } from './lib/pipeline';
+import { fetchTrials, inScope } from './lib/registry';
 
 const d = disease();
 const step = (file: string, ...args: string[]) => execFileSync('npx', ['tsx', `scripts/${file}`, '--disease', d.key, ...args], { stdio: 'inherit' });
+
+const built = Boolean(await store.get(spacePath(d, 'trials.json')));
+if (flag('estimate') || (!built && !flag('yes'))) {
+  console.log(`[${d.key}] ${d.name}: estimate from today's registry (free)\n`);
+  console.log(formatEstimate(estimate(d, (await fetchTrials(d)).filter(inScope(d)), today())));
+  if (!flag('estimate')) console.log(`\nNothing built yet. To build it at this cost: npm run pipeline -- --disease ${d.key} --yes`);
+  process.exit(0);
+}
 
 step('02-registry.mts');
 step('03-companies.mts');

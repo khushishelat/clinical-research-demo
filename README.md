@@ -66,10 +66,10 @@ cleaning, comparator words such as "placebo").
 
 ## How it's built
 
-One command builds an indication end to end:
+One command builds an indication end to end (see [Add an indication](#add-an-indication) for a new one):
 
 ```bash
-npm run pipeline -- --disease mash
+npm run pipeline -- --disease mash --yes
 ```
 
 | Step | Source | Parallel processor | Data Connectors | MASH runs | MASH cost | Migraine runs | Migraine cost |
@@ -149,7 +149,7 @@ noisy web, and a join between them.
 ```bash
 npm install
 cp .env.example .env.local   # set PARALLEL_API_KEY
-npm run pipeline -- --disease mash
+npm run pipeline -- --disease mash --yes   # without --yes, a first build only prints its estimate
 npm run dev                   # open http://localhost:3000
 ```
 
@@ -174,10 +174,9 @@ To deploy on Vercel:
 Optionally set `NEXT_PUBLIC_REMOVAL_URL` to where removal requests should go.
 The default is the removal section of PRIVACY.md.
 
-To add an indication, append it to `scripts/diseases.json` and run the pipeline
-with its key. Visitors can ask for one from the indication picker ("Request an
-indication"), which opens a GitHub issue form; a person reviews each request
-before it is built, since a build costs about $15–60 depending on its size.
+Visitors can ask for an indication from the app ("Request an indication"), which
+opens a GitHub issue form. A maintainer builds it with the steps in
+[Add an indication](#add-an-indication).
 
 Once deployed, two scheduled jobs (`vercel.json`) keep every built indication
 current:
@@ -208,6 +207,56 @@ npm test
 npm run typecheck
 npm run lint
 ```
+
+## Add an indication
+
+Nothing is spent until you pass `--yes`, apart from one scoping run.
+
+1. **Propose it.** A free ClinicalTrials.gov preview of the name, then one `core`
+   Task run (about $0.03) that proposes the entry:
+   ```bash
+   npm run new-indication -- "Idiopathic pulmonary fibrosis"
+   ```
+   It adds the entry to `scripts/diseases.json` and prints what the build will
+   cost. Check it with `git diff`, mainly the search terms (`query_cond`) and any
+   condition filter (`default_scope.conditions_only`), against the condition
+   terms it prints. Edit freely; `--print` shows a proposal without writing it.
+2. **Check the cost** after any edit (free):
+   ```bash
+   npm run pipeline -- --disease idiopathic-pulmonary-fibrosis --estimate
+   ```
+3. **Build it.** The pipeline stops once, for companies found only on the web:
+   ```bash
+   npm run pipeline -- --disease idiopathic-pulmonary-fibrosis --yes
+   npm run review -- --disease idiopathic-pulmonary-fibrosis   # recommendations; set include in review/companies.json
+   npm run pipeline -- --disease idiopathic-pulmonary-fibrosis
+   ```
+4. **Ship it.** Open a pull request with the new entry. For a deployment, run
+   `npm run sync-blob`; the daily job starts the indication's news Monitor.
+
+Who decides each field:
+
+| Field | Set by |
+| --- | --- |
+| `name`, `subtitle`, `area` | the scoping run (`SCOPE` in `scripts/lib/specs.ts`) |
+| `query_cond`, `pubmed_terms`, `specialties` | the scoping run, given the registry preview |
+| `default_scope.conditions_only` | the scoping run, when the search also returns neighboring conditions |
+| `default_scope.min_phase: 2` | code, above 400 active drug trials |
+| `chain_regions` | code, from 80 company sponsors |
+| `include_completed_since` | code: January 1, two years back |
+| `monitor` | `true` |
+
+The estimate is a range because the number of companies is unknown until the
+pipeline resolves sponsors to owners and searches the web (1.0 to 1.6 per
+sponsor). For each of the five indications built so far, the actual cost fell
+inside its range.
+
+The scoping run was tested on the six configured indications. It set the same
+condition filters as the hand-written entries that have one (alopecia areata,
+Alzheimer's, pancreatic cancer), its search terms covered the same names, and
+code chose Phase 2+ for the same two (obesity, pancreatic cancer). Differences: a
+mild "migraine" filter (keeps 225 of 233 trials), regions for Alzheimer's
+company list, and trials completed since 2024 for MASH.
 
 ## Routes
 
