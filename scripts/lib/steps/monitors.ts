@@ -227,16 +227,19 @@ const near = (a: string, b: string, days = 3) => Math.abs(Date.parse(a) - Date.p
 type Comparable = Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 'source_url'> & { company_name?: string };
 /**
  * The same development, found by two monitors or twice by one: same company and close
- * dates, with the same source or the same type and a similar headline. Partners report
+ * dates, with the same source or the same kind of news and a similar headline. Partners report
  * the same news under two companies (a licensee and the originator of its drug), so two
  * companies also match when the headlines share a distinctive word: a code with digits
  * ("HRS-4729", "KAI-4729") or a word of either company's name. "Lilly reports Phase 2
  * results" and "Novo reports Phase 2 results" share neither.
  */
+// Results reach the news as data, a presentation or a publication, often the same day: one family.
+const family = (t: string) => (['data', 'presentation', 'publication'].includes(t) ? 'results' : t);
+
 export function sameEvent(a: Comparable, b: Comparable): boolean {
   if (!near(a.date, b.date)) return false;
   if (a.source_url && a.source_url === b.source_url) return true;
-  if (a.type !== b.type || !similar(a.headline, b.headline)) return false;
+  if (family(a.type) !== family(b.type) || !similar(a.headline, b.headline)) return false;
   if (a.company === b.company) return true;
   if (!near(a.date, b.date, 2)) return false;
   const names = new Set([...tokens(a.company_name ?? ''), ...tokens(b.company_name ?? '')]);
