@@ -253,8 +253,9 @@ test('monitors: partners reporting the same news are one event; different compan
   const kailera = { company: 'kailera', company_name: 'Kailera Therapeutics', type: 'enrollment_complete', date: '2026-09-30', headline: 'Kailera Completes Enrollment in Three KaiNETIC Phase 3 Trials', source_url: 'https://kailera.com/a' };
   const hengrui = { company: 'hengrui', company_name: 'Jiangsu Hengrui Medicine', type: 'enrollment_complete', date: '2026-09-30', headline: 'Kailera completes enrollment in three global ribupatide Phase 3 trials', source_url: 'https://pharmcube.com/b' };
   assert.ok(sameEvent(kailera, hengrui));
+  // Typed "data" by one monitor and "presentation" by the other, as in production.
   const easd1 = { ...hengrui, type: 'data', date: '2026-10-01', headline: 'EASD reports Phase 1 data for HRS-4729 and ribupatide' };
-  const easd2 = { ...kailera, type: 'data', date: '2026-10-01', headline: 'EASD Presentation Reports Phase 1 KAI-4729 Weight and Liver-Fat Result' };
+  const easd2 = { ...kailera, type: 'presentation', date: '2026-10-01', headline: 'EASD Presentation Reports Phase 1 KAI-4729 Weight and Liver-Fat Result' };
   assert.ok(sameEvent(easd1, easd2));
   const lilly = { company: 'lilly', company_name: 'Eli Lilly and Company', type: 'data', date: '2026-10-01', headline: 'Lilly reports Phase 2 results', source_url: null };
   const novo = { company: 'novo', company_name: 'Novo Nordisk', type: 'data', date: '2026-10-01', headline: 'Novo reports Phase 2 results', source_url: null };
