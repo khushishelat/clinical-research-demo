@@ -18,4 +18,6 @@ if (flag('report')) {
   const r = await monitorReport(d);
   console.log(`[${d.key}] ${r.events} events since ${r.since?.slice(0, 10) ?? '—'}`);
   console.table(r.rows);
+  // Set aside for review: a company found here but missing from the map may belong on it.
+  for (const o of r.aside) console.log(`  aside · ${o.reason} · ${o.company ?? '—'} · ${o.headline}${o.source_url ? ` (${o.source_url})` : ''}`);
 }
