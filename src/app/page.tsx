@@ -50,7 +50,12 @@ export default async function Home() {
                   <dl className="mt-4 flex gap-6">
                     <Num value={String(c.trials)} label="Trials" />
                     <Num value={String(c.companies)} label="Companies" />
-                    <Num value={c.dealDollars ? money(c.dealDollars) : String(c.deals)} label="Deals" accent />
+                    <Num
+                      value={c.dealDollars ? money(c.dealDollars) : '—'}
+                      label={`${c.deals} deal${c.deals === 1 ? '' : 's'}`}
+                      hint={`Licensing deals and acquisitions for drugs in this indication since May 2025${c.dealDollars ? ', at their announced "up to" value' : c.deals ? '; no value was disclosed' : ''}`}
+                      accent
+                    />
                   </dl>
                 </Link>
               </li>
@@ -115,9 +120,9 @@ export default async function Home() {
   );
 }
 
-function Num({ value, label, accent }: { value: string; label: string; accent?: boolean }) {
+function Num({ value, label, accent, hint }: { value: string; label: string; accent?: boolean; hint?: string }) {
   return (
-    <div>
+    <div title={hint}>
       <dd className="text-[18px] leading-none">{value}</dd>
       <dt className="mt-1 flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.06em] text-muted">
         {accent ? <span className="h-1 w-1 bg-orange" /> : null}

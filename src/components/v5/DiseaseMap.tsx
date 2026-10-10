@@ -314,7 +314,9 @@ function DealStat({ view }: { view: MapView }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <dd className="text-[28px] leading-none">{s.dealDollars ? `≈${money(s.dealDollars)}` : String(s.deals)}</dd>
+      <dd className="text-[28px] leading-none" title={s.dealDollars ? undefined : s.deals ? 'No value was disclosed' : undefined}>
+        {s.dealDollars ? `≈${money(s.dealDollars)}` : '—'}
+      </dd>
       <dt className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted">
         <button type="button" disabled={!s.deals} onClick={() => setOpen((v) => !v)} aria-expanded={open} title={'Licensing deals and acquisitions since May 2025, at their announced "up to" value'} className="flex items-center gap-1.5 hover:text-ink disabled:hover:text-muted">
           <span className="h-1.5 w-1.5 bg-orange" />

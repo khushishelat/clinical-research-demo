@@ -194,9 +194,25 @@ export function phaseText(phases: string[]): string {
 /** A trial as a headline names it: its acronym, else "Phase 2 HRS9531 trial", else its NCT ID. */
 export function trialName(t: Trial | undefined, nct: string): string {
   if (t?.acronym) return t.acronym;
-  const drug = t?.interventions.find((i) => !/placebo|vehicle|standard of care|usual care/i.test(i.name))?.name.split(/[(,;]/)[0].trim();
+  const drug = t?.interventions
+    .find((i) => !/placebo|vehicle|standard of care|usual care/i.test(i.name))
+    ?.name.replace(/^(part|cohort|arm|group|stage)\s+[a-z0-9]+\s*[:\-–]\s*/i, '')
+    .split(/[(,;]/)[0]
+    .trim();
   const phase = t ? phaseText(t.phases) : '';
   return drug ? `${phase ? `${phase} ` : ''}${drug} trial` : nct;
+}
+
+/** A registry change on its own, for a trial's history: "Stopped recruiting", "Moved to Phase 3". */
+export function registryChange(r: Pick<RegistryEvent, 'type' | 'detail'>): string {
+  if (r.type === 'trial_registered') return 'Registered';
+  const [from = '', to = ''] = r.detail.split(' → ');
+  if (r.type === 'phase_changed') return `Moved to ${phaseText(to.split('/')) || 'no stated phase'}${phaseText(from.split('/')) ? ` from ${phaseText(from.split('/'))}` : ''}`;
+  if (to === 'RECRUITING') return from === 'NOT_YET_RECRUITING' ? 'Started recruiting' : 'Recruiting again';
+  if (to === 'ACTIVE_NOT_RECRUITING') return 'Stopped recruiting';
+  if (to === 'ENROLLING_BY_INVITATION') return 'Enrolling by invitation';
+  const word = to.toLowerCase().replace(/_/g, ' ');
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
 /** A registry change in words: "ZUPREME-5 starts recruiting", "KaiNETIC-1 stops recruiting". */

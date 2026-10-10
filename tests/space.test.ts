@@ -274,3 +274,15 @@ test('table: an empty readout cell explains itself from the registry when no run
   assert.ok(cell.why && cell.why.text.length > 0);
   assert.ok(cell.why!.trials.every((t) => /^NCT/.test(t.nct) && t.detail.includes('·')));
 });
+
+test('trial drawer: registry changes are listed with their dates; a person with no location is not called outside the US', () => {
+  const s = space();
+  s.events.push({ id: 'r1', date: '2026-10-09', company: 'acme', drug: null, type: 'status_changed', headline: 'ONE stops recruiting', change: 'Stopped recruiting', source_url: null, nct: 'NCT1', origin: 'registry' } as never);
+  const t = trialDetail(s, 'NCT1')!;
+  assert.deepEqual(t.changes, [{ date: '2026-10-09', text: 'Stopped recruiting' }]);
+  const c = s.clinicians[0] as any;
+  Object.assign(c, { us: false, npi: null, country: null });
+  const p = trialDetail(s, 'NCT1')!.named[0]!;
+  assert.equal(p.specialty, 'Location not listed');
+  assert.equal(p.npiNote, null);
+});

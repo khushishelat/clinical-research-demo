@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto';
 import { regulatoryEvent } from '../../../src/lib/space/labels';
 import { log, spacePath, store, where, type Disease } from '../pipeline';
-import { registryHeadline, type RegistryEvent, type Trial } from '../registry';
+import { registryChange, registryHeadline, type RegistryEvent, type Trial } from '../registry';
 import { sameEvent, type MonitorEvent } from './monitors';
 
 export async function eventsStep(d: Disease) {
@@ -22,7 +22,7 @@ export async function eventsStep(d: Disease) {
   const id = (...parts: string[]) => createHash('sha1').update(parts.join('|')).digest('hex').slice(0, 12);
   const valid = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
 
-  type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; origin: 'web' | 'registry' | 'monitor'; found_by?: string[]; detected?: string };
+  type Event = { id: string; date: string; company: string; drug: string | null; type: string; headline: string; source_url: string | null; nct?: string | null; origin: 'web' | 'registry' | 'monitor'; found_by?: string[]; detected?: string; change?: string };
   const events: Event[] = [];
   for (const [key, f] of Object.entries(facts)) {
     for (const m of f.milestones ?? []) if (valid(m.date)) events.push({ id: id(key, m.date, m.headline), date: m.date, company: key, drug: m.drug ?? null, type: m.type, headline: m.headline, source_url: m.source_url, nct: m.nct ?? null, origin: 'web' });
@@ -52,7 +52,7 @@ export async function eventsStep(d: Disease) {
     const c = companyOf.get(r.nct);
     if (!c) continue;
     const t = byNct.get(r.nct);
-    events.push({ id: r.id, date: r.date, company: c, drug: null, type: r.type, headline: registryHeadline(r, t), source_url: `https://clinicaltrials.gov/study/${r.nct}`, nct: r.nct, origin: 'registry' });
+    events.push({ id: r.id, date: r.date, company: c, drug: null, type: r.type, headline: registryHeadline(r, t), change: registryChange(r), source_url: `https://clinicaltrials.gov/study/${r.nct}`, nct: r.nct, origin: 'registry' });
   }
   // New registrations come from each trial's first-posted date, so the feed works
   // from day one; snapshot diffs add status and phase changes on later days.

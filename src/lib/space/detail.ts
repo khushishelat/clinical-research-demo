@@ -42,9 +42,10 @@ function clinicianLine(s: S, key: string) {
     name: c.name,
     initials: initials(c.name),
     profile,
-    specialty: c.npi?.taxonomy ?? (c.us ? 'Specialty not verified' : 'Outside the US'),
+    // Outside the US only when a country says so; the registry often names a study chair with no location at all.
+    specialty: c.npi?.taxonomy ?? (c.us ? 'Specialty not verified' : c.country ? 'Outside the US' : 'Location not listed'),
     place: c.npi ? place(c.npi.city, c.npi.state) : place(c.city, c.state, c.country),
-    npiNote: c.us ? (c.npi ? null : c.npi_status === 'ambiguous' ? 'More than one NPI match' : 'No US NPI match') : 'No NPI',
+    npiNote: c.us ? (c.npi ? null : c.npi_status === 'ambiguous' ? 'More than one NPI match' : 'No US NPI match') : c.country ? 'No NPI' : null,
     trials: new Set(c.roles.map((r) => r.nct)).size,
     papers: c.pubmed?.verified ? c.pubmed.count : null,
   };
@@ -148,7 +149,7 @@ export function trialDetail(s: S, nct: string) {
       const other = elsewhere ? c?.roles.find((r) => r.facility === elsewhere) : undefined;
       const otherCo = other ? (s.companies.find((x) => x.key === other.company)?.name ?? other.sponsor) : null;
       const webRole = c?.web_roles[0];
-      return { ...line, role: p.role === 'study_chair' ? 'Study chair' : p.facility ? 'Site PI' : 'Principal investigator', site: here, note: elsewhere ? `Site named in ${otherCo}’s record: ${elsewhere}` : webRole ? `${webRole.role}, ${webRole.program}` : null };
+      return { ...line, role: p.role === 'study_chair' ? 'Study chair' : p.facility ? 'Site PI' : 'Principal investigator', site: here, note: elsewhere ? `Site named in ${otherCo}’s record: ${elsewhere}` : webRole ? `${roleLabel(webRole.role)}, ${webRole.program}` : null };
     })
     .filter(present)
     .filter((x, i, all) => all.findIndex((y) => y.key === x.key) === i)
@@ -173,6 +174,11 @@ export function trialDetail(s: S, nct: string) {
     acronym: t.acronym,
     title: t.title,
     status: t.status.replace(/_/g, ' '),
+    // What the daily registry pull saw change, newest first, so anything marked new can be traced.
+    changes: s.events
+      .filter((e) => e.origin === 'registry' && e.nct === nct && e.type !== 'trial_registered')
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map((e) => ({ date: e.date, text: e.change ?? e.headline })),
     phase: t.phases.map((p) => p.replace('PHASE', 'Phase ').replace('EARLY_', 'Early ')).join(' / ') || 'Phase not set',
     company: company ? { key: company.key, name: company.name } : null,
     sponsor: t.sponsor,
