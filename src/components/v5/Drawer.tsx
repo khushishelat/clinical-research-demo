@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ClinicianDetail, TrialDetail } from '@/lib/space/detail';
 import { Favicon } from './Favicon';
+import { RelDay } from './Live';
 
 const REMOVAL = process.env.NEXT_PUBLIC_REMOVAL_URL || 'https://github.com/khushishelat/clinical-research-demo/blob/main/PRIVACY.md#asking-to-be-removed';
 const fmt = (iso: string | null | undefined, month: 'short' | 'long' = 'short') => {
@@ -157,7 +158,7 @@ function Person({ p, onOpen, children }: { p: { key: string; name: string; initi
         <span className="block text-[12px] text-muted">
           {p.specialty}
           {p.place ? ` · ${p.place}` : ''}
-          {p.npiNote && p.specialty !== 'Outside the US' ? ` · ${p.npiNote}` : ''}
+          {p.npiNote && p.specialty !== 'Outside the US' && p.specialty !== 'Location not listed' ? ` · ${p.npiNote}` : ''}
         </span>
       </span>
       <span className="w-14 shrink-0 text-right font-mono text-[13px]">{p.trials || '—'}</span>
@@ -193,6 +194,20 @@ function Trial({ t, onOpen }: { t: TrialDetail; onOpen: (kind: 'trial' | 'clinic
             {t.nct} ↗
           </a>
         </p>
+        {t.changes.length ? (
+          <ul aria-label="Registry changes" className="mt-3 space-y-1 font-mono text-[11px]">
+            {t.changes.slice(0, 4).map((c) => (
+              <li key={`${c.date}-${c.text}`} className="flex flex-wrap items-center gap-x-2">
+                <span className="h-1.5 w-1.5 bg-ink" />
+                <span className="text-muted">
+                  <RelDay iso={c.date} />
+                </span>
+                <span>{c.text}</span>
+                <span className="text-faint">· ClinicalTrials.gov update</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <TrialSummary s={t.summary} />
         <Facts
           items={[

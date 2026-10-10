@@ -272,3 +272,12 @@ test('monitors: events kept by v1 monitors (no detected, ids or found_by) fold w
   assert.deepEqual(out[0].ids, ['old1', 'new1']);
   assert.deepEqual(out[0].found_by, ['co:acme']);
 });
+
+test('registry changes on their own, and trial names without arm prefixes', async () => {
+  const { registryChange, trialName } = await import('../scripts/lib/registry');
+  assert.equal(registryChange({ type: 'status_changed', detail: 'RECRUITING → ACTIVE_NOT_RECRUITING' }), 'Stopped recruiting');
+  assert.equal(registryChange({ type: 'status_changed', detail: 'NOT_YET_RECRUITING → RECRUITING' }), 'Started recruiting');
+  assert.equal(registryChange({ type: 'status_changed', detail: 'RECRUITING → TERMINATED' }), 'Terminated');
+  const t = { ...toTrial(study()), acronym: '', phases: ['PHASE1', 'PHASE2'], interventions: [{ name: 'Part C: RM-718', type: 'DRUG', other_names: [] }] };
+  assert.equal(trialName(t, t.nct), 'Phase 1/2 RM-718 trial');
+});
