@@ -64,6 +64,7 @@ export async function GET(req: Request) {
     }
     revalidatePath(`/d/${key}`);
     revalidatePath(`/d/${key}/data`);
+    revalidatePath(`/d/${key}/monitor`);
     revalidatePath('/api/status');
   }
   revalidatePath('/');

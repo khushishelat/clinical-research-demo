@@ -127,6 +127,8 @@ export type RunSpec = {
   connectors?: string[];
   metadata?: Record<string, string>;
   previous_interaction_id?: string | null;
+  /** Limits the run's web sources, e.g. to content published on or after a date. */
+  source_policy?: { after_date?: string; include_domains?: string[]; exclude_domains?: string[] };
 };
 
 /** Create a run once per key (or reuse the recorded one), wait for it, and record the result. */
@@ -146,6 +148,7 @@ export async function runOnce(client: Parallel, rl: { log: RunLog; save: () => P
       // Progress events are only tracked when asked for at creation (on by default from pro up).
       ...(rec0 ? { enable_events: true } : {}),
       ...(spec.previous_interaction_id ? { previous_interaction_id: spec.previous_interaction_id } : {}),
+      ...(spec.source_policy ? { source_policy: spec.source_policy } : {}),
     } as any);
     rec = rl.log[key] = { run_id: run.run_id, interaction_id: run.interaction_id, previous_interaction_id: spec.previous_interaction_id ?? null, processor: spec.processor, created: new Date().toISOString(), ...(failed ? { failed_runs: failed } : {}) };
     await rl.save();

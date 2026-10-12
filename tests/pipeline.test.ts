@@ -332,3 +332,15 @@ test('other registries: IDs in their registry format, not on ClinicalTrials.gov,
   assert.deepEqual(kept.map((x) => x.id), ['jRCT2031230195']); // active only without completed_since; one each
   assert.deepEqual(keepElsewhere([t({ id: 'CTR20249999', registry: 'NMPA (China)', status: 'completed', primary_completion: '2025-03' })], '2024-01-01').map((x) => x.id), ['CTR20249999']);
 });
+
+test('monitors: one company, one drug, the same kind of news within a day is one event', async () => {
+  const { sameEvent } = await import('../scripts/lib/steps/monitors');
+  // As production had it: the drug lists differ, one within the other; "biomarker" is shared.
+  const a = { company: 'lilly', company_name: 'Eli Lilly and Company', drug: 'tirzepatide', type: 'data', date: '2026-10-09', headline: 'Taltz plus Zepbound shows broader biomarker changes in TOGETHER-PsO', source_url: 'https://a' };
+  const b = { ...a, drug: 'tirzepatide and ixekizumab', type: 'presentation', headline: 'Lilly presents combination biomarker data in psoriasis and obesity', source_url: 'https://b' };
+  assert.ok(sameEvent(a, b));
+  assert.ok(!sameEvent(a, { ...b, drug: 'orforglipron', headline: 'Lilly presents orforglipron biomarker data' }));
+  assert.ok(!sameEvent(a, { ...b, date: '2026-10-12' }));
+  // Two different same-day releases about one drug share only generic words: kept apart.
+  assert.ok(!sameEvent({ ...a, headline: 'Tirzepatide SURMOUNT-5 results presented' }, { ...b, drug: 'tirzepatide', headline: 'Tirzepatide kidney outcomes presented at ASN' }));
+});
