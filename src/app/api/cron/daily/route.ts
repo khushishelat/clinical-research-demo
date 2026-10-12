@@ -1,5 +1,6 @@
 // Daily refresh for every built indication:
-// - today's ClinicalTrials.gov snapshot and diff (free);
+// - today's ClinicalTrials.gov snapshot and diff (free), and new trials put on their
+//   company's row (an owner run, $0.10, only for a sponsor seen for the first time);
 // - the indication's news Monitors (broad, by topic, and per leading company), created
 //   here when its config turns them on ($0.01 a run each), and their new events (free);
 // - the event feed and the first-disclosure check for newly registered trials;
@@ -11,6 +12,7 @@
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { disease as byKey } from '../../../../../scripts/lib/pipeline';
+import { attachStep } from '../../../../../scripts/lib/steps/attach';
 import { eventsStep } from '../../../../../scripts/lib/steps/events';
 import { firstSeenStep } from '../../../../../scripts/lib/steps/first-seen';
 import { collectMonitorEvents, reconcileMonitors } from '../../../../../scripts/lib/steps/monitors';
@@ -34,6 +36,9 @@ export async function GET(req: Request) {
     try {
       await registryStep(d);
       done[key].push('registry');
+      // New registrations and newly matching trials join their company's row.
+      await attachStep(d);
+      done[key].push('attach');
       // Monitors are created with this deployment's API key, so this job can read their
       // events; a monitor the key can't see is marked lost while collecting, and replaced.
       if (d.monitor) await reconcileMonitors(d);

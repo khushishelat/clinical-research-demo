@@ -304,6 +304,49 @@ export const READOUT = {
 // event names its company and, where it can, the drug and trial, so code joins
 // it to the map like a disclosure from step 4. Monitors can't call Data
 // Connectors; registry changes come from the daily ClinicalTrials.gov diff.
+// Step 7: trials registered outside ClinicalTrials.gov. A company on the map with
+// programs but no trial there (22 of them in MASH) usually registers elsewhere: China's
+// NMPA drug-trial registry or ChiCTR, India's CTRI, the EU's CTIS, Japan's jRCT,
+// Australia's ANZCTR, Korea's CRIS. One run per such company lists them by registry ID;
+// code keeps only IDs in each registry's own format and drops trials also on
+// ClinicalTrials.gov.
+// v2 (Oct 12): on MASH, v1 returned the EU and Japanese records of trials that are on
+// ClinicalTrials.gov but outside the map (completed, terminated, or status unknown:
+// Viking's VOYAGE, Kowa, ENYO, Can-Fite) without their NCT IDs. v2 checks the
+// ClinicalTrials.gov connector for each trial and gives primary completion, so code can
+// apply the indication's own scope.
+export const REGISTRIES = ['NMPA (China)', 'ChiCTR', 'CTRI (India)', 'EU CTIS', 'EudraCT', 'jRCT (Japan)', 'ANZCTR', 'CRIS (Korea)', 'ISRCTN'] as const;
+export const OTHER_REGISTRIES = {
+  key: 'registries@2',
+  processor: 'pro',
+  connectors: ['clinical_trials'],
+  schema: O({
+    trials: A(
+      O({
+        registry: E([...REGISTRIES]),
+        id: S('The trial ID exactly as the registry shows it: CTR20241234 (NMPA), ChiCTR2400081234, CTRI/2024/05/067890, 2024-512345-12-00 (CTIS), 2019-001234-56 (EudraCT), jRCT2031230123, ACTRN12624000123456, KCT0009876, ISRCTN12345678.'),
+        title: S('The registered title, in English if the registry gives one.'),
+        drug: S('The company drug it tests, by the name in known_drugs.'),
+        phase: PHASE('Phase as registered.'),
+        status: E(['recruiting', 'not_yet_recruiting', 'active_not_recruiting', 'completed', 'terminated', 'unknown']),
+        first_posted: N('YYYY-MM-DD the registry first posted it, or null.'),
+        primary_completion: N('Primary completion date as registered, YYYY-MM-DD or YYYY-MM, or null.'),
+        nct: N('The NCT ID when the same trial is on ClinicalTrials.gov (check with the ClinicalTrials.gov connector: same drug, phase and design, or the registry ID listed as a secondary ID), else null.'),
+        source_url: S('Link to the trial record, on the registry if possible.'),
+      }),
+      'This company\'s interventional drug trials for the indication registered in these registries: active, or completed or stopped since completed_since. Not trials on ClinicalTrials.gov only. Empty if none.'
+    ),
+  }),
+  input: (d: Disease, company: { name: string; country: string | null; drugs: string[] }, completedSince: string) => ({
+    company: company.name,
+    country: company.country,
+    indication: label(d),
+    known_drugs: company.drugs,
+    completed_since: completedSince,
+    task: 'Find this company\'s trials of its drugs for the indication in clinical-trial registries other than ClinicalTrials.gov: China (NMPA drug clinical trial registry, chinadrugtrials.org.cn; ChiCTR), India (CTRI), the EU (CTIS, EudraCT), Japan (jRCT), Australia and New Zealand (ANZCTR), Korea (CRIS) and ISRCTN. Give each trial\'s ID exactly as registered, with a link. For every trial, check the ClinicalTrials.gov connector for the same trial and give its NCT ID if it is there: most multinational trials are registered in both. Only trials you can find in a registry or in a source that quotes the registry ID. Never fabricate an ID.',
+  }),
+};
+
 // Daily news, from a set of Monitors per indication (base, daily, $0.01 a run each).
 // v2 (Oct 9): v1 was one broad monitor per indication; in its first days it found 15
 // events, none for three of five indications, against a usual 1 to 9 news items a week

@@ -7,7 +7,7 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 
 export const metadata: Metadata = {
   title: 'Trial Check',
-  description: 'Competitive landscapes by indication: every company developing drugs in it, their active trials, news and investigators. Built on Parallel: the Task API with Data Connectors for ClinicalTrials.gov, PubMed, ChEMBL, the NPI Registry and CMS Coverage.',
+  description: 'Competitive landscapes by indication: the companies developing drugs in it, their trials on ClinicalTrials.gov, news and investigators. Built on Parallel: the Task API with Data Connectors for ClinicalTrials.gov, PubMed, ChEMBL, the NPI Registry and CMS Coverage.',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

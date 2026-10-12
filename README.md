@@ -88,6 +88,7 @@ npm run pipeline -- --disease mash --yes
 | 05 Roles named in disclosures | Task Group, one run per company | `pro` | PubMed, NPI Registry | 68 | $6.80 | 37 | $3.70 |
 | 05 Profiles of the top 25 | Task Group | `core` | NPI Registry, PubMed, ClinicalTrials.gov | 25 | $0.63 | 25 | $0.63 |
 | 06 Events | Code, from steps 2–4 | | | | free | | free |
+| 07 Other registries | Task Group, one run per company on the map with no ClinicalTrials.gov trial: its trials in China's NMPA registry and ChiCTR, India's CTRI, the EU's CTIS, Japan's jRCT, ANZCTR, Korea's CRIS. Code keeps only IDs in each registry's format, drops trials on ClinicalTrials.gov (by the run's check, and by ClinicalTrials.gov listing the ID) and applies the indication's scope | `pro` | ClinicalTrials.gov | 20 | $2.00 | | |
 | 08 First disclosed | Task Group, trials registered in the last 90 days | `core` | | 17 | $0.43 | 9 | $0.23 |
 | 09 Weekly brief | Task API deep research, text output: starts from the week's registry changes and disclosures, then researches what they miss; recorded for replay | `ultra2x` | ClinicalTrials.gov, PubMed | 1 | $0.60 | 1 | $0.60 |
 | **Total** | | | | **362** | **$29.26** | **241** | **$17.96** |
@@ -195,7 +196,10 @@ Once deployed, two scheduled jobs (`vercel.json`) keep every built indication
 current:
 
 - **Daily** (`/api/cron/daily`):
-  - the ClinicalTrials.gov diff;
+  - the ClinicalTrials.gov diff, and new trials put on their company's row: by
+    sponsor, by one owner run ($0.10) for a sponsor seen for the first time, or for an
+    investigator-run trial, by the company with an established program of the drug
+    (two or more trials of its own here). Existing rows never reshuffle;
   - the indication's news Monitors (`monitor: true` in `diseases.json`):
     created when missing, replaced when the API key can't see them, and read;
   - the event feed and the first-disclosure check for new trials;

@@ -114,10 +114,10 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted">{view.disease.area ? `${view.disease.area} · ` : ''}Competitive landscape</p>
           <h1 className="mt-1 text-[36px] leading-tight tracking-[-0.01em]">{view.disease.name}</h1>
-          <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Every company developing drugs for this indication, their active trials and investigators'}</p>
+          <p className="mt-1 text-[15px] text-muted">{view.disease.subtitle ?? 'Companies developing drugs for this indication, their trials on ClinicalTrials.gov and investigators'}</p>
         </div>
         <dl className="flex flex-wrap gap-x-10 gap-y-4">
-          <Stat value={String(s.trials)} label="Active trials" hint={`Active trials on company rows${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}: each company's own, and investigator-run trials of its drugs${s.completed ? `; +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}. The registry search finds ${s.allActive} active drug trials in all; the rest test generics, supplements or procedures and stay off the map.`} />
+          <Stat value={String(s.trials)} label="Active trials" hint={`Active trials on company rows${view.scope?.min_phase ? `, Phase ${view.scope.min_phase}+` : ''}: each company's own, and investigator-run trials of its drugs${s.completed ? `; +${s.completed} completed since ${view.scope?.completed_since?.slice(0, 4) ?? ''}` : ''}. The registry search finds ${s.allActive} active drug trials in all; the rest test generics, supplements or procedures and stay off the map.${s.elsewhere ? ` Not counted: ${s.elsewhere} trials registered only outside ClinicalTrials.gov.` : ''}`} />
           <Stat value={String(s.companies)} label="Companies" hint={`${s.sponsors} registry sponsors${s.webCompanies ? `, ${s.webCompanies} found by web research` : ''}`} />
           <Stat value={String(s.investigators)} label="Investigators" hint="PIs and study chairs in the registry" />
           <DealStat view={view} />
@@ -151,6 +151,11 @@ export function DiseaseMap({ view, today }: { view: MapView; today: string }) {
               <li className="flex items-center gap-1.5" title="A trial that came with an acquired company or drug">
                 <span className="h-2.5 w-2.5 rounded-full bg-ink ring-2 ring-orange ring-offset-1" /> Acquired
               </li>
+              {view.stats.elsewhere ? (
+                <li className="flex items-center gap-1.5" title="A trial registered only outside ClinicalTrials.gov (China, India, EU, Japan, Australia or Korea), found by a Parallel research run; click to open the registry record">
+                  <span className="h-2.5 w-2.5 border-[1.5px] border-ink bg-card" /> Other registry
+                </li>
+              ) : null}
               <li className="flex items-center gap-1.5" title="Something the company announced: results, a deal, an approval, a filing, a financing">
                 <span className="h-2 w-2 bg-orange" /> News
               </li>
@@ -383,7 +388,13 @@ function MapRow({ row, x, years, todayAt, recent, onDot, onCard, setTip, showFir
               {d}
             </span>
           ))}
-          {row.webOnly ? <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">No active trials</span> : null}
+          {row.elsewhere.length ? (
+            <span title="Registered outside ClinicalTrials.gov" className="rounded-[2px] border border-ink px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">
+              {row.elsewhere.length} in other registries
+            </span>
+          ) : row.webOnly ? (
+            <span className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">No ClinicalTrials.gov trials</span>
+          ) : null}
         </p>
       </div>
       <div className="relative" style={{ minHeight: spread + 38 }}>
@@ -402,6 +413,20 @@ function MapRow({ row, x, years, todayAt, recent, onDot, onCard, setTip, showFir
         {row.next.map((m, i) => (
           <MarkLink key={`x${i}`} m={m} onTrial={onDot} onCard={onCard} label={`Expected next step: ${m.headline}`} onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `Expected · ${m.window ?? fmt(m.date)}`, body: m.headline, foot: m.nct ? 'Click to open the trial' : 'Click for details' })} className="absolute h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-dashed border-orange bg-card hover:scale-150" style={{ left: `${x(m.date)}%`, top: 26 }} />
         ))}
+        {row.elsewhere
+          .filter((t) => t.x)
+          .map((t) => (
+            <a
+              key={t.id}
+              href={t.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${t.registry} ${t.id}, ${t.title}`}
+              onMouseEnter={(e) => tipFor(e, { x: 0, y: 0, title: `${t.registry} · ${t.id} · ${t.phase ? `Phase ${t.phase}` : 'Phase n/a'}`, body: t.title, foot: `${t.status.replace(/_/g, ' ')} · first posted ${fmt(t.x!)} · click to open the registry record` })}
+              className="absolute -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-ink bg-card transition-transform hover:scale-150"
+              style={{ left: `${x(t.x!)}%`, top: jitter(t.id, spread) + 10, width: dotSize(t.phase) + 1, height: dotSize(t.phase) + 1 }}
+            />
+          ))}
         {row.dots.map((d) => {
           const size = dotSize(d.phase);
           return (
@@ -428,7 +453,10 @@ function MapRow({ row, x, years, todayAt, recent, onDot, onCard, setTip, showFir
           </div>
         ) : null}
       </div>
-      <div className="flex items-center justify-end font-mono text-[13px]">{row.trials || '—'}</div>
+      <div className="flex items-center justify-end font-mono text-[13px]" title={row.elsewhere.length ? `${row.elsewhere.length} more in other registries` : undefined}>
+        {row.trials || '—'}
+        {row.elsewhere.length ? <span className="ml-1 text-faint">+{row.elsewhere.length}</span> : null}
+      </div>
     </div>
   );
 }

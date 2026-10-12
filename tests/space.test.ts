@@ -66,6 +66,7 @@ const space = (): NonNullable<Space> =>
     briefs: [],
     monitors: [],
     news: { last_collected: null, last_new: null },
+    elsewhere: {},
   }) as unknown as NonNullable<Space>;
 
 test('map: rows for registry companies and approved web finds, others left out', () => {

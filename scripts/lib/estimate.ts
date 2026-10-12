@@ -11,13 +11,15 @@
 
 import type { Disease } from './pipeline';
 import type { Trial } from './registry';
-import { BRIEF, COMPANY_CHAIN, DEALS, FACTS, FIRST_SEEN, MONITOR, OWNER, PROFILE, READOUT, WEB_ROLES } from './specs';
+import { BRIEF, COMPANY_CHAIN, DEALS, FACTS, FIRST_SEEN, MONITOR, OTHER_REGISTRIES, OWNER, PROFILE, READOUT, WEB_ROLES } from './specs';
 
 /** Dollars per completed run, by processor (docs.parallel.ai/getting-started/pricing). Failed runs are free. */
 export const PRICE: Record<string, number> = { lite: 0.005, base: 0.01, core: 0.025, core2x: 0.05, pro: 0.1, ultra: 0.3, ultra2x: 0.6 };
 const COMPANIES_PER_SPONSOR = [1.0, 1.6] as const;
 const CHAIN_PAGES = [COMPANY_CHAIN.minPages, COMPANY_CHAIN.maxPages] as const;
 const PROFILES = 25;
+/** Companies on the map with no ClinicalTrials.gov trial, as a share of sponsors (0.1–0.45 in the five built so far). */
+const NO_CTGOV_PER_SPONSOR = [0.1, 0.45] as const;
 /** Investigator name checks, the Medicare coverage check and the same-company run: under a dollar in every build. */
 const SMALL_JOBS = 0.5;
 
@@ -44,6 +46,7 @@ export function estimate(d: Pick<Disease, 'chain_regions'>, trials: Trial[], tod
     line('Investigator roles, one per company', companies, WEB_ROLES.processor),
     line('Readouts, late-stage trials', [readouts, readouts], READOUT.processor),
     line('First disclosed, trials from the last 90 days', [recent, recent], FIRST_SEEN.processor),
+    line('Other registries, companies with no ClinicalTrials.gov trial', [Math.round(sponsors * NO_CTGOV_PER_SPONSOR[0]), Math.round(sponsors * NO_CTGOV_PER_SPONSOR[1])], OTHER_REGISTRIES.processor),
     line('Investigator profiles', [PROFILES, PROFILES], PROFILE.processor),
     line('Weekly brief', [1, 1], BRIEF.processor),
   ];
