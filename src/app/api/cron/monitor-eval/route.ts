@@ -1,8 +1,8 @@
-// The weekly monitor evaluation: each call scores the next indication still missing
-// last week's evaluation (one ultra reference run, a few minutes), so the Monday
-// schedule covers every indication with monitors in turn.
+// The weekly monitor evaluation, for us rather than visitors: each call scores the next
+// indication still missing last week's evaluation (one ultra reference run, a few
+// minutes), so the Monday schedule covers every indication with monitors in turn.
+// Read the results with scripts/monitor-report.mts.
 
-import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { disease as byKey, spacePath, store } from '../../../../../scripts/lib/pipeline';
 import { lastWeek, monitorEvalStep } from '../../../../../scripts/lib/steps/monitor-eval';
@@ -28,7 +28,6 @@ export async function GET(req: Request) {
       console.error(`[${key}] monitor evaluation failed:`, error);
       continue;
     }
-    revalidatePath(`/d/${key}/monitor`);
     return NextResponse.json({ ok: true, wrote: key, week: start, failed });
   }
   return NextResponse.json({ ok: Object.keys(failed).length === 0, wrote: null, week: start, failed }, { status: Object.keys(failed).length ? 500 : 200 });
