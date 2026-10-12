@@ -210,8 +210,10 @@ current:
   published that week only) lists the week's developments; the news Monitors'
   finds are scored against it: found by both, found only by Monitor, missed, and
   days from announcement to the map. Registry items (the daily pull's job) and
-  news from before the monitors started are listed, not scored. Each
-  indication's Monitor tab shows it, with every item linked to its source.
+  news from before the monitors started are listed, not scored. It is for us,
+  not visitors: read it with
+  `npx tsx --env-file=.env.vercel scripts/monitor-report.mts [--out report.md]`,
+  which also shows each monitor's finds and what was set aside.
 
 Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. With five
 indications they cost about $46 a month: the monitors about $22 (15 per

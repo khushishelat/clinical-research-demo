@@ -20,7 +20,6 @@ export function Tabs({ disease, name, briefs }: { disease: string; name: string;
   const tabs = [
     { href: `/d/${disease}`, label: 'Map' },
     { href: `/d/${disease}/data`, label: 'Table' },
-    { href: `/d/${disease}/monitor`, label: 'Monitor' },
   ];
   return (
     <nav aria-label="Views" className="flex items-center gap-6 border-b border-line px-4 sm:px-8">
