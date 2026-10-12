@@ -232,14 +232,17 @@ export function companyMatcher(companies: Company[]) {
 
 const STOP = new Set(['the', 'a', 'an', 'of', 'for', 'in', 'to', 'and', 'with', 'on', 'at', 'its', 'phase', 'trial', 'study']);
 const tokens = (s: string) => new Set(s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(' ').filter((x) => x.length > 2 && !STOP.has(x)));
+// Words any headline in this field might use; they say nothing about which development it is.
+const GENERIC = new Set(['results', 'reports', 'reported', 'presents', 'presented', 'presentation', 'shows', 'announces', 'positive', 'topline', 'trial', 'trials', 'study', 'phase', 'patients', 'adults', 'combination', 'treatment', 'weight', 'obesity', 'company', 'conference', 'meeting', 'congress', 'first', 'interim', 'primary', 'endpoint', 'endpoints', 'clinical', 'data']);
+/** Two headlines about one development: at least two distinctive words in common, half of the shorter one's. */
 const similar = (a: string, b: string) => {
-  const x = tokens(a);
-  const y = tokens(b);
+  const x = new Set([...tokens(a)].filter((t) => !GENERIC.has(t)));
+  const y = new Set([...tokens(b)].filter((t) => !GENERIC.has(t)));
   const both = [...x].filter((t) => y.has(t)).length;
-  return both / Math.max(1, Math.min(x.size, y.size)) >= 0.5;
+  return both >= 2 && both / Math.max(1, Math.min(x.size, y.size)) >= 0.5;
 };
 const near = (a: string, b: string, days = 3) => Math.abs(Date.parse(a) - Date.parse(b)) <= days * 86_400_000;
-type Comparable = Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 'source_url'> & { company_name?: string };
+type Comparable = Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 'source_url'> & { company_name?: string; drug?: string | null };
 /**
  * The same development, found by two monitors or twice by one: same company and close
  * dates, with the same source or the same kind of news and a similar headline. Partners report
@@ -250,10 +253,25 @@ type Comparable = Pick<MonitorEvent, 'company' | 'type' | 'date' | 'headline' | 
  */
 // Results reach the news as data, a presentation or a publication, often the same day: one family.
 const family = (t: string) => (['data', 'presentation', 'publication'].includes(t) ? 'results' : t);
+const drugSet = (s: string) => new Set(s.toLowerCase().split(/\s*(?:,|\+|\/|\band\b|\bplus\b|\bwith\b)\s*/).map(norm).filter(Boolean));
 
 export function sameEvent(a: Comparable, b: Comparable): boolean {
   if (!near(a.date, b.date)) return false;
   if (a.source_url && a.source_url === b.source_url) return true;
+  // One company, the same drugs (one list within the other), the same kind of news within a
+  // day, and a distinctive word in common besides the drug and company names: one
+  // development, however differently two monitors word it ("Taltz plus Zepbound shows broader
+  // biomarker changes" and "Lilly presents combination biomarker data in psoriasis and
+  // obesity"). Two different same-day releases about one drug share only generic words.
+  if (a.company === b.company && a.drug && b.drug && family(a.type) === family(b.type) && near(a.date, b.date, 1)) {
+    const da = drugSet(a.drug);
+    const db = drugSet(b.drug);
+    if ([...da].every((x) => db.has(x)) || [...db].every((x) => da.has(x))) {
+      const skip = new Set([...GENERIC, ...da, ...db, ...tokens(a.company_name ?? ''), ...tokens(b.company_name ?? '')]);
+      const tb = tokens(b.headline);
+      if ([...tokens(a.headline)].some((t) => tb.has(t) && t.length >= 5 && !skip.has(t))) return true;
+    }
+  }
   if (family(a.type) !== family(b.type) || !similar(a.headline, b.headline)) return false;
   if (a.company === b.company) return true;
   if (!near(a.date, b.date, 2)) return false;

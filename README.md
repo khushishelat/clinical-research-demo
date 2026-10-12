@@ -205,11 +205,18 @@ current:
   - the event feed and the first-disclosure check for new trials;
   - a readout check for trials that reach a readout point, plus a monthly re-check of those with no results yet.
 - **Weekly** (`/api/cron/brief`, Mondays): the brief.
+- **Weekly** (`/api/cron/monitor-eval`, Mondays): the monitors' scorecard. An
+  independent research sweep of the past week (Task API, `ultra`, sources
+  published that week only) lists the week's developments; the news Monitors'
+  finds are scored against it: found by both, found only by Monitor, missed, and
+  days from announcement to the map. Registry items (the daily pull's job) and
+  news from before the monitors started are listed, not scored. Each
+  indication's Monitor tab shows it, with every item linked to its source.
 
 Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. With five
-indications they cost about $40 a month: the monitors about $22 (15 per
-indication, $0.01 a run, daily), the weekly brief about $13, readout checks
-about $5.
+indications they cost about $46 a month: the monitors about $22 (15 per
+indication, $0.01 a run, daily), the weekly brief about $13, the monitors'
+weekly scorecard about $6.50, readout checks about $5.
 
 In production each monitor also calls `/api/monitor/webhook` when it finds
 something, so news reaches the map within minutes instead of at the next daily

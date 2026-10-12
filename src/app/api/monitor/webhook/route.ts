@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const got = await collectMonitorEvents(d, { monitor_id, event_group_id });
     if (got.added) {
       await eventsStep(d);
-      for (const p of [`/d/${key}`, `/d/${key}/data`, '/', '/api/status']) revalidatePath(p);
+      for (const p of [`/d/${key}`, `/d/${key}/data`, `/d/${key}/monitor`, '/', '/api/status']) revalidatePath(p);
     }
     return NextResponse.json({ ok: true, indication: key, ...got });
   }

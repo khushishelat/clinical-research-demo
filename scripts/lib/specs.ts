@@ -347,6 +347,38 @@ export const OTHER_REGISTRIES = {
   }),
 };
 
+/** Kinds of development, shared by the news Monitors and the weekly reference. */
+const MONITOR_TYPES = ['data', 'presentation', 'publication', 'regulatory', 'approval', 'trial_start', 'enrollment_complete', 'discontinuation', 'deal', 'financing', 'other'];
+
+// Monitor evaluation: an independent list of the week's developments, from a deep
+// research run limited to sources published that week, to score the monitors against
+// (steps/monitor-eval.ts). It answers "what did the monitors miss?" and "what did they
+// catch that a careful researcher looking back at the week would also find?".
+export const REFERENCE = {
+  key: 'reference@1',
+  processor: 'ultra',
+  schema: O({
+    events: A(
+      O({
+        company: S('The company the development is about, by its full usual name.'),
+        drug: N('The drug, by its INN or code, or null.'),
+        nct: N('The ClinicalTrials.gov NCT ID named in the source, or null.'),
+        type: E(MONITOR_TYPES),
+        date: S('YYYY-MM-DD the development was announced, within the week.'),
+        headline: S('In English, 12 words or fewer.'),
+        source_url: S('The primary source: company release, regulator, journal, conference or registry.'),
+      }),
+      'Every development announced in the week for drugs in development for the indication, from any company, in any country. Not reviews, opinion or market commentary.'
+    ),
+  }),
+  input: (d: Disease, start: string, end: string, companies: string[]) => ({
+    indication: label(d),
+    week: { from: start, to: end },
+    companies_to_check: companies,
+    task: `List every development in ${d.name} drug development announced from ${start} to ${end}: clinical trial results and readouts, conference presentations and publications, regulatory filings, designations, approvals and rejections, trial starts and first patients dosed, enrollment completions, clinical holds, discontinuations, licensing deals, acquisitions and financings. Check each company in companies_to_check and look beyond them, including companies in China, Japan, Korea and Europe. Only developments announced in that week, each with its primary source. Never fabricate.`,
+  }),
+};
+
 // Daily news, from a set of Monitors per indication (base, daily, $0.01 a run each).
 // v2 (Oct 9): v1 was one broad monitor per indication; in its first days it found 15
 // events, none for three of five indications, against a usual 1 to 9 news items a week
@@ -357,7 +389,6 @@ export const OTHER_REGISTRIES = {
 // full name, and code also matches on drug names; headlines must be in English (a test
 // run returned one in Russian). Every kept event records which
 // monitors found it (npm run monitors -- --report), so the set can be pruned on evidence.
-const MONITOR_TYPES = ['data', 'presentation', 'publication', 'regulatory', 'approval', 'trial_start', 'enrollment_complete', 'discontinuation', 'deal', 'financing', 'other'];
 export const MONITOR = {
   key: 'monitor@2',
   processor: 'base' as const,

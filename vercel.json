@@ -3,6 +3,7 @@
   "framework": "nextjs",
   "crons": [
     { "path": "/api/cron/daily", "schedule": "0 12 * * *" },
-    { "path": "/api/cron/brief", "schedule": "*/20 13-15 * * 1" }
+    { "path": "/api/cron/brief", "schedule": "*/20 13-15 * * 1" },
+    { "path": "/api/cron/monitor-eval", "schedule": "*/20 16-17 * * 1" }
   ]
 }
