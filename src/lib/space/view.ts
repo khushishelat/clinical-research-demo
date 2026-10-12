@@ -171,8 +171,21 @@ export function bdDeals(s: Space): Deal[] {
   const out: Deal[] = [];
   for (const f of Object.values(s.facts))
     for (const d of f.deals ?? []) {
-      if (!BD.has(d.type) || !forThisMap(d) || (d.stage && d.stage !== 'new')) continue;
-      const dup = out.find((x) => x.date && d.date && Math.abs(Date.parse(x.date) - Date.parse(d.date)) <= 3 * 86_400_000 && x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length >= 2);
+      // New deals count, and so does an expansion that buys new rights for disclosed new money
+      // (Fosun's global option on AR1001: a $60M option fee); amendments, terminations and
+      // closings don't. Only a stated total adds to the headline value.
+      const counts = !d.stage || d.stage === 'new' || (d.stage === 'expansion' && (dealValue(d) > 0 || dealUpfront(d) > 0));
+      if (!BD.has(d.type) || !forThisMap(d) || !counts) continue;
+      // Both parties often record the same deal, naming each other differently ("Hengrui Pharma",
+      // "Jiangsu Hengrui Pharmaceuticals"): within three days, two parties in common, or one plus
+      // the same drug or the same value, is one deal.
+      const dup = out.find((x) => {
+        if (!x.date || !d.date || Math.abs(Date.parse(x.date) - Date.parse(d.date)) > 3 * 86_400_000) return false;
+        const shared = x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length;
+        const sameDrug = (x.drugs ?? []).some((a) => (d.drugs ?? []).some((b) => norm(a) === norm(b)));
+        const sameValue = x.total_m != null && x.total_m === d.total_m && x.currency === d.currency;
+        return shared >= 2 || (shared >= 1 && (sameDrug || sameValue));
+      });
       if (dup) {
         // Keep the record that states a total.
         if (!dealValue(dup) && dealValue(d)) Object.assign(dup, d);
