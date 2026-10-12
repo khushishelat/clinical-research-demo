@@ -304,3 +304,18 @@ test('deals@5: a portfolio deal counts when every drug it names is on the map; a
   assert.equal(v.stats.deals, 1);
   assert.equal(v.stats.dealDollars, 2.2e9);
 });
+
+test('deals: one deal recorded by both parties under different names counts once; an expansion with new money counts', () => {
+  const s = space();
+  s.companies[0].drugs.push({ name: 'HRS-1596', codes: [], mechanism: '', mechanism_source: '', chembl_id: null, highest_phase: 'Phase 1' } as never);
+  const deal = { date: '2026-09-29', drugs: ['HRS-1596'], type: 'license', about: 'asset', stage: 'new', upfront: null, total: 'up to 2.6 billion US dollars', currency: 'USD', total_m: 2600, headline: 'Novo licenses HRS-1596', source_url: 'https://a' };
+  s.facts.acme.deals = [
+    { ...deal, parties: ['Novo Nordisk', 'Hengrui Pharma'] },
+    { ...deal, parties: ['Jiangsu Hengrui Pharmaceuticals', 'Novo Nordisk'], source_url: 'https://b' },
+    { ...deal, date: '2026-05-13', parties: ['Fosun Pharma', 'AriBio'], drugs: [], about: 'asset', stage: 'expansion', total_m: 4700, headline: 'Fosun obtains global option for AR1001' },
+    { ...deal, date: '2026-04-07', parties: ['AC Immune', 'Lilly'], drugs: [], stage: 'amendment', total_m: 1700, headline: 'AC Immune and Lilly amend collaboration' },
+  ] as never;
+  const v = mapView(s, 'companies', '2026-10-12');
+  assert.equal(v.stats.deals, 2);
+  assert.equal(v.stats.dealDollars, (2600 + 4700) * 1e6);
+});
