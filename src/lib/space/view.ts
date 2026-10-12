@@ -152,13 +152,14 @@ export const dealUpfront = (d: Deal): number => (d.currency ? (d.currency === 'U
 /**
  * Licensing, M&A and partnership deals for a drug in this indication, once each:
  * both parties often record the same deal. Portfolio, commercial and research
- * deals (deals@2 `about`) stay on the rows but not in this count.
+ * deals (deals@2 `about`), and amendments, expansions, terminations and closings of
+ * earlier deals (deals@4 `stage`), stay on the rows but not in this count.
  */
 export function bdDeals(s: Space): Deal[] {
   const out: Deal[] = [];
   for (const f of Object.values(s.facts))
     for (const d of f.deals ?? []) {
-      if (!BD.has(d.type) || !isAssetDeal(d.about)) continue;
+      if (!BD.has(d.type) || !isAssetDeal(d.about) || (d.stage && d.stage !== 'new')) continue;
       const dup = out.find((x) => x.date && d.date && Math.abs(Date.parse(x.date) - Date.parse(d.date)) <= 3 * 86_400_000 && x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length >= 2);
       if (dup) {
         // Keep the record that states a total.
