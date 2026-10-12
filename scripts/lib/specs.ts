@@ -224,8 +224,13 @@ export const FACTS = {
 // v4 (Oct 12): deals@3 counted an amendment to an old license as a new asset deal
 // (migraine's only "deal" was AEON amending its 2019 Daewoong license). Each deal now
 // says its stage, and only new agreements count toward the headline.
+// v5 (Oct 12): on migraine and alopecia areata, v4 classed argenx buying Forte for FB102
+// as portfolio where v3 had company_for_asset, under the same rules, which moved
+// alopecia's whole headline ($2.2B); counted a patent settlement (Sun licensing
+// Incyte's Leqselvi patents); and classed an exclusive China license of an unapproved
+// drug with milestones (Huadong, VC005) as commercial. The about rules now say each case.
 export const DEALS = {
-  key: 'deals@4',
+  key: 'deals@5',
   processor: 'pro',
   schema: O({
     deals: A(
@@ -235,8 +240,8 @@ export const DEALS = {
         drugs: A(DRUG),
         type: E(['license', 'acquisition', 'collaboration', 'option', 'divestiture', 'other']),
         about: E(
-          ['asset', 'company_for_asset', 'portfolio', 'commercial', 'research', 'other'],
-          'What the deal is for, from the announcement. asset: rights to specific drugs or programs for this indication, at any stage, named or not (e.g. licensing several preclinical programs). company_for_asset: buying a company chiefly for a drug for this indication. portfolio: a company or product portfolio in which this indication is a small part. commercial: distribution, co-promotion, supply, formulary, pricing or awareness agreements. research: discovery or platform work that has not yet produced a program for this indication.'
+          ['asset', 'company_for_asset', 'portfolio', 'commercial', 'research', 'legal', 'other'],
+          'What the deal is for, from the announcement. asset: rights to specific drugs or programs for this indication, at any stage, named or not (e.g. licensing several preclinical programs), including exclusive development or commercialization rights in a territory to a drug not yet approved there, with upfront or milestone payments. company_for_asset: buying a company chiefly for a drug in development for this indication, even when that drug is also developed for other diseases. portfolio: a company or product portfolio in which this indication is a small part and no drug for it is named as a reason. commercial: distribution, co-promotion, supply, formulary, pricing or awareness agreements for approved products. research: discovery or platform work that has not yet produced a program for this indication. legal: a patent license or settlement that resolves litigation, not rights to develop a drug.'
         ),
         stage: E(
           ['new', 'amendment', 'expansion', 'termination', 'closing'],
