@@ -40,6 +40,8 @@ export type Space = {
   /** The news Monitors (scripts/lib/steps/monitors.ts): what each watches, and when news was last read. */
   monitors: { key: string; label: string; kind: string }[];
   news: { last_collected: string | null; last_new: string | null };
+  /** Trials of map companies registered outside ClinicalTrials.gov (step 7), by company key. */
+  elsewhere: Record<string, { registry: string; id: string; title: string; drug: string; phase: string; status: string; first_posted: string | null; source_url: string }[]>;
 };
 
 
@@ -48,7 +50,7 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
   if (!config) return null;
   const trialsDoc = await doc<{ fetched: string; scope?: Space['scope']; trials: Trial[] }>(key, 'trials.json');
   if (!trialsDoc) return null;
-  const [companies, facts, events, clinicians, coverage, firstSeen, briefs, review, monitor] = await Promise.all([
+  const [companies, facts, events, clinicians, coverage, firstSeen, briefs, review, monitor, elsewhere] = await Promise.all([
     doc<{ companies: Company[]; unassigned_investigator_trials: string[] }>(key, 'companies.json'),
     doc<{ facts: Record<string, Facts> }>(key, 'facts.json'),
     doc<EventsDoc>(key, 'events.json'),
@@ -58,6 +60,7 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
     doc<{ issues: string[] }>(key, 'briefs/index.json'),
     doc<CompanyReview[]>(key, 'review/companies.json'),
     doc<{ monitors?: Record<string, { label: string; kind: string }>; health?: { last_collected: string; last_new: string | null } }>(key, 'monitor.json'),
+    doc<{ companies: Space['elsewhere'] }>(key, 'other-registries.json'),
   ]);
   return {
     config,
@@ -77,6 +80,7 @@ async function loadSpaceRaw(key: string): Promise<Space | null> {
     briefs: briefs?.issues ?? [],
     monitors: Object.entries(monitor?.monitors ?? {}).map(([k, m]) => ({ key: k, label: m.label, kind: m.kind })),
     news: { last_collected: monitor?.health?.last_collected ?? null, last_new: monitor?.health?.last_new ?? null },
+    elsewhere: elsewhere?.companies ?? {},
   };
 }
 

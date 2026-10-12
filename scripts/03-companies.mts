@@ -6,7 +6,9 @@
 //   npx tsx scripts/03-companies.mts --disease mash
 
 import { createHash } from 'node:crypto';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, phaseFromText, phaseLabel, phaseRank, trialTests, trialUses, type Drug } from './lib/companies';
+import { drugOwner, investigatorClaims } from './lib/assign';
+import type { Owner } from './lib/companies';
+import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, ownerFrom, ownerName, phaseFromText, phaseLabel, phaseRank, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
@@ -20,12 +22,6 @@ if (!trials.length) throw new Error('No trials yet. Run 02-registry first.');
 const sponsors = [...new Set(trials.filter((t) => t.run_by === 'company').map((t) => t.sponsor))].sort();
 const rl = await runLog(d, 'companies');
 
-// Runs sometimes explain instead of naming ("Lepu Medical group; the proposed transfer…"): keep the name.
-const ownerName = (x: string | null | undefined) => (x ?? '').split(/;|\(|,\s+(?:the|which|but|pending|not)\b/i)[0].replace(/\s+group$/i, '').trim();
-
-type Owner = { current_owner: string; relationship: string; announced: string | null; closed: string | null; value: string | null; owner_source_url: string; drugs: Drug[] };
-// v1 returns a phase enum; rows show "Phase 3" or "Approved". Trial IDs never count as drug codes.
-const ownerFrom = (c: any): Owner => ({ ...c, drugs: (c.drugs ?? []).map((x: any) => ({ ...x, highest_phase: phaseLabel(x.phase), codes: (x.codes ?? []).filter((y: string) => !/^NCT\d{8}$/i.test(y)) })) });
 const owners: Record<string, Owner> = {};
 if (client) {
   await pool(sponsors, 8, async (sponsor) => {
@@ -114,37 +110,10 @@ const same = client || rl.log[sameKey] ? await runOnce(client!, rl, sameKey, { p
 const merges = mergeRows(companies, ((same?.content as any)?.groups ?? []) as { names: string[]; company: string }[]);
 for (const m of merges) log(d, `same company: ${m.from.join(', ')} → ${m.into}`);
 
-// Who a drug belongs to: the company with the most of its own trials of it,
-// counting every name and code of the drug (Innovent registers mazdutide as
-// IBI362). If those are all Phase 4 studies of a marketed drug, it is a generic
-// here and claims no investigator trials (handoff: generics stay unassigned).
-const companyTrials = new Map(trials.filter((t) => t.run_by === 'company').map((t) => [t.nct, t]));
-const aliasOwner = new Map<string, string | null>();
-const ownerOf = (alias: string): string | null => {
-  if (aliasOwner.has(alias)) return aliasOwner.get(alias)!;
-  let best: { key: string; n: number; early: boolean } | null = null;
-  for (const c of companies.values()) {
-    const drug = c.drugs.find((x) => aliasesOf(x).includes(alias));
-    if (!drug) continue;
-    const names = aliasesOf(drug);
-    const mine = c.trials.map((n) => companyTrials.get(n)).filter((t): t is Trial => Boolean(t) && names.some((a) => trialUses(t!, a)));
-    const cand = { key: c.key, n: mine.length, early: mine.some((t) => t.phase_level > 0 && t.phase_level <= 3) };
-    if (!best || cand.n > best.n) best = cand;
-  }
-  // A company with no trial of its own here can still own the drug (e.g. a web-found originator).
-  const owner = best && (best.early || (best.n === 0 && !companies.get(best.key)!.trials.length)) ? best.key : null;
-  aliasOwner.set(alias, owner);
-  return owner;
-};
+// Who a drug belongs to, and which investigator trials test it (lib/assign.ts, shared with the daily refresh).
+const ownerOf = drugOwner([...companies.values()], trials);
 const owns = (c: Company, drug: Drug) => aliasesOf(drug).some((a) => ownerOf(a) === c.key);
-
-// Investigator-run trials join the company whose drug sits in an experimental arm.
-const claims = new Map<string, Set<string>>();
-for (const t of trials.filter((x) => x.run_by === 'investigator')) {
-  for (const c of companies.values())
-    for (const drug of c.drugs)
-      for (const a of aliasesOf(drug)) if (ownerOf(a) === c.key && trialTests(t, a)) (claims.get(t.nct) ?? claims.set(t.nct, new Set()).get(t.nct)!).add(c.key);
-}
+const claims = investigatorClaims([...companies.values()], trials, ownerOf);
 const conflicts: { nct: string; companies: string[] }[] = [];
 for (const [nct, keys] of claims) {
   // A combination trial can test two companies' drugs; it shows in both rows.

@@ -56,7 +56,8 @@ export function trialUses(trial: Trial, alias: string): boolean {
   return trial.interventions.some((iv) => [iv.name, ...iv.other_names].some((n) => norm(n).includes(a) || (c.length >= 5 && /\d/.test(c) && compact(n).includes(c))));
 }
 
-export { phaseLabel } from '../../src/lib/space/labels';
+import { phaseLabel } from '../../src/lib/space/labels';
+export { phaseLabel };
 
 /** A phase as older runs wrote it ("Phase 2b", "Approved for NASH in India") → the PHASES enum. */
 export function phaseFromText(text: string | null | undefined): string {
@@ -87,7 +88,10 @@ export function trialTests(trial: Trial, alias: string): boolean {
   const c = compact(alias);
   const inArm = (arm: { interventions: string[] }) => arm.interventions.some((n) => norm(n).includes(a) || (c.length >= 5 && /\d/.test(c) && compact(n).includes(c)));
   const experimental = arms.filter((x) => !/COMPARATOR|SHAM|NO_INTERVENTION/.test(x.type));
-  return experimental.some(inArm);
+  if (experimental.length) return experimental.some(inArm);
+  // No experimental arm: some investigators label the drug under test an active comparator against
+  // placebo (semaglutide vs placebo, NCT06184633). Then the active arms are what the trial tests.
+  return arms.every((x) => /COMPARATOR|SHAM|NO_INTERVENTION/.test(x.type)) && arms.filter((x) => x.type === 'ACTIVE_COMPARATOR').some(inArm);
 }
 
 /** A financial parent (a foundation or holding company) is not the company on the map. */
@@ -124,3 +128,11 @@ export function mergeRows(rows: Map<string, Company>, groups: { names: string[];
   }
   return merges;
 }
+
+// Runs sometimes explain instead of naming ("Lepu Medical group; the proposed transfer…"): keep the name.
+export const ownerName = (x: string | null | undefined) => (x ?? '').split(/;|\(|,\s+(?:the|which|but|pending|not)\b/i)[0].replace(/\s+group$/i, '').trim();
+
+/** An OWNER run's answer: who owns a registry sponsor today, and its drugs for the indication. */
+export type Owner = { current_owner: string; relationship: string; announced: string | null; closed: string | null; value: string | null; owner_source_url: string; drugs: Drug[] };
+// v1 returns a phase enum; rows show "Phase 3" or "Approved". Trial IDs never count as drug codes.
+export const ownerFrom = (c: any): Owner => ({ ...c, drugs: (c.drugs ?? []).map((x: any) => ({ ...x, highest_phase: phaseLabel(x.phase), codes: (x.codes ?? []).filter((y: string) => !/^NCT\d{8}$/i.test(y)) })) });

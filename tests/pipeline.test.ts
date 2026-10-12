@@ -281,3 +281,54 @@ test('registry changes on their own, and trial names without arm prefixes', asyn
   const t = { ...toTrial(study()), acronym: '', phases: ['PHASE1', 'PHASE2'], interventions: [{ name: 'Part C: RM-718', type: 'DRUG', other_names: [] }] };
   assert.equal(trialName(t, t.nct), 'Phase 1/2 RM-718 trial');
 });
+
+test('assignment: an active-comparator-only trial tests its drug; investigator trials need an established program', async () => {
+  const { trialTests } = await import('../scripts/lib/companies');
+  const { drugOwner, investigatorClaims } = await import('../scripts/lib/assign');
+  const base = toTrial(study());
+  const ist = { ...base, nct: 'NCT9', run_by: 'investigator' as const, interventions: [{ name: 'Semaglutide 3.2 MG/ML', type: 'DRUG', other_names: [] }, { name: 'Placebo', type: 'DRUG', other_names: [] }], arms: [{ type: 'ACTIVE_COMPARATOR', interventions: ['Semaglutide 3.2 MG/ML'] }, { type: 'PLACEBO_COMPARATOR', interventions: ['Placebo'] }] };
+  assert.equal(trialTests(ist, 'semaglutide'), true);
+  // A drug only compared against an experimental one is not what the trial tests.
+  assert.equal(trialTests({ ...ist, arms: [{ type: 'EXPERIMENTAL', interventions: ['Placebo'] }, { type: 'ACTIVE_COMPARATOR', interventions: ['Semaglutide 3.2 MG/ML'] }] }, 'semaglutide'), false);
+  const own = (nct: string) => ({ ...base, nct, run_by: 'company' as const, phase_level: 3, interventions: [{ name: 'semaglutide', type: 'DRUG', other_names: [] }] });
+  const company = (key: string, trials: string[]) => ({ key, name: key, trials, investigator_trials: [], drugs: [{ name: 'semaglutide', codes: ['NN9535'], highest_phase: 'Approved' }] }) as never;
+  const trials = [own('NCT1'), own('NCT2'), own('NCT3'), ist];
+  // Novo runs two trials of its own: it claims the investigator trial. A biosimilar maker with one does not.
+  const companies = [company('novo', ['NCT1', 'NCT2']), company('biosim', ['NCT3'])];
+  const claims = investigatorClaims(companies, trials, drugOwner(companies, trials));
+  assert.deepEqual([...(claims.get('NCT9') ?? [])], ['novo']);
+  const thin = [company('novo', ['NCT1'])];
+  assert.equal(investigatorClaims(thin, trials, drugOwner(thin, trials)).size, 0);
+});
+
+test('attach: new trials join their sponsor company; existing assignments stay', async () => {
+  const { memoryStore } = await import('../src/lib/store');
+  const base = toTrial(study());
+  const t1 = { ...base, nct: 'NCT1', sponsor: 'Acme Bio, Inc.', run_by: 'company' as const };
+  const t2 = { ...base, nct: 'NCT2', sponsor: 'Acme Bio, Inc.', run_by: 'company' as const, first_posted: '2026-10-08' };
+  const s = memoryStore({
+    'spaces/x/trials.json': { trials: [t1, t2] },
+    'spaces/x/companies.json': { disease: 'x', built: '', unassigned_investigator_trials: [], companies: [{ key: 'acme', name: 'Acme Bio', registry_sponsors: ['Acme Bio, Inc.'], trials: ['NCT1'], investigator_trials: [], drugs: [], web_only: false, max_phase: 2 }] },
+  });
+  const pipeline = await import('../scripts/lib/pipeline');
+  const orig = { get: pipeline.store.get, put: pipeline.store.put };
+  Object.assign(pipeline.store, { get: s.get, put: s.put });
+  try {
+    const { attachStep } = await import('../scripts/lib/steps/attach');
+    const r = await attachStep({ key: 'x', name: 'X' } as never);
+    assert.equal(r.attached, 1);
+    const doc = (await s.get<any>('spaces/x/companies.json'))!;
+    assert.deepEqual(doc.companies[0].trials, ['NCT1', 'NCT2']);
+    assert.equal(doc.attached[0].nct, 'NCT2');
+  } finally {
+    Object.assign(pipeline.store, orig);
+  }
+});
+
+test('other registries: IDs in their registry format, not on ClinicalTrials.gov, within the indication scope', async () => {
+  const { keepElsewhere } = await import('../scripts/lib/registries');
+  const t = (over: Record<string, unknown>) => ({ registry: 'jRCT (Japan)', id: 'jRCT2031230195', title: 'A trial', drug: 'X', phase: 'phase_2', status: 'recruiting', first_posted: '2023-07-01', primary_completion: null, nct: null, source_url: 'https://jrct.mhlw.go.jp/x', ...over }) as never;
+  const kept = keepElsewhere([t({}), t({ id: 'jRCT-bad' }), t({ id: 'CTR20241234', registry: 'NMPA (China)', nct: 'NCT01234567' }), t({ id: 'CTR20249999', registry: 'NMPA (China)', status: 'completed', primary_completion: '2025-03' }), t({ id: 'jRCT2031230195' })], null);
+  assert.deepEqual(kept.map((x) => x.id), ['jRCT2031230195']); // active only without completed_since; one each
+  assert.deepEqual(keepElsewhere([t({ id: 'CTR20249999', registry: 'NMPA (China)', status: 'completed', primary_completion: '2025-03' })], '2024-01-01').map((x) => x.id), ['CTR20249999']);
+});

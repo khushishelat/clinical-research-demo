@@ -39,6 +39,7 @@ if (pending.length) {
 step('04-enrich.mts');
 step('05-clinicians.mts');
 step('06-events.mts');
+step('07-registries.mts');
 step('08-first-seen.mts');
 step('09-brief.mts');
 console.log(`\n[${d.key}] done. Open /d/${d.key}`);

@@ -28,6 +28,8 @@ export type Row = {
   next: (Mark & { window: string | null })[];
   trials: number;
   webOnly: boolean;
+  /** Trials registered outside ClinicalTrials.gov (step 7): placed by first-posted date when the registry gives one. */
+  elsewhere: { id: string; registry: string; title: string; drug: string; phase: number; status: string; x: string | null; url: string }[];
   acquisitions: { from: string; closed: string | null; source: string }[];
   /** Regulatory designations granted, e.g. "BTD", "PRIME". */
   designations: string[];
@@ -132,6 +134,7 @@ export function dollars(s: string | null | undefined): number {
 
 const ACTIVE_WINDOW_DAYS = 60;
 const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION']);
+const ELSEWHERE_PHASE: Record<string, number> = { phase_1: 1, phase_1_2: 1, phase_2: 2, phase_2_3: 2, phase_3: 3, filed: 4, approved: 4 };
 export const DEALS_SINCE = '2025-05-01';
 const BD = new Set(['license', 'acquisition', 'collaboration', 'option', 'divestiture']);
 const firstWord = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ')[0];
@@ -230,6 +233,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       next,
       trials: dots.length,
       webOnly: c.web_only,
+      elsewhere: (s.elsewhere[c.key] ?? []).map((t) => ({ id: t.id, registry: t.registry, title: t.title, drug: t.drug, phase: ELSEWHERE_PHASE[t.phase] ?? 0, status: t.status, x: t.first_posted, url: t.source_url })),
       acquisitions: c.acquisitions.map((a) => ({ from: a.sponsor, closed: a.closed, source: a.source })),
       designations,
     });
@@ -250,6 +254,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       next: [],
       trials: s.unassigned.length,
       webOnly: false,
+      elsewhere: [],
       acquisitions: [],
       designations: [],
     });
@@ -273,6 +278,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       trials: s.trials.filter((t) => onMap.has(t.nct) && ACTIVE.has(t.status)).length,
       completed: s.trials.filter((t) => onMap.has(t.nct) && !ACTIVE.has(t.status)).length,
       allActive: s.trials.filter((t) => ACTIVE.has(t.status)).length,
+      elsewhere: Object.values(s.elsewhere).reduce((n, ts) => n + ts.length, 0),
       all: s.trials.length,
       onMap: onMap.size,
       companies: rows.filter((r) => r.key !== '_unassigned').length,
