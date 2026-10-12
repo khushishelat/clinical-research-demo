@@ -152,13 +152,26 @@ export const dealUpfront = (d: Deal): number => (d.currency ? (d.currency === 'U
 /**
  * Licensing, M&A and partnership deals for a drug in this indication, once each:
  * both parties often record the same deal. Portfolio, commercial and research
- * deals (deals@2 `about`) stay on the rows but not in this count.
+ * deals (deals@2 `about`), and amendments, expansions, terminations and closings of
+ * earlier deals (deals@4 `stage`), stay on the rows but not in this count.
  */
 export function bdDeals(s: Space): Deal[] {
+  // Every name and code of the drugs on this map, normalized ("FB-102" is "fb102"), and whether it is approved.
+  const norm = (x: string) => x.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const onMap = new Map<string, boolean>();
+  for (const c of s.companies) for (const x of c.drugs) for (const n of [x.name.split('(')[0], ...(x.codes ?? [])].map(norm)) if (n && !onMap.get(n)) onMap.set(n, /approved|marketed/i.test(x.highest_phase ?? ''));
+  // Whether a whole-company acquisition is "for" this indication is a judgment runs make
+  // differently (argenx buying Forte for FB102: company_for_asset in one run, portfolio in
+  // the next). Code decides it from the drugs the deal names: a portfolio deal counts when
+  // every drug it names is on this map and one is still in development. A broad portfolio
+  // (Sun buying Organon) names others; a sale of marketed brands (Assertio's Cambia to
+  // Cosette) names only approved drugs.
+  const named = (d: Deal) => (d.drugs ?? []).map((x) => norm(x.split('(')[0]));
+  const forThisMap = (d: Deal) => isAssetDeal(d.about) || (d.about === 'portfolio' && named(d).length > 0 && named(d).every((n) => onMap.has(n)) && named(d).some((n) => onMap.get(n) === false));
   const out: Deal[] = [];
   for (const f of Object.values(s.facts))
     for (const d of f.deals ?? []) {
-      if (!BD.has(d.type) || !isAssetDeal(d.about)) continue;
+      if (!BD.has(d.type) || !forThisMap(d) || (d.stage && d.stage !== 'new')) continue;
       const dup = out.find((x) => x.date && d.date && Math.abs(Date.parse(x.date) - Date.parse(d.date)) <= 3 * 86_400_000 && x.parties.filter((p) => d.parties.some((q) => sameCompany(p, q))).length >= 2);
       if (dup) {
         // Keep the record that states a total.

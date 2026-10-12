@@ -287,3 +287,20 @@ test('trial drawer: registry changes are listed with their dates; a person with 
   assert.equal(p.specialty, 'Location not listed');
   assert.equal(p.npiNote, null);
 });
+
+test('deals@5: a portfolio deal counts when every drug it names is on the map; amendments and closings never', () => {
+  const s = space();
+  s.companies[0].drugs.push({ name: 'FB102', codes: ['FB-102'], mechanism: '', mechanism_source: '', chembl_id: null, highest_phase: 'Phase 1' } as never);
+  s.facts.acme.deals = [
+    { date: '2026-07-27', parties: ['argenx', 'Forte Biosciences'], drugs: ['FB102'], type: 'acquisition', about: 'portfolio', stage: 'new', upfront: null, total: 'approximately $2.2 billion', currency: 'USD', total_m: 2200, headline: 'argenx acquires Forte for FB102', source_url: 'https://x' },
+    { date: '2026-08-27', parties: ['argenx', 'Forte Biosciences'], drugs: ['FB102'], type: 'acquisition', about: 'company_for_asset', stage: 'closing', upfront: null, total: null, headline: 'argenx completes Forte acquisition', source_url: 'https://y' },
+    { date: '2026-04-26', parties: ['Sun Pharma', 'Organon'], drugs: ['FB102', 'Nexplanon'], type: 'acquisition', about: 'portfolio', stage: 'new', upfront: null, total: 'US$11.75 billion', currency: 'USD', total_m: 11750, headline: 'Sun to acquire Organon', source_url: 'https://z' },
+    { date: '2026-01-21', parties: ['AEON', 'Daewoong'], drugs: [], type: 'license', about: 'asset', stage: 'amendment', upfront: null, total: null, headline: 'Daewoong license amended', source_url: 'https://w' },
+    // A sale of marketed brands names only approved drugs: not counted.
+    { date: '2026-04-08', parties: ['Assertio', 'Cosette'], drugs: ['acmetide'], type: 'divestiture', about: 'portfolio', stage: 'new', upfront: null, total: '$35 million', currency: 'USD', total_m: 35, headline: 'Assertio sells brands to Cosette', source_url: 'https://v' },
+  ] as never;
+  s.companies[0].drugs.push({ name: 'acmetide', codes: [], mechanism: '', mechanism_source: '', chembl_id: null, highest_phase: 'Approved' } as never);
+  const v = mapView(s, 'companies', '2026-10-12');
+  assert.equal(v.stats.deals, 1);
+  assert.equal(v.stats.dealDollars, 2.2e9);
+});
