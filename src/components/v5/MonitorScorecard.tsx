@@ -122,7 +122,7 @@ export function MonitorScorecard({ name, view }: { name: string; view: View }) {
                       <Favicon host={c.host} name={c.company} size={12} />
                       <span className="truncate">{c.company}</span>
                       <span className="ml-auto shrink-0 font-mono text-[10px]">
-                        <RelDay iso={c.detected} short /> · {speed(c.after)} after
+                        <RelDay iso={c.detected} short /> · {c.after == null ? 'first run' : `${speed(c.after)} after`}
                       </span>
                     </span>
                     <span className="mt-0.5 block text-[13px] leading-snug">{c.headline}</span>

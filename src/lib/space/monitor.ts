@@ -48,7 +48,8 @@ export async function monitorScorecard(key: string) {
     latency,
     latencyN: forward.length,
     monitors,
-    latest: [...found].sort((a, b) => (b.detected ?? '').localeCompare(a.detected ?? '')).slice(0, 8).map((e) => ({ ...card(e), detected: e.detected!, after: days(e) })),
+    // News announced before the monitors started came in their first run's sample, not by detection: no speed for it.
+    latest: [...found].sort((a, b) => (b.detected ?? '').localeCompare(a.detected ?? '')).slice(0, 8).map((e) => ({ ...card(e), detected: e.detected!, after: since && e.date >= since.slice(0, 10) ? days(e) : null })),
     aside: { reasons, examples: (aside ?? []).filter((a) => a.reason !== 'no_date').slice(0, 6).map((a) => ({ reason: a.reason, company: a.company, headline: a.headline, source: a.source_url, host: hostOf(a.source_url), monitor: label(a.monitor) })) },
     week: evalDoc
       ? {
