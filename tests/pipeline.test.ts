@@ -344,3 +344,65 @@ test('monitors: one company, one drug, the same kind of news within a day is one
   // Two different same-day releases about one drug share only generic words: kept apart.
   assert.ok(!sameEvent({ ...a, headline: 'Tirzepatide SURMOUNT-5 results presented' }, { ...b, drug: 'tirzepatide', headline: 'Tirzepatide kidney outcomes presented at ASN' }));
 });
+
+test('scope: Phase 1 and branded drugs earn a row; generic versions and preclinical programs do not', async () => {
+  const { inScopeDrug } = await import('../scripts/lib/companies');
+  const drug = (name: string, highest_phase: string) => ({ name, codes: [], mechanism: '', mechanism_source: 'web', chembl_id: null, highest_phase });
+  assert.ok(inScopeDrug(drug('MT-001', 'Phase 1')));
+  assert.ok(inScopeDrug(drug('Ergomar (ergotamine sublingual tablets)', 'Approved (United States)')));
+  assert.ok(!inScopeDrug(drug('Rizatriptan benzoate tablets', 'Approved (India)')));
+  assert.ok(!inScopeDrug(drug('MT-004', 'Preclinical')));
+});
+
+test('company chain: generic-only companies do not keep the list going', async () => {
+  const { chain } = await import('../scripts/lib/pipeline');
+  const co = (name: string, phase: string) => ({ company: name, drugs: [{ phase }] });
+  const page = (companies: unknown[]) => ({ run_id: 'r', processor: 'ultra', created: '', status: 'completed', interaction_id: 'i', content: { companies } });
+  // Page 2 adds five companies, four of them generic makers; page 3 is never run (no client).
+  const rl = { log: { 'c:p1': page(['A', 'B', 'C', 'D'].map((n) => co(n, 'phase_2'))), 'c:p2': page([co('E', 'phase_1'), ...['F', 'G', 'H', 'I'].map((n) => co(n, 'generic'))]) }, save: async () => {} };
+  const got = await chain<{ company: string; drugs: { phase: string }[] }>({} as never, rl as never, 'c', { first: '', next: '', field: 'companies', processor: 'ultra', schema: {}, dedupe: (x) => x.company, counts: (x) => x.drugs.some((y) => y.phase !== 'generic'), maxPages: 8, minNew: 3, minPages: 2 });
+  assert.equal(got.length, 9);
+});
+
+test('expansion: set-aside companies are looked up once, newest first, five a week; joint names and institutions are not', async () => {
+  const { lookups } = await import('../scripts/lib/steps/expand');
+  const row = (name: string) => ({ key: name.toLowerCase(), name, relationship: 'independent', owner_source: null, acquisitions: [], registry_sponsors: [], drugs: [], trials: [], investigator_trials: [], web: null, web_only: false, approved: false, max_phase: 3 }) as never;
+  const aside = (company: string | null, reason = 'no_company_on_map') => ({ id: company ?? 'x', monitor: 'all', reason, company, headline: '', date: '2026-11-09', source_url: null, detected: '2026-11-09' }) as never;
+  const other = [aside('Mentari Therapeutics, Inc.'), aside('Mentari Therapeutics'), aside('Brise Pharmaceuticals Co., Ltd. and AbbVie Inc.'), aside('University of Colorado, Denver'), aside('U.S. Food and Drug Administration'), aside('No company identified (academic research)'), aside('Rapport Therapeutics, Inc.'), aside('Livzon Pharmaceutical Group Inc.', 'other_indication'), aside('TriGemX Bio')];
+  const looked = (n: number) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`co${i}`, { name: `Co ${i}`, date: '2026-11-08', outcome: 'out_of_scope' as const, why: '' }]));
+  const map = [row('Brise Pharmaceuticals'), row('AbbVie')];
+  const first = lookups(other, map, { looked: {} }, '2026-11-11');
+  assert.deepEqual(first.now, ['Mentari Therapeutics, Inc.', 'Rapport Therapeutics, Inc.', 'TriGemX Bio']);
+  assert.deepEqual(Object.values(first.settled).map((x) => x.outcome), ['on_map', 'not_a_company', 'not_a_company', 'not_a_company']);
+  // Four lookups this week leave one; a company already looked at is not looked at again.
+  assert.deepEqual(lookups(other, map, { looked: looked(4) }, '2026-11-11').now, ['Mentari Therapeutics, Inc.']);
+  assert.deepEqual(lookups(other, map, { looked: { ...looked(4), mentari: { name: 'Mentari Therapeutics, Inc.', date: '2026-11-01', outcome: 'added', why: '' } } }, '2026-11-11').now, ['Rapport Therapeutics, Inc.']);
+});
+
+test('expansion: set-aside news joins a company once it is on the map, as one event', async () => {
+  const { rejoinUnmatched } = await import('../scripts/lib/steps/monitors');
+  const mentari = { key: 'mentari', name: 'Mentari Therapeutics', relationship: 'independent', owner_source: null, acquisitions: [], registry_sponsors: [], drugs: [], trials: [], investigator_trials: [], web: null, web_only: true, approved: false, max_phase: 1 } as never;
+  const aside = (id: string, company: string, headline: string, url: string) => ({ id, monitor: id, reason: 'no_company_on_map' as const, company, headline, date: '2026-11-06', source_url: url, detected: '2026-11-06T12:00:00Z' });
+  const other = [aside('a', 'Mentari Therapeutics, Inc.', 'Mentari merger closes alongside approximately $490 million in financing', 'https://x'), aside('b', 'Mentari Therapeutics, Inc.', 'Mentari completes InMed merger after $490 million in financings', 'https://x'), aside('c', 'TriGemX Bio', 'TriGemX doses first patient', 'https://y')];
+  const r = rejoinUnmatched([mentari], [], other);
+  assert.equal(r.moved, 2);
+  assert.equal(r.kept.length, 1);
+  assert.deepEqual(r.kept[0].found_by, ['a', 'b']);
+  assert.deepEqual(r.other.map((x) => x.id), ['c']);
+});
+
+test('expansion: a looked-up company joins when in scope and not already a row by name or drug', async () => {
+  const { judge } = await import('../scripts/lib/steps/expand');
+  const drug = (name: string, highest_phase: string) => ({ name, codes: [], mechanism: '', mechanism_source: 'web', chembl_id: null, highest_phase });
+  const owner = (drugs: unknown[], over: Record<string, unknown> = {}) => ({ current_owner: '', relationship: 'independent', announced: null, closed: null, value: null, owner_source_url: '', drugs, ...over }) as never;
+  const roche = { key: 'hoffmann la', name: 'Hoffmann-La Roche', relationship: 'independent', owner_source: null, acquisitions: [], registry_sponsors: ['Hoffmann-La Roche'], drugs: [drug('trontinemab', 'Phase 3')], trials: [], investigator_trials: [], web: null, web_only: false, approved: false, max_phase: 3 } as never;
+  assert.equal(judge('Roche AG', owner([drug('trontinemab', 'Phase 3')], { current_owner: 'Roche' }), [roche]).outcome, 'on_map');
+  assert.equal(judge('Mentari Therapeutics, Inc.', owner([drug('MT-001', 'Phase 1'), drug('MT-002', 'Preclinical')]), [roche]).outcome, 'added');
+  assert.equal(judge('Shenzhen Hybio', owner([drug('Liraglutide injection', 'Approved (China)')]), [roche]).outcome, 'out_of_scope');
+  // A subsidiary's lookup names its owner's row, so its news can join that row.
+  assert.equal(judge('Chugai Pharma', owner([], { current_owner: 'Hoffmann-La Roche', relationship: 'acquired' }), [roche]).owner, roche);
+  // A person's "no" stands; a recommendation's does not.
+  const no = (decided: string) => [{ company: 'Mentari', include: false, decided }];
+  assert.equal(judge('Mentari', owner([drug('MT-001', 'Phase 1')]), [roche], no('2026-10-02')).outcome, 'left_out');
+  assert.equal(judge('Mentari', owner([drug('MT-001', 'Phase 1')]), [roche], no('recommendation: earlier than Phase 2')).outcome, 'added');
+});

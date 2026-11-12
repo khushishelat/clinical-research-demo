@@ -28,6 +28,8 @@ export type Row = {
   next: (Mark & { window: string | null })[];
   trials: number;
   webOnly: boolean;
+  /** When a news Monitor's find put the company on the map, and the news. */
+  foundByMonitor: { date: string; source: string | null } | null;
   /** Trials registered outside ClinicalTrials.gov (step 7): placed by first-posted date when the registry gives one. */
   elsewhere: { id: string; registry: string; title: string; drug: string; phase: number; status: string; x: string | null; url: string }[];
   acquisitions: { from: string; closed: string | null; source: string }[];
@@ -259,6 +261,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       next,
       trials: dots.length,
       webOnly: c.web_only,
+      foundByMonitor: c.found?.by === 'monitor' ? { date: c.found.date, source: c.found.source_url } : null,
       elsewhere: (s.elsewhere[c.key] ?? []).map((t) => ({ id: t.id, registry: t.registry, title: t.title, drug: t.drug, phase: ELSEWHERE_PHASE[t.phase] ?? 0, status: t.status, x: t.first_posted, url: t.source_url })),
       acquisitions: c.acquisitions.map((a) => ({ from: a.sponsor, closed: a.closed, source: a.source })),
       designations,
@@ -280,6 +283,7 @@ export function mapView(s: Space, scope: Scope, today: string) {
       next: [],
       trials: s.unassigned.length,
       webOnly: false,
+      foundByMonitor: null,
       elsewhere: [],
       acquisitions: [],
       designations: [],

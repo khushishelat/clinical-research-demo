@@ -11,7 +11,7 @@ type S = NonNullable<Space>;
 /** Why a cell is empty when no research run covers it: computed from the registry, with each trial cited. */
 export type Why = { text: string; trials: { nct: string; label: string; detail: string }[] };
 export type Cell = { field: string; text: string; sub?: string; source?: string | null; why?: Why };
-export type DatasetRow = { key: string; name: string; host: string | null; webOnly: boolean; trials: number; cells: Record<string, Cell>; run: string | null; connectors: Record<string, number>; seconds: number | null };
+export type DatasetRow = { key: string; name: string; host: string | null; webOnly: boolean; foundByMonitor: boolean; trials: number; cells: Record<string, Cell>; run: string | null; connectors: Record<string, number>; seconds: number | null };
 
 export const COLUMNS: { field: string; label: string; help: string }[] = [
   { field: 'furthest_along', label: 'Highest phase', help: 'The company’s most advanced asset in this indication, its phase, and where.' },
@@ -94,7 +94,7 @@ export function datasetView(s: S, today = new Date().toISOString().slice(0, 10))
     const appr = f.approvals ?? [];
     cells.approvals = { field: 'approvals', text: appr.length ? [...new Set(appr.map((a) => a.region))].join(', ') : '—', sub: appr[0] ? `First ${appr.map((a) => a.date).filter(Boolean).sort()[0] ?? ''}` : undefined };
     const host = hostOf(c.owner_source ?? c.web?.source);
-    rows.push({ key: c.key, name: c.name, host, webOnly: c.web_only, trials: c.trials.length + c.investigator_trials.length, cells, run: f._run ?? null, connectors: f._connectors ?? {}, seconds: f._seconds ?? null });
+    rows.push({ key: c.key, name: c.name, host, webOnly: c.web_only, foundByMonitor: c.found?.by === 'monitor', trials: c.trials.length + c.investigator_trials.length, cells, run: f._run ?? null, connectors: f._connectors ?? {}, seconds: f._seconds ?? null });
   }
   const rank = (r: DatasetRow) => (/approved/i.test(r.cells.furthest_along.text) ? 5 : Number(r.cells.furthest_along.text.match(/\d/)?.[0] ?? 0));
   rows.sort((a, b) => rank(b) - rank(a) || b.trials - a.trials);

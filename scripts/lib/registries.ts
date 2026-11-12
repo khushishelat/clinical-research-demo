@@ -45,3 +45,14 @@ export function keepElsewhere(trials: ElsewhereTrial[], completedSince: string |
   }
   return [...out.values()];
 }
+
+/** keepElsewhere, then drops trials ClinicalTrials.gov lists under the registry ID: those trials are its own. */
+export async function elsewhereFor(got: ElsewhereTrial[], completedSince: string | null): Promise<{ kept: ElsewhereTrial[]; crossListed: number }> {
+  const kept: ElsewhereTrial[] = [];
+  let crossListed = 0;
+  for (const t of keepElsewhere(got, completedSince)) {
+    if (await onCtGov(t.id)) crossListed += 1;
+    else kept.push(t);
+  }
+  return { kept, crossListed };
+}

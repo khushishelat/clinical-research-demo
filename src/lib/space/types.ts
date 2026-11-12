@@ -64,6 +64,8 @@ export type Company = {
   web_only: boolean;
   approved: boolean;
   max_phase: number;
+  /** Set when the daily expansion put the row on the map from news a Monitor found (scripts/lib/steps/expand.ts). */
+  found?: { by: 'monitor'; date: string; headline: string | null; source_url: string | null };
 };
 export type CompanyReview = { company: string; include: boolean | null };
 

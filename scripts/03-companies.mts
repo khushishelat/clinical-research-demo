@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto';
 import { drugOwner, investigatorClaims } from './lib/assign';
 import type { Owner } from './lib/companies';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, ownerFrom, ownerName, phaseFromText, phaseLabel, phaseRank, type Drug } from './lib/companies';
+import { aliasesOf, companyKey, displayName, inScopeDrug, isApproved, isHoldingCompany, mergeRows, ownerFrom, ownerName, phaseFromText, phaseLabel, phaseRank, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
@@ -38,6 +38,7 @@ if (client) {
 }
 
 type WebCompany = { company: string; country: string; registry_sponsor_names?: string[]; drugs: { name: string; codes: string[]; mechanism: string; phase: string; approved_in: string[] }[]; source_url: string };
+const webDrug = (drug: WebCompany['drugs'][number]): Drug => ({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, phase: drug.phase, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : phaseLabel(drug.phase) });
 // One chain per region for large indications, else one chain over all regions.
 const regions: (string | null)[] = d.chain_regions?.length ? d.chain_regions : [null];
 const slug = (r: string | null) => (r ? r.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : 'all');
@@ -45,7 +46,7 @@ const web: WebCompany[] = [];
 for (const region of regions) {
   const key = `${COMPANY_CHAIN.key}:${slug(region)}`;
   const got = client
-    ? await chain<WebCompany>(client, rl, key, { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today(), region), next: COMPANY_CHAIN.next(d, region), dedupe: (x) => companyKey(x.company), metadata: { job: 'company-chain', disease: d.key, region: slug(region) } })
+    ? await chain<WebCompany>(client, rl, key, { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today(), region), next: COMPANY_CHAIN.next(d, region), dedupe: (x) => companyKey(x.company), counts: (x) => (x.drugs ?? []).some((y) => inScopeDrug(webDrug(y))), metadata: { job: 'company-chain', disease: d.key, region: slug(region) } })
     : Object.keys(rl.log)
         .filter((k) => k.startsWith(`${key}:p`))
         .flatMap((k) => ((rl.log[k].content as any)?.companies ?? []) as WebCompany[]);
@@ -97,10 +98,14 @@ for (const w of web) {
   c.web = { country: w.country, source: w.source_url };
   for (const drug of w.drugs ?? []) {
     if (c.drugs.some((x) => x.name.toLowerCase() === drug.name.toLowerCase())) continue;
-    c.drugs.push({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, phase: drug.phase, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : phaseLabel(drug.phase) });
+    c.drugs.push(webDrug(drug));
   }
   companies.set(key, c);
 }
+
+// Rows added after a build, by hand (add-company) or from a monitor's news (steps/expand.ts), outlive a rebuild.
+const added = new Set(((await store.get<Record<string, unknown>[]>(spacePath(d, 'review/companies.json'))) ?? []).filter((r) => r.added_by_hand || r.added_by === 'monitor').map((r) => r.company as string));
+for (const c of ((await store.get<{ companies: Company[] }>(spacePath(d, 'companies.json')))?.companies ?? []).filter((x) => added.has(x.name))) if (!companies.has(c.key)) companies.set(c.key, { ...c, trials: [], investigator_trials: [] });
 
 // One company, one row: a Task run groups names that are the same company today.
 // Keyed by the names, so the same set of rows reuses the run.
@@ -133,8 +138,10 @@ const unassigned = trials.filter((t) => t.run_by === 'investigator' && !assigned
 
 await store.put(spacePath(d, 'companies.json'), { disease: d.key, built: new Date().toISOString(), companies: list, unassigned_investigator_trials: unassigned, shared_trials: conflicts });
 // Keep any decisions a person already made in the review file.
-const prior = new Map(((await store.get<{ company: string; include: boolean | null; decided?: string }[]>(spacePath(d, 'review/companies.json'))) ?? []).map((r) => [r.company, r]));
-const review = list.filter((c) => c.web_only).map((c) => ({ include: prior.get(c.name)?.include ?? null, ...(prior.get(c.name)?.decided ? { decided: prior.get(c.name)!.decided } : {}), company: c.name, country: c.web?.country, drugs: c.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: c.web?.source, registry_trials: c.trials.length + c.investigator_trials.length }));
+const prior = new Map(((await store.get<({ company: string; include: boolean | null } & Record<string, unknown>)[]>(spacePath(d, 'review/companies.json'))) ?? []).map((r) => [r.company, r]));
+const KEEP = ['decided', 'added_by', 'added_by_hand', 'note'];
+const kept = (name: string) => Object.fromEntries(Object.entries(prior.get(name) ?? {}).filter(([k]) => KEEP.includes(k)));
+const review = list.filter((c) => c.web_only).map((c) => ({ include: prior.get(c.name)?.include ?? null, ...kept(c.name), company: c.name, country: c.web?.country, drugs: c.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: c.web?.source, registry_trials: c.trials.length + c.investigator_trials.length }));
 // Decisions outlive the list: a company missing from this run keeps its entry (listed: false), so a later run that finds it again finds the decision too.
 const unlisted = [...prior.values()].filter((r) => !review.some((x) => x.company === r.company) && r.include !== null).map((r) => ({ ...r, listed: false }));
 await store.put(spacePath(d, 'review/companies.json'), [...review, ...unlisted]);

@@ -3,8 +3,8 @@
 // keys (a pilot run is reused by the next build, never billed twice).
 
 import type { Company, Facts, Trial } from '../../src/lib/space/types';
-import type { Disease, RunSpec } from './pipeline';
-import { DEALS, FACTS, OWNER, READOUT, WEB_ROLES } from './specs';
+import type { Disease, RunRecord, RunSpec } from './pipeline';
+import { DEALS, FACTS, OTHER_REGISTRIES, OWNER, READOUT, WEB_ROLES } from './specs';
 
 export type Unit = { key: string; spec: RunSpec };
 const present = <T>(x: T | undefined | null): x is T => x != null;
@@ -33,6 +33,14 @@ export const factsUnit = (d: Disease, today: string, c: Company, byNct: Map<stri
 export const dealsUnit = (d: Disease, today: string, c: Company, byNct: Map<string, Trial>): Unit => ({
   key: `${DEALS.key}:${c.key}`,
   spec: { processor: DEALS.processor, schema: DEALS.schema, input: DEALS.input(d, today, c, registryRows(c, byNct)), metadata: { company: c.key } },
+});
+
+/** A company's facts from its FACTS run (content already joined with its DEALS run by cleanFacts). */
+export const factsRecord = (f: Facts, r: RunRecord, readouts: Facts['readouts'] = []): Facts => ({ ...f, readouts, _spec: `${FACTS.key}+${DEALS.key}`, _run: r.run_id, _connectors: r.connectors, _seconds: r.seconds });
+
+export const registriesUnit = (d: Disease, c: Company, since: string): Unit => ({
+  key: `${OTHER_REGISTRIES.key}:${c.key}`,
+  spec: { processor: OTHER_REGISTRIES.processor, connectors: OTHER_REGISTRIES.connectors, schema: OTHER_REGISTRIES.schema, input: OTHER_REGISTRIES.input(d, { name: c.name, country: c.web?.country ?? null, drugs: c.drugs.map((x) => x.name).slice(0, 8) }, since), metadata: { company: c.key.slice(0, 60) } },
 });
 
 /**

@@ -46,7 +46,8 @@ export type MonitorEvent = {
   /** When this app first read it. */
   detected: string;
 };
-type Unmatched = { id: string; monitor: string; reason: 'other_indication' | 'no_company_on_map' | 'no_date'; company: string | null; headline: string; date: string | null; source_url: string | null; detected: string };
+/** Set-aside news. drug, nct and type let it join a company that reaches the map later; records from before they were kept have none. */
+export type Unmatched = { id: string; monitor: string; reason: 'other_indication' | 'no_company_on_map' | 'no_date'; company: string | null; headline: string; date: string | null; source_url: string | null; detected: string; drug?: string | null; nct?: string | null; type?: string };
 
 const path = (d: Disease, f: string) => spacePath(d, f);
 const now = () => new Date().toISOString();
@@ -228,6 +229,53 @@ export function companyMatcher(companies: Company[]) {
   };
 }
 
+/** True for a company on the map, or a name naming several of them (a joint announcement): neither is a new company. */
+export function onMap(companies: Company[]) {
+  const match = companyMatcher(companies);
+  return (name: string): boolean => {
+    if (match(name, null)) return true;
+    const all = new Set(name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').split(' '));
+    return companies.some((c) => {
+      const cw = words(c.name);
+      return cw.length > 0 && cw.every((x) => all.has(x));
+    });
+  };
+}
+
+/**
+ * Set-aside news about a company that has since joined the map, moved onto its row with the
+ * same matching and merging as new events. Records set aside before drug and type were kept
+ * join as type "other".
+ */
+export function rejoinUnmatched(companies: Company[], kept: MonitorEvent[], other: Unmatched[]): { kept: MonitorEvent[]; other: Unmatched[]; moved: number } {
+  const match = companyMatcher(companies);
+  const next = [...kept];
+  const rest: Unmatched[] = [];
+  for (const o of other) {
+    const company = o.reason === 'no_company_on_map' && o.date ? match(o.company, o.drug ?? null) : null;
+    if (!company) {
+      rest.push(o);
+      continue;
+    }
+    const nct = o.nct && (company.trials.includes(o.nct) || company.investigator_trials.includes(o.nct)) ? o.nct : null;
+    next.push({ id: o.id, ids: [o.id], date: o.date!, company: company.key, company_name: company.name, drug: o.drug ?? null, nct, type: o.type ?? 'other', headline: o.headline.slice(0, 120), source_url: o.source_url, found_by: [o.monitor], detected: o.detected });
+  }
+  return { kept: mergeDuplicates(next).sort((a, b) => b.date.localeCompare(a.date)), other: rest, moved: other.length - rest.length };
+}
+
+/** Moves set-aside news onto companies that are on the map now. Free: no monitor is read. */
+export async function rejoinSetAside(d: Disease): Promise<number> {
+  const { companies } = (await store.get<{ companies: Company[] }>(path(d, 'companies.json'))) ?? { companies: [] };
+  const kept = (await store.get<MonitorEvent[]>(path(d, 'monitor-events.json'))) ?? [];
+  const other = (await store.get<Unmatched[]>(path(d, 'monitor-unmatched.json'))) ?? [];
+  const r = rejoinUnmatched(companies, kept, other);
+  if (!r.moved) return 0;
+  await store.put(path(d, 'monitor-events.json'), r.kept);
+  await store.put(path(d, 'monitor-unmatched.json'), r.other);
+  log(d, `monitors: ${r.moved} set-aside events moved onto companies now on the map`);
+  return r.moved;
+}
+
 // ── Reading events ───────────────────────────────────────────────────────────
 
 const STOP = new Set(['the', 'a', 'an', 'of', 'for', 'in', 'to', 'and', 'with', 'on', 'at', 'its', 'phase', 'trial', 'study']);
@@ -357,7 +405,7 @@ export async function collectMonitorEvents(d: Disease, only?: { monitor_id: stri
       const c = typeof x.output?.content === 'string' ? safeJson(x.output.content) : x.output?.content;
       const source = (x.output?.basis ?? []).flatMap((b: any) => (b.citations ?? []).map((ci: any) => ci.url)).find(Boolean) ?? null;
       const miss = (reason: Unmatched['reason']) => {
-        other.unshift({ id: x.event_id, monitor: key, reason, company: c?.company ?? null, headline: String(c?.headline ?? '').slice(0, 160), date: c?.date ?? null, source_url: source, detected: now() });
+        other.unshift({ id: x.event_id, monitor: key, reason, company: c?.company ?? null, headline: String(c?.headline ?? '').slice(0, 160), date: c?.date ?? null, source_url: source, detected: now(), drug: c?.drug ?? null, nct: typeof c?.nct === 'string' ? c.nct : null, type: c?.type ?? 'other' });
         result.unmatched += 1;
       };
       if (!c || !/^\d{4}-\d{2}-\d{2}$/.test(c.date ?? '')) {

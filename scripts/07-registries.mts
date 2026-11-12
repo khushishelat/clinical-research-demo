@@ -3,8 +3,9 @@
 //   npx tsx scripts/07-registries.mts --disease mash
 
 import { disease, groupRuns, log, parallel, runLog, spacePath, store, today, where } from './lib/pipeline';
-import { keepElsewhere, onCtGov, type ElsewhereTrial } from './lib/registries';
+import { elsewhereFor, type ElsewhereTrial } from './lib/registries';
 import { OTHER_REGISTRIES } from './lib/specs';
+import { registriesUnit } from './lib/units';
 import type { Company } from '../src/lib/space/types';
 
 const d = disease();
@@ -18,7 +19,7 @@ const targets = companies.filter((c) => (!c.web_only || included.has(c.name)) &&
 const since = d.include_completed_since ?? `${Number(today().slice(0, 4)) - 2}-01-01`;
 log(d, `${targets.length} companies on the map have no ClinicalTrials.gov trial; one run each`);
 const rl = await runLog(d, 'registries');
-const units = targets.map((c) => ({ key: `${OTHER_REGISTRIES.key}:${c.key}`, spec: { processor: OTHER_REGISTRIES.processor, connectors: OTHER_REGISTRIES.connectors, schema: OTHER_REGISTRIES.schema, input: OTHER_REGISTRIES.input(d, { name: c.name, country: c.web?.country ?? null, drugs: c.drugs.map((x) => x.name).slice(0, 8) }, since), metadata: { company: c.key.slice(0, 60) } } }));
+const units = targets.map((c) => registriesUnit(d, c, since));
 const results = await groupRuns(client, rl, d, 'registries', units, 12);
 const byCompany: Record<string, ElsewhereTrial[]> = {};
 let found = 0;
@@ -26,13 +27,8 @@ let dropped = 0;
 let crossListed = 0;
 for (const c of targets) {
   const got = ((results[`${OTHER_REGISTRIES.key}:${c.key}`]?.content as { trials?: ElsewhereTrial[] } | undefined)?.trials ?? []) as ElsewhereTrial[];
-  const fits = keepElsewhere(got, d.include_completed_since ?? null);
-  // ClinicalTrials.gov lists some registries' IDs as secondary IDs: those trials are its own.
-  const kept: ElsewhereTrial[] = [];
-  for (const t of fits) {
-    if (await onCtGov(t.id)) crossListed += 1;
-    else kept.push(t);
-  }
+  const { kept, crossListed: listed } = await elsewhereFor(got, d.include_completed_since ?? null);
+  crossListed += listed;
   dropped += got.length - kept.length;
   if (kept.length) byCompany[c.key] = kept;
   found += kept.length;

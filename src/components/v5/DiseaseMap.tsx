@@ -388,6 +388,11 @@ function MapRow({ row, x, years, todayAt, recent, onDot, onCard, setTip, showFir
               {d}
             </span>
           ))}
+          {row.foundByMonitor ? (
+            <a href={row.foundByMonitor.source ?? undefined} target="_blank" rel="noreferrer" title="A news Monitor found this company; it joined the map on its own" className="rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">
+              Found by news monitor · {fmt(row.foundByMonitor.date, { month: 'short', day: 'numeric' })}
+            </a>
+          ) : null}
           {row.elsewhere.length ? (
             <span title="Registered outside ClinicalTrials.gov" className="rounded-[2px] border border-ink px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">
               {row.elsewhere.length} in other registries
