@@ -399,4 +399,10 @@ test('expansion: a looked-up company joins when in scope and not already a row b
   assert.equal(judge('Roche AG', owner([drug('trontinemab', 'Phase 3')], { current_owner: 'Roche' }), [roche]).outcome, 'on_map');
   assert.equal(judge('Mentari Therapeutics, Inc.', owner([drug('MT-001', 'Phase 1'), drug('MT-002', 'Preclinical')]), [roche]).outcome, 'added');
   assert.equal(judge('Shenzhen Hybio', owner([drug('Liraglutide injection', 'Approved (China)')]), [roche]).outcome, 'out_of_scope');
+  // A subsidiary's lookup names its owner's row, so its news can join that row.
+  assert.equal(judge('Chugai Pharma', owner([], { current_owner: 'Hoffmann-La Roche', relationship: 'acquired' }), [roche]).owner, roche);
+  // A person's "no" stands; a recommendation's does not.
+  const no = (decided: string) => [{ company: 'Mentari', include: false, decided }];
+  assert.equal(judge('Mentari', owner([drug('MT-001', 'Phase 1')]), [roche], no('2026-10-02')).outcome, 'left_out');
+  assert.equal(judge('Mentari', owner([drug('MT-001', 'Phase 1')]), [roche], no('recommendation: earlier than Phase 2')).outcome, 'added');
 });

@@ -9,7 +9,7 @@
 // spaces/<d>/expand.json records every company looked at, so none is paid for twice.
 
 import type { Company, Facts } from '../../../src/lib/space/types';
-import { aliasesOf, companyKey, inScopeDrug, joinRow, ownerFrom, rowNameFor, type Owner } from '../companies';
+import { aliasesOf, companyKey, displayName, inScopeDrug, joinRow, ownerFrom, rowNameFor, type Owner } from '../companies';
 import { groupRuns, log, parallel, pool, runLog, runOnce, spacePath, store, today as todayOf, type Disease } from '../pipeline';
 import { elsewhereFor, type ElsewhereTrial } from '../registries';
 import { assertNoContacts, redactBasis, type Trial } from '../registry';
@@ -18,7 +18,7 @@ import { cleanFacts, dealsUnit, factsRecord, factsUnit, ownerUnit, registriesUni
 import { companyMatcher, onMap, rejoinSetAside, type Unmatched } from './monitors';
 
 export const WEEKLY_LOOKUPS = 5;
-type Outcome = 'added' | 'out_of_scope' | 'on_map' | 'not_a_company' | 'failed';
+type Outcome = 'added' | 'out_of_scope' | 'on_map' | 'left_out' | 'not_a_company' | 'failed';
 export type Looked = { name: string; date: string; outcome: Outcome; why: string; row?: string; run_id?: string };
 /** spaces/<d>/expand.json, keyed by companyKey. */
 export type ExpandDoc = { looked: Record<string, Looked> };
@@ -27,7 +27,7 @@ type Review = { company: string; include: boolean | null } & Record<string, unkn
 
 // Institutions, regulators and descriptions a monitor wrote where a company name belongs.
 const NOT_A_COMPANY = /\b(universit\w*|hospitals?|college|institutes?|school|medical cent(er|re)|clinics?|ministry|agency|administration|commission|foundation|association|society|FDA|EMA|NIH|no company|multiple|holders)\b/i;
-const PAID: Outcome[] = ['added', 'out_of_scope', 'failed'];
+const PAID: Outcome[] = ['added', 'out_of_scope', 'left_out', 'failed'];
 
 /**
  * Set-aside companies to look up now, newest news first, within the week's lookups; and the
@@ -52,19 +52,22 @@ export function lookups(other: Unmatched[], companies: Company[], doc: ExpandDoc
 
 /**
  * What a lookup decides: on the map already (by its owner's name, or a drug a row already
- * lists, as with "Roche AG" and the Hoffmann-La Roche row), in scope, or not.
+ * lists, as with "Roche AG" and the Hoffmann-La Roche row), in scope, or not. A company a
+ * person left out in review stays out. `owner` is the row its owner already has.
  */
-export function judge(name: string, o: Owner, companies: Company[]): { outcome: 'added' | 'out_of_scope' | 'on_map'; why: string } {
-  const owner = rowNameFor(name, o).name;
-  if (onMap(companies)(owner)) return { outcome: 'on_map', why: `owned by ${owner}` };
+export function judge(name: string, o: Owner, companies: Company[], review: Review[] = []): { outcome: 'added' | 'out_of_scope' | 'on_map' | 'left_out'; why: string; owner?: Company } {
+  const target = rowNameFor(name, o).name;
   const match = companyMatcher(companies);
+  if (onMap(companies)(target)) return { outcome: 'on_map', why: `owned by ${target}`, owner: match(target, null) ?? undefined };
   for (const x of o.drugs)
     for (const a of aliasesOf(x)) {
       const row = match(null, a);
       if (row) return { outcome: 'on_map', why: `${x.name} is on ${row.name}'s row` };
     }
   const drug = o.drugs.find(inScopeDrug);
-  return drug ? { outcome: 'added', why: `${drug.name}: ${drug.highest_phase}` } : { outcome: 'out_of_scope', why: o.drugs.map((x) => `${x.name}: ${x.highest_phase}`).join('; ') || 'no drug for the indication' };
+  if (!drug) return { outcome: 'out_of_scope', why: o.drugs.map((x) => `${x.name}: ${x.highest_phase}`).join('; ') || 'no drug for the indication' };
+  const no = review.find((r) => r.company === displayName(target) && r.include === false && !String(r.decided ?? '').startsWith('recommendation'));
+  return no ? { outcome: 'left_out', why: `a person left it out (${no.decided ?? 'no date'})` } : { outcome: 'added', why: `${drug.name}: ${drug.highest_phase}` };
 }
 
 export async function expandStep(d: Disease, today = todayOf()): Promise<{ added: string[]; researched: string[]; rejoined: number }> {
@@ -84,6 +87,7 @@ export async function expandStep(d: Disease, today = todayOf()): Promise<{ added
   const client = now.length || unresearched().length ? parallel(d, 'map expansion') : null;
 
   // 1. Who each company is, and whether it has a drug that earns a row.
+  let changed = false;
   if (client && now.length) {
     const rl = await runLog(d, 'companies');
     await pool(now, 5, async (name) => {
@@ -95,11 +99,19 @@ export async function expandStep(d: Disease, today = todayOf()): Promise<{ added
         return;
       }
       const o = ownerFrom(rec.content);
-      const verdict = judge(name, o, doc.companies);
+      const { owner, ...verdict } = judge(name, o, doc.companies, review);
       expand.looked[k] = { name, date: today, ...verdict, run_id: rec.run_id };
+      // The name the news used joins its owner's row, so that news (and later news) finds the row.
+      const alias = (row: Company) => {
+        if (companyKey(row.name) === k || row.registry_sponsors.some((x) => companyKey(x) === k)) return;
+        row.registry_sponsors.push(name);
+        changed = true;
+      };
+      if (owner) alias(owner);
       if (verdict.outcome === 'added') {
         const news = other.find((x) => x.company && companyKey(x.company) === k);
         const { row } = joinRow(doc.companies, name, o);
+        alias(row);
         row.found = { by: 'monitor', date: today, headline: news?.headline ?? null, source_url: news?.source_url ?? null };
         const entry = { company: row.name, include: true, decided: today, added_by: 'monitor', drugs: row.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: o.owner_source_url };
         const i = review.findIndex((r) => r.company === row.name);
@@ -107,12 +119,12 @@ export async function expandStep(d: Disease, today = todayOf()): Promise<{ added
         else review.push(entry);
         expand.looked[k].row = row.key;
         out.added.push(row.name);
+        changed = true;
       }
     });
-    if (out.added.length) {
-      await store.put(spacePath(d, 'companies.json'), doc);
-      await store.put(spacePath(d, 'review/companies.json'), review);
-    }
+    // Review first: a call cut off between the writes leaves an approval without a row, which the next call completes.
+    if (out.added.length) await store.put(spacePath(d, 'review/companies.json'), review);
+    if (changed) await store.put(spacePath(d, 'companies.json'), doc);
   }
   if (Object.keys(settled).length || now.length) await store.put(spacePath(d, 'expand.json'), expand);
   for (const [k, x] of Object.entries(expand.looked)) if (now.some((n) => companyKey(n) === k) || settled[k]) log(d, `expansion: ${x.name}: ${x.outcome} (${x.why})`);
@@ -133,12 +145,8 @@ export async function expandStep(d: Disease, today = todayOf()): Promise<{ added
       await store.put(spacePath(d, `basis/${c.key}.json`), { company: c.name, run_id: fr.run_id, basis });
       done.push(c);
     }
-    if (done.length) {
-      assertNoContacts('facts', factsDoc.facts);
-      await store.put(spacePath(d, 'facts.json'), { ...factsDoc, built: new Date().toISOString() });
-      out.researched.push(...done.map((c) => c.name));
-    }
-    // Their trials outside ClinicalTrials.gov, as step 7 finds them.
+    // Their trials outside ClinicalTrials.gov, as step 7 finds them. Facts are saved after
+    // these runs: a row with facts counts as researched, so a call cut off here must leave none.
     const elsewhere = done.filter((c) => !c.trials.length && !c.investigator_trials.length);
     if (elsewhere.length) {
       const since = d.include_completed_since ?? `${Number(today.slice(0, 4)) - 2}-01-01`;
@@ -150,6 +158,11 @@ export async function expandStep(d: Disease, today = todayOf()): Promise<{ added
         if (kept.length) reg.companies[c.key] = kept;
       }
       await store.put(spacePath(d, 'other-registries.json'), { ...reg, built: new Date().toISOString() });
+    }
+    if (done.length) {
+      assertNoContacts('facts', factsDoc.facts);
+      await store.put(spacePath(d, 'facts.json'), { ...factsDoc, built: new Date().toISOString() });
+      out.researched.push(...done.map((c) => c.name));
     }
     log(d, `expansion: researched ${done.length} of ${targets.length} approved web-found rows (${done.map((c) => c.name).join(', ') || 'none finished'})`);
   }

@@ -138,8 +138,10 @@ const unassigned = trials.filter((t) => t.run_by === 'investigator' && !assigned
 
 await store.put(spacePath(d, 'companies.json'), { disease: d.key, built: new Date().toISOString(), companies: list, unassigned_investigator_trials: unassigned, shared_trials: conflicts });
 // Keep any decisions a person already made in the review file.
-const prior = new Map(((await store.get<{ company: string; include: boolean | null; decided?: string }[]>(spacePath(d, 'review/companies.json'))) ?? []).map((r) => [r.company, r]));
-const review = list.filter((c) => c.web_only).map((c) => ({ include: prior.get(c.name)?.include ?? null, ...(prior.get(c.name)?.decided ? { decided: prior.get(c.name)!.decided } : {}), company: c.name, country: c.web?.country, drugs: c.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: c.web?.source, registry_trials: c.trials.length + c.investigator_trials.length }));
+const prior = new Map(((await store.get<({ company: string; include: boolean | null } & Record<string, unknown>)[]>(spacePath(d, 'review/companies.json'))) ?? []).map((r) => [r.company, r]));
+const KEEP = ['decided', 'added_by', 'added_by_hand', 'note'];
+const kept = (name: string) => Object.fromEntries(Object.entries(prior.get(name) ?? {}).filter(([k]) => KEEP.includes(k)));
+const review = list.filter((c) => c.web_only).map((c) => ({ include: prior.get(c.name)?.include ?? null, ...kept(c.name), company: c.name, country: c.web?.country, drugs: c.drugs.map((x) => `${x.name} (${x.highest_phase})`), source: c.web?.source, registry_trials: c.trials.length + c.investigator_trials.length }));
 // Decisions outlive the list: a company missing from this run keeps its entry (listed: false), so a later run that finds it again finds the decision too.
 const unlisted = [...prior.values()].filter((r) => !review.some((x) => x.company === r.company) && r.include !== null).map((r) => ({ ...r, listed: false }));
 await store.put(spacePath(d, 'review/companies.json'), [...review, ...unlisted]);
