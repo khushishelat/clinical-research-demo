@@ -139,8 +139,10 @@ noisy web, and a join between them.
 3. **Connectors where a judgment needs a database.** Direct API calls do the
    bulk lookups for free. Only ambiguous cases go to a Task run: a name with
    several NPI records, or a common name in PubMed.
-4. **One person, once.** Web-found companies need a yes or no before they cost
-   anything further.
+4. **One person, once.** Companies the build finds on the web need a yes or no
+   before they cost anything further. After the build, companies the news
+   Monitors find join on their own by the same rule a person would apply: a
+   drug for the indication in Phase 1 or later that isn't only a generic.
 5. **Never bill twice.** Every step keeps a run log and reuses finished runs, so
    re-running an indication pays only for new work.
 6. **Privacy enforced in code.** No document holds phone numbers, emails,
@@ -153,7 +155,8 @@ noisy web, and a join between them.
    output schema says whether an event is about this indication, so the run
    filters other diseases itself. Events join a company by name, drug or a
    unique partial name; the rest are kept in `monitor-unmatched.json` with the
-   reason, never dropped silently. The same development found by two monitors
+   reason, never dropped silently. A company the news names that the map lacks
+   is looked up and, if in scope, added with its research and its news. The same development found by two monitors
    is one item that names both. `npx tsx scripts/monitors.mts --disease <key> --report`
    shows what each monitor found and what only it found, so the set can be
    pruned on evidence.
@@ -192,7 +195,7 @@ Visitors can ask for an indication from the app ("Request an indication"), which
 opens a GitHub issue form. A maintainer builds it with the steps in
 [Add an indication](#add-an-indication).
 
-Once deployed, two scheduled jobs (`vercel.json`) keep every built indication
+Once deployed, scheduled jobs (`vercel.json`) keep every built indication
 current:
 
 - **Daily** (`/api/cron/daily`):
@@ -204,6 +207,14 @@ current:
     created when missing, replaced when the API key can't see them, and read;
   - the event feed and the first-disclosure check for new trials;
   - a readout check for trials that reach a readout point, plus a monthly re-check of those with no results yet.
+- **Daily, after the refresh** (`/api/cron/expand`): companies the news Monitors
+  found that the map lacks. Each gets one owner run ($0.10) and joins the map,
+  marked "Found by news monitor", when it has a drug for the indication in Phase 1
+  or later that isn't only a generic. Then its facts, deals and other-registry
+  trials are researched ($0.30), and the news set aside while it was off the map
+  joins its row. Any web-found row approved in review but not yet researched is
+  researched too. At most 5 lookups per indication per week; `expand.json` records
+  every company looked at, so none is paid for twice.
 - **Weekly** (`/api/cron/brief`, Mondays): the brief.
 - **Weekly** (`/api/cron/monitor-eval`, Mondays): the monitors' scorecard. An
   independent research sweep of the past week (Task API, `ultra`, sources
@@ -215,10 +226,11 @@ current:
   `npx tsx --env-file=.env.vercel scripts/monitor-report.mts [--out report.md]`,
   which also shows each monitor's finds and what was set aside.
 
-Both need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. With five
+They need `PARALLEL_API_KEY` and `CRON_SECRET` set on the project. With five
 indications they cost about $46 a month: the monitors about $22 (15 per
 indication, $0.01 a run, daily), the weekly brief about $13, the monitors'
-weekly scorecard about $6.50, readout checks about $5.
+weekly scorecard about $6.50, readout checks about $5. Map expansion adds up to
+$2 per indication a week, and costs nothing in a week the monitors name no new company.
 
 In production each monitor also calls `/api/monitor/webhook` when it finds
 something, so news reaches the map within minutes instead of at the next daily
@@ -265,7 +277,7 @@ Nothing is spent until you pass `--yes`, apart from one scoping run.
 3. **Build it.** The pipeline stops once, for companies found only on the web:
    ```bash
    npm run pipeline -- --disease idiopathic-pulmonary-fibrosis --yes
-   npm run review -- --disease idiopathic-pulmonary-fibrosis   # recommendations; set include in review/companies.json
+   npm run review -- --disease idiopathic-pulmonary-fibrosis   # recommendations (Phase 1+ or approved, not generic-only); set include in review/companies.json
    npm run pipeline -- --disease idiopathic-pulmonary-fibrosis
    ```
 4. **Ship it.** Open a pull request with the new entry. For a deployment, run

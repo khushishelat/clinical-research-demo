@@ -145,6 +145,9 @@ const STREET_ADDRESS = /\b\d{2,5}\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St\.|Avenue|
 /** Removes emails, phone numbers and street addresses from quoted source text (citation excerpts). */
 export const redactContacts = (text: string) => text.replace(EMAIL, '[email removed]').replace(PHONE, '[phone removed]').replace(new RegExp(STREET_ADDRESS.source, 'g'), '[address removed]');
 
+/** A run's basis with contact lines removed from its excerpts, each field under `prefix`. */
+export const redactBasis = (basis: unknown[] | undefined, prefix = '') => ((basis ?? []) as any[]).map((b) => ({ ...b, field: prefix + b.field, citations: (b.citations ?? []).map((c: any) => ({ ...c, excerpts: (c.excerpts ?? []).map(redactContacts) })) }));
+
 /** Throws if anything that looks like a phone number, email or street address reached the data. */
 export function assertNoContacts(label: string, data: unknown) {
   const text = JSON.stringify(data);

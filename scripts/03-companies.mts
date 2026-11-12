@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto';
 import { drugOwner, investigatorClaims } from './lib/assign';
 import type { Owner } from './lib/companies';
-import { aliasesOf, companyKey, displayName, isApproved, isHoldingCompany, mergeRows, ownerFrom, ownerName, phaseFromText, phaseLabel, phaseRank, type Drug } from './lib/companies';
+import { aliasesOf, companyKey, displayName, inScopeDrug, isApproved, isHoldingCompany, mergeRows, ownerFrom, ownerName, phaseFromText, phaseLabel, phaseRank, type Drug } from './lib/companies';
 import { chain, disease, log, parallel, pool, runLog, runOnce, spacePath, store, today, where } from './lib/pipeline';
 import type { Company } from '../src/lib/space/types';
 import type { Trial } from './lib/registry';
@@ -38,6 +38,7 @@ if (client) {
 }
 
 type WebCompany = { company: string; country: string; registry_sponsor_names?: string[]; drugs: { name: string; codes: string[]; mechanism: string; phase: string; approved_in: string[] }[]; source_url: string };
+const webDrug = (drug: WebCompany['drugs'][number]): Drug => ({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, phase: drug.phase, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : phaseLabel(drug.phase) });
 // One chain per region for large indications, else one chain over all regions.
 const regions: (string | null)[] = d.chain_regions?.length ? d.chain_regions : [null];
 const slug = (r: string | null) => (r ? r.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : 'all');
@@ -45,7 +46,7 @@ const web: WebCompany[] = [];
 for (const region of regions) {
   const key = `${COMPANY_CHAIN.key}:${slug(region)}`;
   const got = client
-    ? await chain<WebCompany>(client, rl, key, { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today(), region), next: COMPANY_CHAIN.next(d, region), dedupe: (x) => companyKey(x.company), metadata: { job: 'company-chain', disease: d.key, region: slug(region) } })
+    ? await chain<WebCompany>(client, rl, key, { ...COMPANY_CHAIN, first: COMPANY_CHAIN.first(d, today(), region), next: COMPANY_CHAIN.next(d, region), dedupe: (x) => companyKey(x.company), counts: (x) => (x.drugs ?? []).some((y) => inScopeDrug(webDrug(y))), metadata: { job: 'company-chain', disease: d.key, region: slug(region) } })
     : Object.keys(rl.log)
         .filter((k) => k.startsWith(`${key}:p`))
         .flatMap((k) => ((rl.log[k].content as any)?.companies ?? []) as WebCompany[]);
@@ -97,10 +98,14 @@ for (const w of web) {
   c.web = { country: w.country, source: w.source_url };
   for (const drug of w.drugs ?? []) {
     if (c.drugs.some((x) => x.name.toLowerCase() === drug.name.toLowerCase())) continue;
-    c.drugs.push({ name: drug.name, codes: drug.codes ?? [], mechanism: drug.mechanism, mechanism_source: 'web', chembl_id: null, phase: drug.phase, highest_phase: drug.approved_in?.length ? `Approved (${drug.approved_in.join(', ')})` : phaseLabel(drug.phase) });
+    c.drugs.push(webDrug(drug));
   }
   companies.set(key, c);
 }
+
+// Rows added after a build, by hand (add-company) or from a monitor's news (steps/expand.ts), outlive a rebuild.
+const added = new Set(((await store.get<Record<string, unknown>[]>(spacePath(d, 'review/companies.json'))) ?? []).filter((r) => r.added_by_hand || r.added_by === 'monitor').map((r) => r.company as string));
+for (const c of ((await store.get<{ companies: Company[] }>(spacePath(d, 'companies.json')))?.companies ?? []).filter((x) => added.has(x.name))) if (!companies.has(c.key)) companies.set(c.key, { ...c, trials: [], investigator_trials: [] });
 
 // One company, one row: a Task run groups names that are the same company today.
 // Keyed by the names, so the same set of rows reuses the run.

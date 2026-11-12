@@ -123,7 +123,7 @@ export function Dataset({ view }: { view: DatasetView }) {
                   <span className="flex items-center gap-2 text-[14px] font-medium">
                     <Favicon host={r.host} name={r.name} /> {r.name}
                   </span>
-                  {r.webOnly ? <span className="mt-1 inline-block rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">Found on the web</span> : null}
+                  {r.webOnly ? <span className="mt-1 inline-block rounded-[2px] bg-orange-wash px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.05em]">{r.foundByMonitor ? 'Found by news monitor' : 'Found on the web'}</span> : null}
                 </th>
                 {view.columns.map((c) => {
                   const cell = r.cells[c.field];

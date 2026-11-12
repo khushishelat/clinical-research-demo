@@ -12,9 +12,9 @@
 import type { Company, Facts, Readout } from '../src/lib/space/types';
 import { isApproved } from './lib/companies';
 import { disease, groupRuns, log, parallel, recorder, runLog, runOnce, saveReplay, spacePath, store, today, where } from './lib/pipeline';
-import { assertNoContacts, redactContacts, type Trial } from './lib/registry';
+import { assertNoContacts, redactBasis, type Trial } from './lib/registry';
 import { COVERAGE, DEALS, FACTS, READOUT } from './lib/specs';
-import { cleanFacts, dealsUnit, factsUnit, readoutTrials, readoutUnit } from './lib/units';
+import { cleanFacts, dealsUnit, factsRecord, factsUnit, readoutTrials, readoutUnit } from './lib/units';
 
 const d = disease();
 const client = parallel(d, 'enrich');
@@ -47,9 +47,6 @@ log(d, `readouts: ${readoutJobs.length} trials checked · ${readoutJobs.filter((
 const drugsApproved = [...new Set(targets.flatMap((c) => c.drugs.filter((x) => isApproved(x.highest_phase)).map((x) => x.name)))];
 const coverage = drugsApproved.length ? await runOnce(client, rl, COVERAGE.key, { processor: COVERAGE.processor, connectors: COVERAGE.connectors, schema: COVERAGE.schema, input: COVERAGE.input(d, drugsApproved), metadata: { job: 'coverage', disease: d.key } }) : null;
 
-// Sources sometimes quote a company's contact line; excerpts keep the facts, not the contacts.
-const redact = (basis: unknown[] | undefined, prefix = '') => (basis ?? []).map((b: any) => ({ ...b, field: prefix + b.field, citations: (b.citations ?? []).map((c: any) => ({ ...c, excerpts: (c.excerpts ?? []).map(redactContacts) })) }));
-
 const facts: Record<string, Facts> = {};
 let failed = 0;
 for (const c of targets) {
@@ -61,9 +58,10 @@ for (const c of targets) {
   }
   const mine = readoutJobs.filter((j) => j.c.key === c.key).map(({ t }) => ({ t, rr: readouts[`${READOUT.key}:${t.nct}`] }));
   const reported = mine.filter(({ rr }) => (rr?.content as Readout | undefined)?.has_data).map(({ t, rr }) => ({ ...(rr.content as Omit<Readout, 'nct'>), nct: t.nct, _run: rr.run_id }));
-  facts[c.key] = { ...f, readouts: reported, _spec: `${FACTS.key}+${DEALS.key}`, _run: r.run_id, _connectors: r.connectors, _seconds: r.seconds };
+  facts[c.key] = factsRecord(f, r, reported);
   // Basis goes in its own file per company (large, only the table view reads it); readout fields as readouts.<nct>.<field>.
-  const basis = [...redact(r.basis), ...redact(results[`${DEALS.key}:${c.key}`]?.basis), ...mine.flatMap(({ t, rr }) => redact(rr?.basis, `readouts.${t.nct}.`))];
+  // Sources sometimes quote a company's contact line; excerpts keep the facts, not the contacts.
+  const basis = [...redactBasis(r.basis), ...redactBasis(results[`${DEALS.key}:${c.key}`]?.basis), ...mine.flatMap(({ t, rr }) => redactBasis(rr?.basis, `readouts.${t.nct}.`))];
   assertNoContacts(`basis ${c.key}`, basis);
   await store.put(spacePath(d, `basis/${c.key}.json`), { company: c.name, run_id: r.run_id, basis });
 }

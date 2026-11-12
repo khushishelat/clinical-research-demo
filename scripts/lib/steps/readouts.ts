@@ -9,7 +9,7 @@
 
 import type { Company, Facts, Readout } from '../../../src/lib/space/types';
 import { groupRuns, log, parallel, runLog, spacePath, store, today as todayOf, type Disease } from '../pipeline';
-import { assertNoContacts, redactContacts, type Trial } from '../registry';
+import { assertNoContacts, redactBasis, type Trial } from '../registry';
 import { READOUT } from '../specs';
 import { readoutTrials, readoutUnit } from '../units';
 
@@ -64,7 +64,7 @@ export async function readoutsStep(d: Disease, today = todayOf()): Promise<numbe
     const path = spacePath(d, `basis/${c.key}.json`);
     const file = (await store.get<BasisDoc>(path)) ?? { company: c.name, run_id: rr.run_id, basis: [] };
     const prefix = `readouts.${t.nct}.`;
-    const added = ((rr.basis ?? []) as any[]).map((b) => ({ ...b, field: prefix + b.field, citations: (b.citations ?? []).map((x: any) => ({ ...x, excerpts: (x.excerpts ?? []).map(redactContacts) })) }));
+    const added = redactBasis(rr.basis, prefix);
     const next = { ...file, basis: [...file.basis.filter((b) => !b.field.startsWith(prefix)), ...added] };
     assertNoContacts(`basis ${c.key}`, next);
     await store.put(path, next);

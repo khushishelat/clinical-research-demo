@@ -125,8 +125,11 @@ export const OWNER = {
 // companies, so the cap is 8 and a page must add 3, but only from page 4 (the
 // MASH v1 run stopped at page 3 after one thin page and missed 8 companies v0
 // had found). Large indications chain once per region (`chain_regions`).
+// v2: migraine v1 drifted into generic triptan makers by page 3 and stopped when
+// they ran dry, before early-stage biotechs (Mentari, Phase 1 on ANZCTR). Generic-only
+// makers are now out of scope and don't count toward a page's new companies.
 export const COMPANY_CHAIN = {
-  key: 'chain@1',
+  key: 'chain@2',
   processor: 'ultra',
   connectors: ['clinical_trials', 'chembl'],
   field: 'companies',
@@ -145,9 +148,9 @@ export const COMPANY_CHAIN = {
     ),
   }),
   first: (d: Disease, today: string, region: string | null) =>
-    `Enumerate every company, pharma or biotech, with a drug in clinical development or approved for ${label(d)} as of ${today}${region ? `, headquartered in ${region}` : ' in any country'}. Go far beyond the best-known companies${region ? '' : ': include Chinese, Korean, Japanese, Indian and European biotechs, and companies whose trials appear only in non-US registries'}. Search ClinicalTrials.gov through the connector and confirm mechanisms with ChEMBL. For each company give its country, the names it uses as a trial sponsor, and its drugs for ${d.name} (name, codes, mechanism, highest phase, where approved) with a source URL. Never fabricate.`,
+    `Enumerate every company, pharma or biotech, with a drug in clinical development (Phase 1 or later) or approved for ${label(d)} as of ${today}${region ? `, headquartered in ${region}` : ' in any country'}. Go far beyond the best-known companies: include early-stage biotechs with first-in-human trials${region ? '' : ', Chinese, Korean, Japanese, Indian and European biotechs, and companies whose trials appear only in non-US registries such as ANZCTR, EU CTIS or China\'s NMPA'}. Leave out companies that only sell generic versions of approved drugs. Search ClinicalTrials.gov through the connector and confirm mechanisms with ChEMBL. For each company give its country, the names it uses as a trial sponsor, and its drugs for ${d.name} (name, codes, mechanism, highest phase, where approved) with a source URL. Never fabricate.`,
   next: (d: Disease, region: string | null) =>
-    `Continue. Return MORE companies${region ? ` headquartered in ${region}` : ''} with drugs in clinical development or approved for ${d.name} that you have NOT already returned in this conversation. Net-new only, no repeats, same fields, real source URLs.`,
+    `Continue. Return MORE companies${region ? ` headquartered in ${region}` : ''} with drugs in clinical development (Phase 1 or later) or approved for ${d.name} that you have NOT already returned in this conversation, never makers of generic versions only. Net-new only, no repeats, same fields, real source URLs.`,
 };
 
 const SRC = S('Primary source URL: company release, filing, regulator, journal or conference.');

@@ -75,6 +75,12 @@ export function phaseFromText(text: string | null | undefined): string {
 export const isApproved = (phase: string) => /approved|marketed|launch/i.test(phase ?? '');
 export const phaseRank = (phase: string) => (isApproved(phase) ? 5 : /filed|submitted|nda|bla|registration/i.test(phase ?? '') ? 4 : /3/.test(phase ?? '') ? 3 : /2/.test(phase ?? '') ? 2 : /1/.test(phase ?? '') ? 1 : 0);
 
+// A generic: approved, named by molecule and dosage form, with no brand ("Rizatriptan benzoate tablets").
+const FORM = /\b(tablets?|capsules?|injection|orally disintegrating|oral solution|nasal spray|autoinjector)\b/i;
+export const isGeneric = (x: Drug) => isApproved(x.highest_phase) && FORM.test(x.name) && !x.name.includes('(');
+/** What earns a company a row: a drug in Phase 1 or later, or approved, that is not only a generic version. */
+export const inScopeDrug = (x: Drug) => phaseRank(x.highest_phase) >= 1 && !isGeneric(x);
+
 /**
  * Does the trial test the drug, not just compare against it? Uses the arms when
  * the registry has them: the drug must sit in an experimental arm. Trials
@@ -136,3 +142,25 @@ export const ownerName = (x: string | null | undefined) => (x ?? '').split(/;|\(
 export type Owner = { current_owner: string; relationship: string; announced: string | null; closed: string | null; value: string | null; owner_source_url: string; drugs: Drug[] };
 // v1 returns a phase enum; rows show "Phase 3" or "Approved". Trial IDs never count as drug codes.
 export const ownerFrom = (c: any): Owner => ({ ...c, drugs: (c.drugs ?? []).map((x: any) => ({ ...x, highest_phase: phaseLabel(x.phase), codes: (x.codes ?? []).filter((y: string) => !/^NCT\d{8}$/i.test(y)) })) });
+
+/** The row a company looked up by name belongs on: its owner's when another company owns it outright. */
+export function rowNameFor(name: string, o: Owner): { name: string; owned: boolean } {
+  const owned = ['acquired', 'merged'].includes(o.relationship) && !isHoldingCompany(o.current_owner);
+  return { name: (owned ? ownerName(o.current_owner) : name) || name, owned };
+}
+
+/** Puts a looked-up company on the map as a web-found row, or adds its drugs to the row it already has. */
+export function joinRow(companies: Company[], name: string, o: Owner): { row: Company; created: boolean } {
+  const target = rowNameFor(name, o);
+  const key = companyKey(target.name);
+  let row = companies.find((x) => x.key === key);
+  const created = !row;
+  if (!row) {
+    row = { key, name: displayName(target.name), relationship: target.owned ? o.relationship : 'independent', owner_source: o.owner_source_url, acquisitions: [], registry_sponsors: [], drugs: [], trials: [], investigator_trials: [], web: { country: '', source: o.owner_source_url }, web_only: true, approved: false, max_phase: 0 };
+    companies.push(row);
+  }
+  for (const drug of o.drugs) if (!row.drugs.some((x) => x.name.toLowerCase() === drug.name.toLowerCase())) row.drugs.push(drug);
+  row.approved = row.drugs.some((x) => isApproved(x.highest_phase));
+  row.max_phase = Math.max(row.max_phase, ...row.drugs.map((x) => phaseRank(x.highest_phase)));
+  return { row, created };
+}
